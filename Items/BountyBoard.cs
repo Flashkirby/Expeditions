@@ -7,26 +7,26 @@ namespace Expeditions.Items
 	{
 		public override void SetDefaults()
 		{
-			item.name = "BountyBoard";
-			item.damage = 50;
-			item.melee = true;
-			item.width = 40;
-			item.height = 40;
-			item.toolTip = "This is a modded sword.";
-			item.useTime = 20;
-			item.useAnimation = 20;
-			item.useStyle = 1;
-			item.knockBack = 6;
-			item.value = 10000;
-			item.rare = 2;
-			item.useSound = 1;
-			item.autoReuse = true;
-		}
+			item.name = "Expeditions Board";
+			item.toolTip = "Used to call the Clerk and manage expeditions.";
+            item.width = 30;
+            item.height = 36;
+            item.maxStack = 99;
 
-		public override void AddRecipes()
+            item.useStyle = 1;
+            item.useTurn = true;
+            item.useAnimation = 15;
+            item.useTime = 10;
+            item.autoReuse = true;
+            item.consumable = true;
+            item.createTile = mod.TileType("BountyBoard");
+            item.placeStyle = 0; //the first board spriteset
+            item.value = 100;
+        }
+        public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
+            recipe.AddIngredient(ItemID.Wood, 20);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
