@@ -33,8 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Expedition.cs" />
     <Compile Include="Items\BountyBoard.cs" />
     <Compile Include="Expeditions.cs" />
+    <Compile Include="ModExpedition.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,9 +56,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Xact\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Xact.dll</HintPath>
     </Reference>
+    <Reference Include="Mono">
+      <HintPath>..\..\Output\CheatSheet\Mono.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Terraria">
       <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\Terraria.exe</HintPath>
+    </Reference>
+    <Reference Include="tModLoader835">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\tModLoader835.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
