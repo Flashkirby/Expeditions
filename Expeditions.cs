@@ -14,7 +14,7 @@ namespace Expeditions
         private UserInterface expeditionUserInterface;
         internal ExpeditionUI expeditionUI;
 
-        private List<ModExpedition> expeditionList; //make add to expediiton list, for mods to call when loading
+        public static List<ModExpedition> expeditionList; //make add to expediiton list, for mods to call when loading
 
         public Expeditions()
 		{
@@ -36,8 +36,6 @@ namespace Expeditions
             expeditionList = new List<ModExpedition>();
             
             //add quests
-            AddExpeditionToList(new WelcomeQuest());
-            AddExpeditionToList(new WelcomeQuest());
             AddExpeditionToList(new WelcomeQuest());
         }
         public void AddExpeditionToList(ModExpedition modExpedition)

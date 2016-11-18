@@ -116,7 +116,20 @@ namespace Expeditions
         {
             AddDeliverable(moditem.item.type, stack);
         }
-        
+
+        public Item[] GetDeliverablesArray()
+        {
+            Item[] deliverables = new Item[this.deliverables.Count];
+            for (int i = 0; i < deliverables.Length; i++)
+            {
+                Item it = new Item();
+                it.SetDefaults(this.deliverables[i].Key);
+                it.stack = Math.Max(1, Math.Min(this.deliverables[i].Value, it.maxStack));
+                deliverables[i] = it;
+            }
+            return deliverables;
+        }
+
         /// <summary>
         /// Add an item to be given out to participants who finished the expedition
         /// </summary>
@@ -129,6 +142,25 @@ namespace Expeditions
         public void AddReward(ModItem moditem)
         {
             AddReward(moditem.item);
+        }
+
+        public Item[] GetRewardsArray()
+        {
+            Item[] rewards = new Item[this.rewards.Count];
+            for (int i = 0; i < rewards.Length; i++)
+            {
+                rewards[i] = this.rewards[i];
+            }
+            return rewards;
+        }
+        public Item[] GetRewardsCloneToArray()
+        {
+            Item[] rewards = new Item[this.rewards.Count];
+            for(int i = 0; i < rewards.Length; i++)
+            {
+                rewards[i] = this.rewards[i].Clone();
+            }
+            return rewards;
         }
     }
 }

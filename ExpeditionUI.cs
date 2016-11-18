@@ -13,8 +13,12 @@ namespace Expeditions
 {
     class ExpeditionUI : UIState
     {
+        private static Color backgroundColour = new Color(63, 65, 151, 200);
+        private static Color borderColour = new Color(18, 18, 31, 200);
+
         public UIPanel coinCounterPanel;
         public UIMoneyDisplay moneyDiplay;
+        public ItemSlot itemslot;
         public static bool visible = false;
 
         public override void OnInitialize()
@@ -25,7 +29,8 @@ namespace Expeditions
             coinCounterPanel.Top.Set(100f, 0f);
             coinCounterPanel.Width.Set(170f, 0f);
             coinCounterPanel.Height.Set(70f, 0f);
-            coinCounterPanel.BackgroundColor = new Color(200, 200, 200, 200);
+            coinCounterPanel.BackgroundColor = backgroundColour;
+            coinCounterPanel.BorderColor = borderColour;
 
             coinCounterPanel.OnMouseDown += new UIElement.MouseEvent(DragStart);
             coinCounterPanel.OnMouseUp += new UIElement.MouseEvent(DragEnd);
@@ -102,6 +107,19 @@ namespace Expeditions
                 coinCounterPanel.Top.Set(MousePosition.Y - offset.Y, 0f);
                 Recalculate();
             }
+
+        }
+
+        public static void DrawItemSlot(SpriteBatch spriteBatch, Item item, float x, float y, int Context)
+        {
+            if (Main.mouseX >= x && (float)Main.mouseX <= (float)x + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= y && (float)Main.mouseY <= (float)y + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+            {
+                Main.player[Main.myPlayer].mouseInterface = true;
+                ItemSlot.MouseHover(ref item, Context);
+            }
+            Main.inventoryScale = 0.6f;
+            ItemSlot.Draw(Main.spriteBatch, ref item,
+                Context, new Vector2(x, y), default(Microsoft.Xna.Framework.Color));
         }
 
         public void updateValue(int pickedUp)
@@ -168,6 +186,10 @@ namespace Expeditions
             return (int)((sum * 60f) / count);
         }
 
+        /// <summary>
+        /// It gets draw here.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle innerDimensions = base.GetInnerDimensions();
@@ -192,6 +214,17 @@ namespace Expeditions
                 Utils.DrawBorderStringFourWay(spriteBatch, Main.fontItemStack, coinsArray[3 - j].ToString(), shopx + (float)(24 * j) + (float)num, shopy + 25f, Color.White, Color.Black, new Vector2(0.3f), 0.75f);
             }
             Utils.DrawBorderStringFourWay(spriteBatch, Main.fontMouseText, "CPM", shopx + (float)(24 * 4), shopy + 25f, Color.White, Color.Black, new Vector2(0.3f), 0.75f);
+
+
+
+
+
+            Item theItem = Expeditions.expeditionList[0].expedition.GetDeliverablesArray()[0];
+            ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 200, 280, 7);
+            theItem = Expeditions.expeditionList[0].expedition.GetRewardsArray()[0];
+            ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 200, 310, 15);
+            theItem = Expeditions.expeditionList[0].expedition.GetRewardsArray()[1];
+            ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 230, 310, 15);
         }
 
         internal void ResetCoins()

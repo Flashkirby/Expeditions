@@ -12,14 +12,17 @@ namespace Expeditions.Quests
             expedition.title = "Hello World";
             expedition.description = "This is a sample quest";
             expedition.difficulty = 0;
-            expedition.AddDeliverable(ItemID.DirtBlock, 1);
+            expedition.AddDeliverable(ItemID.DirtBlock, 151);
 
             Item i = new Item();
+            i.SetDefaults(ItemID.SoulofFlight);
+            i.stack = 50;
+            expedition.AddReward(i);
+            i = new Item();
             i.SetDefaults(ItemID.Shackle);
             i.prefix = 1;
             i.Prefix(i.prefix);
             expedition.AddReward(i);
-
         }
         /*
          
