@@ -9,16 +9,29 @@ namespace Expeditions
     {
         public ModExpedition mex;
 
+        /// <summary>Title of expedition</summary>
         public string title = "";
+        /// <summary>Description of expedition</summary>
         public string description = "";
+        /// <summary>Description of conditions to be met</summary>
         public string conditionDescription = "";
+        /// <summary>Tier of expedition, same as item rarity</summary>
         public int difficulty = 0;
+        /// <summary>Check if expedition is being tracked, this calls conditions met</summary>
         public bool trackingActive = false;
+        /// <summary>Category: Is prioritised on the board</summary>
         public bool important = false;
+        /// <summary>Category: Involves discovering things</summary>
         public bool explore = false;
+        /// <summary>Category: Involves collecting items</summary>
         public bool deliver = false;
+        /// <summary>Category: Involves defeating monsters</summary>
         public bool defeat = false;
+        /// <summary>Completed expeditions are archived and cannot be redone unless repeatable</summary>
         public bool completed = false;
+        /// <summary>Allows archived expeditions to be redone</summary>
+        public bool repeatable = false;
+        /// <summary>Calls expedition success to all party members when completed</summary>
         public bool partyShare = false;
         private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
         private List<Item> rewards = new List<Item>();

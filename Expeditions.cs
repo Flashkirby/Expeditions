@@ -64,7 +64,7 @@ namespace Expeditions
             if (MouseTextIndex != -1)
             {
                 layers.Insert(MouseTextIndex, new MethodSequenceListItem(
-                    "ExampleMod: Coins Per Minute",
+                    "ExpeditionsUIPanel",
                     delegate
                     {
                         if (expeditionMenu)
@@ -78,10 +78,12 @@ namespace Expeditions
                                 Main.gameMenu
                                 )
                             {
+                                //close this if other things are opened
                                 expeditionMenu = false;
                             }
                             else
                             {
+                                //No idea what this does but the other one draws the UI
                                 expeditionUserInterface.Update(Main._drawInterfaceGameTime);
                                 expeditionUI.Draw(Main.spriteBatch);
 
