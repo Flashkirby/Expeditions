@@ -64,15 +64,7 @@ namespace Expeditions.Tiles
                 return;
             }
 
-            if (Expeditions.expeditionMenu)
-            {
-                Expeditions.CloseExpeditionMenu();
-                return;
-            }
-            else
-            {
-                Expeditions.OpenExpeditionMenu();
-            }
+            Expeditions.ToggleExpeditionMenu();
         }
 
         public override void MouseOver(int i, int j)

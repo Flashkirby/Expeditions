@@ -25,7 +25,7 @@ namespace Expeditions
             coinCounterPanel.Top.Set(100f, 0f);
             coinCounterPanel.Width.Set(170f, 0f);
             coinCounterPanel.Height.Set(70f, 0f);
-            coinCounterPanel.BackgroundColor = new Color(73, 94, 171);
+            coinCounterPanel.BackgroundColor = new Color(200, 200, 200, 200);
 
             coinCounterPanel.OnMouseDown += new UIElement.MouseEvent(DragStart);
             coinCounterPanel.OnMouseUp += new UIElement.MouseEvent(DragEnd);

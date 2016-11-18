@@ -11,7 +11,6 @@ namespace Expeditions
 {
 	class Expeditions : Mod
 	{
-        public static bool expeditionMenu = false;
         private UserInterface expeditionUserInterface;
         internal ExpeditionUI expeditionUI;
 
@@ -67,7 +66,7 @@ namespace Expeditions
                     "ExpeditionsUIPanel",
                     delegate
                     {
-                        if (expeditionMenu)
+                        if (ExpeditionUI.visible)
                         {
                             if (Main.playerInventory ||
                                 Main.player[Main.myPlayer].chest != -1 ||
@@ -79,7 +78,7 @@ namespace Expeditions
                                 )
                             {
                                 //close this if other things are opened
-                                expeditionMenu = false;
+                                ExpeditionUI.visible = false;
                             }
                             else
                             {
@@ -118,7 +117,7 @@ namespace Expeditions
             Main.npcChatText = "";
 
             Main.PlaySound(10, -1, -1, 1); //open menu
-            Expeditions.expeditionMenu = true;
+            ExpeditionUI.visible = true;
         }
 
         public static void CloseExpeditionMenu()
@@ -126,7 +125,19 @@ namespace Expeditions
             Main.npcChatText = "";
 
             Main.PlaySound(11, -1, -1, 1); //close menu
-            Expeditions.expeditionMenu = false;
+            ExpeditionUI.visible = false;
+        }
+
+        public static void ToggleExpeditionMenu()
+        {
+            if (ExpeditionUI.visible)
+            {
+                Expeditions.CloseExpeditionMenu();
+            }
+            else
+            {
+                Expeditions.OpenExpeditionMenu();
+            }
         }
 
 
