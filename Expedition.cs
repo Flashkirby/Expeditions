@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 
@@ -6,22 +7,79 @@ namespace Expeditions
 {
     public class Expedition
     {
-        public string title;
-        public string description;
-        public string conditionDescription;
-        public int difficulty;
-        public bool active;
-        public bool important;
-        public bool explore;
-        public bool deliver;
-        public bool defeat;
-        public bool partyShare;
-        private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
-        private List<KeyValuePair<int, int>> rewards = new List<KeyValuePair<int, int>>();
+        public ModExpedition mex;
 
-        public bool Completed()
+        public string title = "";
+        public string description = "";
+        public string conditionDescription = "";
+        public int difficulty = 0;
+        public bool trackingActive = false;
+        public bool important = false;
+        public bool explore = false;
+        public bool deliver = false;
+        public bool defeat = false;
+        public bool completed = false;
+        public bool partyShare = false;
+        private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
+        private List<Item> rewards = new List<Item>();
+
+        /// <summary>
+        /// Checks against all conditions to see if completeable
+        /// </summary>
+        /// <returns></returns>
+        public bool ConditionsMet()
         {
+            if(!mex.CheckPrerequisites()) return false;
+            if (deliverables.Count > 0)
+            {
+                //get as temp array of required
+                int[] items = new int[deliverables.Count];
+                int[] stacks = new int[deliverables.Count];
+                for (int i = 0; i < items.Length; i++)
+                {
+                    items[i] = deliverables[i].Key;
+                    stacks[i] = deliverables[i].Value;
+                }
+
+                //keep track of stacks player has
+                int[] hasStacks = new int[deliverables.Count];
+                Item[] inventory = Main.player[Main.myPlayer].inventory;
+                for (int i = 0; i < inventory.Length; i++)
+                {
+                    addToStackIfMatching(inventory[i], items, ref hasStacks);
+                }
+
+                //check to see if all item stacks are == or above
+                try
+                {
+                    for (int i = 0; i < stacks.Length; i++)
+                    {
+                        if (hasStacks[i] < stacks[i]) return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
             return true;
+        }
+        /// <summary>
+        /// Check against itemTypes to see if it matches, if so add to corrosponding index in stack counter
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="itemTypes"></param>
+        /// <param name="itemStackCount"></param>
+        private void addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount)
+        {
+            for (int i = 0; i < itemTypes.Length; i++)
+            {
+                if (item.type == itemTypes[i])
+                {
+                    itemStackCount[i] += item.stack;
+                    return;
+                }
+            }
         }
 
         /// <summary>
@@ -31,6 +89,7 @@ namespace Expeditions
         /// <param name="stack"></param>
         public void AddDeliverable(int type, int stack)
         {
+            if (stack < 1) stack = 1;
             deliverables.Add(new KeyValuePair<int, int>(
                 type,
                 stack
@@ -44,26 +103,19 @@ namespace Expeditions
         {
             AddDeliverable(moditem.item.type, stack);
         }
-
+        
         /// <summary>
         /// Add an item to be given out to participants who finished the expedition
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="item"></param>
         /// <param name="stack"></param>
-        public void AddReward(int type, int stack)
+        public void AddReward(Item item)
         {
-            rewards.Add(new KeyValuePair<int, int>(
-                type,
-                stack
-                ));
+            rewards.Add(item);
         }
-        public void AddReward(Item item, int stack)
+        public void AddReward(ModItem moditem)
         {
-            AddReward(item.type, stack);
-        }
-        public void AddReward(ModItem moditem, int stack)
-        {
-            AddReward(moditem.item.type, stack);
+            AddReward(moditem.item);
         }
     }
 }

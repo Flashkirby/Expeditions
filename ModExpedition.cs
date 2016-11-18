@@ -1,21 +1,25 @@
-﻿using Terraria;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 
 namespace Expeditions
 {
     public class ModExpedition
     {
-        public readonly Mod mod;
-
-        public ModExpedition(Mod mod)
+        public Expedition expedition
         {
-            this.mod = mod;
+            get;
+            internal set;
         }
-
-        public virtual bool Autoload(ref string name)
+        public Mod mod
         {
-            return this.mod.Properties.Autoload;
+            get;
+            internal set;
+        }
+        public ModExpedition()
+        {
+            expedition = new Expedition();
+
         }
 
         #region Virtual Methods

@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ExpeditionUI.cs" />
     <Compile Include="Expedition.cs" />
     <Compile Include="Items\BountyBoard.cs" />
     <Compile Include="Expeditions.cs" />
