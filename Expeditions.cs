@@ -41,6 +41,8 @@ namespace Expeditions
         public void AddExpeditionToList(ModExpedition modExpedition)
         {
             expeditionList.Add(modExpedition);
+            expeditionList.Add(modExpedition);
+            expeditionList.Add(modExpedition);
         }
 
         public override void AddRecipes()
@@ -84,6 +86,7 @@ namespace Expeditions
                                 expeditionUserInterface.Update(Main._drawInterfaceGameTime);
                                 expeditionUI.Draw(Main.spriteBatch);
 
+                                //TODO: Remove
                                 //test show all quests
                                 string listOfEs = "";
                                 foreach (ModExpedition me in expeditionList)
