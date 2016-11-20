@@ -12,6 +12,8 @@ namespace Expeditions.Quests
             expedition.title = "Hello World";
             expedition.description = "This is a sample quest";
             expedition.difficulty = 0;
+            expedition.deliver = true;
+            expedition.important = true;
             expedition.AddDeliverable(ItemID.DirtBlock, 151);
 
             Item i = new Item();

@@ -17,22 +17,32 @@ namespace Expeditions
         private static Color backgroundColour = new Color(63, 65, 151, 200);
         private static Color borderColour = new Color(18, 18, 31, 200);
 
-        public UIPanel navigationPanel;
-        public UIMoneyDisplay moneyDiplay;
-        public ItemSlot itemslot;
         public static bool visible = false;
-
+        public UIPanel navigationPanel;
+        public UIValueBar scrollBar;
+        public UITextWrap indexText;
 
         private List<UIToggleImage> _categoryButtons = new List<UIToggleImage>();
+        public List<ModExpedition> filterList;
+        public List<ModExpedition> sortedList;
+
+        // TODO: DELET dis
+        public UIMoneyDisplay moneyDiplay;
+        public ItemSlot itemslot;
+
+
 
         public override void OnInitialize()
         {
+            filterList = new List<ModExpedition>(Expeditions.GetExpeditionsList());
+            sortedList = new List<ModExpedition>(filterList);
+
             navigationPanel = new UIPanel();
             navigationPanel.SetPadding(0);
             navigationPanel.Left.Set(400, 0);
             navigationPanel.Top.Set(100, 0);
             navigationPanel.Width.Set(400, 0);
-            navigationPanel.Height.Set(80, 0);
+            navigationPanel.Height.Set(90, 0);
             navigationPanel.BackgroundColor = backgroundColour;
             navigationPanel.BorderColor = borderColour;
 
@@ -45,7 +55,7 @@ namespace Expeditions
             playButton.Top.Set(10, 0f);
             playButton.Width.Set(22, 0f);
             playButton.Height.Set(22, 0f);
-            playButton.OnClick += new MouseEvent(PlayButtonClicked);
+            playButton.OnClick += new MouseEvent(IncrementIndexClick);
             navigationPanel.Append(playButton);
 
             Texture2D buttonDeleteTexture = ModLoader.GetTexture("Terraria/UI/ButtonDelete");
@@ -66,22 +76,27 @@ namespace Expeditions
 
             //#########################################################################
 
-            //close button
-            AppendTextButton("Close", 50, 30, new MouseEvent(CloseButtonClicked));
-            //prev button
-            AppendTextButton("Prev", 120, 30, new MouseEvent(PlayButtonClicked));
+            // Close button
+            AppendTextButton("Close", 16, 16, new MouseEvent(CloseButtonClicked));
+            // Prev button
+            AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
+            // Next button
+            AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
 
-            //AppendText("000/000", 160, 10, Color.White);
-            UITextWrap textWrap = new UITextWrap("000/000", Color.White, Color.Black);
-            textWrap.Left.Set(160, 0f);
-            textWrap.Top.Set(10, 0f);
-            navigationPanel.Append(textWrap);
+            // Bar
+            scrollBar = new UIValueBar(0, sortedList.Count);
+            scrollBar.Left.Set(40, 0f);
+            scrollBar.Top.Set(50, 0f);
+            scrollBar.OnMouseUp += new MouseEvent(UpdateIndex);
+            navigationPanel.Append(scrollBar);
 
-            //next button
-            AppendTextButton("Next", 220, 30, new MouseEvent(PlayButtonClicked));
-
-            // Category Filter Buttons, Line 1
+            // Category Filter Buttons
             AppendCategoryButtonsLine1(250, 10);
+            AppendCategoryButtonsLine2(250, 46);
+
+            // Counter text
+            indexText = AppendText("000/000", 156, 16, Color.White, true);
+
 
             base.Append(navigationPanel);
         }
@@ -91,16 +106,17 @@ namespace Expeditions
             UITextButton textButton = new UITextButton(text, 1, false);
             textButton.Left.Set(x, 0f);
             textButton.Top.Set(y, 0f);
-            textButton.OnClick += evt;
+            textButton.OnMouseDown += evt;
             navigationPanel.Append(textButton);
         }
 
-        private void AppendText(string text, float x, float y, Color colour)
+        private UITextWrap AppendText(string text, float x, float y, Color colour, bool centre = false)
         {
-            UITextWrap textWrap = new UITextWrap(text, Color.White, Color.Black);
+            UITextWrap textWrap = new UITextWrap(text, Color.White, Color.Black, centre);
             textWrap.Left.Set(x, 0f);
-            textWrap.Top.Set(y, 0f);
+            textWrap.Top.Set(y - 3f, 0f);
             navigationPanel.Append(textWrap);
+            return textWrap;
         }
 
         private void AppendCategoryButtonsLine1(float x, float y)
@@ -121,11 +137,46 @@ namespace Expeditions
             }
             navigationPanel.Append(uIElement);
         }
-
-        private void PlayButtonClicked(UIMouseEvent evt, UIElement listeningElement)
+        private void AppendCategoryButtonsLine2(float x, float y)
         {
-            Main.PlaySound(10, -1, -1, 1);
-            moneyDiplay.ResetCoins();
+            UIElement uIElement = new UIElement();
+            uIElement.Width.Set(0f, 1f);
+            uIElement.Height.Set(32f, 0f);
+            uIElement.Top.Set(y, 0f);
+            Texture2D texture = Expeditions.sortingTexture;
+            for (int j = 0; j < 4; j++)
+            {
+                UIToggleImage uIToggleImage = new UIToggleImage(texture, 32, 32, new Point(34 * j, 0), new Point(34 * j, 34));
+                uIToggleImage.Left.Set((float)(j * 36 + x), 0f);
+                uIToggleImage.SetState(true);
+                uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
+                this._categoryButtons.Add(uIToggleImage);
+                uIElement.Append(uIToggleImage);
+            }
+            navigationPanel.Append(uIElement);
+        }
+
+        public static void DrawItemSlot(SpriteBatch spriteBatch, Item item, float x, float y, int Context)
+        {
+            if (Main.mouseX >= x && (float)Main.mouseX <= (float)x + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= y && (float)Main.mouseY <= (float)y + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+            {
+                Main.player[Main.myPlayer].mouseInterface = true;
+                ItemSlot.MouseHover(ref item, Context);
+            }
+            Main.inventoryScale = 0.6f;
+            ItemSlot.Draw(Main.spriteBatch, ref item,
+                Context, new Vector2(x, y), default(Microsoft.Xna.Framework.Color));
+        }
+
+        private void IncrementIndexClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            scrollBar.Value++;
+            UpdateIndex();
+        }
+        private void DecrementIndexClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            scrollBar.Value--;
+            UpdateIndex();
         }
 
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -136,36 +187,62 @@ namespace Expeditions
 
         private void FilterList(UIMouseEvent evt, UIElement listeningElement)
         {
-            /*
-            this._achievementsList.Clear();
-            foreach (UIAchievementListItem current in this._achievementElements)
+            ListRecalculate();
+        }
+
+        public void UpdateIndex() { UpdateIndex(null, null); }
+        /// <summary>
+        /// Update the Index Text
+        /// </summary>
+        public void UpdateIndex(UIMouseEvent evt, UIElement listeningElement)
+        {
+            scrollBar.Value = scrollBar.Value; //this will update to include floor/ceiling
+            indexText.SetText(scrollBar.Value + "/" + scrollBar.MaxValue);
+        }
+
+        /// <summary>
+        /// Recalculate and sort the list again
+        /// </summary>
+        public void ListRecalculate()
+        {
+            // get a new list
+            filterList.Clear();
+            sortedList.Clear();
+
+            int anyMatch = 0;
+            foreach (ModExpedition current in Expeditions.GetExpeditionsList())
             {
-                if (this._categoryButtons[(int)current.GetAchievement().Category].IsOn)
-                {
-                    this._achievementsList.Add(current);
-                }
+                Expedition e = current.expedition;
+                anyMatch = 0;
+                // line 1
+                if (e.defeat && this._categoryButtons[0].IsOn) { anyMatch++; }
+                if (e.deliver && this._categoryButtons[1].IsOn) { anyMatch++; }
+                if (e.explore && this._categoryButtons[2].IsOn) { anyMatch++; }
+                if (e.important && this._categoryButtons[3].IsOn) { anyMatch++; }
+                if (anyMatch == 0) continue;
+                // line 2
+                if (e.completed && !this._categoryButtons[5].IsOn) { continue; }
+                if (e.repeatable && !this._categoryButtons[6].IsOn) { continue; }
+                filterList.Add(current);
             }
-            */
-            this.Recalculate();
-        }
 
-        Vector2 offset;
-        public bool dragging = false;
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
-        {
-            offset = new Vector2(evt.MousePosition.X - navigationPanel.Left.Pixels, evt.MousePosition.Y - navigationPanel.Top.Pixels);
-            dragging = true;
-        }
 
-        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
-        {
-            Vector2 end = evt.MousePosition;
-            dragging = false;
+            // to be sorted later
+            sortedList.AddRange(filterList);
 
-            navigationPanel.Left.Set(end.X - offset.X, 0f);
-            navigationPanel.Top.Set(end.Y - offset.Y, 0f);
-
-            Recalculate();
+            // set scrollbar
+            if(sortedList.Count > 0)
+            {
+                scrollBar.MinValue = 1;
+                scrollBar.MaxValue = sortedList.Count;
+            }
+            else
+            {
+                scrollBar.MinValue = 0;
+                scrollBar.MaxValue = 0;
+            }
+            UpdateIndex();
+            Main.NewText("Re-sorted List: " + sortedList.Count);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -175,21 +252,18 @@ namespace Expeditions
             {
                 Main.player[Main.myPlayer].mouseInterface = true;
             }
-            if (dragging)
-            {
-                navigationPanel.Left.Set(MousePosition.X - offset.X, 0f);
-                navigationPanel.Top.Set(MousePosition.Y - offset.Y, 0f);
-                Recalculate();
-            }
 
         }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
             CategoryButtonMouseText(spriteBatch);
         }
 
+        /// <summary>
+        /// Draw the text of image buttons
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         private void CategoryButtonMouseText(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < this._categoryButtons.Count; i++)
@@ -215,10 +289,10 @@ namespace Expeditions
                             text = "Challenger";
                             break;
                         case 4:
-                            text = "Repeatable";
+                            text = "Completed";
                             break;
                         case 5:
-                            text = "Party Share";
+                            text = "Repeatable";
                             break;
                         case 6:
                             text = "Sort Alphabetically";
@@ -244,18 +318,6 @@ namespace Expeditions
                     return;
                 }
             }
-        }
-
-        public static void DrawItemSlot(SpriteBatch spriteBatch, Item item, float x, float y, int Context)
-        {
-            if (Main.mouseX >= x && (float)Main.mouseX <= (float)x + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= y && (float)Main.mouseY <= (float)y + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
-            {
-                Main.player[Main.myPlayer].mouseInterface = true;
-                ItemSlot.MouseHover(ref item, Context);
-            }
-            Main.inventoryScale = 0.6f;
-            ItemSlot.Draw(Main.spriteBatch, ref item,
-                Context, new Vector2(x, y), default(Microsoft.Xna.Framework.Color));
         }
     }
     
@@ -300,40 +362,27 @@ namespace Expeditions
             this.MinHeight.Set(vector.Y + this.PaddingTop + this.PaddingBottom, 0f);
         }
 
+        public override void MouseOver(UIMouseEvent evt)
+        {
+            base.MouseOver(evt);
+            Main.PlaySound(12, -1, -1, 1);
+            Recalculate();
+            _isOn = true;
+        }
+        public override void MouseOut(UIMouseEvent evt)
+        {
+            base.MouseOver(evt);
+            Main.PlaySound(12, -1, -1, 1);
+            Recalculate();
+            _isOn = false;
+        }
+
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
             CalculatedStyle dimensions = base.GetDimensions();
             Vector2 pos = dimensions.Position();
             Vector2 size = Main.fontMouseText.MeasureString(_text);
-
-
-            if (Main.mouseX > pos.X - size.X * 0.5f && (float)Main.mouseX < (float)pos.X + size.X * 0.5f && 
-                Main.mouseY > pos.Y - size.Y * 0.5f && (float)Main.mouseY < (float)pos.Y + size.Y * 0.5f) //yes normal text buttons extend down like this
-            {
-                Main.player[Main.myPlayer].mouseInterface = true;
-                if (!_isOn)
-                {
-                    Main.PlaySound(12, -1, -1, 1);
-                    Recalculate();
-                }
-                _isOn = true;
-                Main.player[Main.myPlayer].releaseUseItem = false;
-                if (Main.mouseLeft && Main.mouseLeftRelease)
-                {
-                    Click(new UIMouseEvent(this, new Vector2(Main.mouseX, Main.mouseY)));
-                }
-            }
-            else
-            {
-                if (_isOn)
-                {
-                    Main.PlaySound(12, -1, -1, 1);
-                    Recalculate();
-                }
-                _isOn = false;
-            }
-
 
             if (this._isLarge)
             {
@@ -349,10 +398,10 @@ namespace Expeditions
             Color textColor = new Color(Main.mouseTextColor, (int)((double)Main.mouseTextColor / 1.1), Main.mouseTextColor / 2, Main.mouseTextColor);
             if (this._isLarge)
             {
-                Utils.DrawBorderStringBig(spriteBatch, this._text, pos, textColor, textScale, scaleCentre.X, scaleCentre.Y, -1);
+                Utils.DrawBorderStringBig(spriteBatch, this._text, pos + scaleCentre, textColor, textScale, scaleCentre.X, scaleCentre.Y, -1);
                 return;
             }
-            Utils.DrawBorderStringFourWay(spriteBatch, Main.fontMouseText, this._text, pos.X, pos.Y,
+            Utils.DrawBorderStringFourWay(spriteBatch, Main.fontMouseText, this._text, pos.X + scaleCentre.X, pos.Y + scaleCentre.Y,
                 textColor, Color.Black, scaleCentre, textScale);
         }
     }
@@ -361,11 +410,18 @@ namespace Expeditions
         private string _text = "";
         private int _maxLines = 10;
         private int _maxWidth = 460;
+        private int _textHeight = 0;
+        private bool _centred = false;
         private Color _colour;
         private Color _borderColour;
-        public UITextWrap(string text, Color color, Color borderColour)
+        public int TextHeight
+        {
+            get { return _textHeight; }
+        }
+        public UITextWrap(string text, Color color, Color borderColour, bool centre)
         {
             this.SetText(text);
+            _centred = centre;
             _colour = color;
             _borderColour = borderColour;
         }
@@ -388,6 +444,8 @@ namespace Expeditions
             base.DrawSelf(spriteBatch);
             CalculatedStyle dimensions = base.GetDimensions();
             Vector2 pos = dimensions.Position();
+            float offsetX = 0;
+            if (_centred) offsetX = Main.fontMouseText.MeasureString(_text).X * 0.5f;
 
             //calculate wordwrap of text
             int noOfLines = 0;
@@ -398,12 +456,105 @@ namespace Expeditions
             int textValB = (int)((Main.mouseTextColor * 2 + _colour.B) / 3);
             int textValA = (int)((Main.mouseTextColor * 2 + _colour.A) / 3);
             Color textColor = new Color(textValR, textValG, textValB, textValA);
-            
+
             //draw each line of text
+            _textHeight = 30 * noOfLines;
             for (int i = 0; i < noOfLines; i++)
             {
-                Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, array[i], pos.X, (float)(pos.Y + i * 30), textColor, _borderColour, Vector2.Zero, 1f);
+                Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, array[i], pos.X - offsetX, (float)(pos.Y + i * 30), textColor, _borderColour, Vector2.Zero, 1f);
             }
+        }
+    }
+    internal class UIValueBar : UIElement
+    {
+        private static Color barColour = new Color(43, 56, 101, 200);
+
+        Texture2D bar = Main.colorBarTexture;
+        Texture2D blip = Main.colorBlipTexture;
+        Texture2D slider = Main.colorSliderTexture; //80 range with offset 3
+
+        private int _minValue = 0;
+        private int _maxValue = 4;
+        private int _lastIndex = 0;
+        private int _index = 0;
+        private int _dragVal = 0;
+        private float _widthRange = 160f;
+        private bool _dragging = false;
+        public int Value
+        {
+            get { return _index; }
+            set
+            {
+                if (value > _maxValue) value = _maxValue;
+                if (value < _minValue) value = _minValue;
+                _index = value;
+                //Main.NewText("Scroll Value: " + _minValue + " < " + value + " > " + _maxValue);
+            }
+        }
+        public int MinValue
+        {
+            get { return _minValue; }
+            set { _minValue = value; }
+        }
+        public int MaxValue
+        {
+            get { return _maxValue; }
+            set
+            {
+                if (value < _minValue) value = _minValue;
+                _maxValue = value;
+            }
+        }
+        public UIValueBar(int minValue, int maxValue)
+        {
+            MinValue = minValue;
+            MaxValue = maxValue;
+            _widthRange = 160f;
+            Width.Set(178f, 0f);
+            Height.Set(25f, 0f);
+        }
+
+        public override void MouseDown(UIMouseEvent evt)
+        {
+            base.MouseDown(evt);
+            _dragging = true;
+        }
+        public override void MouseUp(UIMouseEvent evt)
+        {
+            base.MouseUp(evt);
+            _dragging = false;
+        }
+
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            base.DrawSelf(spriteBatch);
+            CalculatedStyle dimensions = base.GetDimensions();
+            Vector2 pos = dimensions.Position();
+
+            // Draw bar
+            spriteBatch.Draw(bar, pos + new Vector2(0f, 4f), bar.Bounds, barColour);
+
+            // Draw blips on bar
+            int range = _maxValue - _minValue;
+            for (int i = 0; i < range + 1; i++)
+            {
+                spriteBatch.Draw(blip, pos + new Vector2(8f + (160f / range) * i, 8f), blip.Bounds, Color.LightSlateGray);
+            }
+
+
+            // set to mouse
+            if (_dragging) _dragVal = (int)(Main.mouseX - pos.X - 10);
+
+            // limit slider to bar
+            _dragVal = (int)Math.Max(Math.Min(_widthRange, _dragVal), 0f);
+
+            //Set index to rounded position of dragVal in relation to range and distance across width
+            _lastIndex = _index;
+            if (_dragging) _index = (int)((0.5f + _minValue) + range * _dragVal / _widthRange);
+
+            // Draw Slider
+            spriteBatch.Draw(slider, pos + new Vector2(3f + _dragVal, 0f), slider.Bounds, Color.White);
+            _dragVal = (int)(_widthRange / range * (_index - _minValue));
         }
     }
 
@@ -496,12 +647,12 @@ namespace Expeditions
 
 
 
-
-            Item theItem = Expeditions.expeditionList[0].expedition.GetDeliverablesArray()[0];
+            List<ModExpedition> expeditionList = Expeditions.GetExpeditionsList();
+            Item theItem = expeditionList[0].expedition.GetDeliverablesArray()[0];
             ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 200, 280, 7);
-            theItem = Expeditions.expeditionList[0].expedition.GetRewardsArray()[0];
+            theItem = expeditionList[0].expedition.GetRewardsArray()[0];
             ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 200, 310, 15);
-            theItem = Expeditions.expeditionList[0].expedition.GetRewardsArray()[1];
+            theItem = expeditionList[0].expedition.GetRewardsArray()[1];
             ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 230, 310, 15);
         }
 

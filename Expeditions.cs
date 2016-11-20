@@ -12,9 +12,10 @@ namespace Expeditions
 	class Expeditions : Mod
 	{
         private UserInterface expeditionUserInterface;
-        internal ExpeditionUI expeditionUI;
+        internal static ExpeditionUI expeditionUI;
 
-        public static List<ModExpedition> expeditionList; //make add to expediiton list, for mods to call when loading
+        private static List<ModExpedition> expeditionList; //make add to expediiton list, for mods to call when loading
+        public static Texture2D sortingTexture;
 
         public Expeditions()
 		{
@@ -28,21 +29,27 @@ namespace Expeditions
 
         public override void Load()
         {
+            sortingTexture = GetTexture("UI/Sorting_Categories");
+
             expeditionUI = new ExpeditionUI();
             expeditionUI.Activate();
             expeditionUserInterface = new UserInterface();
             expeditionUserInterface.SetState(expeditionUI);
-
-            expeditionList = new List<ModExpedition>();
             
             //add quests
             AddExpeditionToList(new WelcomeQuest());
         }
-        public void AddExpeditionToList(ModExpedition modExpedition)
+        public static void AddExpeditionToList(ModExpedition modExpedition)
         {
-            expeditionList.Add(modExpedition);
-            expeditionList.Add(modExpedition);
-            expeditionList.Add(modExpedition);
+            GetExpeditionsList().Add(modExpedition);
+            // TODO: delet
+            GetExpeditionsList().Add(modExpedition);
+            GetExpeditionsList().Add(modExpedition);
+        }
+        public static List<ModExpedition> GetExpeditionsList()
+        {
+            if(expeditionList == null) expeditionList = new List<ModExpedition>();
+            return expeditionList;
         }
 
         public override void AddRecipes()
@@ -118,6 +125,7 @@ namespace Expeditions
             Main.npcChatText = "";
 
             Main.PlaySound(10, -1, -1, 1); //open menu
+            expeditionUI.ListRecalculate();
             ExpeditionUI.visible = true;
         }
 
