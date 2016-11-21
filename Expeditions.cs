@@ -92,17 +92,6 @@ namespace Expeditions
                                 //No idea what this does but the other one draws the UI
                                 expeditionUserInterface.Update(Main._drawInterfaceGameTime);
                                 expeditionUI.Draw(Main.spriteBatch);
-
-                                //TODO: Remove
-                                //test show all quests
-                                string listOfEs = "";
-                                foreach (ModExpedition me in expeditionList)
-                                {
-                                    listOfEs += me.expedition.title + "\n";
-                                }
-                                Main.spriteBatch.DrawString(
-                                Main.fontMouseText, listOfEs,
-                                new Vector2(200, 200), Color.Magenta, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
                             }
                         }
                         return true;

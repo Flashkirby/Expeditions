@@ -14,21 +14,23 @@ namespace Expeditions
 {
     class ExpeditionUI : UIState
     {
-        private static Color backgroundColour = new Color(63, 65, 151, 200);
-        private static Color borderColour = new Color(18, 18, 31, 200);
-
+        //First Panel
         public static bool visible = false;
         public UIPanel navigationPanel;
         public UIValueBar scrollBar;
         public UITextWrap indexText;
-
         private List<UIToggleImage> _categoryButtons = new List<UIToggleImage>();
+
+        // Second Panel
+        public UIPanel expeditionPanel;
+        public UITextWrap title;
+
+        // Data
         public List<ModExpedition> filterList;
         public List<ModExpedition> sortedList;
 
         // TODO: DELET dis
         public UIMoneyDisplay moneyDiplay;
-        public ItemSlot itemslot;
 
 
 
@@ -43,11 +45,8 @@ namespace Expeditions
             navigationPanel.Top.Set(100, 0);
             navigationPanel.Width.Set(400, 0);
             navigationPanel.Height.Set(90, 0);
-            navigationPanel.BackgroundColor = backgroundColour;
-            navigationPanel.BorderColor = borderColour;
-
-            //navigationPanel.OnMouseDown += new UIElement.MouseEvent(DragStart);
-            //navigationPanel.OnMouseUp += new UIElement.MouseEvent(DragEnd);
+            navigationPanel.BackgroundColor = UIColour.backgroundColour;
+            navigationPanel.BorderColor = UIColour.borderColour;
 
             Texture2D buttonPlayTexture = ModLoader.GetTexture("Terraria/UI/ButtonPlay");
             UIImageButton playButton = new UIImageButton(buttonPlayTexture);
@@ -67,38 +66,34 @@ namespace Expeditions
             closeButton.OnClick += new MouseEvent(CloseButtonClicked);
             navigationPanel.Append(closeButton);
 
-            moneyDiplay = new UIMoneyDisplay();
-            moneyDiplay.Left.Set(15, 0f);
-            moneyDiplay.Top.Set(420, 0f);
-            moneyDiplay.Width.Set(100f, 0f);
-            moneyDiplay.Height.Set(0, 1f);
-            navigationPanel.Append(moneyDiplay);
-
-            //#########################################################################
-
-            // Close button
-            AppendTextButton("Close", 16, 16, new MouseEvent(CloseButtonClicked));
-            // Prev button
-            AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
-            // Next button
-            AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
-
             // Bar
             scrollBar = new UIValueBar(0, sortedList.Count);
             scrollBar.Left.Set(40, 0f);
             scrollBar.Top.Set(50, 0f);
             scrollBar.OnMouseUp += new MouseEvent(UpdateIndex);
+
+            // Append (in reverse order)
+            AppendTextButton("Close", 16, 16, new MouseEvent(CloseButtonClicked));
+            AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
+            AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
             navigationPanel.Append(scrollBar);
-
-            // Category Filter Buttons
-            AppendCategoryButtonsLine1(250, 10);
             AppendCategoryButtonsLine2(250, 46);
-
-            // Counter text
+            AppendCategoryButtonsLine1(250, 10);
             indexText = AppendText("000/000", 156, 16, Color.White, true);
-
-
             base.Append(navigationPanel);
+
+            //#########################################################################
+            float yOffset = navigationPanel.Top.Pixels + navigationPanel.Height.Pixels;
+            expeditionPanel = new UIPanel();
+            expeditionPanel.SetPadding(0);
+            expeditionPanel.Left.Set(400, 0);
+            expeditionPanel.Top.Set(yOffset + 8, 0);
+            expeditionPanel.Width.Set(400, 0);
+            expeditionPanel.Height.Set(120, 0);
+            expeditionPanel.BackgroundColor = UIColour.backgroundColour;
+            expeditionPanel.BorderColor = UIColour.borderColour;
+
+            base.Append(expeditionPanel);
         }
 
         private void AppendTextButton(string text, float x, float y, MouseEvent evt)
@@ -248,7 +243,8 @@ namespace Expeditions
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
-            if (navigationPanel.ContainsPoint(MousePosition))
+            if (navigationPanel.ContainsPoint(MousePosition) ||
+                expeditionPanel.ContainsPoint(MousePosition))
             {
                 Main.player[Main.myPlayer].mouseInterface = true;
             }
@@ -321,6 +317,12 @@ namespace Expeditions
         }
     }
     
+
+
+
+
+
+
 
     public class UIMoneyDisplay : UIElement
     {
@@ -418,6 +420,17 @@ namespace Expeditions
             ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 200, 310, 15);
             theItem = expeditionList[0].expedition.GetRewardsArray()[1];
             ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 230, 310, 15);
+
+            //TODO: Remove
+            //test show all quests
+            string listOfEs = "";
+            foreach (ModExpedition me in expeditionList)
+            {
+                listOfEs += me.expedition.title + "\n";
+            }
+            Main.spriteBatch.DrawString(
+            Main.fontMouseText, listOfEs,
+            new Vector2(200, 200), Color.Magenta, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
         }
 
         internal void ResetCoins()
