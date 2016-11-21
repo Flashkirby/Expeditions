@@ -42,6 +42,10 @@ namespace Expeditions.UI
             this.MinWidth.Set(vector.X + this.PaddingLeft + this.PaddingRight, 0f);
             this.MinHeight.Set(vector.Y + this.PaddingTop + this.PaddingBottom, 0f);
         }
+        public void SetColour(Color colour)
+        {
+            this._colour = colour;
+        }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
