@@ -16,7 +16,11 @@ namespace Expeditions.UI
         private Color _borderColour;
         public int TextHeight
         {
-            get { return _textHeight; }
+            get
+            {
+                if (_text == "") return 0;
+                return _textHeight;
+            }
         }
         public UITextWrap(string text, Color color, Color borderColour, bool centre)
         {
