@@ -22,9 +22,10 @@ namespace Expeditions.UI
                 return _textHeight;
             }
         }
-        public UITextWrap(string text, Color color, Color borderColour, bool centre)
+        public UITextWrap(string text, int textMaxWidth, Color color, Color borderColour, bool centre)
         {
             this.SetText(text);
+            _maxWidth = textMaxWidth;
             _centred = centre;
             _colour = color;
             _borderColour = borderColour;
