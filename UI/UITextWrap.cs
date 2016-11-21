@@ -19,7 +19,10 @@ namespace Expeditions.UI
             get
             {
                 if (_text == "") return 0;
-                return _textHeight;
+                int noOfLines = 0;
+                string[] array = Utils.WordwrapString(_text, Main.fontMouseText, _maxWidth, _maxLines, out noOfLines);
+                noOfLines++;
+                return noOfLines * 30;
             }
         }
         public UITextWrap(string text, int textMaxWidth, Color color, Color borderColour, bool centre)
@@ -67,7 +70,6 @@ namespace Expeditions.UI
             Color textColor = new Color(textValR, textValG, textValB, textValA);
 
             //draw each line of text
-            _textHeight = 30 * noOfLines;
             for (int i = 0; i < noOfLines; i++)
             {
                 Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, array[i], pos.X - offsetX, (float)(pos.Y + i * 30), textColor, _borderColour, Vector2.Zero, 1f);
