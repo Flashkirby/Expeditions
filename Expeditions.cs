@@ -43,8 +43,8 @@ namespace Expeditions
         {
             GetExpeditionsList().Add(modExpedition);
             // TODO: delet
-            GetExpeditionsList().Add(modExpedition);
-            GetExpeditionsList().Add(modExpedition);
+            //GetExpeditionsList().Add(modExpedition);
+            //GetExpeditionsList().Add(modExpedition);
         }
         public static List<ModExpedition> GetExpeditionsList()
         {

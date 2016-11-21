@@ -40,6 +40,10 @@
     <Compile Include="ModExpedition.cs" />
     <Compile Include="Quests\WelcomeQuest.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
+    <Compile Include="UI\UITextButton.cs" />
+    <Compile Include="UI\UIColour.cs" />
+    <Compile Include="UI\UITextWrap.cs" />
+    <Compile Include="UI\UIValueBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
@@ -72,6 +76,7 @@
   <ItemGroup>
     <Content Include="Items\BountyBoard.png" />
     <Content Include="Tiles\BountyBoard.png" />
+    <Content Include="UI\Sorting_Categories.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

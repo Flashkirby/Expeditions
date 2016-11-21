@@ -7,6 +7,7 @@ namespace Expeditions.UI
     {
         public readonly static Color backgroundColour = new Color(63, 65, 151, 200);
         public readonly static Color borderColour = new Color(18, 18, 31, 200);
+        public readonly static Color Grey = new Color(130, 130, 130);
         public readonly static Color Gray = new Color(130, 130, 130);
         public readonly static Color White = new Color(130, 130, 130);
         public readonly static Color Blue = new Color(130, 130, 130);
@@ -21,7 +22,7 @@ namespace Expeditions.UI
         public readonly static Color Red = new Color(130, 130, 130);
         public readonly static Color Purple = new Color(130, 130, 130);
         public readonly static Color Amber = new Color(130, 130, 130);
-        public static Color Expert { get { return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB); } }
+        public static Color Expert { get { return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 1000); } }
 
         public static Color GetColourFromRarity(int rarity)
         {

@@ -23,18 +23,24 @@ namespace Expeditions
 
         // Second Panel
         private UIPanel _expeditionPanel;
-        private UITextWrap _title;
+        private UITextWrap _titleHeader;
         private UITextWrap _description;
-        private UITextWrap _condition;
+        private UITextWrap _conditionHeader;
         private UITextWrap _conditionsDesc;
-        //private List<ItemSlot>
+        private UIItemSlots _deliverableSlots;
+        private UITextWrap _rewardHeader;
+        private UIItemSlots _rewardSlots;
+        private List<ItemSlot> _deliveryItems = new List<ItemSlot>();
+        private List<ItemSlot> _rewardItems = new List<ItemSlot>();
+
+        private ModExpedition currentME
+        {
+            get { return sortedList[_scrollBar.Value - 1]; }
+        }
 
         // Data
         public List<ModExpedition> filterList;
         public List<ModExpedition> sortedList;
-
-        // TODO: DELET dis
-        public UIMoneyDisplay moneyDiplay;
 
 
 
@@ -81,22 +87,40 @@ namespace Expeditions
             AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
             AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
             _navigationPanel.Append(_scrollBar);
-            AppendCategoryButtonsLine2(250, 46);
             AppendCategoryButtonsLine1(250, 10);
+            AppendCategoryButtonsLine2(250, 46);
             _indexText = AppendText("000/000", 156, 16, Color.White, true);
             base.Append(_navigationPanel);
 
             //#########################################################################
-            float yOffset = _navigationPanel.Top.Pixels + _navigationPanel.Height.Pixels;
             _expeditionPanel = new UIPanel();
             _expeditionPanel.SetPadding(0);
             _expeditionPanel.Left.Set(400, 0);
-            _expeditionPanel.Top.Set(yOffset + 8, 0);
+            _expeditionPanel.Top.Set(_navigationPanel.Top.Pixels + _navigationPanel.Height.Pixels + 8, 0);
             _expeditionPanel.Width.Set(400, 0);
-            _expeditionPanel.Height.Set(120, 0);
+            _expeditionPanel.Height.Set(300, 0);
             _expeditionPanel.BackgroundColor = UIColour.backgroundColour;
             _expeditionPanel.BorderColor = UIColour.borderColour;
 
+            _deliverableSlots = new UIItemSlots(7);
+            _deliverableSlots.Left.Set(14, 0);
+            _deliverableSlots.Top.Set(8, 0);
+            _deliverableSlots.Width.Set(380, 0);
+
+            _rewardSlots = new UIItemSlots(15);
+            _rewardSlots.Left.Set(14, 0);
+            _rewardSlots.Top.Set(8, 0);
+            _rewardSlots.Width.Set(380, 0);
+
+            Color invis = new Color(0, 0, 0, 0);
+            _titleHeader = AppendTextPan2("Title", 200, 16, Color.White, Color.Black, true);
+            _description = AppendTextPan2("The character '_' fills a large amount of space, eg. ___________________________________________. Cool!",
+                16, 16, Color.White, invis);
+            _conditionHeader = AppendTextPan2("Goals", 200, 16, Color.White, Color.Black, true);
+            _conditionsDesc = AppendTextPan2("Be the amazing person you already are. ", 16, 16, Color.White, invis);
+            _expeditionPanel.Append(_deliverableSlots);
+            _rewardHeader = AppendTextPan2("Bounty", 200, 16, Color.White, Color.Black, true);
+            _expeditionPanel.Append(_rewardSlots);
             base.Append(_expeditionPanel);
         }
 
@@ -108,13 +132,29 @@ namespace Expeditions
             textButton.OnMouseDown += evt;
             _navigationPanel.Append(textButton);
         }
+        private void AppendTextButtonPan2(string text, float x, float y, MouseEvent evt)
+        {
+            UITextButton textButton = new UITextButton(text, 1, false);
+            textButton.Left.Set(x, 0f);
+            textButton.Top.Set(y, 0f);
+            textButton.OnMouseDown += evt;
+            _expeditionPanel.Append(textButton);
+        }
 
         private UITextWrap AppendText(string text, float x, float y, Color colour, bool centre = false)
         {
-            UITextWrap textWrap = new UITextWrap(text, Color.White, Color.Black, centre);
+            UITextWrap textWrap = new UITextWrap(text, 368, colour, Color.Black, centre);
             textWrap.Left.Set(x, 0f);
             textWrap.Top.Set(y - 3f, 0f);
             _navigationPanel.Append(textWrap);
+            return textWrap;
+        }
+        private UITextWrap AppendTextPan2(string text, float x, float y, Color colour, Color border, bool centre = false)
+        {
+            UITextWrap textWrap = new UITextWrap(text, 368, colour, border, centre);
+            textWrap.Left.Set(x, 0f);
+            textWrap.Top.Set(y - 3f, 0f);
+            _expeditionPanel.Append(textWrap);
             return textWrap;
         }
 
@@ -197,6 +237,52 @@ namespace Expeditions
         {
             _scrollBar.Value = _scrollBar.Value; //this will update to include floor/ceiling
             _indexText.SetText(_scrollBar.Value + "/" + _scrollBar.MaxValue);
+
+            if (_scrollBar.Value > 0)
+            {
+                float yBottom = 0;
+                _titleHeader.SetText(currentME.expedition.title);
+                yBottom += _titleHeader.TextHeight + 10;
+
+                _description.SetText(currentME.expedition.description);
+                _description.Top.Set(yBottom, 0f);
+                yBottom += _description.TextHeight;
+
+                _conditionHeader.SetText("Goals");
+                _conditionHeader.Top.Set(yBottom, 0f);
+                yBottom += _conditionHeader.TextHeight;
+
+                _conditionsDesc.SetText(currentME.expedition.conditionDescription);
+                _conditionsDesc.Top.Set(yBottom, 0f);
+                yBottom += _conditionsDesc.TextHeight;
+
+                _deliverableSlots.Items = currentME.expedition.GetDeliverablesArray();
+                _deliverableSlots.Top.Set(yBottom, 0f);
+                yBottom += _deliverableSlots.SlotHeight;
+
+                _rewardHeader.SetText("Bounty");
+                _rewardHeader.Top.Set(yBottom, 0f);
+                yBottom += _rewardHeader.TextHeight;
+
+                _rewardSlots.Items = currentME.expedition.GetRewardsArray();
+                _rewardSlots.Top.Set(yBottom, 0f);
+                yBottom += _rewardSlots.SlotHeight;
+
+                _expeditionPanel.Height.Set(32 + yBottom, 0);
+            }
+            else
+            {
+                _titleHeader.SetText("No Expeditions Posted");
+                _description.SetText("");
+                _conditionHeader.SetText("");
+                _conditionsDesc.SetText("");
+                _deliverableSlots.Items = null;
+                _rewardHeader.SetText("");
+                _rewardSlots.Items = null;
+
+                _expeditionPanel.Height.Set(32 + _titleHeader.TextHeight, 0);
+            }
+            this.Recalculate();
         }
 
         /// <summary>
@@ -246,6 +332,15 @@ namespace Expeditions
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
+			if (sortedList.Count > 0)
+			{
+				_titleHeader.SetColour(UIColour.GetColourFromRarity(currentME.expedition.difficulty));
+			}
+			else
+			{
+				_titleHeader.SetColour(UIColour.Grey);
+			}
+				
             Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
             if (_navigationPanel.ContainsPoint(MousePosition) ||
                 _expeditionPanel.ContainsPoint(MousePosition))
@@ -321,128 +416,52 @@ namespace Expeditions
         }
     }
     
-
-
-
-
-
-
-
-    public class UIMoneyDisplay : UIElement
+    public class UIItemSlots : UIElement
     {
-        public long coins;
+        public const int itemSlotSize = (int)(50 * 0.6f + 4); //scale being used
 
-        public UIMoneyDisplay()
+        private int _context = 7;
+
+        public Item[] Items;
+        public int SlotHeight
         {
-            Width.Set(100, 0f);
-            Height.Set(40, 0f);
-
-            for (int i = 0; i < 60; i++)
+            get
             {
-                coinBins[i] = -1;
+                if(Items == null || Items.Length <= 0) return 0;
+                return itemSlotSize * (int)(1 + (Items.Length * itemSlotSize) / Width.Pixels);
             }
         }
 
-        DateTime dpsEnd;
-        DateTime dpsStart;
-        int dpsDamage;
-        public bool dpsStarted;
-        public DateTime dpsLastHit;
-
-        // Array of ints 60 long.
-        // "length" = seconds since reset
-        // reset on button or 20 seconds of inactibvity?
-        // pointer to index so on new you can clear previous
-        int[] coinBins = new int[60];
-        int coinBinsIndex;
-
-        public void addCPM(int coins)
+        public UIItemSlots(int context = 7)
         {
-            int second = DateTime.Now.Second;
-            if (second != coinBinsIndex)
-            {
-                coinBinsIndex = second;
-                coinBins[coinBinsIndex] = 0;
-            }
-            coinBins[coinBinsIndex] += coins;
+            _context = context;
         }
 
-        public int getCPM()
-        {
-            int second = DateTime.Now.Second;
-            if (second != coinBinsIndex)
-            {
-                coinBinsIndex = second;
-                coinBins[coinBinsIndex] = 0;
-            }
-
-            long sum = coinBins.Sum(a => a > -1 ? a : 0);
-            int count = coinBins.Count(a => a > -1);
-            if (count == 0)
-            {
-                return 0;
-            }
-            return (int)((sum * 60f) / count);
-        }
-
-        /// <summary>
-        /// It gets draw here.
-        /// </summary>
-        /// <param name="spriteBatch"></param>
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            CalculatedStyle innerDimensions = base.GetInnerDimensions();
-            Vector2 drawPos = new Vector2(innerDimensions.X + 5f, innerDimensions.Y + 30f);
+            base.DrawSelf(spriteBatch);
+            if (Items == null) return;
+            CalculatedStyle dimensions = base.GetDimensions();
+            Rectangle bounds = dimensions.ToRectangle();
 
-            float shopx = innerDimensions.X;
-            float shopy = innerDimensions.Y;
-
-            int[] coinsArray = Utils.CoinsSplit(coins);
-            for (int j = 0; j < 4; j++)
+            if (Items.Length > 0)
             {
-                int num = (j == 0 && coinsArray[3 - j] > 99) ? -6 : 0;
-                spriteBatch.Draw(Main.itemTexture[74 - j], new Vector2(shopx + 11f + (float)(24 * j), shopy /*+ 75f*/), null, Color.White, 0f, Main.itemTexture[74 - j].Size() / 2f, 1f, SpriteEffects.None, 0f);
-                Utils.DrawBorderStringFourWay(spriteBatch, Main.fontItemStack, coinsArray[3 - j].ToString(), shopx + (float)(24 * j) + (float)num, shopy/* + 75f*/, Color.White, Color.Black, new Vector2(0.3f), 0.75f);
-            }
-
-            coinsArray = Utils.CoinsSplit(getCPM());
-            for (int j = 0; j < 4; j++)
-            {
-                int num = (j == 0 && coinsArray[3 - j] > 99) ? -6 : 0;
-                spriteBatch.Draw(Main.itemTexture[74 - j], new Vector2(shopx + 11f + (float)(24 * j), shopy + 25f), null, Color.White, 0f, Main.itemTexture[74 - j].Size() / 2f, 1f, SpriteEffects.None, 0f);
-                Utils.DrawBorderStringFourWay(spriteBatch, Main.fontItemStack, coinsArray[3 - j].ToString(), shopx + (float)(24 * j) + (float)num, shopy + 25f, Color.White, Color.Black, new Vector2(0.3f), 0.75f);
-            }
-            Utils.DrawBorderStringFourWay(spriteBatch, Main.fontMouseText, "CPM", shopx + (float)(24 * 4), shopy + 25f, Color.White, Color.Black, new Vector2(0.3f), 0.75f);
-
-
-
-
-            List<ModExpedition> expeditionList = Expeditions.GetExpeditionsList();
-            Item theItem = expeditionList[0].expedition.GetDeliverablesArray()[0];
-            ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 200, 280, 7);
-            theItem = expeditionList[0].expedition.GetRewardsArray()[0];
-            ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 200, 310, 15);
-            theItem = expeditionList[0].expedition.GetRewardsArray()[1];
-            ExpeditionUI.DrawItemSlot(spriteBatch, theItem, 230, 310, 15);
-
-            //TODO: Remove
-            //test show all quests
-            string listOfEs = "";
-            foreach (ModExpedition me in expeditionList)
-            {
-                listOfEs += me.expedition.title + "\n";
-            }
-            Main.spriteBatch.DrawString(
-            Main.fontMouseText, listOfEs,
-            new Vector2(200, 200), Color.Magenta, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-        }
-
-        internal void ResetCoins()
-        {
-            coins = 0;
-            for (int i = 0; i < 60; i++)
-            {
-                coinBins[i] = -1;
+                int noOfLines = (Items.Length * itemSlotSize) / bounds.Width;
+                //Main.NewText(deliverables.Length + " / " + (bounds.Width / itemSlotSize));
+                //Main.NewText(deliverables.Length + " items cover " + noOfLines + "lines");
+                int i = 0;
+                noOfLines++;
+                for (int y = 0; y < noOfLines; y++)
+                {
+                    for (int x = 0; x < (bounds.Width / itemSlotSize); x++)
+                    {
+                        ExpeditionUI.DrawItemSlot(spriteBatch, Items[i],
+                            bounds.Left + x * itemSlotSize, bounds.Y + y * itemSlotSize, _context);
+                        i++;
+                        if (i >= Items.Length) break;
+                    }
+                    if (i >= Items.Length) break;
+                }
             }
         }
     }
