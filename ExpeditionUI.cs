@@ -16,14 +16,18 @@ namespace Expeditions
     {
         //First Panel
         public static bool visible = false;
-        public UIPanel navigationPanel;
-        public UIValueBar scrollBar;
-        public UITextWrap indexText;
+        private UIPanel _navigationPanel;
+        private UIValueBar _scrollBar;
+        private UITextWrap _indexText;
         private List<UIToggleImage> _categoryButtons = new List<UIToggleImage>();
 
         // Second Panel
-        public UIPanel expeditionPanel;
-        public UITextWrap title;
+        private UIPanel _expeditionPanel;
+        private UITextWrap _title;
+        private UITextWrap _description;
+        private UITextWrap _condition;
+        private UITextWrap _conditionsDesc;
+        //private List<ItemSlot>
 
         // Data
         public List<ModExpedition> filterList;
@@ -39,14 +43,14 @@ namespace Expeditions
             filterList = new List<ModExpedition>(Expeditions.GetExpeditionsList());
             sortedList = new List<ModExpedition>(filterList);
 
-            navigationPanel = new UIPanel();
-            navigationPanel.SetPadding(0);
-            navigationPanel.Left.Set(400, 0);
-            navigationPanel.Top.Set(100, 0);
-            navigationPanel.Width.Set(400, 0);
-            navigationPanel.Height.Set(90, 0);
-            navigationPanel.BackgroundColor = UIColour.backgroundColour;
-            navigationPanel.BorderColor = UIColour.borderColour;
+            _navigationPanel = new UIPanel();
+            _navigationPanel.SetPadding(0);
+            _navigationPanel.Left.Set(400, 0);
+            _navigationPanel.Top.Set(100, 0);
+            _navigationPanel.Width.Set(400, 0);
+            _navigationPanel.Height.Set(90, 0);
+            _navigationPanel.BackgroundColor = UIColour.backgroundColour;
+            _navigationPanel.BorderColor = UIColour.borderColour;
 
             Texture2D buttonPlayTexture = ModLoader.GetTexture("Terraria/UI/ButtonPlay");
             UIImageButton playButton = new UIImageButton(buttonPlayTexture);
@@ -55,7 +59,7 @@ namespace Expeditions
             playButton.Width.Set(22, 0f);
             playButton.Height.Set(22, 0f);
             playButton.OnClick += new MouseEvent(IncrementIndexClick);
-            navigationPanel.Append(playButton);
+            _navigationPanel.Append(playButton);
 
             Texture2D buttonDeleteTexture = ModLoader.GetTexture("Terraria/UI/ButtonDelete");
             UIImageButton closeButton = new UIImageButton(buttonDeleteTexture);
@@ -64,36 +68,36 @@ namespace Expeditions
             closeButton.Width.Set(22, 0f);
             closeButton.Height.Set(22, 0f);
             closeButton.OnClick += new MouseEvent(CloseButtonClicked);
-            navigationPanel.Append(closeButton);
+            _navigationPanel.Append(closeButton);
 
             // Bar
-            scrollBar = new UIValueBar(0, sortedList.Count);
-            scrollBar.Left.Set(40, 0f);
-            scrollBar.Top.Set(50, 0f);
-            scrollBar.OnMouseUp += new MouseEvent(UpdateIndex);
+            _scrollBar = new UIValueBar(0, sortedList.Count);
+            _scrollBar.Left.Set(40, 0f);
+            _scrollBar.Top.Set(50, 0f);
+            _scrollBar.OnMouseUp += new MouseEvent(UpdateIndex);
 
             // Append (in reverse order)
             AppendTextButton("Close", 16, 16, new MouseEvent(CloseButtonClicked));
             AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
             AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
-            navigationPanel.Append(scrollBar);
+            _navigationPanel.Append(_scrollBar);
             AppendCategoryButtonsLine2(250, 46);
             AppendCategoryButtonsLine1(250, 10);
-            indexText = AppendText("000/000", 156, 16, Color.White, true);
-            base.Append(navigationPanel);
+            _indexText = AppendText("000/000", 156, 16, Color.White, true);
+            base.Append(_navigationPanel);
 
             //#########################################################################
-            float yOffset = navigationPanel.Top.Pixels + navigationPanel.Height.Pixels;
-            expeditionPanel = new UIPanel();
-            expeditionPanel.SetPadding(0);
-            expeditionPanel.Left.Set(400, 0);
-            expeditionPanel.Top.Set(yOffset + 8, 0);
-            expeditionPanel.Width.Set(400, 0);
-            expeditionPanel.Height.Set(120, 0);
-            expeditionPanel.BackgroundColor = UIColour.backgroundColour;
-            expeditionPanel.BorderColor = UIColour.borderColour;
+            float yOffset = _navigationPanel.Top.Pixels + _navigationPanel.Height.Pixels;
+            _expeditionPanel = new UIPanel();
+            _expeditionPanel.SetPadding(0);
+            _expeditionPanel.Left.Set(400, 0);
+            _expeditionPanel.Top.Set(yOffset + 8, 0);
+            _expeditionPanel.Width.Set(400, 0);
+            _expeditionPanel.Height.Set(120, 0);
+            _expeditionPanel.BackgroundColor = UIColour.backgroundColour;
+            _expeditionPanel.BorderColor = UIColour.borderColour;
 
-            base.Append(expeditionPanel);
+            base.Append(_expeditionPanel);
         }
 
         private void AppendTextButton(string text, float x, float y, MouseEvent evt)
@@ -102,7 +106,7 @@ namespace Expeditions
             textButton.Left.Set(x, 0f);
             textButton.Top.Set(y, 0f);
             textButton.OnMouseDown += evt;
-            navigationPanel.Append(textButton);
+            _navigationPanel.Append(textButton);
         }
 
         private UITextWrap AppendText(string text, float x, float y, Color colour, bool centre = false)
@@ -110,7 +114,7 @@ namespace Expeditions
             UITextWrap textWrap = new UITextWrap(text, Color.White, Color.Black, centre);
             textWrap.Left.Set(x, 0f);
             textWrap.Top.Set(y - 3f, 0f);
-            navigationPanel.Append(textWrap);
+            _navigationPanel.Append(textWrap);
             return textWrap;
         }
 
@@ -130,7 +134,7 @@ namespace Expeditions
                 this._categoryButtons.Add(uIToggleImage);
                 uIElement.Append(uIToggleImage);
             }
-            navigationPanel.Append(uIElement);
+            _navigationPanel.Append(uIElement);
         }
         private void AppendCategoryButtonsLine2(float x, float y)
         {
@@ -148,7 +152,7 @@ namespace Expeditions
                 this._categoryButtons.Add(uIToggleImage);
                 uIElement.Append(uIToggleImage);
             }
-            navigationPanel.Append(uIElement);
+            _navigationPanel.Append(uIElement);
         }
 
         public static void DrawItemSlot(SpriteBatch spriteBatch, Item item, float x, float y, int Context)
@@ -165,12 +169,12 @@ namespace Expeditions
 
         private void IncrementIndexClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            scrollBar.Value++;
+            _scrollBar.Value++;
             UpdateIndex();
         }
         private void DecrementIndexClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            scrollBar.Value--;
+            _scrollBar.Value--;
             UpdateIndex();
         }
 
@@ -191,8 +195,8 @@ namespace Expeditions
         /// </summary>
         public void UpdateIndex(UIMouseEvent evt, UIElement listeningElement)
         {
-            scrollBar.Value = scrollBar.Value; //this will update to include floor/ceiling
-            indexText.SetText(scrollBar.Value + "/" + scrollBar.MaxValue);
+            _scrollBar.Value = _scrollBar.Value; //this will update to include floor/ceiling
+            _indexText.SetText(_scrollBar.Value + "/" + _scrollBar.MaxValue);
         }
 
         /// <summary>
@@ -228,13 +232,13 @@ namespace Expeditions
             // set scrollbar
             if(sortedList.Count > 0)
             {
-                scrollBar.MinValue = 1;
-                scrollBar.MaxValue = sortedList.Count;
+                _scrollBar.MinValue = 1;
+                _scrollBar.MaxValue = sortedList.Count;
             }
             else
             {
-                scrollBar.MinValue = 0;
-                scrollBar.MaxValue = 0;
+                _scrollBar.MinValue = 0;
+                _scrollBar.MaxValue = 0;
             }
             UpdateIndex();
             Main.NewText("Re-sorted List: " + sortedList.Count);
@@ -243,8 +247,8 @@ namespace Expeditions
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
-            if (navigationPanel.ContainsPoint(MousePosition) ||
-                expeditionPanel.ContainsPoint(MousePosition))
+            if (_navigationPanel.ContainsPoint(MousePosition) ||
+                _expeditionPanel.ContainsPoint(MousePosition))
             {
                 Main.player[Main.myPlayer].mouseInterface = true;
             }
