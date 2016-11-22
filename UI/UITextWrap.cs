@@ -63,16 +63,18 @@ namespace Expeditions.UI
             int noOfLines = 0;
             string[] array = Utils.WordwrapString(_text, Main.fontMouseText, _maxWidth, _maxLines, out noOfLines);
             noOfLines++;
-            int textValR = (int)((Main.mouseTextColor * 2 + _colour.R) / 3);
-            int textValG = (int)((Main.mouseTextColor * 2 + _colour.G) / 3);
-            int textValB = (int)((Main.mouseTextColor * 2 + _colour.B) / 3);
-            int textValA = (int)((Main.mouseTextColor * 2 + _colour.A) / 3);
-            Color textColor = new Color(textValR, textValG, textValB, textValA);
+
+            float colMod = (Main.mouseTextColor / 255f);
+            Color textColor = new Color(
+                (int)(_colour.R * colMod),
+                (int)(_colour.G * colMod),
+                (int)(_colour.B * colMod),
+                (int)(_colour.A));
 
             //draw each line of text
             for (int i = 0; i < noOfLines; i++)
             {
-                Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, array[i], pos.X - offsetX, (float)(pos.Y + i * 30), textColor, _borderColour, Vector2.Zero, 1f);
+                Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, array[i], (int)(pos.X - offsetX), (int)(pos.Y + i * 30), textColor, _borderColour, Vector2.Zero, 1f);
             }
         }
     }
