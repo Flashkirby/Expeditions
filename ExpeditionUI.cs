@@ -189,6 +189,10 @@ namespace Expeditions
                 uIToggleImage.Left.Set((float)(j * 36 + x), 0f);
                 uIToggleImage.SetState(true);
                 uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
+                if(j == 1 || j == 3)
+                {
+                    uIToggleImage.SetState(false);
+                }
                 this._categoryButtons.Add(uIToggleImage);
                 uIElement.Append(uIToggleImage);
             }
@@ -307,7 +311,7 @@ namespace Expeditions
                 if (anyMatch == 0) continue;
                 // line 2
                 if (e.completed && !this._categoryButtons[5].IsOn) { continue; }
-                if (e.repeatable && !this._categoryButtons[6].IsOn) { continue; }
+                if (!e.repeatable && this._categoryButtons[6].IsOn) { continue; }
                 filterList.Add(current);
             }
 
@@ -384,16 +388,16 @@ namespace Expeditions
                             text = "Challenger";
                             break;
                         case 4:
-                            text = "Completed";
+                            text = "Include Completed";
                             break;
                         case 5:
-                            text = "Repeatable";
+                            text = "Only Repeatables";
                             break;
                         case 6:
-                            text = "Sort Alphabetically";
+                            text = "Sort by A-Z";
                             break;
                         case 7:
-                            text = "Sort by Difficulty";
+                            text = "Sort by Tier";
                             break;
                         default:
                             text = "None";
