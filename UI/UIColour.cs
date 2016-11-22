@@ -9,19 +9,19 @@ namespace Expeditions.UI
         public readonly static Color borderColour = new Color(18, 18, 31, 200);
         public readonly static Color Grey = new Color(130, 130, 130);
         public readonly static Color Gray = new Color(130, 130, 130);
-        public readonly static Color White = new Color(130, 130, 130);
-        public readonly static Color Blue = new Color(130, 130, 130);
-        public readonly static Color Green = new Color(130, 130, 130);
-        public readonly static Color Orange = new Color(130, 130, 130);
-        public readonly static Color LightRed = new Color(130, 130, 130);
-        public readonly static Color Pink = new Color(130, 130, 130);
-        public readonly static Color LightPurple = new Color(130, 130, 130);
-        public readonly static Color Lime = new Color(130, 130, 130);
-        public readonly static Color Yellow = new Color(130, 130, 130);
-        public readonly static Color Cyan = new Color(130, 130, 130);
-        public readonly static Color Red = new Color(130, 130, 130);
-        public readonly static Color Purple = new Color(130, 130, 130);
-        public readonly static Color Amber = new Color(130, 130, 130);
+        public readonly static Color White = new Color(255, 255, 255);
+        public readonly static Color Blue = new Color(150, 150, 255);
+        public readonly static Color Green = new Color(150, 255, 150);
+        public readonly static Color Orange = new Color(255, 200, 150);
+        public readonly static Color LightRed = new Color(255, 150, 150);
+        public readonly static Color Pink = new Color(255, 150, 255);
+        public readonly static Color LightPurple = new Color(210, 160, 255);
+        public readonly static Color Lime = new Color(150, 255, 10);
+        public readonly static Color Yellow = new Color(255, 255, 10);
+        public readonly static Color Cyan = new Color(5, 200, 255);
+        public readonly static Color Red = new Color(255, 40, 100);
+        public readonly static Color Purple = new Color(180, 40, 255);
+        public readonly static Color Amber = new Color(255, 175, 0);
         public static Color Expert { get { return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 1000); } }
 
         public static Color GetColourFromRarity(int rarity)
