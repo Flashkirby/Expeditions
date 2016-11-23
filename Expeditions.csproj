@@ -38,6 +38,7 @@
     <Compile Include="Items\BountyBoard.cs" />
     <Compile Include="Expeditions.cs" />
     <Compile Include="ModExpedition.cs" />
+    <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Quests\WelcomeQuest.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
     <Compile Include="UI\UITextButton.cs" />

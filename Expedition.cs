@@ -184,5 +184,17 @@ namespace Expeditions
             }
             return rewards;
         }
+
+        public int GetHashID()
+        {
+            if (mex == null)
+            {
+                return ("Terraria@" + title).GetHashCode();
+            }
+            else
+            {
+                return (mex.mod.Name + "@" + title).GetHashCode();
+            }
+        }
     }
 }
