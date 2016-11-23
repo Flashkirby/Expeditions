@@ -384,7 +384,9 @@ namespace Expeditions
         {
 			if (sortedList.Count > 0)
 			{
-				_titleHeader.SetColour(UIColour.GetColourFromRarity(currentME.expedition.difficulty));
+                int tier = currentME.expedition.difficulty;
+                if (currentME.expedition.important && !currentME.expedition.completed) tier = -12;
+                _titleHeader.SetColour(UIColour.GetColourFromRarity(tier));
 			}
 			else
 			{

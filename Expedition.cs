@@ -7,7 +7,11 @@ namespace Expeditions
 {
     public class Expedition
     {
-        public ModExpedition mex;
+        public ModExpedition mex
+        {
+            get;
+            internal set;
+        }
 
         /// <summary>Title of expedition</summary>
         public string title = "";
@@ -42,8 +46,7 @@ namespace Expeditions
         /// <returns></returns>
         public bool ConditionsMet()
         {
-            if (mex == null) return false;
-            if (!mex.CheckPrerequisites()) return false;
+            if (mex != null && !mex.CheckPrerequisites()) return false;
             if (deliverables.Count > 0)
             {
                 //get as temp array of required
@@ -111,7 +114,7 @@ namespace Expeditions
         /// </summary>
         public void CompleteExpedition()
         {
-
+            Main.NewText("yay you did it");
         }
 
         /// <summary>

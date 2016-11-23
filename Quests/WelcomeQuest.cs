@@ -11,11 +11,12 @@ namespace Expeditions.Quests
         {
             expedition.title = "Hello World";
             expedition.description = "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. ";
-            expedition.difficulty = -12;
+            expedition.difficulty = 1;
             expedition.deliver = true;
             expedition.important = true;
             expedition.conditionDescription = "Keep being awesome!";
-            expedition.AddDeliverable(ItemID.DirtBlock, 151);
+            expedition.AddDeliverable(ItemID.DirtBlock, 1);
+            /*
             expedition.AddDeliverable(ItemID.Silk, 151);
             expedition.AddDeliverable(ItemID.SiltBlock, 151);
             expedition.AddDeliverable(ItemID.SilverAndBlackDye, 151);
@@ -29,16 +30,10 @@ namespace Expeditions.Quests
             expedition.AddDeliverable(ItemID.BanquetTable, 151);
             expedition.AddDeliverable(ItemID.BatBanner, 151);
             expedition.AddDeliverable(ItemID.Bananarang, 6);
+            */
 
-            Item i = new Item();
-            i.SetDefaults(ItemID.SoulofFlight);
-            i.stack = 50;
-            expedition.AddReward(i);
-            i = new Item();
-            i.SetDefaults(ItemID.Shackle);
-            i.prefix = 1;
-            i.Prefix(i.prefix);
-            expedition.AddReward(i);
+            AddRewardItem(ItemID.DirtBlock, 2);
+            AddRewardPrefix(ItemID.Shackle, 65);
         }
         /*
          
