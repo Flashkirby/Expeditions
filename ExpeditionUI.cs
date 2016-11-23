@@ -194,7 +194,18 @@ namespace Expeditions
                 UIToggleImage uIToggleImage = new UIToggleImage(texture, 32, 32, new Point(34 * j, 0), new Point(34 * j, 34));
                 uIToggleImage.Left.Set((float)(j * 36 + x), 0f);
                 uIToggleImage.SetState(true);
-                uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
+                if (j == 2)
+                {
+                    uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortAlphabetical);
+                }
+                else if(j ==3)
+                {
+                    uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortDifficulty);
+                }
+                else
+                {
+                    uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
+                }
                 if(j == 1 || j == 3)
                 {
                     uIToggleImage.SetState(false);
@@ -236,6 +247,26 @@ namespace Expeditions
 
         private void FilterList(UIMouseEvent evt, UIElement listeningElement)
         {
+            ListRecalculate();
+        }
+
+        private void SortAlphabetical(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (this._categoryButtons[6].IsOn)
+            { this._categoryButtons[7].SetState(false); }
+            else
+            { this._categoryButtons[7].SetState(true); }
+
+            ListRecalculate();
+        }
+
+        private void SortDifficulty(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (this._categoryButtons[7].IsOn)
+            { this._categoryButtons[6].SetState(false); }
+            else
+            { this._categoryButtons[6].SetState(true); }
+
             ListRecalculate();
         }
 
@@ -361,9 +392,20 @@ namespace Expeditions
                 filterList.Add(current);
             }
 
+            // sort by these
+            int sortMode = 0;
+            if (this._categoryButtons[6].IsOn) sortMode = 0;
+            if (this._categoryButtons[7].IsOn) sortMode = 1;
 
-            // to be sorted later
-            sortedList.AddRange(filterList);
+            switch(sortMode)
+            {
+                case 1:
+                    sortedList = filterList.OrderBy(me => me.expedition.difficulty).ToList();
+                    break;
+                default:
+                    sortedList = filterList.OrderBy(me => me.expedition.title).ToList();
+                    break;
+            }
 
             // set scrollbar
             if(sortedList.Count > 0)
