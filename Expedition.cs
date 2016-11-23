@@ -95,6 +95,24 @@ namespace Expeditions
                 }
             }
         }
+        
+        /// <summary>
+        /// Toggles the state of this expedition being tracked
+        /// </summary>
+        /// <returns>The new state of the tracking</returns>
+        public bool ToggleTrackingActive()
+        {
+            trackingActive = !trackingActive;
+            return trackingActive;
+        }
+
+        /// <summary>
+        /// Sets the expedition to complete, removing tracking and dropping items (check net as well)
+        /// </summary>
+        public void CompleteExpedition()
+        {
+
+        }
 
         /// <summary>
         /// Add an item to be handed in for the expedition to be successful

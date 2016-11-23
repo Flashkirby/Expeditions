@@ -125,7 +125,7 @@ namespace Expeditions
             _rewardHeader = AppendTextPan2("Bounty", 200, 16, Color.White, Color.Black, true);
             _expeditionPanel.Append(_rewardSlots);
             _trackButton = AppendTextButtonPan2("Un/track", 20, 0, new MouseEvent(ToggleTrackedClicked));
-            _completeButton = AppendTextButtonPan2("Complete", 120, 0, new MouseEvent(ToggleTrackedClicked));
+            _completeButton = AppendTextButtonPan2("Complete", 120, 0, new MouseEvent(CompleteClicked));
             base.Append(_expeditionPanel);
         }
 
@@ -241,14 +241,26 @@ namespace Expeditions
 
         private void ToggleTrackedClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.PlaySound(11, -1, -1, 1);
-            visible = false;
+            if (currentME != null)
+            {
+                currentME.expedition.ToggleTrackingActive();
+                Main.PlaySound(12, -1, -1, 1);
+            }
+            UpdateIndex();
         }
 
         private void CompleteClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.PlaySound(11, -1, -1, 1);
-            visible = false;
+            if(currentME != null &&
+                (currentME.expedition.ConditionsMet()))
+            {
+                currentME.expedition.CompleteExpedition();
+                Main.PlaySound(12, -1, -1, 1);
+            }else
+            {
+                Main.PlaySound(22, -1, -1, 1);
+            }
+            UpdateIndex();
         }
 
         public void UpdateIndex() { UpdateIndex(null, null); }
@@ -263,7 +275,7 @@ namespace Expeditions
             if (_scrollBar.Value > 0)
             {
                 float yBottom = 0;
-                _titleHeader.SetText(currentME.expedition.title);
+                _titleHeader.SetText(currentME.expedition.title + (currentME.expedition.completed ? "(Completed)" : ""));
                 yBottom += _titleHeader.TextHeight + 10;
 
                 _description.SetText(currentME.expedition.description);
