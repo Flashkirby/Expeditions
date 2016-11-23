@@ -9,8 +9,8 @@ using Expeditions.Quests;
 
 namespace Expeditions
 {
-	class Expeditions : Mod
-	{
+    class Expeditions : Mod
+    {
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
@@ -18,14 +18,14 @@ namespace Expeditions
         public static Texture2D sortingTexture;
 
         public Expeditions()
-		{
-			Properties = new ModProperties()
-			{
-				Autoload = true,
-				AutoloadGores = true,
-				AutoloadSounds = true
-			};
-		}
+        {
+            Properties = new ModProperties()
+            {
+                Autoload = true,
+                AutoloadGores = true,
+                AutoloadSounds = true
+            };
+        }
 
         public override void Load()
         {
@@ -35,7 +35,7 @@ namespace Expeditions
             expeditionUI.Activate();
             expeditionUserInterface = new UserInterface();
             expeditionUserInterface.SetState(expeditionUI);
-            
+
             //add quests
             AddExpeditionToList(new WelcomeQuest(), this);
         }
@@ -58,7 +58,7 @@ namespace Expeditions
         /// <returns></returns>
         public static List<ModExpedition> GetExpeditionsList()
         {
-            if(expeditionList == null) expeditionList = new List<ModExpedition>();
+            if (expeditionList == null) expeditionList = new List<ModExpedition>();
             return expeditionList;
         }
 
@@ -118,7 +118,7 @@ namespace Expeditions
         public static void OpenExpeditionMenu(bool previewMode = false)
         {
             Player player = Main.player[Main.myPlayer];
-            
+
 
             Main.playerInventory = false;
             Main.npcShop = 0;
@@ -155,6 +155,71 @@ namespace Expeditions
             else
             {
                 Expeditions.OpenExpeditionMenu();
+            }
+        }
+
+        /// <summary>
+        /// Spawn an item from a client input for a player
+        /// </summary>
+        /// <param name="itemType"></param>
+        /// <param name="stack"></param>
+        public static void ClientNetSpawnItem(int itemType, int stack, int prefix = 0)
+        {
+            int id = Item.NewItem(
+                (int)Main.player[Main.myPlayer].position.X,
+                (int)Main.player[Main.myPlayer].position.Y,
+                Main.player[Main.myPlayer].width,
+                Main.player[Main.myPlayer].height,
+                itemType, stack, false, prefix, false, false);
+            if (Main.netMode == 1)
+            {
+                NetMessage.SendData(21, -1, -1, "", id, 1f);
+            }
+        }
+        /// <summary>
+        /// Spawn an item from a client input for a player
+        /// </summary>
+        /// <param name="item"></param>
+        public static void ClientNetSpawnItem(Item item)
+        {
+            ClientNetSpawnItem(item.type, item.stack, item.prefix);
+        }
+        /// <summary>
+        /// Spawn money on the player equal to the amount specified
+        /// </summary>
+        /// <param name="value"></param>
+        public static void ClientNetSpawnItemMoney(int value)
+        {
+            int denomination;
+            int coinType;
+            int stack;
+            while (value > 0)
+            {
+                if (value >= 1000000) //platinum
+                {
+                    denomination = 1000000;
+                    coinType = 74;
+                }
+                if (value >= 10000) //gold
+                {
+                    denomination = 10000;
+                    coinType = 73;
+                }
+                if (value >= 100) //silver
+                {
+                    denomination = 100;
+                    coinType = 72;
+                }
+                else
+                {
+                    denomination = 1;
+                    coinType = 71;
+                }
+
+                stack = value / denomination;
+                value -= stack * denomination;
+
+                ClientNetSpawnItem(coinType, stack);
             }
         }
     }

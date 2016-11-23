@@ -49,51 +49,78 @@ namespace Expeditions
             if (mex != null && !mex.CheckPrerequisites()) return false;
             if (deliverables.Count > 0)
             {
-                //get as temp array of required
-                int[] items = new int[deliverables.Count];
-                int[] stacks = new int[deliverables.Count];
-                for (int i = 0; i < items.Length; i++)
-                {
-                    items[i] = deliverables[i].Key;
-                    stacks[i] = deliverables[i].Value;
-                }
-
-                //keep track of stacks player has
-                int[] hasStacks = new int[deliverables.Count];
-                Item[] inventory = Main.player[Main.myPlayer].inventory;
-                for (int i = 0; i < inventory.Length; i++)
-                {
-                    addToStackIfMatching(inventory[i], items, ref hasStacks);
-                }
-
-                //check to see if all item stacks are == or above
-                try
-                {
-                    for (int i = 0; i < stacks.Length; i++)
-                    {
-                        if (hasStacks[i] < stacks[i]) return false;
-                    }
-                }
-                catch (Exception e)
-                {
-                    return false;
-                }
+                return CheckRequiredItems();
             }
             return true;
         }
+
+        private bool CheckRequiredItems(bool deductItems = false)
+        {
+            //get as temp array of required
+            int[] items = new int[deliverables.Count];
+            int[] stacks = new int[deliverables.Count];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = deliverables[i].Key;
+                stacks[i] = deliverables[i].Value;
+            }
+
+            //keep track of stacks player has
+            int[] hasStacks = new int[deliverables.Count];
+            Item[] inventory = Main.player[Main.myPlayer].inventory;
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                addToStackIfMatching(inventory[i], items, ref hasStacks, stacks, deductItems);
+            }
+
+            //check to see if all item stacks are == or above
+            try
+            {
+                for (int i = 0; i < stacks.Length; i++)
+                {
+                    if (hasStacks[i] < stacks[i]) return false;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Check against itemTypes to see if it matches, if so add to corrosponding index in stack counter
         /// </summary>
         /// <param name="item"></param>
         /// <param name="itemTypes"></param>
         /// <param name="itemStackCount"></param>
-        private void addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount)
+        private void addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount, int[]itemStacks, bool deductItems = false)
         {
             for (int i = 0; i < itemTypes.Length; i++)
             {
-                if (item.type == itemTypes[i])
+                if (item.type == itemTypes[i]) //the itemtype matches
                 {
-                    itemStackCount[i] += item.stack;
+                    if (deductItems) //behaviour if removing items
+                    {
+                        int deductAmount = itemStacks[i] - itemStackCount[i];
+                        if (item.stack > deductAmount)
+                        {
+                            //item stack is larger than amount remaining;
+                            item.stack -= deductAmount;
+                            itemStackCount[i] += item.stack;
+                        }
+                        else
+                        {
+                            //item stack is less than amount remaining;
+                            item.SetDefaults(0);
+                            itemStackCount[i] += deductAmount;
+                        }
+                    }
+                    else //normal counting behaviour
+                    {
+                        //add to total owned in stack
+                        itemStackCount[i] += item.stack;
+                    }
                     return;
                 }
             }
@@ -114,7 +141,23 @@ namespace Expeditions
         /// </summary>
         public void CompleteExpedition()
         {
-            Main.NewText("yay you did it");
+            // check mod hook first
+            if (mex != null && !mex.CompleteExpedition(rewards)) return;
+
+            // deduct deliverables
+            CheckRequiredItems(true);
+
+            // grant items
+            foreach (Item item in rewards)
+            {
+                Expeditions.ClientNetSpawnItem(item);
+            }
+
+            //complete this
+            trackingActive = false;
+            completed = true;
+
+            //net message sender
         }
 
         /// <summary>

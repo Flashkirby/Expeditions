@@ -306,7 +306,7 @@ namespace Expeditions
             if (_scrollBar.Value > 0)
             {
                 float yBottom = 0;
-                _titleHeader.SetText(currentME.expedition.title + (currentME.expedition.completed ? "(Completed)" : ""));
+                _titleHeader.SetText(currentME.expedition.title + (currentME.expedition.completed ? " (Completed)" : ""));
                 yBottom += _titleHeader.TextHeight + 10;
 
                 _description.SetText(currentME.expedition.description);

@@ -14,6 +14,7 @@ namespace Expeditions.Quests
             expedition.difficulty = 1;
             expedition.deliver = true;
             expedition.important = true;
+            expedition.repeatable = true;
             expedition.conditionDescription = "Keep being awesome!";
             expedition.AddDeliverable(ItemID.DirtBlock, 1);
             /*

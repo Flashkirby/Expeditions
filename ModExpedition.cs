@@ -22,34 +22,6 @@ namespace Expeditions
             this.expedition.mex = this;
         }
 
-        #region Virtual Methods
-        /// <summary>
-        /// The initialisation method for mods using this. Use it to set the title, rewards etc.
-        /// </summary>
-        public virtual void SetDefaults()
-        {
-
-        }
-
-        /// <summary>
-        /// Put in any checks here to determine whether the expedition is complete, sans deliverables
-        /// </summary>
-        /// <returns>True if conditions are met</returns>
-        public virtual bool CheckConditions()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Put in any checks here to determine whether the expedition is visible yet
-        /// </summary>
-        /// <returns>True if prerequisites are met</returns>
-        public virtual bool CheckPrerequisites()
-        {
-            return true;
-        }
-        #endregion
-
         /// <summary>
         /// Add an item with a specified stack to the expedition rewards.
         /// </summary>
@@ -76,5 +48,43 @@ namespace Expeditions
             i.Prefix(i.prefix);
             expedition.AddReward(i);
         }
+
+        #region Virtual Methods
+        /// <summary>
+        /// The initialisation method for mods using this. Use it to set the title, rewards etc.
+        /// </summary>
+        public virtual void SetDefaults()
+        {
+
+        }
+
+        /// <summary>
+        /// Put in any checks here to determine whether the expedition is complete, sans deliverables
+        /// </summary>
+        /// <returns>True if conditions are met</returns>
+        public virtual bool CheckConditions()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Put in any checks here to determine whether the expedition is visible yet
+        /// </summary>
+        /// <returns>True if prerequisites are met</returns>
+        public virtual bool CheckPrerequisites()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Called before granting the rewards of an expedition
+        /// </summary>
+        /// <param name="rewards">List of items to be rewarded</param>
+        /// <returns>True to actually drop reward items</returns>
+        public virtual bool CompleteExpedition(List<Item> rewards)
+        {
+            return true;
+        }
+        #endregion
     }
 }
