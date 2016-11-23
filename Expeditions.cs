@@ -102,7 +102,7 @@ namespace Expeditions
 
         }
 
-        public static void OpenExpeditionMenu()
+        public static void OpenExpeditionMenu(bool previewMode = false)
         {
             Player player = Main.player[Main.myPlayer];
             
@@ -116,6 +116,7 @@ namespace Expeditions
             Main.PlaySound(10, -1, -1, 1); //open menu
             expeditionUI.ListRecalculate();
             ExpeditionUI.visible = true;
+            //ExpeditionUI.previewMode = previewMode;
         }
 
         public static void CloseExpeditionMenu()

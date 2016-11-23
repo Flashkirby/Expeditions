@@ -42,7 +42,8 @@ namespace Expeditions
         /// <returns></returns>
         public bool ConditionsMet()
         {
-            if(!mex.CheckPrerequisites()) return false;
+            if (mex == null) return false;
+            if (!mex.CheckPrerequisites()) return false;
             if (deliverables.Count > 0)
             {
                 //get as temp array of required

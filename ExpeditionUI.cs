@@ -16,6 +16,7 @@ namespace Expeditions
     {
         //First Panel
         public static bool visible = false;
+        public static bool previewMode = false;
         private UIPanel _navigationPanel;
         private UIValueBar _scrollBar;
         private UITextWrap _indexText;
@@ -32,6 +33,8 @@ namespace Expeditions
         private UIItemSlots _rewardSlots;
         private List<ItemSlot> _deliveryItems = new List<ItemSlot>();
         private List<ItemSlot> _rewardItems = new List<ItemSlot>();
+        private UITextButton _trackButton;
+        private UITextButton _completeButton;
 
         private ModExpedition currentME
         {
@@ -121,6 +124,8 @@ namespace Expeditions
             _expeditionPanel.Append(_deliverableSlots);
             _rewardHeader = AppendTextPan2("Bounty", 200, 16, Color.White, Color.Black, true);
             _expeditionPanel.Append(_rewardSlots);
+            _trackButton = AppendTextButtonPan2("Un/track", 20, 0, new MouseEvent(ToggleTrackedClicked));
+            _completeButton = AppendTextButtonPan2("Complete", 120, 0, new MouseEvent(ToggleTrackedClicked));
             base.Append(_expeditionPanel);
         }
 
@@ -132,13 +137,14 @@ namespace Expeditions
             textButton.OnMouseDown += evt;
             _navigationPanel.Append(textButton);
         }
-        private void AppendTextButtonPan2(string text, float x, float y, MouseEvent evt)
+        private UITextButton AppendTextButtonPan2(string text, float x, float y, MouseEvent evt)
         {
             UITextButton textButton = new UITextButton(text, 1, false);
             textButton.Left.Set(x, 0f);
             textButton.Top.Set(y, 0f);
             textButton.OnMouseDown += evt;
             _expeditionPanel.Append(textButton);
+            return textButton;
         }
 
         private UITextWrap AppendText(string text, float x, float y, Color colour, bool centre = false)
@@ -233,6 +239,18 @@ namespace Expeditions
             ListRecalculate();
         }
 
+        private void ToggleTrackedClicked(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Main.PlaySound(11, -1, -1, 1);
+            visible = false;
+        }
+
+        private void CompleteClicked(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Main.PlaySound(11, -1, -1, 1);
+            visible = false;
+        }
+
         public void UpdateIndex() { UpdateIndex(null, null); }
         /// <summary>
         /// Update the Index Text
@@ -271,6 +289,20 @@ namespace Expeditions
                 _rewardSlots.Items = currentME.expedition.GetRewardsArray();
                 _rewardSlots.Top.Set(yBottom, 0f);
                 yBottom += _rewardSlots.SlotHeight;
+                
+                if (previewMode || (currentME.expedition.completed && !currentME.expedition.repeatable))
+                {
+                    _trackButton.SetText("");
+                    _completeButton.SetText("");
+                }
+                else
+                {
+                    _trackButton.SetText((currentME.expedition.trackingActive ? "Untrack" : "Track"));
+                    _trackButton.Top.Set(yBottom + 10f, 0f);
+                    _completeButton.SetText((currentME.expedition.ConditionsMet() ? "Complete" : "In Progress"));
+                    _completeButton.Top.Set(yBottom + 10f, 0f);
+                    yBottom += 10;
+                }
 
                 _expeditionPanel.Height.Set(32 + yBottom, 0);
             }
@@ -283,6 +315,8 @@ namespace Expeditions
                 _deliverableSlots.Items = null;
                 _rewardHeader.SetText("");
                 _rewardSlots.Items = null;
+                _trackButton.SetText("");
+                _completeButton.SetText("");
 
                 _expeditionPanel.Height.Set(32 + _titleHeader.TextHeight, 0);
             }
@@ -310,8 +344,8 @@ namespace Expeditions
                 if (e.important && this._categoryButtons[3].IsOn) { anyMatch++; }
                 if (anyMatch == 0) continue;
                 // line 2
-                if (e.completed && !this._categoryButtons[5].IsOn) { continue; }
-                if (!e.repeatable && this._categoryButtons[6].IsOn) { continue; }
+                if (e.completed && !this._categoryButtons[4].IsOn) { continue; }
+                if (!e.repeatable && this._categoryButtons[5].IsOn) { continue; }
                 filterList.Add(current);
             }
 
