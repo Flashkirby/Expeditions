@@ -309,7 +309,10 @@ namespace Expeditions
                 _titleHeader.SetText(currentME.expedition.title + (currentME.expedition.completed ? " (Completed)" : ""));
                 yBottom += _titleHeader.TextHeight + 10;
 
-                _description.SetText(currentME.expedition.description);
+                if (currentME.expedition.completed && currentME.expedition.description != "")
+                { _description.SetText(currentME.expedition.descriptionCompleted); }
+                else
+                { _description.SetText(currentME.expedition.description); }
                 _description.Top.Set(yBottom, 0f);
                 yBottom += _description.TextHeight;
 
@@ -389,6 +392,7 @@ namespace Expeditions
                 // line 2
                 if (e.completed && !this._categoryButtons[4].IsOn) { continue; }
                 if (!e.repeatable && this._categoryButtons[5].IsOn) { continue; }
+                if (!e.PrerequisitesMet()) continue;
                 filterList.Add(current);
             }
 

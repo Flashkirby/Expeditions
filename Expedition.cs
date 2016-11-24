@@ -10,6 +10,7 @@ namespace Expeditions
     public class Expedition
     {
         public readonly static Color textColour = new Color(80, 255, 160);
+        public readonly static Color muteColour = new Color(75, 150, 112);
 
         public ModExpedition mex
         {
@@ -21,6 +22,8 @@ namespace Expeditions
         public string title = "";
         /// <summary>Description of expedition</summary>
         public string description = "";
+        /// <summary>Description of expedition if completed, eg. for repeatable quests</summary>
+        public string descriptionCompleted = "";
         /// <summary>Description of conditions to be met</summary>
         public string conditionDescription = "";
         /// <summary>Tier of expedition, same as item rarity</summary>
@@ -50,7 +53,7 @@ namespace Expeditions
         /// <returns></returns>
         public bool ConditionsMet()
         {
-            if (mex != null && !mex.CheckPrerequisites()) return false;
+            if (mex != null && !mex.CheckConditions()) return false;
             if (deliverables.Count > 0)
             {
                 return CheckRequiredItems();
@@ -58,7 +61,13 @@ namespace Expeditions
             return true;
         }
 
-        private bool CheckRequiredItems(bool deductItems = false)
+        public bool PrerequisitesMet()
+        {
+            if (mex != null && !mex.CheckPrerequisites()) return false;
+            return true;
+        }
+
+    private bool CheckRequiredItems(bool deductItems = false)
         {
             //get as temp array of required
             int[] items = new int[deliverables.Count];
