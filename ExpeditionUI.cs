@@ -100,13 +100,13 @@ namespace Expeditions
             _rewardSlots.Width.Set(_expPanelWidth - 20, 0);
 
             Color invis = new Color(0, 0, 0, 0);
-            _titleHeader = AppendTextPan2("Title", 200, 16, Color.White, Color.Black, true);
+            _titleHeader = AppendTextPan2("Title", _expPanelWidth/2, 16, Color.White, Color.Black, true);
             _description = AppendTextPan2("The character '_' fills a large amount of space, eg. ___________________________________________. Cool!",
                 16, 16, Color.White, invis);
-            _conditionHeader = AppendTextPan2("Goals", 200, 16, Color.White, Color.Black, true);
+            _conditionHeader = AppendTextPan2("Goals", _expPanelWidth / 2, 16, Color.White, Color.Black, true);
             _conditionsDesc = AppendTextPan2("Be the amazing person you already are. ", 16, 16, Color.White, invis);
             _expeditionPanel.Append(_deliverableSlots);
-            _rewardHeader = AppendTextPan2("Bounty", 200, 16, Color.White, Color.Black, true);
+            _rewardHeader = AppendTextPan2("Bounty", _expPanelWidth / 2, 16, Color.White, Color.Black, true);
             _expeditionPanel.Append(_rewardSlots);
             _trackButton = AppendTextButtonPan2("Un/track", 20, 0, new MouseEvent(ToggleTrackedClicked));
             _completeButton = AppendTextButtonPan2("Complete", 120, 0, new MouseEvent(CompleteClicked));
