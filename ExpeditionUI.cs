@@ -231,12 +231,12 @@ namespace Expeditions
         private void IncrementIndexClick(UIMouseEvent evt, UIElement listeningElement)
         {
             _scrollBar.Value++;
-            UpdateIndex();
+            //UpdateIndex();
         }
         private void DecrementIndexClick(UIMouseEvent evt, UIElement listeningElement)
         {
             _scrollBar.Value--;
-            UpdateIndex();
+            //UpdateIndex();
         }
 
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -277,7 +277,7 @@ namespace Expeditions
                 currentME.expedition.ToggleTrackingActive();
                 Main.PlaySound(12, -1, -1, 1);
             }
-            UpdateIndex();
+            //UpdateIndex();
         }
 
         private void CompleteClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -291,14 +291,13 @@ namespace Expeditions
             {
                 Main.PlaySound(22, -1, -1, 1);
             }
-            UpdateIndex();
+            //UpdateIndex();
         }
 
-        public void UpdateIndex() { UpdateIndex(null, null); }
         /// <summary>
         /// Update the Index Text
         /// </summary>
-        public void UpdateIndex(UIMouseEvent evt, UIElement listeningElement)
+        public void UpdateIndex()
         {
             _scrollBar.Value = _scrollBar.Value; //this will update to include floor/ceiling
             _indexText.SetText(_scrollBar.Value + "/" + _scrollBar.MaxValue);
@@ -335,7 +334,7 @@ namespace Expeditions
                 _rewardSlots.Items = currentME.expedition.GetRewardsArray();
                 _rewardSlots.Top.Set(yBottom, 0f);
                 yBottom += _rewardSlots.SlotHeight;
-                
+
                 if (previewMode || (currentME.expedition.completed && !currentME.expedition.repeatable))
                 {
                     _trackButton.SetText("");
@@ -366,7 +365,13 @@ namespace Expeditions
 
                 _expeditionPanel.Height.Set(32 + _titleHeader.TextHeight, 0);
             }
+
+            // move the elements to new set position
             this.Recalculate();
+        }
+        public void UpdateIndex(UIMouseEvent evt, UIElement listeningElement)
+        {
+            UpdateIndex();
         }
 
         /// <summary>
@@ -422,8 +427,8 @@ namespace Expeditions
                 _scrollBar.MinValue = 0;
                 _scrollBar.MaxValue = 0;
             }
-            UpdateIndex();
-            Main.NewText("Re-sorted List: " + sortedList.Count);
+            //UpdateIndex();
+            //Main.NewText("Re-sorted List: " + sortedList.Count);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -433,7 +438,7 @@ namespace Expeditions
                 int tier = currentME.expedition.difficulty;
                 if (currentME.expedition.important && !currentME.expedition.completed) tier = -12;
                 _titleHeader.SetColour(UIColour.GetColourFromRarity(tier));
-			}
+            }
 			else
 			{
 				_titleHeader.SetColour(UIColour.Grey);
@@ -449,6 +454,10 @@ namespace Expeditions
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
+            // constantly check while open
+            UpdateIndex();
+
+            // draw category mouse text
             base.Draw(spriteBatch);
             CategoryButtonMouseText(spriteBatch);
         }
