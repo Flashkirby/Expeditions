@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Expeditions;
 
 namespace Expeditions.Quests
 {
@@ -16,7 +16,8 @@ namespace Expeditions.Quests
             expedition.deliver = true;
             expedition.important = true;
             expedition.repeatable = true;
-            expedition.conditionDescription = "Stand on the ground";
+            expedition.conditionDescription1 = "Stand on the ground";
+            expedition.conditionDescription2 = "Run quickly";
             expedition.AddDeliverable(ItemID.DirtBlock, 1);
             /*
             expedition.AddDeliverable(ItemID.Silk, 151);
@@ -38,14 +39,19 @@ namespace Expeditions.Quests
             AddRewardPrefix(ItemID.Shackle, 65);
         }
 
-        public override bool CheckConditions()
+        public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
         {
-            return Main.player[Main.myPlayer].velocity.Y == 0f;
+            condition1 = player.velocity.Y == 0f;
+            if (!condition2 && condition1) 
+            {
+                condition2 = Math.Abs(player.velocity.X) > 6;
+            }
+            return condition1 && condition2;
         }
 
-        public override bool CheckPrerequisites()
+        public override bool CheckPrerequisites(Player player)
         {
-            foreach(Item item in Main.player[Main.myPlayer].inventory)
+            foreach(Item item in player.inventory)
             {
                 if (item.rare == -1) return true;
             }

@@ -113,13 +113,15 @@ namespace Expeditions
 
         public override void PostUpdateInput()
         {
-            // Keep track of active expeditions every 10 frames
-            if (!Main.gamePaused && Main.time % 10 == 0)
-            foreach (ModExpedition me in expeditionList)
+            // Keep track of active expeditions in-game
+            if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
             {
-                if (me.expedition.trackingActive)
+                foreach (ModExpedition me in expeditionList)
                 {
-                    me.expedition.ConditionsMet(true);
+                    if (me.CheckPrerequisites(Main.player[Main.myPlayer]))
+                    {
+                        me.expedition.ConditionsMet();
+                    }
                 }
             }
         }

@@ -15,6 +15,7 @@ namespace Expeditions
     class ExpeditionUI : UIState
     {
         //First Panel
+        private const int _navPanelWidth = 400;
         public static bool visible = false;
         public static bool previewMode = false;
         private UIPanel _navigationPanel;
@@ -23,6 +24,7 @@ namespace Expeditions
         private List<UIToggleImage> _categoryButtons = new List<UIToggleImage>();
 
         // Second Panel
+        private const int _expPanelWidth = 460;
         private UIPanel _expeditionPanel;
         private UITextWrap _titleHeader;
         private UITextWrap _description;
@@ -54,30 +56,12 @@ namespace Expeditions
 
             _navigationPanel = new UIPanel();
             _navigationPanel.SetPadding(0);
-            _navigationPanel.Left.Set(400, 0);
-            _navigationPanel.Top.Set(100, 0);
-            _navigationPanel.Width.Set(400, 0);
+            _navigationPanel.Left.Set(30 + (_expPanelWidth - _navPanelWidth) / 2, 0);
+            _navigationPanel.Top.Set(120, 0);
+            _navigationPanel.Width.Set(_navPanelWidth, 0);
             _navigationPanel.Height.Set(90, 0);
             _navigationPanel.BackgroundColor = UIColour.backgroundColour;
             _navigationPanel.BorderColor = UIColour.borderColour;
-
-            Texture2D buttonPlayTexture = ModLoader.GetTexture("Terraria/UI/ButtonPlay");
-            UIImageButton playButton = new UIImageButton(buttonPlayTexture);
-            playButton.Left.Set(510, 0f);
-            playButton.Top.Set(10, 0f);
-            playButton.Width.Set(22, 0f);
-            playButton.Height.Set(22, 0f);
-            playButton.OnClick += new MouseEvent(IncrementIndexClick);
-            _navigationPanel.Append(playButton);
-
-            Texture2D buttonDeleteTexture = ModLoader.GetTexture("Terraria/UI/ButtonDelete");
-            UIImageButton closeButton = new UIImageButton(buttonDeleteTexture);
-            closeButton.Left.Set(540, 0f);
-            closeButton.Top.Set(10, 0f);
-            closeButton.Width.Set(22, 0f);
-            closeButton.Height.Set(22, 0f);
-            closeButton.OnClick += new MouseEvent(CloseButtonClicked);
-            _navigationPanel.Append(closeButton);
 
             // Bar
             _scrollBar = new UIValueBar(0, sortedList.Count);
@@ -90,17 +74,17 @@ namespace Expeditions
             AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
             AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
             _navigationPanel.Append(_scrollBar);
-            AppendCategoryButtonsLine1(250, 10);
-            AppendCategoryButtonsLine2(250, 46);
+            AppendCategoryButtonsLine1(_navPanelWidth - 150, 10);
+            AppendCategoryButtonsLine2(_navPanelWidth - 150, 46);
             _indexText = AppendText("000/000", 156, 16, Color.White, true);
             base.Append(_navigationPanel);
 
             //#########################################################################
             _expeditionPanel = new UIPanel();
             _expeditionPanel.SetPadding(0);
-            _expeditionPanel.Left.Set(400, 0);
-            _expeditionPanel.Top.Set(_navigationPanel.Top.Pixels + _navigationPanel.Height.Pixels + 8, 0);
-            _expeditionPanel.Width.Set(400, 0);
+            _expeditionPanel.Left.Set(30, 0);
+            _expeditionPanel.Top.Set(_navigationPanel.Top.Pixels + _navigationPanel.Height.Pixels + 4, 0);
+            _expeditionPanel.Width.Set(_expPanelWidth, 0);
             _expeditionPanel.Height.Set(300, 0);
             _expeditionPanel.BackgroundColor = UIColour.backgroundColour;
             _expeditionPanel.BorderColor = UIColour.borderColour;
@@ -108,12 +92,12 @@ namespace Expeditions
             _deliverableSlots = new UIItemSlots(7);
             _deliverableSlots.Left.Set(14, 0);
             _deliverableSlots.Top.Set(8, 0);
-            _deliverableSlots.Width.Set(380, 0);
+            _deliverableSlots.Width.Set(_expPanelWidth - 20, 0);
 
             _rewardSlots = new UIItemSlots(15);
             _rewardSlots.Left.Set(14, 0);
             _rewardSlots.Top.Set(8, 0);
-            _rewardSlots.Width.Set(380, 0);
+            _rewardSlots.Width.Set(_expPanelWidth - 20, 0);
 
             Color invis = new Color(0, 0, 0, 0);
             _titleHeader = AppendTextPan2("Title", 200, 16, Color.White, Color.Black, true);
@@ -157,7 +141,7 @@ namespace Expeditions
         }
         private UITextWrap AppendTextPan2(string text, float x, float y, Color colour, Color border, bool centre = false)
         {
-            UITextWrap textWrap = new UITextWrap(text, 368, colour, border, centre);
+            UITextWrap textWrap = new UITextWrap(text, _expPanelWidth - 32, colour, border, centre);
             textWrap.Left.Set(x, 0f);
             textWrap.Top.Set(y - 3f, 0f);
             _expeditionPanel.Append(textWrap);
@@ -319,7 +303,18 @@ namespace Expeditions
                 _conditionHeader.Top.Set(yBottom, 0f);
                 yBottom += _conditionHeader.TextHeight;
 
-                _conditionsDesc.SetText(currentME.expedition.conditionDescription);
+                // build conditionals strings
+                string conditionals = "";
+                if (currentME.expedition.conditionDescription1 != "")
+                {
+                    conditionals += currentME.expedition.conditionDescription1;
+
+                    if (currentME.expedition.conditionDescription2 != "")
+                    { conditionals += "\n" + currentME.expedition.conditionDescription2; }
+                    if (currentME.expedition.conditionDescription3 != "")
+                    { conditionals += "\n" + currentME.expedition.conditionDescription3; }
+                }
+                _conditionsDesc.SetText(conditionals);
                 _conditionsDesc.Top.Set(yBottom, 0f);
                 yBottom += _conditionsDesc.TextHeight;
 

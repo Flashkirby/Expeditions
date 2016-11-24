@@ -61,8 +61,11 @@ namespace Expeditions
         /// <summary>
         /// Put in any checks here to determine whether the expedition is complete, sans deliverables
         /// </summary>
-        /// <returns>True if conditions are met</returns>
-        public virtual bool CheckConditions()
+        /// <param name="condition1">Used to keep track of a saved condition</param>
+        /// <param name="condition2">Used to keep track of a saved condition</param>
+        /// <param name="condition3">Used to keep track of a saved condition</param>
+        /// <returns>True if custom conditions are met</returns>
+        public virtual bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
         {
             return true;
         }
@@ -71,7 +74,7 @@ namespace Expeditions
         /// Put in any checks here to determine whether the expedition is visible yet
         /// </summary>
         /// <returns>True if prerequisites are met</returns>
-        public virtual bool CheckPrerequisites()
+        public virtual bool CheckPrerequisites(Player player)
         {
             return true;
         }

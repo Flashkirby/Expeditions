@@ -11,6 +11,7 @@ namespace Expeditions
     {
         public readonly static Color textColour = new Color(80, 255, 160);
         public readonly static Color muteColour = new Color(75, 150, 112);
+        public readonly static Color poorColour = new Color(150, 75, 75);
 
         public ModExpedition mex
         {
@@ -25,7 +26,9 @@ namespace Expeditions
         /// <summary>Description of expedition if completed, eg. for repeatable quests</summary>
         public string descriptionCompleted = "";
         /// <summary>Description of conditions to be met</summary>
-        public string conditionDescription = "";
+        public string conditionDescription1 = "";
+        public string conditionDescription2 = "";
+        public string conditionDescription3 = "";
         /// <summary>Tier of expedition, same as item rarity</summary>
         public int difficulty = 0;
         /// <summary>Check if expedition is being tracked, this calls conditions met</summary>
@@ -38,6 +41,10 @@ namespace Expeditions
         public bool deliver = false;
         /// <summary>Category: Involves defeating monsters</summary>
         public bool defeat = false;
+        /// <summary>Tracks the conditionals not related to deliverable items</summary>
+        public bool condition1Met = false;
+        public bool condition2Met = false;
+        public bool condition3Met = false;
         /// <summary>Completed expeditions are archived and cannot be redone unless repeatable</summary>
         public bool completed = false;
         /// <summary>Allows archived expeditions to be redone</summary>
@@ -51,31 +58,59 @@ namespace Expeditions
         /// Checks against all conditions to see if completeable
         /// </summary>
         /// <returns></returns>
-        public bool ConditionsMet(bool trackingText = false)
+        public bool ConditionsMet()
         {
-            if (mex != null && !mex.CheckConditions()) return false;
+            if (Main.netMode == 2) return false;
+            bool meet1 = condition1Met;
+            bool meet2 = condition2Met;
+            bool meet3 = condition3Met;
+
+            // check conditions
+            bool checkConditions = mex.CheckConditions(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met);
+            if (!trackCondition && checkConditions) { trackCondition = true; }
+            if (trackCondition && !checkConditions) { trackCondition = false; }
+
+            // tracker
+            if (trackingActive)
+            {
+                if (!meet1 && condition1Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription1 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                if (!meet2 && condition2Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription2 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                if (!meet3 && condition3Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription3 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+
+                if (meet1 && !condition1Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription1 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                if (meet2 && !condition2Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription2 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                if (meet3 && !condition3Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription3 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+            }
+            
             if (deliverables.Count > 0)
             {
                 if (CheckRequiredItems())
                 {
-                    if(trackingText && !trackCondition)
+                    if(trackingActive && !trackItems)
                     {
-                        Main.NewText("Expedition Tracker: '" + title + "' all goals met!", muteColour.R, muteColour.G, muteColour.B);
-                        trackCondition = true;
+                        Main.NewText("Expedition Tracker: '" + title + "' Collect expedition items accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                        trackItems = true;
                     }
                 }
                 else
                 {
+                    if (trackingActive && trackItems && Main.mouseItem.type == 0)
+                    {
+                        Main.NewText("Expedition Tracker: '" + title + "' Collect expedition items is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                        trackItems = false;
+                    }
                     return false;
                 }
             }
-            return true;
+            return !(mex != null && !checkConditions);
         }
         private bool trackCondition = false;
+        private bool trackItems = false;
 
         public bool PrerequisitesMet()
         {
-            if (mex != null && !mex.CheckPrerequisites()) return false;
+            if (Main.netMode == 2) return false;
+            if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer])) return false;
             return true;
         }
 
@@ -186,12 +221,19 @@ namespace Expeditions
                 Main.NewText("Expeditions: '" + title + "' completed!", textColour.R, textColour.G, textColour.B);
                 Player p = Main.player[Main.myPlayer];
                 Projectile.NewProjectile(p.Center, new Vector2(0f, -6f), ProjectileID.RocketFireworkBlue, 0, 0f, p.whoAmI);
-            }else
+            }
+            else
             {
                 Main.NewText("Expeditions: '" + title + "' recompleted!", textColour.R, textColour.G, textColour.B);
             }
+            condition1Met = false;
+            condition2Met = false;
+            condition3Met = false;
+
             trackCondition = false;
+            trackItems = false;
             trackingActive = false;
+
             completed = true;
 
             //net message sender
