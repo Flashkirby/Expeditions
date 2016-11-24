@@ -16,7 +16,7 @@ namespace Expeditions.Quests
             expedition.deliver = true;
             expedition.important = true;
             expedition.repeatable = true;
-            expedition.conditionDescription = "Be standing on the ground";
+            expedition.conditionDescription = "Stand on the ground";
             expedition.AddDeliverable(ItemID.DirtBlock, 1);
             /*
             expedition.AddDeliverable(ItemID.Silk, 151);

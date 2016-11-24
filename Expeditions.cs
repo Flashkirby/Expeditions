@@ -111,6 +111,21 @@ namespace Expeditions
 
         }
 
+        public override void PostUpdateInput()
+        {
+            // Keep track of active expeditions every 10 frames
+            if (!Main.gamePaused && Main.time % 10 == 0)
+            foreach (ModExpedition me in expeditionList)
+            {
+                if (me.expedition.trackingActive)
+                {
+                    me.expedition.ConditionsMet(true);
+                }
+            }
+        }
+
+
+
         /// <summary>
         /// Opens the expediton menu
         /// </summary>

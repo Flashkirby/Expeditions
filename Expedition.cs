@@ -51,15 +51,27 @@ namespace Expeditions
         /// Checks against all conditions to see if completeable
         /// </summary>
         /// <returns></returns>
-        public bool ConditionsMet()
+        public bool ConditionsMet(bool trackingText = false)
         {
             if (mex != null && !mex.CheckConditions()) return false;
             if (deliverables.Count > 0)
             {
-                return CheckRequiredItems();
+                if (CheckRequiredItems())
+                {
+                    if(trackingText && !trackCondition)
+                    {
+                        Main.NewText("Expedition Tracker: '" + title + "' all goals met!", muteColour.R, muteColour.G, muteColour.B);
+                        trackCondition = true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
             return true;
         }
+        private bool trackCondition = false;
 
         public bool PrerequisitesMet()
         {
@@ -171,13 +183,14 @@ namespace Expeditions
             Main.PlaySound(24, -1, -1, 1);
             if (!repeatable || (repeatable && !completed))
             {
-                Main.NewText("Expeditions: " + title + " completed!", textColour.R, textColour.G, textColour.B);
+                Main.NewText("Expeditions: '" + title + "' completed!", textColour.R, textColour.G, textColour.B);
                 Player p = Main.player[Main.myPlayer];
                 Projectile.NewProjectile(p.Center, new Vector2(0f, -6f), ProjectileID.RocketFireworkBlue, 0, 0f, p.whoAmI);
             }else
             {
-                Main.NewText("Expeditions: " + title + " recompleted!", textColour.R, textColour.G, textColour.B);
+                Main.NewText("Expeditions: '" + title + "' recompleted!", textColour.R, textColour.G, textColour.B);
             }
+            trackCondition = false;
             trackingActive = false;
             completed = true;
 
