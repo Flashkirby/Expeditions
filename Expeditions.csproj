@@ -37,6 +37,7 @@
     <Compile Include="Expedition.cs" />
     <Compile Include="Items\BountyBoard.cs" />
     <Compile Include="Expeditions.cs" />
+    <Compile Include="Items\PrefixApplicator.cs" />
     <Compile Include="ModExpedition.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Quests\WelcomeQuest.cs" />
