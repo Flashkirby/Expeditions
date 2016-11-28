@@ -176,11 +176,11 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Spawn an item from a client input for a player
+        /// Spawn an item from a client input for a player. An increaed options version of QuickSpawnItem()
         /// </summary>
         /// <param name="itemType"></param>
         /// <param name="stack"></param>
-        public static void ClientNetSpawnItem(int itemType, int stack, int prefix = 0)
+        public static void ClientNetSpawnItem(int itemType, int stack = 1, int prefix = 0)
         {
             int id = Item.NewItem(
                 (int)Main.player[Main.myPlayer].position.X,

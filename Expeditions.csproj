@@ -39,6 +39,7 @@
     <Compile Include="Expeditions.cs" />
     <Compile Include="Items\PrefixApplicator.cs" />
     <Compile Include="ModExpedition.cs" />
+    <Compile Include="NPCs\Clerk.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Quests\WelcomeQuest.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
@@ -77,8 +78,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Items\BountyBoard.png" />
+    <Content Include="NPCs\Clerk.png" />
+    <Content Include="NPCs\Clerk_Head.png" />
     <Content Include="Tiles\BountyBoard.png" />
     <Content Include="UI\Sorting_Categories.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
