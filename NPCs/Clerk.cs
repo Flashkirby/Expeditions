@@ -16,7 +16,7 @@ namespace Expeditions.NPCs
             npc.height = 40;
             npc.townNPC = true;
             npc.friendly = true;
-            Main.npcFrameCount[npc.type] = 23;
+            Main.npcFrameCount[npc.type] = 21;
 
             npc.aiStyle = 7;
             npc.damage = 10;
@@ -26,13 +26,13 @@ namespace Expeditions.NPCs
             npc.soundKilled = 1;
             npc.knockBackResist = 0.5f;
             
-            NPCID.Sets.ExtraFramesCount[npc.type] = 9; // Extra frames after walk animation
-            NPCID.Sets.AttackFrameCount[npc.type] = 4; // Attack frames at the end
-            NPCID.Sets.DangerDetectRange[npc.type] = 500;
+            NPCID.Sets.ExtraFramesCount[npc.type] = 7; // Extra frames after walk animation
+            NPCID.Sets.AttackFrameCount[npc.type] = 2; // Attack frames at the end
+            NPCID.Sets.DangerDetectRange[npc.type] = 700;
+            NPCID.Sets.MagicAuraColor[npc.type] = new Color(238, 82, 255);
             NPCID.Sets.AttackType[npc.type] = 2;
-            NPCID.Sets.MagicAuraColor[npc.type] = Color.Yellow;
-            NPCID.Sets.AttackTime[npc.type] = 20;
-            NPCID.Sets.AttackAverageChance[npc.type] = 20;
+            NPCID.Sets.AttackTime[npc.type] = 30; // time to execute 1 attack
+            NPCID.Sets.AttackAverageChance[npc.type] = 20; // 1/chance to attack per frame
             NPCID.Sets.HatOffsetY[npc.type] = 4;
 
             animationType = NPCID.Steampunker;
@@ -105,29 +105,96 @@ namespace Expeditions.NPCs
         }
 
 
+        private int getWeaponType()
+        {
+            if (Main.hardMode)
+            { return 2; }
+            else if (NPC.downedBoss1)
+            { return 1; }
+            return 0;
+        }
+
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
-            damage = 4;
-            knockback = 5.75f;
+            switch(getWeaponType())
+            {
+                case 2:
+                    damage = 40;
+                    knockback = 5f;
+                    break;
+                case 1:
+                    damage = 21;
+                    knockback = 5f;
+                    break;
+                default:
+                    damage = 10;
+                    knockback = 0f;
+                    break;
+            }
         }
         public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
         {
-            cooldown = 10;
+            switch (getWeaponType())
+            {
+                case 2:
+                    cooldown = 32; //min cooldown from START of attack (no inc. attack time)
+                    randExtraCooldown = 33;
+                    break;
+                case 1:
+                    cooldown = 36; //min cooldown from START of attack (no inc. attack time)
+                    randExtraCooldown = 26;
+                    break;
+                default:
+                    cooldown = 40; //min cooldown from START of attack (no inc. attack time)
+                    randExtraCooldown = 20;
+                    break;
+            }
         }
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            projType = ProjectileID.Spark;
-            attackDelay = 15;
+            switch (getWeaponType())
+            {
+                case 2:
+                    projType = ProjectileID.CrystalPulse;
+                    attackDelay = 30; //how many frames before projectile spawns
+                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 109);
+                    break;
+                case 1:
+                    projType = ProjectileID.AmethystBolt; //ruby stats though
+                    attackDelay = 30; //how many frames before projectile spawns
+                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 43);
+                    break;
+                default:
+                    projType = ProjectileID.Spark;
+                    attackDelay = 30; //how many frames before projectile spawns
+                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 8);
+                    break;
+            }
         }
         public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
         {
-            multiplier = 5f;
-            randomOffset = 1f;
-            gravityCorrection = 0.5f;
+            gravityCorrection = 0f;
+            switch (getWeaponType())
+            {
+                case 2:
+                    multiplier = 13f;
+                    randomOffset = 0.6f;
+                    break;
+                case 1:
+                    multiplier = 9f;
+                    randomOffset = 0.3f;
+                    break;
+                default:
+                    multiplier = 9f;
+                    randomOffset = 0.5f;
+                    gravityCorrection = 1f;
+                    break;
+            }
         }
         public override void TownNPCAttackMagic(ref float auraLightMultiplier)
         {
             auraLightMultiplier = 0.5f;
         }
+
     }
 }
