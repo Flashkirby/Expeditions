@@ -146,7 +146,7 @@ namespace Expeditions
             Main.PlaySound(10, -1, -1, 1); //open menu
             expeditionUI.ListRecalculate();
             ExpeditionUI.visible = true;
-            //ExpeditionUI.previewMode = previewMode;
+            ExpeditionUI.previewMode = previewMode;
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Expeditions
         /// <summary>
         /// Toggle expedition menu visibility
         /// </summary>
-        public static void ToggleExpeditionMenu()
+        public static void ToggleExpeditionMenu(bool previewMode = false)
         {
             if (ExpeditionUI.visible)
             {
@@ -171,7 +171,7 @@ namespace Expeditions
             }
             else
             {
-                Expeditions.OpenExpeditionMenu();
+                Expeditions.OpenExpeditionMenu(previewMode);
             }
         }
 

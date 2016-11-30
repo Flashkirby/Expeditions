@@ -51,6 +51,10 @@ namespace Expeditions.NPCs
             }
         }
 
+        public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+        {
+            return WorldExplore.savedClerk;
+        }
         public override string TownNPCName()
         {
             switch (WorldGen.genRand.Next(7))

@@ -8,7 +8,8 @@ namespace Expeditions.Items
 		public override void SetDefaults()
 		{
 			item.name = "Expeditions Board";
-			item.toolTip = "Used to call the Clerk and manage expeditions.";
+			item.toolTip = "Manage tracking on your expeditions";
+            //item.toolTip2 = "Allows the Clerk to move in";
             item.width = 30;
             item.height = 36;
             item.maxStack = 99;

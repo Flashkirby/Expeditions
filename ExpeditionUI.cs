@@ -266,7 +266,7 @@ namespace Expeditions
 
         private void CompleteClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            if(currentME != null &&
+            if(currentME != null && !previewMode &&
                 (currentME.expedition.ConditionsMet()))
             {
                 currentME.expedition.CompleteExpedition();
@@ -330,7 +330,7 @@ namespace Expeditions
                 _rewardSlots.Top.Set(yBottom, 0f);
                 yBottom += _rewardSlots.SlotHeight;
 
-                if (previewMode || (currentME.expedition.completed && !currentME.expedition.repeatable))
+                if (currentME.expedition.completed && !currentME.expedition.repeatable)
                 {
                     _trackButton.SetText("");
                     _completeButton.SetText("");
@@ -339,8 +339,11 @@ namespace Expeditions
                 {
                     _trackButton.SetText((currentME.expedition.trackingActive ? "Untrack" : "Track"));
                     _trackButton.Top.Set(yBottom + 10f, 0f);
-                    _completeButton.SetText((currentME.expedition.ConditionsMet() ? "Complete" : "In Progress"));
-                    _completeButton.Top.Set(yBottom + 10f, 0f);
+                    if (!previewMode)
+                    {
+                        _completeButton.SetText((currentME.expedition.ConditionsMet() ? "Complete" : "In Progress"));
+                        _completeButton.Top.Set(yBottom + 10f, 0f);
+                    }
                     yBottom += 10;
                 }
 
