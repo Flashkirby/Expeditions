@@ -7,6 +7,18 @@ using Terraria.ModLoader;
 
 namespace Expeditions.NPCs
 {
+    /// <summary>
+    /// The sole executive in charge of the Ministry of Cartography and 
+    /// Taxonomy's foreign branch. Her employers rarely actually 
+    /// communicate, but they send plenty of shipments over everytime a 
+    /// new report rolls in, which she is more than happy to divulge.
+    /// 
+    /// Enjoys discovering and documenting new things, but both annoyed 
+    /// and concerned with effectively being stuck at the bottom of the
+    /// corporate ladder.
+    /// 
+    /// Uses magic gratuitously in everyday life, akin to the Wizard.
+    /// </summary>
     public class Clerk : ModNPC
     {
         public override void SetDefaults()
@@ -57,7 +69,7 @@ namespace Expeditions.NPCs
         }
         public override string TownNPCName()
         {
-            switch (WorldGen.genRand.Next(7))
+            switch (WorldGen.genRand.Next(9))
             {
                 case 0:
                     return "Nastasia"; //Super Paper Mario
@@ -71,6 +83,10 @@ namespace Expeditions.NPCs
                     return "Eva"; //Grim Fandango
                 case 5:
                     return "Carol"; //Dilbert
+                case 6:
+                    return "Moneypenny"; //James Bond
+                case 7:
+                    return "Donna"; //Dr. Who and Suits
                 default:
                     return "Isabelle"; //Animal Crossing
             }
@@ -78,6 +94,7 @@ namespace Expeditions.NPCs
 
         public override string GetChat()
         {
+            //"Ok, here's the deal. I'm really not cut out for adventuring, but my employers are constantly demanding information about WORLDNAME. They also send me goodies whenever I document something new, which I'm more than willing to share... catch my drift? But we'll need a base camp first, and I've got all this stuff lying around..."
             return "Oh... um... ignore me. I'm waiting for my assignment. ";
         }
 
