@@ -11,6 +11,8 @@ namespace Expeditions
 {
     class Expeditions : Mod
     {
+        private const bool DEBUG = true;
+
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
@@ -121,6 +123,16 @@ namespace Expeditions
                     if (me.CheckPrerequisites(Main.player[Main.myPlayer]))
                     {
                         me.expedition.ConditionsMet();
+                    }
+                }
+            }
+            if (DEBUG)
+            {
+                if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.L))
+                {
+                    if (Main.time % 30 == 0)
+                    {
+                        Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
                     }
                 }
             }
