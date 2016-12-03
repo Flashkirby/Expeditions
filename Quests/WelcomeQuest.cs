@@ -9,7 +9,7 @@ namespace Expeditions.Quests
     {
         public override void SetDefaults()
         {
-            expedition.title = "Hello World";
+            expedition.name = "Hello World";
             expedition.description = "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. ";
             expedition.descriptionCompleted = "You've completed this repeatable expedition. Good for you! ";
             expedition.difficulty = 1;

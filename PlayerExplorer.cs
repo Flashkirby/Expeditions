@@ -77,7 +77,7 @@ namespace Expeditions
                         e.condition1Met = flags[2];
                         e.condition2Met = flags[3];
                         e.condition3Met = flags[4];
-                        if (Expeditions.DEBUG) message += "\n" + e.title + " : " + expeditionID.ToString("X") + " : " + e.completed + " & " + e.trackingActive;
+                        if (Expeditions.DEBUG) message += "\n" + e.name + " : " + expeditionID.ToString("X") + " : " + e.completed + " & " + e.trackingActive;
                     }
                     else
                     {

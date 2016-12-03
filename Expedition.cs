@@ -20,7 +20,7 @@ namespace Expeditions
         }
 
         /// <summary>Title of expedition</summary>
-        public string title = "";
+        public string name = "";
         /// <summary>Description of expedition</summary>
         public string description = "";
         /// <summary>Description of expedition if completed, eg. for repeatable quests</summary>
@@ -78,13 +78,13 @@ namespace Expeditions
             if (trackingActive)
             {
                 // Apply green colour to gains
-                if (!meet1 && condition1Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription1 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
-                if (!meet2 && condition2Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription2 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
-                if (!meet3 && condition3Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription3 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                if (!meet1 && condition1Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription1 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                if (!meet2 && condition2Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription2 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                if (!meet3 && condition3Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription3 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
                 // Apply red colour to lossess
-                if (meet1 && !condition1Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription1 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
-                if (meet2 && !condition2Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription2 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
-                if (meet3 && !condition3Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription3 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                if (meet1 && !condition1Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription1 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                if (meet2 && !condition2Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription2 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                if (meet3 && !condition3Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription3 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
             }
             
             if (deliverables.Count > 0)
@@ -93,7 +93,7 @@ namespace Expeditions
                 {
                     if(trackingActive && !trackItems)
                     {
-                        Main.NewText("Expedition Tracker: '" + title + "' Collect expedition items accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                        Main.NewText("Expedition Tracker: '" + name + "' Collect expedition items accomplished!", muteColour.R, muteColour.G, muteColour.B);
                         trackItems = true;
                     }
                 }
@@ -101,7 +101,7 @@ namespace Expeditions
                 {
                     if (trackingActive && trackItems && Main.mouseItem.type == 0)
                     {
-                        Main.NewText("Expedition Tracker: '" + title + "' Collect expedition items is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                        Main.NewText("Expedition Tracker: '" + name + "' Collect expedition items is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
                         trackItems = false;
                     }
                     return false;
@@ -221,13 +221,13 @@ namespace Expeditions
             Main.PlaySound(24, -1, -1, 1);
             if (!repeatable || (repeatable && !completed))
             {
-                Main.NewText("Expeditions: '" + title + "' completed!", textColour.R, textColour.G, textColour.B);
+                Main.NewText("Expeditions: '" + name + "' completed!", textColour.R, textColour.G, textColour.B);
                 Player p = Main.player[Main.myPlayer];
                 Projectile.NewProjectile(p.Center, new Vector2(0f, -6f), ProjectileID.RocketFireworkBlue, 0, 0f, p.whoAmI);
             }
             else
             {
-                Main.NewText("Expeditions: '" + title + "' recompleted!", textColour.R, textColour.G, textColour.B);
+                Main.NewText("Expeditions: '" + name + "' recompleted!", textColour.R, textColour.G, textColour.B);
             }
             condition1Met = false;
             condition2Met = false;
@@ -327,9 +327,9 @@ namespace Expeditions
 
             // Set up the unique fields
             if (mex == null)
-            { identifier = "Terraria@" + title; }
+            { identifier = "Terraria@" + name; }
             else
-            { identifier = mex.mod.Name + "@" + title; }
+            { identifier = mex.mod.Name + "@" + name; }
 
             // Custom runtime independant hash not dependant on runtime
             // I ran it >100000 times with random values and it got no collisions,

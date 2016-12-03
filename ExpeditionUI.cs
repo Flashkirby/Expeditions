@@ -297,7 +297,7 @@ namespace Expeditions
             if (_scrollBar.Value > 0)
             {
                 float yBottom = 0;
-                _titleHeader.SetText(currentME.expedition.title + (currentME.expedition.completed ? " (Completed)" : ""));
+                _titleHeader.SetText(currentME.expedition.name + (currentME.expedition.completed ? " (Completed)" : ""));
                 yBottom += _titleHeader.TextHeight + 10;
 
                 if (currentME.expedition.completed && currentME.expedition.description != "")
@@ -425,7 +425,7 @@ namespace Expeditions
                     sortedList = filterList.OrderBy(me => me.expedition.difficulty).ToList();
                     break;
                 default:
-                    sortedList = filterList.OrderBy(me => me.expedition.title).ToList();
+                    sortedList = filterList.OrderBy(me => me.expedition.name).ToList();
                     break;
             }
 
