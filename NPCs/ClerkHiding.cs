@@ -50,9 +50,7 @@ namespace Expeditions.NPCs
                     spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third &&
                     // in the overworld
                     spawnInfo.player.ZoneOverworldHeight &&
-                    // Not in special biomes mear spawm
-                    !spawnInfo.player.ZoneSnow &&
-                    !spawnInfo.player.ZoneJungle &&
+                    // Not near bad biomes
                     !spawnInfo.player.ZoneCorrupt &&
                     !spawnInfo.player.ZoneCrimson &&
                     // Can only spawn on grass with no natural dirt background or liquid (so in open air)
