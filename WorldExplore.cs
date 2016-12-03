@@ -14,6 +14,7 @@ namespace Expeditions
 
         public override void Initialize()
         {
+            Main.player[Main.myPlayer].GetModPlayer<PlayerExplorer>(mod).CopyLocalExpeditionsToMain();
             savedClerk = false;
         }
 

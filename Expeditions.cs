@@ -18,7 +18,16 @@ namespace Expeditions
         internal static ExpeditionUI expeditionUI;
 
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
-        internal static List<ModExpedition> expeditionList;
+        private static List<ModExpedition> _expeditionList;
+        internal static List<ModExpedition> expeditionList
+        {
+            get
+            {
+                if (_expeditionList == null) _expeditionList = new List<ModExpedition>();
+                return _expeditionList;
+            }
+            set { _expeditionList = value; }
+        }
         public static Texture2D sortingTexture;
 
         private static int _npcClerk;
@@ -61,13 +70,23 @@ namespace Expeditions
             //GetExpeditionsList().Add(modExpedition);
         }
         /// <summary>
-        /// Returns a copy of the current expedition list. 
+        /// Returns the expedition list
         /// </summary>
         /// <returns></returns>
         public static List<ModExpedition> GetExpeditionsList()
         {
             if (expeditionList == null) expeditionList = new List<ModExpedition>();
             return expeditionList;
+        }
+        /// <summary>
+        /// Returns a copy of the current expedition list. 
+        /// </summary>
+        /// <returns></returns>
+        public static List<ModExpedition> GetExpeditionsListCopy()
+        {
+            List<ModExpedition> list = new List<ModExpedition>();
+            list.AddRange(GetExpeditionsList());
+            return list;
         }
 
         public override void AddRecipes()
@@ -133,16 +152,20 @@ namespace Expeditions
                     }
                 }
             }
+                    
 
             //DEBUG INFO
             if (DEBUG)
             {
                 if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.L))
                 {
-                    if (Main.time % 30 == 0)
+                    if (Main.time % 60 == 0)
                     {
+                        Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
-                        Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode);
+                    }
+                    if (Main.time % 60 == 30)
+                    {
 
                         if (PlayerExplorer.message != null)
                         {
