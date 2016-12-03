@@ -37,7 +37,8 @@ namespace Expeditions.NPCs
             npc.soundHit = 1;
             npc.soundKilled = 1;
             npc.knockBackResist = 0.5f;
-            
+
+            NPCID.Sets.ExtraTextureCount[npc.type] = 1;
             NPCID.Sets.ExtraFramesCount[npc.type] = 7; // Extra frames after walk animation
             NPCID.Sets.AttackFrameCount[npc.type] = 2; // Attack frames at the end
             NPCID.Sets.DangerDetectRange[npc.type] = 700;
@@ -45,9 +46,14 @@ namespace Expeditions.NPCs
             NPCID.Sets.AttackType[npc.type] = 2;
             NPCID.Sets.AttackTime[npc.type] = 30; // time to execute 1 attack
             NPCID.Sets.AttackAverageChance[npc.type] = 40; // 1/chance to attack per frame
-            NPCID.Sets.HatOffsetY[npc.type] = 4;
+            NPCID.Sets.HatOffsetY[npc.type] = 2;
 
-            animationType = NPCID.Steampunker;
+            animationType = NPCID.Stylist;
+        }
+        public override bool Autoload(ref string name, ref string texture, ref string[] altTextures)
+        {
+            altTextures = new string[] { "Expeditions/NPCs/Clerk_Party" };
+            return mod.Properties.Autoload;
         }
 
         public override void HitEffect(int hitDirection, double damage)
