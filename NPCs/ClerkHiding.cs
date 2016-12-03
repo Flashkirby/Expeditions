@@ -35,7 +35,7 @@ namespace Expeditions.NPCs
             int third = Main.maxTilesX / 3;
             if (
                 // Within centre third of world
-                //spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third &&
+                spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third &&
                 // in the overworld
                 spawnInfo.player.ZoneOverworldHeight &&
                 // Not in special biomes mear spawm
@@ -43,12 +43,14 @@ namespace Expeditions.NPCs
                 !spawnInfo.player.ZoneJungle &&
                 !spawnInfo.player.ZoneCorrupt &&
                 !spawnInfo.player.ZoneCrimson &&
+                // Can only spawn on grass
+                Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass &&
                 // Not 'saved' yet
                 !WorldExplore.savedClerk &&
                 // None of me exists
                 !NPC.AnyNPCs(npc.type)
                 )
-                return 1f;
+                return 1f; //guaranteed to spawn on next call (because we want to be found)
             return 0f;
         }
 
