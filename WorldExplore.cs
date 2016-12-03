@@ -38,6 +38,7 @@ namespace Expeditions
             }
             else
             {
+                if (_version < 0) return;
                 ErrorLogger.Log("Expeditions: World save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
             }
         }

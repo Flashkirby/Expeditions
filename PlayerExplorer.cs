@@ -8,7 +8,7 @@ namespace Expeditions
     public class PlayerExplorer : ModPlayer
     {
         private static int _version = _versionCurrent;
-        private const int _versionCurrent = -15;
+        private const int _versionCurrent = 0;
         public static string message;
 
         private List<ModExpedition> _localExpeditionList;
@@ -87,6 +87,7 @@ namespace Expeditions
             }
             else
             {
+                if (_version < 0) return;
                 ErrorLogger.Log("Expeditions: Player save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
             }
         }
