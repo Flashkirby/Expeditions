@@ -114,7 +114,7 @@ namespace Expeditions
             return true;
         }
 
-    private bool CheckRequiredItems(bool deductItems = false)
+        private bool CheckRequiredItems(bool deductItems = false)
         {
             //get as temp array of required
             int[] items = new int[deliverables.Count];
@@ -273,6 +273,16 @@ namespace Expeditions
             }
             return deliverables;
         }
+        public void ResetProgress()
+        {
+            completed = false;
+            trackCondition = false;
+            trackingActive = false;
+            trackItems = false;
+            condition1Met = false;
+            condition2Met = false;
+            condition3Met = false;
+        }
 
         /// <summary>
         /// Add an item to be given out to participants who finished the expedition
@@ -309,14 +319,25 @@ namespace Expeditions
 
         public int GetHashID()
         {
+            String identifier = "";
+            int code = 0;
+
+            // Set up the unique fields
             if (mex == null)
-            {
-                return ("Terraria@" + title).GetHashCode();
-            }
+            { identifier = "Terraria@" + title; }
             else
+            { identifier = mex.mod.Name + "@" + title; }
+
+            // Custom runtime independant hash not dependant on runtime
+            // I ran it >100000 times with random values and it got no collisions,
+            // so it's probably safe enough...
+            int salt = identifier.Length;
+            foreach (char c in identifier)
             {
-                return (mex.mod.Name + "@" + title).GetHashCode();
+                code += c + salt;
+                salt *= c + code;
             }
+            return code;
         }
     }
 }

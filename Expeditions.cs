@@ -17,10 +17,12 @@ namespace Expeditions
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
-        private static List<ModExpedition> expeditionList; //make add to expediiton list, for mods to call when loading
+        /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
+        internal static List<ModExpedition> expeditionList;
         public static Texture2D sortingTexture;
 
-        public static int npcClerk;
+        private static int _npcClerk;
+        public static int npcClerk { get { return _npcClerk; } }
 
         public Expeditions()
         {
@@ -35,7 +37,7 @@ namespace Expeditions
         public override void Load()
         {
             sortingTexture = GetTexture("UI/Sorting_Categories");
-            npcClerk = NPCType("Clerk");
+            _npcClerk = NPCType("Clerk");
 
             expeditionUI = new ExpeditionUI();
             expeditionUI.Activate();
@@ -70,7 +72,7 @@ namespace Expeditions
 
         public override void AddRecipes()
         {
-            //initiliase all the quests
+            //initiliase expedition defaults, values reset in PlayerExplorer
             foreach (ModExpedition mex in expeditionList)
             {
                 mex.SetDefaults();
@@ -141,6 +143,11 @@ namespace Expeditions
                     {
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
                         Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode);
+
+                        if (PlayerExplorer.message != null)
+                        {
+                            Main.NewTextMultiline(PlayerExplorer.message);
+                        }
                     }
                 }
             }

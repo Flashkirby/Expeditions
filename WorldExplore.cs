@@ -8,7 +8,8 @@ namespace Expeditions
 {
     public class WorldExplore : ModWorld
     {
-        private static int _version = 0;
+        private static int _version = _versionCurrent;
+        private const int _versionCurrent = 0;
         public static bool savedClerk = false;
 
         public override void Initialize()
@@ -21,14 +22,14 @@ namespace Expeditions
             writer.Write(_version);
 
             // Booleans
-            BitsByte flags = new BitsByte(
-                savedClerk);
-            writer.Write(flags);
+            writer.Write(new BitsByte(
+                savedClerk
+                ));
         }
         public override void LoadCustomData(BinaryReader reader)
         {
             _version = reader.ReadInt32();
-            if (_version == 0)
+            if (_version == _versionCurrent)
             {
                 // Booleans
                 BitsByte flags = reader.ReadByte();
@@ -36,7 +37,7 @@ namespace Expeditions
             }
             else
             {
-                ErrorLogger.Log("Expeditions: Save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
+                ErrorLogger.Log("Expeditions: World save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
             }
         }
     }
