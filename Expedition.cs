@@ -54,6 +54,10 @@ namespace Expeditions
         private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
         private List<Item> rewards = new List<Item>();
 
+        /// <summary> All conditions met </summary>
+        private bool trackCondition = false;
+        /// <summary> All items gathered </summary>
+        private bool trackItems = false;
         /// <summary>
         /// Checks against all conditions to see if completeable
         /// </summary>
@@ -73,10 +77,11 @@ namespace Expeditions
             // tracker
             if (trackingActive)
             {
+                // Apply green colour to gains
                 if (!meet1 && condition1Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription1 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
                 if (!meet2 && condition2Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription2 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
                 if (!meet3 && condition3Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription3 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
-
+                // Apply red colour to lossess
                 if (meet1 && !condition1Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription1 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
                 if (meet2 && !condition2Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription2 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
                 if (meet3 && !condition3Met) Main.NewText("Expedition Tracker: '" + title + "' " + conditionDescription3 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
@@ -104,8 +109,6 @@ namespace Expeditions
             }
             return !(mex != null && !checkConditions);
         }
-        private bool trackCondition = false;
-        private bool trackItems = false;
 
         public bool PrerequisitesMet()
         {

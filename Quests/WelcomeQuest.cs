@@ -44,6 +44,7 @@ namespace Expeditions.Quests
             condition1 = player.velocity.Y == 0f;
             if (!condition2 && condition1) 
             {
+                if(Expeditions.DEBUG) Main.NewText(Math.Abs(player.velocity.X) + " is < 6");
                 condition2 = Math.Abs(player.velocity.X) > 6;
             }
             return condition1 && condition2;

@@ -282,6 +282,10 @@ namespace Expeditions
             //UpdateIndex();
         }
 
+        private string StrTick(bool ticked)
+        {
+            return ticked ? "[x] " : "[ ] ";
+        }
         /// <summary>
         /// Update the Index Text
         /// </summary>
@@ -311,12 +315,19 @@ namespace Expeditions
                 string conditionals = "";
                 if (currentME.expedition.conditionDescription1 != "")
                 {
-                    conditionals += currentME.expedition.conditionDescription1;
+                    conditionals += StrTick(currentME.expedition.condition1Met) + 
+                        currentME.expedition.conditionDescription1;
 
                     if (currentME.expedition.conditionDescription2 != "")
-                    { conditionals += "\n" + currentME.expedition.conditionDescription2; }
+                    {
+                        conditionals += "\n" + StrTick(currentME.expedition.condition2Met) +
+                              currentME.expedition.conditionDescription2;
+                    }
                     if (currentME.expedition.conditionDescription3 != "")
-                    { conditionals += "\n" + currentME.expedition.conditionDescription3; }
+                    {
+                        conditionals += "\n" + StrTick(currentME.expedition.condition3Met) +
+                              currentME.expedition.conditionDescription3;
+                    }
                 }
                 _conditionsDesc.SetText(conditionals);
                 _conditionsDesc.Top.Set(yBottom, 0f);

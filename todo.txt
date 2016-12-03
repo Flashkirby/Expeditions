@@ -1,12 +1,6 @@
 Close UI when away from source (DONE For npc)
-
-
-Save/Load player expedition data
-https://github.com/bluemagic123/tModLoader/wiki/ModPlayer#public-virtual-void-savecustomdatabinarywriter-writer
-
-Save data as hash int + 4 values
-http://stackoverflow.com/questions/10900014/how-to-generate-unique-integer-from-string
-512000 / 33 = 15515 saveable
+rename title to name
+close silenty
 
 Share expedition complete events via network packets
 https://github.com/bluemagic123/tModLoader/wiki/Mod#public-modpacket-getpacketint-capacity--256
