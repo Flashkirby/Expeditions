@@ -120,7 +120,7 @@ namespace Expeditions
                                 )
                             {
                                 //close this if other things are opened
-                                CloseExpeditionMenu();
+                                CloseExpeditionMenu(true);
                                 if (DEBUG) Main.NewText("Closing via obstruction");
                             }
                             else
@@ -205,12 +205,12 @@ namespace Expeditions
         /// <summary>
         /// Close the expedetion menu. Also called by sign and npc.
         /// </summary>
-        public static void CloseExpeditionMenu()
+        public static void CloseExpeditionMenu(bool silent = false)
         {
             if (DEBUG) Main.NewText("CloseMethod UI");
             Main.npcChatText = "";
 
-            Main.PlaySound(11, -1, -1, 1); //close menu
+            if (!silent) Main.PlaySound(11, -1, -1, 1); //close menu
             ExpeditionUI.visible = false;
         }
 
