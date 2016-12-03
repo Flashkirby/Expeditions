@@ -11,7 +11,7 @@ namespace Expeditions.NPCs
     {
         public override void SetDefaults()
         {
-            npc.name = "Camoflauged Clerk";
+            npc.name = "Sleeping Clerk";
             npc.width = 32;
             npc.height = 22;
             npc.friendly = true;
@@ -109,7 +109,7 @@ namespace Expeditions.NPCs
 
         public override string GetChat()
         {
-            return "Oh, this is a test. Sorry about that. ";
+            return "Woah! I wasn't sleeping on the job, honest! ";
         }
     }
 }
