@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.UI;
 using Terraria.ModLoader;
 using System.Collections.Generic;
@@ -11,13 +12,15 @@ namespace Expeditions
 {
     class Expeditions : Mod
     {
-        private const bool DEBUG = true;
+        internal const bool DEBUG = true;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
         private static List<ModExpedition> expeditionList; //make add to expediiton list, for mods to call when loading
         public static Texture2D sortingTexture;
+
+        public static int npcClerk;
 
         public Expeditions()
         {
@@ -32,6 +35,7 @@ namespace Expeditions
         public override void Load()
         {
             sortingTexture = GetTexture("UI/Sorting_Categories");
+            npcClerk = NPCType("Clerk");
 
             expeditionUI = new ExpeditionUI();
             expeditionUI.Activate();
@@ -89,14 +93,14 @@ namespace Expeditions
                             if (Main.playerInventory ||
                                 Main.player[Main.myPlayer].chest != -1 ||
                                 Main.npcShop != 0 ||
-                                Main.player[Main.myPlayer].talkNPC > 0 ||
                                 Main.InReforgeMenu ||
                                 Main.InGuideCraftMenu ||
                                 Main.gameMenu
                                 )
                             {
                                 //close this if other things are opened
-                                ExpeditionUI.visible = false;
+                                CloseExpeditionMenu();
+                                if (DEBUG) Main.NewText("Closing via obstruction");
                             }
                             else
                             {
@@ -115,17 +119,20 @@ namespace Expeditions
 
         public override void PostUpdateInput()
         {
+            Player player = Main.player[Main.myPlayer];
             // Keep track of active expeditions in-game
             if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
             {
                 foreach (ModExpedition me in expeditionList)
                 {
-                    if (me.CheckPrerequisites(Main.player[Main.myPlayer]))
+                    if (me.CheckPrerequisites(player))
                     {
                         me.expedition.ConditionsMet();
                     }
                 }
             }
+
+            //DEBUG INFO
             if (DEBUG)
             {
                 if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.L))
@@ -133,6 +140,7 @@ namespace Expeditions
                     if (Main.time % 30 == 0)
                     {
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
+                        Main.NewText(ExpeditionUI.visible + " : UIVisible? pre:" + ExpeditionUI.previewMode);
                     }
                 }
             }
@@ -146,14 +154,17 @@ namespace Expeditions
         /// <param name="previewMode"></param>
         public static void OpenExpeditionMenu(bool previewMode = false)
         {
+            if (DEBUG) Main.NewText("OpenMethod UI : " + previewMode);
             Player player = Main.player[Main.myPlayer];
-
-
+            
             Main.playerInventory = false;
-            Main.npcShop = 0;
-            if (player.talkNPC > 0) player.talkNPC = 0;
             player.sign = -1;
+            Main.npcShop = 0;
             Main.npcChatText = "";
+            if (previewMode && player.talkNPC > 0)
+            {
+                player.talkNPC = 0;
+            }
 
             Main.PlaySound(10, -1, -1, 1); //open menu
             expeditionUI.ListRecalculate();
@@ -162,10 +173,11 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Close the expedetion menu
+        /// Close the expedetion menu. Also called by sign and npc.
         /// </summary>
         public static void CloseExpeditionMenu()
         {
+            if (DEBUG) Main.NewText("CloseMethod UI");
             Main.npcChatText = "";
 
             Main.PlaySound(11, -1, -1, 1); //close menu

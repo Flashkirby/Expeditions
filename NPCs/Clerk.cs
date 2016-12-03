@@ -94,7 +94,17 @@ namespace Expeditions.NPCs
 
         public override void PostAI()
         {
+            Player player = Main.player[Main.myPlayer];
             WorldExplore.savedClerk = true;
+
+            // Track if leaving npc whilst window is open
+            if (!ExpeditionUI.previewMode && ExpeditionUI.visible &&
+                player.talkNPC != npc.whoAmI
+                )
+            {
+                Expeditions.CloseExpeditionMenu();
+                if (Expeditions.DEBUG) Main.NewText("Closing via talknpc change");
+            }
         }
 
         public override string GetChat()
