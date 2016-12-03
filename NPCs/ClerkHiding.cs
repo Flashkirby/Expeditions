@@ -99,10 +99,10 @@ namespace Expeditions.NPCs
                 if(p.active && p.talkNPC == npc.whoAmI)
                 {
                     //appear out of the grass
-                    for(int i = 0; i < 20; i++)
+                    for(int i = 0; i < 40; i++)
                     {
                         Dust.NewDust(npc.position, npc.width, npc.height,
-                            DustID.GrassBlades, 0, -1);
+                            DustID.GrassBlades, (i - 20) * 0.1f, -1.5f);
                     }
                     Main.PlaySound(6, npc.Center);
 
