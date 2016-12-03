@@ -98,7 +98,7 @@ namespace Expeditions.NPCs
             WorldExplore.savedClerk = true;
 
             // Track if leaving npc whilst window is open
-            if (!ExpeditionUI.previewMode && ExpeditionUI.visible &&
+            if (ExpeditionUI.viewMode == ExpeditionUI.viewMode_NPC && ExpeditionUI.visible &&
                 player.talkNPC != npc.whoAmI
                 )
             {
@@ -130,7 +130,7 @@ namespace Expeditions.NPCs
             }
             else
             {
-                Expeditions.OpenExpeditionMenu(false);
+                Expeditions.OpenExpeditionMenu(ExpeditionUI.viewMode_NPC);
             }
         }
 

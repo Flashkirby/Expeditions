@@ -19,6 +19,8 @@ namespace Expeditions
         public override void SaveCustomData(BinaryWriter writer)
         {
             writer.Write(_version);
+
+            // Booleans
             BitsByte flags = new BitsByte(
                 savedClerk);
             writer.Write(flags);
@@ -28,6 +30,7 @@ namespace Expeditions
             _version = reader.ReadInt32();
             if (_version == 0)
             {
+                // Booleans
                 BitsByte flags = reader.ReadByte();
                 savedClerk = flags[0];
             }

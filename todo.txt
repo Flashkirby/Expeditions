@@ -1,7 +1,4 @@
-Close UI when away from source
-
-NPC to trigger (possibly use NPC transform)
-
+Close UI when away from source (DONE For npc)
 
 
 Save/Load player expedition data
@@ -18,3 +15,5 @@ https://github.com/bluemagic123/tModLoader/wiki/Mod#public-modpacket-getpacketin
 
 Expeditions has NPC heads, can get using
 public static int TypeToNum(int type) in NPC
+
+height, 5

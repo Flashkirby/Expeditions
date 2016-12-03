@@ -140,7 +140,7 @@ namespace Expeditions
                     if (Main.time % 30 == 0)
                     {
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
-                        Main.NewText(ExpeditionUI.visible + " : UIVisible? pre:" + ExpeditionUI.previewMode);
+                        Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode);
                     }
                 }
             }
@@ -151,17 +151,17 @@ namespace Expeditions
         /// <summary>
         /// Opens the expediton menu
         /// </summary>
-        /// <param name="previewMode"></param>
-        public static void OpenExpeditionMenu(bool previewMode = false)
+        /// <param name="viewMode"></param>
+        public static void OpenExpeditionMenu(ushort viewMode)
         {
-            if (DEBUG) Main.NewText("OpenMethod UI : " + previewMode);
+            if (DEBUG) Main.NewText("OpenMethod UI : " + viewMode);
             Player player = Main.player[Main.myPlayer];
             
             Main.playerInventory = false;
             player.sign = -1;
             Main.npcShop = 0;
             Main.npcChatText = "";
-            if (previewMode && player.talkNPC > 0)
+            if (viewMode != ExpeditionUI.viewMode_NPC && player.talkNPC > 0)
             {
                 player.talkNPC = 0;
             }
@@ -169,7 +169,7 @@ namespace Expeditions
             Main.PlaySound(10, -1, -1, 1); //open menu
             expeditionUI.ListRecalculate();
             ExpeditionUI.visible = true;
-            ExpeditionUI.previewMode = previewMode;
+            ExpeditionUI.viewMode = viewMode;
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Expeditions
         /// <summary>
         /// Toggle expedition menu visibility
         /// </summary>
-        public static void ToggleExpeditionMenu(bool previewMode = false)
+        public static void ToggleExpeditionMenu(ushort viewMode)
         {
             if (ExpeditionUI.visible)
             {
@@ -195,7 +195,7 @@ namespace Expeditions
             }
             else
             {
-                Expeditions.OpenExpeditionMenu(previewMode);
+                Expeditions.OpenExpeditionMenu(viewMode);
             }
         }
 

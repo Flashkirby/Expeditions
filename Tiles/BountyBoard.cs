@@ -64,7 +64,7 @@ namespace Expeditions.Tiles
                 return;
             }
 
-            Expeditions.ToggleExpeditionMenu();
+            Expeditions.ToggleExpeditionMenu(ExpeditionUI.viewMode_Tile);
         }
 
         public override void MouseOver(int i, int j)

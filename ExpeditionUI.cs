@@ -14,10 +14,14 @@ namespace Expeditions
 {
     class ExpeditionUI : UIState
     {
+        public const ushort viewMode_NPC = 0;
+        public const ushort viewMode_Tile = 1;
+        public const ushort viewMode_Menu = 2;
+
         //First Panel
         private const int _navPanelWidth = 400;
         public static bool visible = false;
-        public static bool previewMode = false;
+        public static ushort viewMode = 0;
         private UIPanel _navigationPanel;
         private UIValueBar _scrollBar;
         private UITextWrap _indexText;
@@ -47,7 +51,7 @@ namespace Expeditions
         public List<ModExpedition> filterList;
         public List<ModExpedition> sortedList;
 
-
+        private bool previewMode { get { return viewMode == viewMode_Menu; } }
 
         public override void OnInitialize()
         {
