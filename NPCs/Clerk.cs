@@ -44,7 +44,7 @@ namespace Expeditions.NPCs
             NPCID.Sets.MagicAuraColor[npc.type] = new Color(238, 82, 255);
             NPCID.Sets.AttackType[npc.type] = 2;
             NPCID.Sets.AttackTime[npc.type] = 30; // time to execute 1 attack
-            NPCID.Sets.AttackAverageChance[npc.type] = 20; // 1/chance to attack per frame
+            NPCID.Sets.AttackAverageChance[npc.type] = 40; // 1/chance to attack per frame
             NPCID.Sets.HatOffsetY[npc.type] = 4;
 
             animationType = NPCID.Steampunker;
