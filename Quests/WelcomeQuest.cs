@@ -17,7 +17,7 @@ namespace Expeditions.Quests
             expedition.important = true;
             expedition.repeatable = true;
             expedition.conditionDescription1 = "Stand on the ground";
-            expedition.conditionDescription2 = "Run quickly";
+            expedition.conditionDescription2 = "Run at 30mph";
             expedition.AddDeliverable(ItemID.DirtBlock, 1);
             /*
             expedition.AddDeliverable(ItemID.Silk, 151);
