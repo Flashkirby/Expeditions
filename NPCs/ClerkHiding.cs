@@ -33,6 +33,15 @@ namespace Expeditions.NPCs
             if (WorldExplore.savedClerk) return 0f;
 
             int third = Main.maxTilesX / 3;
+            if (Expeditions.DEBUG && !WorldExplore.savedClerk)
+            {
+                Main.NewTextMultiline(
+                    (spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third) + ": In middle third\n" +
+                    (spawnInfo.player.ZoneOverworldHeight) + ": In the overworld\n" +
+                    ((int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass) + ": spawn tile is grass? : " + (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type + "|" + (int)TileID.Grass + "\n" +
+                    ((int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe) + ": spawn tile is not dirt? : " + (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall + "|" + (int)WallID.DirtUnsafe + " or 196-199"
+                    );
+            }
             if (
                 // Within centre third of world
                 spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third &&
@@ -43,14 +52,23 @@ namespace Expeditions.NPCs
                 !spawnInfo.player.ZoneJungle &&
                 !spawnInfo.player.ZoneCorrupt &&
                 !spawnInfo.player.ZoneCrimson &&
-                // Can only spawn on grass
-                Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass &&
+                // Can only spawn on grass with no natural dirt background (so in open air)
+                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass &&
+                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe &&
+                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe1 &&
+                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe2 &&
+                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe3 &&
+                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe4 &&
                 // Not 'saved' yet
                 !WorldExplore.savedClerk &&
                 // None of me exists
-                !NPC.AnyNPCs(npc.type)
+                !NPC.AnyNPCs(npc.type) &&
+                !NPC.AnyNPCs(Expeditions.npcClerk)
                 )
+            {
+                if (Expeditions.DEBUG) Main.NewText("Spawned succesfully!", 50, 255, 100);
                 return 1f; //guaranteed to spawn on next call (because we want to be found)
+            }
             return 0f;
         }
 
