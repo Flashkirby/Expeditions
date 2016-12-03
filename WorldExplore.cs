@@ -29,6 +29,7 @@ namespace Expeditions
             if (_version == 0)
             {
                 BitsByte flags = reader.ReadByte();
+                savedClerk = flags[0];
             }
             else
             {
