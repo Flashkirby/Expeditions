@@ -32,43 +32,49 @@ namespace Expeditions.NPCs
             // Skip if 'rescued' clerk already (no more natural spawn)
             if (WorldExplore.savedClerk) return 0f;
 
-            int third = Main.maxTilesX / 3;
-            if (Expeditions.DEBUG && !WorldExplore.savedClerk)
+            try
             {
-                Main.NewTextMultiline(
-                    (spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third) + ": In middle third\n" +
-                    (spawnInfo.player.ZoneOverworldHeight) + ": In the overworld\n" +
-                    ((int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass) + ": spawn tile is grass? : " + (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type + "|" + (int)TileID.Grass + "\n" +
-                    ((int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe) + ": spawn tile is not dirt? : " + (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall + "|" + (int)WallID.DirtUnsafe + " or 196-199"
-                    );
+                int third = Main.maxTilesX / 3;
+                if (Expeditions.DEBUG && !WorldExplore.savedClerk)
+                {
+                    Main.NewTextMultiline(
+                        (spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third) + ": In middle third\n" +
+                        (spawnInfo.player.ZoneOverworldHeight) + ": In the overworld\n" +
+                        ((int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass) + ": spawn tile is grass? : " + (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type + "|" + (int)TileID.Grass + "\n" +
+                        ((int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe) + ": spawn tile is not dirt? : " + (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall + "|" + (int)WallID.DirtUnsafe + " or 196-199 \n" +
+                        ((int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY - 1].liquid == 0) + ": spawn tile is not submerged? : " + (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY - 1].liquid
+                        );
+                }
+                if (
+                    // Within centre third of world
+                    spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third &&
+                    // in the overworld
+                    spawnInfo.player.ZoneOverworldHeight &&
+                    // Not in special biomes mear spawm
+                    !spawnInfo.player.ZoneSnow &&
+                    !spawnInfo.player.ZoneJungle &&
+                    !spawnInfo.player.ZoneCorrupt &&
+                    !spawnInfo.player.ZoneCrimson &&
+                    // Can only spawn on grass with no natural dirt background or liquid (so in open air)
+                    (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass &&
+                    (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe &&
+                    (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe1 &&
+                    (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe2 &&
+                    (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe3 &&
+                    (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe4 &&
+                    (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY - 1].liquid == 0 &&
+                    // Not 'saved' yet
+                    !WorldExplore.savedClerk &&
+                    // None of me exists
+                    !NPC.AnyNPCs(npc.type) &&
+                    !NPC.AnyNPCs(Expeditions.npcClerk)
+                    )
+                {
+                    if (Expeditions.DEBUG) Main.NewText("Spawned succesfully!", 50, 255, 100);
+                    return 1f; //guaranteed to spawn on next call (because we want to be found)
+                }
             }
-            if (
-                // Within centre third of world
-                spawnInfo.spawnTileX > third && spawnInfo.spawnTileX < Main.maxTilesX - third &&
-                // in the overworld
-                spawnInfo.player.ZoneOverworldHeight &&
-                // Not in special biomes mear spawm
-                !spawnInfo.player.ZoneSnow &&
-                !spawnInfo.player.ZoneJungle &&
-                !spawnInfo.player.ZoneCorrupt &&
-                !spawnInfo.player.ZoneCrimson &&
-                // Can only spawn on grass with no natural dirt background (so in open air)
-                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].type == TileID.Grass &&
-                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe &&
-                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe1 &&
-                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe2 &&
-                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe3 &&
-                (int)Main.tile[spawnInfo.spawnTileX, spawnInfo.spawnTileY].wall != WallID.DirtUnsafe4 &&
-                // Not 'saved' yet
-                !WorldExplore.savedClerk &&
-                // None of me exists
-                !NPC.AnyNPCs(npc.type) &&
-                !NPC.AnyNPCs(Expeditions.npcClerk)
-                )
-            {
-                if (Expeditions.DEBUG) Main.NewText("Spawned succesfully!", 50, 255, 100);
-                return 1f; //guaranteed to spawn on next call (because we want to be found)
-            }
+            catch(Exception e) { } //I hate array errors
             return 0f;
         }
 
@@ -94,6 +100,14 @@ namespace Expeditions.NPCs
             {
                 if(p.active && p.talkNPC == npc.whoAmI)
                 {
+                    //appear out of the grass
+                    for(int i = 0; i < 20; i++)
+                    {
+                        Dust.NewDust(npc.position, npc.width, npc.height,
+                            DustID.GrassBlades, 0, -1);
+                    }
+                    Main.PlaySound(6, npc.Center);
+
                     npc.dontTakeDamage = false;
                     npc.Transform(mod.NPCType("Clerk"));
                 }
