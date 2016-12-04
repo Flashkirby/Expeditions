@@ -13,7 +13,6 @@ namespace Expeditions.Items
             item.width = 32;
             item.height = 36;
             item.scale = 0.95f;
-            item.useSound = 1;
             
             item.damage = 16;
             item.useAnimation = 21;
