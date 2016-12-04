@@ -57,7 +57,7 @@ namespace Expeditions.Tiles
             //Can't do it if something is in front
             if (Main.mouseText)
             {
-                Expeditions.CloseExpeditionMenu(true);
+                if(ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile) Expeditions.CloseExpeditionMenu(true);
                 return;
             }
 
