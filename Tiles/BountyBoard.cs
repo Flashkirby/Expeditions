@@ -54,6 +54,13 @@ namespace Expeditions.Tiles
             PlayerExplorer playerm = player.GetModPlayer<PlayerExplorer>(mod);
             Tile tile = Main.tile[i, j];
 
+            //Can't do it if something is in front
+            if (Main.mouseText)
+            {
+                Expeditions.CloseExpeditionMenu(true);
+                return;
+            }
+
             // Set custom open tile to top left
             playerm.tileOpened[0] = i - tile.frameX / 18;
             playerm.tileOpened[1] = j - tile.frameY / 18;

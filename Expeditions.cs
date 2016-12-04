@@ -126,9 +126,14 @@ namespace Expeditions
                     {
                         if (ExpeditionUI.visible)
                         {
+                            Player p = Main.player[Main.myPlayer];
                             if (Main.playerInventory ||
                                 Main.player[Main.myPlayer].chest != -1 ||
                                 Main.npcShop != 0 ||
+                                (
+                                    p.talkNPC > 0 &&
+                                    Main.npc[p.talkNPC].type != npcClerk
+                                ) ||
                                 Main.InReforgeMenu ||
                                 Main.InGuideCraftMenu ||
                                 Main.gameMenu
@@ -206,7 +211,8 @@ namespace Expeditions
             player.sign = -1;
             Main.npcShop = 0;
             Main.npcChatText = "";
-            if (viewMode != ExpeditionUI.viewMode_NPC && player.talkNPC > 0)
+            if (viewMode != ExpeditionUI.viewMode_NPC && 
+                player.talkNPC > 0)
             {
                 player.talkNPC = 0;
             }
