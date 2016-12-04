@@ -88,6 +88,29 @@ namespace Expeditions
             list.AddRange(GetExpeditionsList());
             return list;
         }
+        /// <summary>
+        /// Finds the specified expedition
+        /// </summary>
+        /// <param name="mod"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static ModExpedition FindModExpedition(Mod mod, string name)
+        {
+            foreach(ModExpedition me in expeditionList)
+            {
+                if(me.mod.Equals(mod) && me.GetType().Name.Equals(name))
+                {
+                    return me;
+                }
+            }
+            return null;
+        }
+        public static Expedition FindExpedition(Mod mod, string name)
+        {
+            ModExpedition e = FindModExpedition(mod, name);
+            if (e == null) return null;
+            return e.expedition;
+        }
 
         public override void AddRecipes()
         {

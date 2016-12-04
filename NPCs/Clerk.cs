@@ -49,6 +49,8 @@ namespace Expeditions.NPCs
             NPCID.Sets.HatOffsetY[npc.type] = 2;
 
             animationType = NPCID.Stylist;
+
+            expCondition = Expeditions.FindExpedition(mod, "WelcomeQuest");
         }
         public override bool Autoload(ref string name, ref string texture, ref string[] altTextures)
         {
@@ -140,14 +142,63 @@ namespace Expeditions.NPCs
             }
         }
 
+        Expedition expCondition;
         public override void SetupShop(Chest shop, ref int nextSlot)
         {
-            shop.item[nextSlot].SetDefaults(ItemID.CopperShortsword);
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(ItemID.CopperPickaxe);
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(ItemID.CopperAxe);
-            nextSlot++;
+            if (!expCondition.completed)
+            {
+                if (WorldGen.CopperTierOre == TileID.Copper)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.CopperShortsword);
+                    nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.CopperPickaxe);
+                    nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.CopperAxe);
+                    nextSlot++;
+                }
+                else
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.TinShortsword);
+                    nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.TinPickaxe);
+                    nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.TinAxe);
+                    nextSlot++;
+                }
+            }
+            else
+            {
+                if (WorldGen.GoldTierOre == TileID.Gold)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.GoldPickaxe);
+                    nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.GoldAxe);
+                    nextSlot++;
+                }
+                else
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.PlatinumPickaxe);
+                    nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.PlatinumAxe);
+                    nextSlot++;
+                }
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSword"));
+                nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerPike"));
+                nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBow"));
+                nextSlot++;
+                if (!WorldGen.crimson)
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerCarbine"));
+                    nextSlot++;
+                }
+                else
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerRepeater"));
+                    nextSlot++;
+                }
+            }
         }
 
 
