@@ -18,16 +18,7 @@ namespace Expeditions
         internal static ExpeditionUI expeditionUI;
 
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
-        private static List<ModExpedition> _expeditionList;
-        internal static List<ModExpedition> expeditionList
-        {
-            get
-            {
-                if (_expeditionList == null) _expeditionList = new List<ModExpedition>();
-                return _expeditionList;
-            }
-            set { _expeditionList = value; }
-        }
+        private static List<ModExpedition> expeditionList;
         public static Texture2D sortingTexture;
 
         private static int _npcClerk;
@@ -79,16 +70,6 @@ namespace Expeditions
             return expeditionList;
         }
         /// <summary>
-        /// Returns a copy of the current expedition list. 
-        /// </summary>
-        /// <returns></returns>
-        public static List<ModExpedition> GetExpeditionsListCopy()
-        {
-            List<ModExpedition> list = new List<ModExpedition>();
-            list.AddRange(GetExpeditionsList());
-            return list;
-        }
-        /// <summary>
         /// Finds the specified expedition
         /// </summary>
         /// <param name="mod"></param>
@@ -96,7 +77,7 @@ namespace Expeditions
         /// <returns></returns>
         public static ModExpedition FindModExpedition(Mod mod, string name)
         {
-            foreach(ModExpedition me in expeditionList)
+            foreach(ModExpedition me in GetExpeditionsList())
             {
                 if(me.mod.Equals(mod) && me.GetType().Name.Equals(name))
                 {
@@ -111,11 +92,22 @@ namespace Expeditions
             if (e == null) return null;
             return e.expedition;
         }
+        /// <summary> Reset progress and detach references </summary>
+        internal static void ResetExpeditions()
+        {
+            //initiliase all the expeditions
+            foreach (ModExpedition mex in GetExpeditionsList())
+            {
+                mex.expedition.ResetProgress();
+                PlayerExplorer.dbgmsg += "(" + mex.expedition.name
+                    + (mex.expedition.trackingActive ? "T" : "n") + ")";
+            }
+        }
 
         public override void AddRecipes()
         {
             //initiliase expedition defaults, values reset in PlayerExplorer
-            foreach (ModExpedition mex in expeditionList)
+            foreach (ModExpedition mex in GetExpeditionsList())
             {
                 mex.SetDefaults();
             }
@@ -167,7 +159,7 @@ namespace Expeditions
             // Keep track of active expeditions in-game
             if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
             {
-                foreach (ModExpedition me in expeditionList)
+                foreach (ModExpedition me in GetExpeditionsList())
                 {
                     if (me.CheckPrerequisites(player))
                     {

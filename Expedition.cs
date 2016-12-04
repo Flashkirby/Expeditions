@@ -286,6 +286,16 @@ namespace Expeditions
             condition2Met = false;
             condition3Met = false;
         }
+        public void CopyProgress(Expedition e)
+        {
+            completed = e.completed;
+            trackCondition = e.trackCondition;
+            trackingActive = e.trackingActive;
+            trackItems = e.trackItems;
+            condition1Met = e.condition1Met;
+            condition2Met = e.condition2Met;
+            condition3Met = e.condition3Met;
+        }
 
         /// <summary>
         /// Add an item to be given out to participants who finished the expedition
