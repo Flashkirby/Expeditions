@@ -4,3 +4,5 @@ obj/
 *.suo
 *.sln
 *.csproj
+*~
+*.TMP
