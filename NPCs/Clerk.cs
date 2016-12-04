@@ -100,15 +100,18 @@ namespace Expeditions.NPCs
             }
         }
 
-        float wasSittingTimer = 0f;
+        private bool danger = false;
+        private float wasSittingTimer = 0f;
         public override void PostAI()
         {
             Player player = Main.player[Main.myPlayer];
             // You 'saved' me!
             WorldExplore.savedClerk = true;
+            
+            danger = CheckDangered();
 
             // Overwrite getting off chair due to type != 15
-            //StayOnChairOverwriteVanilla();
+            StayOnChairOverwriteVanilla();
 
             // Track if leaving npc whilst window is open
             bool anotherNPC = player.talkNPC > 0 && Main.npc[player.talkNPC].type == npc.type;
@@ -120,33 +123,59 @@ namespace Expeditions.NPCs
                 if (Expeditions.DEBUG) Main.NewText("Closing via talknpc change");
             }
 
-            //SitAtBountyBoard();
+            SitAtBountyBoard();
+        }
+
+        private bool CheckDangered()
+        {
+            bool danger = false;
+            float num389 = (float)NPCID.Sets.DangerDetectRange[npc.type];
+            for (int num395 = 0; num395 < 200; num395++)
+            {
+                bool? flag45 = NPCLoader.CanHitNPC(Main.npc[num395], npc);
+                if (!flag45.HasValue || flag45.Value)
+                {
+                    bool flag46 = flag45.HasValue && flag45.Value;
+                    if (Main.npc[num395].active && !Main.npc[num395].friendly && Main.npc[num395].damage > 0 && Main.npc[num395].Distance(npc.Center) < num389 && (!NPCID.Sets.Skeletons.Contains(Main.npc[num395].netID) | flag46))
+                    {
+                        danger = true;
+                        break;
+                    }
+                }
+            }
+
+            return danger;
         }
 
         private void StayOnChairOverwriteVanilla()
         {
-            if (npc.ai[1] == 0f && wasSittingTimer > 0)
+
+            // If standing around when I could still be sitting
+            if (npc.ai[0] == 0f && !danger && wasSittingTimer > 0)
             {
                 Point point = npc.Center.ToTileCoordinates();
                 Tile tile = Main.tile[point.X, point.Y];
                 if (tile.type == mod.TileType("BountyBoard"))
                 {
-                    npc.ai[0] = 5f;
-                    npc.ai[1] = wasSittingTimer - 1;
+                    TakeSeat(point, tile);
+                    npc.ai[1] = 2; //normally sit around all day
                 }
                 else
                 {
                     wasSittingTimer = 0f;
                 }
             }
+            else
+            {
+                wasSittingTimer = 0f;
+            }
         }
         private void SitAtBountyBoard()
         {
             if (Main.netMode != 1)
             {
-                bool flag57 = npc.ai[0] < 2f;
                 // Sit down on expedition boards
-                if (flag57 && npc.ai[0] == 1f && npc.velocity.Y == 0f && Main.dayTime)
+                if (npc.ai[0] == 1f && !danger && npc.velocity.Y == 0f && Main.dayTime)
                 {
                     // Get my tile
                     Point point2 = npc.Center.ToTileCoordinates();
@@ -160,7 +189,7 @@ namespace Expeditions.NPCs
                             if (Main.npc[num471].active && Main.npc[num471].aiStyle == 7 && Main.npc[num471].townNPC && Main.npc[num471].ai[0] == 5f)
                             {
                                 Point a = Main.npc[num471].Center.ToTileCoordinates();
-                                if (a == point2)
+                                if (a.Equals(point2))
                                 {
                                     flag61 = false;
                                     break;
@@ -183,19 +212,31 @@ namespace Expeditions.NPCs
                         }
                         if (flag61)
                         {
-                            npc.ai[0] = 5f;
+                            TakeSeat(point2, tile2);
                             npc.ai[1] = (float)(900 + Main.rand.Next(10800));
-                            npc.direction = ((tile2.frameY <= 52) ? -1 : 1);
-                            npc.Bottom = new Vector2((float)(point2.X * 16 + 8 + 2 * npc.direction), (float)(point2.Y * 16 + 32));
-                            npc.velocity = Vector2.Zero;
-                            npc.localAI[3] = 0f;
-                            npc.netUpdate = true;
                         }
                     }
                 }
             }
 
-            wasSittingTimer = npc.ai[0] == 5f ? npc.ai[1] : 0;
+            wasSittingTimer = (npc.ai[0] == 5f && Main.dayTime) ? npc.ai[1] : 0;
+        }
+        private void TakeSeat(Point point2, Tile tile2)
+        {
+            npc.ai[0] = 5f;
+            bool flag = true;
+            foreach(Player p in Main.player)
+            {
+                if(p.talkNPC == npc.whoAmI)
+                {
+                    flag = false;
+                }
+            }
+            if(flag) npc.direction = ((tile2.frameY <= 52) ? -1 : 1);
+            npc.Bottom = new Vector2((float)(point2.X * 16 + 8 + 2 * npc.direction), (float)(point2.Y * 16 + 32));
+            npc.velocity = Vector2.Zero;
+            npc.localAI[3] = 0f;
+            npc.netUpdate = true;
         }
 
         public override string GetChat()
