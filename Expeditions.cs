@@ -45,7 +45,7 @@ namespace Expeditions
             expeditionUserInterface.SetState(expeditionUI);
 
             //add quests
-            AddExpeditionToList(new WelcomeQuest(), this);
+            AddExpeditionToList(new ExampleExpedition(), this);
         }
         /// <summary>
         /// Adds the designated expedition to the list of active expeditions.
