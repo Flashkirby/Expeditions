@@ -132,7 +132,7 @@ namespace Expeditions
                                 Main.npcShop != 0 ||
                                 (
                                     p.talkNPC > 0 &&
-                                    Main.npc[p.talkNPC].type != npcClerk
+                                    ExpeditionUI.viewMode != ExpeditionUI.viewMode_NPC
                                 ) ||
                                 Main.InReforgeMenu ||
                                 Main.InGuideCraftMenu ||

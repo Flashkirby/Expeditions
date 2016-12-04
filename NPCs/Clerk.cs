@@ -100,19 +100,102 @@ namespace Expeditions.NPCs
             }
         }
 
+        float wasSittingTimer = 0f;
         public override void PostAI()
         {
             Player player = Main.player[Main.myPlayer];
+            // You 'saved' me!
             WorldExplore.savedClerk = true;
 
+            // Overwrite getting off chair due to type != 15
+            //StayOnChairOverwriteVanilla();
+
             // Track if leaving npc whilst window is open
+            bool anotherNPC = player.talkNPC > 0 && Main.npc[player.talkNPC].type == npc.type;
             if (ExpeditionUI.viewMode == ExpeditionUI.viewMode_NPC && ExpeditionUI.visible &&
-                player.talkNPC != npc.whoAmI
+                (player.talkNPC != npc.whoAmI && !anotherNPC)
                 )
             {
                 Expeditions.CloseExpeditionMenu();
                 if (Expeditions.DEBUG) Main.NewText("Closing via talknpc change");
             }
+
+            //SitAtBountyBoard();
+        }
+
+        private void StayOnChairOverwriteVanilla()
+        {
+            if (npc.ai[1] == 0f && wasSittingTimer > 0)
+            {
+                Point point = npc.Center.ToTileCoordinates();
+                Tile tile = Main.tile[point.X, point.Y];
+                if (tile.type == mod.TileType("BountyBoard"))
+                {
+                    npc.ai[0] = 5f;
+                    npc.ai[1] = wasSittingTimer - 1;
+                }
+                else
+                {
+                    wasSittingTimer = 0f;
+                }
+            }
+        }
+        private void SitAtBountyBoard()
+        {
+            if (Main.netMode != 1)
+            {
+                bool flag57 = npc.ai[0] < 2f;
+                // Sit down on expedition boards
+                if (flag57 && npc.ai[0] == 1f && npc.velocity.Y == 0f && Main.dayTime)
+                {
+                    // Get my tile
+                    Point point2 = npc.Center.ToTileCoordinates();
+                    bool flag61 = WorldGen.InWorld(point2.X, point2.Y, 1);
+
+                    // Check first if anyone else is sitting here
+                    if (flag61)
+                    {
+                        for (int num471 = 0; num471 < 200; num471++)
+                        {
+                            if (Main.npc[num471].active && Main.npc[num471].aiStyle == 7 && Main.npc[num471].townNPC && Main.npc[num471].ai[0] == 5f)
+                            {
+                                Point a = Main.npc[num471].Center.ToTileCoordinates();
+                                if (a == point2)
+                                {
+                                    flag61 = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (flag61)
+                    {
+                        Tile tile2 = Main.tile[point2.X, point2.Y];
+                        flag61 = (tile2.type == mod.TileType("BountyBoard"));
+                        // disregard parts with no seat
+                        if (tile2.frameY <= 52)
+                        {
+                            if (tile2.frameX < 54) flag61 = false;
+                        }
+                        else
+                        {
+                            if (tile2.frameX >= 16) flag61 = false;
+                        }
+                        if (flag61)
+                        {
+                            npc.ai[0] = 5f;
+                            npc.ai[1] = (float)(900 + Main.rand.Next(10800));
+                            npc.direction = ((tile2.frameY <= 52) ? -1 : 1);
+                            npc.Bottom = new Vector2((float)(point2.X * 16 + 8 + 2 * npc.direction), (float)(point2.Y * 16 + 32));
+                            npc.velocity = Vector2.Zero;
+                            npc.localAI[3] = 0f;
+                            npc.netUpdate = true;
+                        }
+                    }
+                }
+            }
+
+            wasSittingTimer = npc.ai[0] == 5f ? npc.ai[1] : 0;
         }
 
         public override string GetChat()
