@@ -5,7 +5,7 @@ using Expeditions;
 
 namespace Expeditions.Quests
 {
-    public class ExampleExpedition : ModExpedition
+    class ExampleExpedition : ModExpedition
     {
         public override void SetDefaults()
         {

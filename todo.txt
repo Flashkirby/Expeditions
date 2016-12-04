@@ -1,4 +1,7 @@
-Close UI when away from source (DONE For npc)
+Add clerk gores
+wayfarer 
+	magic
+	summons
 
 Share expedition complete events via network packets
 https://github.com/bluemagic123/tModLoader/wiki/Mod#public-modpacket-getpacketint-capacity--256

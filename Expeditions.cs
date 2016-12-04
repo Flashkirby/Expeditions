@@ -10,7 +10,7 @@ using Expeditions.Quests;
 
 namespace Expeditions
 {
-    class Expeditions : Mod
+    public class Expeditions : Mod
     {
         internal const bool DEBUG = true;
 
@@ -32,6 +32,8 @@ namespace Expeditions
                 AutoloadGores = true,
                 AutoloadSounds = true
             };
+            // Reset list every time we reload
+            expeditionList = new List<ModExpedition>();
         }
 
         public override void Load()

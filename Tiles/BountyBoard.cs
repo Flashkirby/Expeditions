@@ -10,7 +10,7 @@ using Expeditions;
 
 namespace Expeditions.Tiles
 {
-    public class BountyBoard : ModTile
+    class BountyBoard : ModTile
     {
         public static int itemType;
 
