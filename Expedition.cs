@@ -327,9 +327,9 @@ namespace Expeditions
 
             // Set up the unique fields
             if (mex == null)
-            { identifier = "Terraria@" + name; }
+            { identifier = "Terraria@" + this.GetType().Name; }
             else
-            { identifier = mex.mod.Name + "@" + name; }
+            { identifier = mex.mod.Name + "@" + this.GetType().Name; }
 
             // Custom runtime independant hash not dependant on runtime
             // I ran it >100000 times with random values and it got no collisions,
