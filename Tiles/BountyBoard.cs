@@ -14,6 +14,8 @@ namespace Expeditions.Tiles
     {
         public static int itemType;
 
+        public const int tileWidth = 4;
+        public const int tileHeight = 3;
         public override void SetDefaults()
         {
             //extra info
@@ -24,7 +26,7 @@ namespace Expeditions.Tiles
             disableSmartCursor = true;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
-            TileObjectData.newTile.Width = 4;
+            TileObjectData.newTile.Width = tileWidth;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 
             //offset into ground
@@ -39,6 +41,7 @@ namespace Expeditions.Tiles
 
             itemType = mod.ItemType("BountyBoard");
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
+            adjTiles = new int[] { TileID.Chairs };
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
@@ -48,7 +51,15 @@ namespace Expeditions.Tiles
         public override void RightClick(int i, int j)
         {
             Player player = Main.player[Main.myPlayer];
+            PlayerExplorer playerm = player.GetModPlayer<PlayerExplorer>(mod);
             Tile tile = Main.tile[i, j];
+
+            // Set custom open tile to top left
+            playerm.tileOpened[0] = i - tile.frameX / 18;
+            playerm.tileOpened[1] = j - tile.frameY / 18;
+            // Alt direction offset
+            if (tile.frameY > 54) playerm.tileOpened[1] -= tileHeight;
+
             Main.mouseRightRelease = false;
             
             if (player.sign >= 0) //close sign editing

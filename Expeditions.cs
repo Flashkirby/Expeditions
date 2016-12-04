@@ -167,9 +167,9 @@ namespace Expeditions
                     if (Main.time % 60 == 30)
                     {
 
-                        if (PlayerExplorer.message != null)
+                        if (PlayerExplorer.dbgmsg != null)
                         {
-                            Main.NewTextMultiline(PlayerExplorer.message);
+                            Main.NewTextMultiline(PlayerExplorer.dbgmsg);
                         }
                     }
                 }

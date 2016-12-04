@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -9,20 +10,22 @@ namespace Expeditions
     {
         private static int _version = _versionCurrent;
         private const int _versionCurrent = 0;
-        public static string message;
+        public static string dbgmsg;
+
+        public int[] tileOpened = new int[2];
 
         private List<ModExpedition> _localExpeditionList;
 
         public override void SaveCustomData(BinaryWriter writer)
         {
             writer.Write(_versionCurrent);
-            if (Expeditions.DEBUG) message = "\nSAVE v: " + _versionCurrent;
+            if (Expeditions.DEBUG) dbgmsg = "\nSAVE v: " + _versionCurrent;
 
             // Expeditions
             List<ModExpedition> expeditions = Expeditions.expeditionList;
             // Save the counts
             int count = expeditions.Count;
-            if (Expeditions.DEBUG) message += "| c:" + count;
+            if (Expeditions.DEBUG) dbgmsg += "| c:" + count;
             writer.Write(count);
             for (int i = 0; i < count; i++)
             {
@@ -43,7 +46,7 @@ namespace Expeditions
         {
             _version = reader.ReadInt32();
 
-            if (Expeditions.DEBUG) message += "\nLOAD v: " + _version + " / " + _versionCurrent;
+            if (Expeditions.DEBUG) dbgmsg += "\nLOAD v: " + _version + " / " + _versionCurrent;
             if (_version == _versionCurrent)
             {
                 // Expeditions
@@ -63,7 +66,7 @@ namespace Expeditions
                 initialiseExpeditions();
                 // Read expeditions
                 int count = reader.ReadInt32();
-                if (Expeditions.DEBUG) message += " | LOAD c:" + count;
+                if (Expeditions.DEBUG) dbgmsg += " | LOAD c:" + count;
                 for (int i = 0; i < count; i++)
                 {
                     int expeditionID = reader.ReadInt32();
@@ -77,11 +80,11 @@ namespace Expeditions
                         e.condition1Met = flags[2];
                         e.condition2Met = flags[3];
                         e.condition3Met = flags[4];
-                        if (Expeditions.DEBUG) message += "\n" + e.name + " : " + expeditionID.ToString("X") + " : " + e.completed + " & " + e.trackingActive;
+                        if (Expeditions.DEBUG) dbgmsg += "\n" + e.name + " : " + expeditionID.ToString("X") + " : " + e.completed + " & " + e.trackingActive;
                     }
                     else
                     {
-                        if (Expeditions.DEBUG) message += "\n" + expeditionID.ToString("X") + " : Not Found";
+                        if (Expeditions.DEBUG) dbgmsg += "\n" + expeditionID.ToString("X") + " : Not Found";
                     }
                 }
             }
@@ -93,7 +96,7 @@ namespace Expeditions
         }
         private void initialiseExpeditions()
         {
-            if (Expeditions.DEBUG) message += "(rinit)";
+            if (Expeditions.DEBUG) dbgmsg += "(rinit)";
             //initiliase all the expeditions
             foreach (ModExpedition mex in _localExpeditionList)
             {
@@ -114,6 +117,28 @@ namespace Expeditions
                 }
                 // Set the expeditions to use this list
                 Expeditions.expeditionList = _localExpeditionList;
+            }
+        }
+
+        public override void PostUpdate()
+        {
+            if(ExpeditionUI.visible && ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile)
+            {
+                Rectangle tileRange = new Rectangle(
+                    (int)(player.Center.X - (float)(Player.tileRangeX * 16)),
+                    (int)(player.Center.Y - (float)(Player.tileRangeY * 16)),
+                    Player.tileRangeX * 16 * 2,
+                    Player.tileRangeY * 16 * 2);
+                Rectangle boardRect = new Rectangle(
+                    tileOpened[0] * 16,
+                    tileOpened[1] * 16,
+                    4 * 16,
+                    3 * 16
+                    );
+                if(!tileRange.Intersects(boardRect))
+                {
+                    Expeditions.CloseExpeditionMenu();
+                }
             }
         }
     }
