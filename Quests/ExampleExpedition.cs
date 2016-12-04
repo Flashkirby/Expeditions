@@ -5,7 +5,7 @@ using Expeditions;
 
 namespace Expeditions.Quests
 {
-    public class WelcomeQuest : ModExpedition
+    public class ExampleExpedition : ModExpedition
     {
         public override void SetDefaults()
         {
@@ -52,9 +52,12 @@ namespace Expeditions.Quests
 
         public override bool CheckPrerequisites(Player player)
         {
-            foreach(Item item in player.inventory)
+            if (Expeditions.DEBUG)
             {
-                if (item.rare == -1) return true;
+                foreach (Item item in player.inventory)
+                {
+                    if (item.rare == -1) return true;
+                }
             }
             return false;
         }

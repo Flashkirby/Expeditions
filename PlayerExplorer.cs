@@ -9,7 +9,7 @@ namespace Expeditions
     public class PlayerExplorer : ModPlayer
     {
         private static int _version = _versionCurrent;
-        private const int _versionCurrent = -7;
+        private const int _versionCurrent = 0;
         public static string dbgmsg;
 
         public int[] tileOpened = new int[2];
