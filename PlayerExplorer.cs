@@ -33,8 +33,8 @@ namespace Expeditions
             for (int i = 0; i < count; i++)
             {
                 // Save the ID as 4 bytes, and its booleans as another byte
-                if (Expeditions.DEBUG) dbgmsg += "  [" + expeditions[i].expedition.name + " : " + expeditions[i].expedition.GetHashID().ToString("X") + " : " + expeditions[i].expedition.completed + " & " + expeditions[i].expedition.trackingActive + "] ";
-                writer.Write(expeditions[i].expedition.GetHashID());
+                if (Expeditions.DEBUG) dbgmsg += "  [" + expeditions[i].expedition.name + " : " + Expedition.GetHashID(expeditions[i].expedition).ToString("X") + " : " + expeditions[i].expedition.completed + " & " + expeditions[i].expedition.trackingActive + "] ";
+                writer.Write(Expedition.GetHashID(expeditions[i].expedition));
                 writer.Write(new BitsByte(
                     expeditions[i].expedition.completed,
                     expeditions[i].expedition.trackingActive,
@@ -63,12 +63,26 @@ namespace Expeditions
                 Dictionary<int, int> hashToIndex = new Dictionary<int, int>();
                 for(int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
                 {
+                    Expedition e = Expeditions.GetExpeditionsList()[i].expedition;
                     // Populate both lists
-                    hashToIndex.Add(
-                        Expeditions.GetExpeditionsList()[i].expedition.GetHashID(), // The hashcode
-                        i               // The index
-                        );
-                    _localExpeditionList.Add(new Expedition());
+                    try
+                    {
+                        hashToIndex.Add(
+                            Expedition.GetHashID(e), // The hashcode
+                            i               // The index
+                            );
+                        _localExpeditionList.Add(new Expedition());
+                    }
+                    catch
+                    {
+                        string errorList = "";
+                        foreach(ModExpedition me in Expeditions.GetExpeditionsList())
+                        {
+                            errorList += "\n" + Expedition.GetHashID(me.expedition).ToString("X") + " -> " + me.expedition.name + " (" + (object)(me).GetType().Name + ")";
+                        }
+                        throw new System.Exception("{!CONFLICT: " + e.name + ":#" + Expedition.GetHashID(e).ToString("X") + " duplicate!}" + errorList);
+                        //dbgmsg += "{!CONFLICT: " + e.name + ":#" + e.GetHashID().ToString("X") + " duplicate!}";
+                    }
                 }
 
                 // Read expeditions

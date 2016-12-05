@@ -338,16 +338,16 @@ namespace Expeditions
             return rewards;
         }
 
-        public int GetHashID()
+        public static int GetHashID(Expedition expedition)
         {
             String identifier = "";
             int code = 0;
 
             // Set up the unique fields
-            if (mex == null)
-            { identifier = "Terraria@" + this.GetType().Name; }
+            if (expedition.mex == null)
+            { identifier = "Terraria@" + expedition.name; }
             else
-            { identifier = mex.mod.Name + "@" + this.GetType().Name; }
+            { identifier = expedition.mex.mod.Name + "@" + (object)(expedition.mex).GetType().Name; }
 
             // Custom runtime independant hash not dependant on runtime
             // I ran it >100000 times with random values and it got no collisions,
