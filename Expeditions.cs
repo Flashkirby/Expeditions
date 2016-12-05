@@ -24,6 +24,10 @@ namespace Expeditions
         private static int _npcClerk;
         public static int npcClerk { get { return _npcClerk; } }
 
+        private static ModExpedition tier1ExpPointer;
+        public static bool unlockedTier1Quests { get { return tier1ExpPointer.expedition.completed; } }
+
+
         public Expeditions()
         {
             Properties = new ModProperties()
@@ -46,8 +50,11 @@ namespace Expeditions
             expeditionUserInterface = new UserInterface();
             expeditionUserInterface.SetState(expeditionUI);
 
+            tier1ExpPointer = new CaveExplorationKit();
+
             //add quests
             AddExpeditionToList(new ExampleExpedition(), this);
+            AddExpeditionToList(tier1ExpPointer, this);
         }
         /// <summary>
         /// Adds the designated expedition to the list of active expeditions.
@@ -185,6 +192,7 @@ namespace Expeditions
                     {
                         Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
+                        Main.NewText(unlockedTier1Quests + " : tier 1 expeditions");
                     }
                     if (Main.time % 60 == 30)
                     {

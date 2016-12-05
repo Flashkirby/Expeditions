@@ -12,7 +12,7 @@ namespace Expeditions.Quests
             expedition.name = "Hello World";
             expedition.difficulty = 1;
             expedition.deliver = true;
-            expedition.important = true;
+            expedition.important = false;
             expedition.repeatable = true;
             expedition.conditionDescription1 = "Stand on the ground";
             expedition.conditionDescription2 = "Run at 30mph";
