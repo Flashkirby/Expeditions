@@ -22,6 +22,7 @@ namespace Expeditions
         public override void SaveCustomData(BinaryWriter writer)
         {
             writer.Write(_versionCurrent);
+            int byteCount = 4;
             if (Expeditions.DEBUG) dbgmsg = "\nSAVE v: " + _versionCurrent;
 
             // Expeditions
@@ -29,23 +30,23 @@ namespace Expeditions
             // Save the counts
             int count = expeditions.Count;
             if (Expeditions.DEBUG) dbgmsg += "| c:" + count;
-            writer.Write(count);
+            writer.Write(count); byteCount += 4;
             for (int i = 0; i < count; i++)
             {
                 // Save the ID as 4 bytes, and its booleans as another byte
                 if (Expeditions.DEBUG) dbgmsg += "  [" + expeditions[i].expedition.name + " : " + Expedition.GetHashID(expeditions[i].expedition).ToString("X") + " : " + expeditions[i].expedition.completed + " & " + expeditions[i].expedition.trackingActive + "] ";
-                writer.Write(Expedition.GetHashID(expeditions[i].expedition));
+                writer.Write(Expedition.GetHashID(expeditions[i].expedition)); byteCount += 4;
                 writer.Write(new BitsByte(
                     expeditions[i].expedition.completed,
                     expeditions[i].expedition.trackingActive,
                     expeditions[i].expedition.condition1Met,
                     expeditions[i].expedition.condition2Met,
                     expeditions[i].expedition.condition3Met
-                    ));
+                    )); byteCount += 1;
             }
+            dbgmsg += "\nFilesize = " + byteCount + "B";
 
             // Reset this
-            dbgmsg += "[reset expd]";
             _localExpeditionList = new List<Expedition>();
         }
 
@@ -54,7 +55,7 @@ namespace Expeditions
             _version = reader.ReadInt32();
             if (_version == _versionCurrent)
             {
-                if (Expeditions.DEBUG) dbgmsg += "\nLOAD v: " + _version + " / " + _versionCurrent;
+                if (Expeditions.DEBUG) dbgmsg += "\nLOAD v:" + _version + "/" + _versionCurrent;
 
                 // Create a new progress storage
                 _localExpeditionList = new List<Expedition>();
@@ -87,7 +88,7 @@ namespace Expeditions
 
                 // Read expeditions
                 int count = reader.ReadInt32();
-                if (Expeditions.DEBUG) dbgmsg += " | LOAD c:" + count;
+                if (Expeditions.DEBUG) dbgmsg += "|c:" + count;
                 for (int i = 0; i < count; i++)
                 {
                     int expeditionID = reader.ReadInt32();
@@ -102,12 +103,12 @@ namespace Expeditions
                         e.condition1Met = flags[2];
                         e.condition2Met = flags[3];
                         e.condition3Met = flags[4];
-                        if (Expeditions.DEBUG) dbgmsg += "  [" + Expeditions.GetExpeditionsList()[index].expedition.name + " : " + expeditionID.ToString("X") + " : " + e.completed + " & " + e.trackingActive + "] ";
+                        if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";" + (e.completed ? "`" : ".") + (e.trackingActive ? "`" : ".") + "]";
                     }
                     else // No match found
                     {
                         
-                        if (Expeditions.DEBUG) dbgmsg += "  [" + expeditionID.ToString("X") + " : Not Found" + "] ";
+                        if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";-]";
                     }
                 }
             }
