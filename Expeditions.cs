@@ -42,7 +42,10 @@ namespace Expeditions
 
         public override void Load()
         {
-            sortingTexture = GetTexture("UI/Sorting_Categories");
+            if (Main.netMode != 2)
+            {
+                sortingTexture = GetTexture("UI/Sorting_Categories");
+            }
             _npcClerk = NPCType("Clerk");
 
             expeditionUI = new ExpeditionUI();

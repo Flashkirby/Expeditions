@@ -1,4 +1,5 @@
 core quewsts
+add explorer tag to quests
 
 Add clerk gores
 wayfarer 
