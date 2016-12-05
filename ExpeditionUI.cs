@@ -300,10 +300,7 @@ namespace Expeditions
                 _titleHeader.SetText(currentME.expedition.name + (currentME.expedition.completed ? " (Completed)" : "") + (Expeditions.DEBUG?" #"+currentME.expedition.GetHashID().ToString("X"):""));
                 yBottom += _titleHeader.TextHeight + 10;
 
-                if (currentME.expedition.completed && currentME.expedition.description != "")
-                { _description.SetText(currentME.expedition.descriptionCompleted); }
-                else
-                { _description.SetText(currentME.expedition.description); }
+                _description.SetText(currentME.expedition.GetDescription());
                 _description.Top.Set(yBottom, 0f);
                 yBottom += _description.TextHeight;
 

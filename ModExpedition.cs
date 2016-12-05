@@ -88,6 +88,17 @@ namespace Expeditions
         {
             return true;
         }
+
+        /// <summary>
+        /// Set the description of the expedition here.
+        /// </summary>
+        /// <param name="complete">Expedition is completed, sometimes you want to display different text.</param>
+        /// <returns></returns>
+        public virtual string Description(bool complete)
+        {
+            return "";
+        }
+
         #endregion
     }
 }

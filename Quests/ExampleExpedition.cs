@@ -10,8 +10,6 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Hello World";
-            expedition.description = "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. ";
-            expedition.descriptionCompleted = "You've completed this repeatable expedition. Good for you! ";
             expedition.difficulty = 1;
             expedition.deliver = true;
             expedition.important = true;
@@ -37,6 +35,11 @@ namespace Expeditions.Quests
 
             AddRewardItem(ItemID.DirtBlock, 2);
             AddRewardPrefix(ItemID.Shackle, 65);
+        }
+        public override string Description(bool complete)
+        {
+            if (complete) return "You've completed this repeatable expedition. Good for you! ";
+            return "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. ";
         }
 
         public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)

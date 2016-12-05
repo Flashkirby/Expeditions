@@ -21,10 +21,6 @@ namespace Expeditions
 
         /// <summary>Title of expedition</summary>
         public string name = "";
-        /// <summary>Description of expedition</summary>
-        public string description = "";
-        /// <summary>Description of expedition if completed, eg. for repeatable quests</summary>
-        public string descriptionCompleted = "";
         /// <summary>Description of conditions to be met</summary>
         public string conditionDescription1 = "";
         public string conditionDescription2 = "";
@@ -58,6 +54,18 @@ namespace Expeditions
         private bool trackCondition = false;
         /// <summary> All items gathered </summary>
         private bool trackItems = false;
+
+        /// <summary> Gets the description of this expedition </summary>
+        public string GetDescription()
+        {
+            if (mex != null)
+            {
+                return mex.Description(completed);
+            }
+            return "";
+        }
+
+
         /// <summary>
         /// Checks against all conditions to see if completeable
         /// </summary>
