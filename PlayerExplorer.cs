@@ -141,6 +141,7 @@ namespace Expeditions
                     4 * 16,
                     3 * 16
                     );
+                if (Expeditions.DEBUG) Dust.NewDust(boardRect.TopLeft(), boardRect.Width, boardRect.Height, 175);
                 if(!tileRange.Intersects(boardRect))
                 {
                     Expeditions.CloseExpeditionMenu();

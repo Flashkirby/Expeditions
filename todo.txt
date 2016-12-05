@@ -1,5 +1,3 @@
-descripto method instead of fields
-
 core quewsts
 
 Add clerk gores

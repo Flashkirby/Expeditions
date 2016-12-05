@@ -61,11 +61,12 @@ namespace Expeditions.Tiles
                 return;
             }
 
+            int directionTileFrameY = tile.frameY / 18;
+            // Alt direction offset
+            if (tile.frameY >= 54) directionTileFrameY -= tileHeight;
             // Set custom open tile to top left
             playerm.tileOpened[0] = i - tile.frameX / 18;
-            playerm.tileOpened[1] = j - tile.frameY / 18;
-            // Alt direction offset
-            if (tile.frameY > 54) playerm.tileOpened[1] -= tileHeight;
+            playerm.tileOpened[1] = j - directionTileFrameY;
 
             Main.mouseRightRelease = false;
             
