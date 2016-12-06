@@ -25,7 +25,27 @@ namespace Expeditions
         public static int npcClerk { get { return _npcClerk; } }
 
         private static ModExpedition tier1ExpPointer;
+        private static ModExpedition tier2ExpPointer;
+        private static ModExpedition tier3ExpPointer;
+        private static ModExpedition tier4ExpPointer;
+        private static ModExpedition tier5ExpPointer;
+        private static ModExpedition tier6ExpPointer;
+        private static ModExpedition tier7ExpPointer;
+        private static ModExpedition tier8ExpPointer;
+        private static ModExpedition tier9ExpPointer;
+        private static ModExpedition tier10ExpPointer;
+        private static ModExpedition tier11ExpPointer;
         public static bool unlockedTier1Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier2Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier3Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier4Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier5Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier6Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier7Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier8Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier9Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier10Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier11Quests { get { return tier1ExpPointer.expedition.completed; } }
 
 
         public Expeditions()
@@ -53,7 +73,7 @@ namespace Expeditions
             expeditionUserInterface = new UserInterface();
             expeditionUserInterface.SetState(expeditionUI);
 
-            tier1ExpPointer = new CaveExplorationKit();
+            tier1ExpPointer = new Tier1Quest();
 
             //add quests
             AddExpeditionToList(new ExampleExpedition(), this);

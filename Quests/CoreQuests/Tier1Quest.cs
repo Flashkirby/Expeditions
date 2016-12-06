@@ -5,13 +5,15 @@ using Expeditions;
 
 namespace Expeditions.Quests
 {
-    class CaveExplorationKit : ModExpedition
+    class Tier1Quest : ModExpedition
     {
         public override void SetDefaults()
         {
             expedition.name = "Cave Exploration kit";
             expedition.difficulty = 1;
+            expedition.explore = true;
             expedition.important = true;
+
             expedition.conditionDescription1 = "Enter the Underground";
             expedition.conditionDescription2 = "Reach the Cavern layer";
 
