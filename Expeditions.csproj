@@ -48,6 +48,7 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />
+    <Compile Include="Quests\CaveExplorationKit.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
     <Compile Include="UI\UITextButton.cs" />

@@ -60,15 +60,30 @@ namespace Expeditions.NPCs
 
         public override void HitEffect(int hitDirection, double damage)
         {
-            int num;
-            if (npc.life > 0) num = (int)Math.Min(damage, npc.life);
-            else num = npc.lifeMax;
-            num = num / 2 + 1;
-            for (int i = 0; i < num; i++)
+            if (npc.life > 0)
             {
-                Dust.NewDust(npc.position, npc.height, npc.width,
-                    DustID.Blood, hitDirection * 2, -1);
+                for (int i = 0; i < damage / npc.lifeMax * 100.0; i++)
+                {
+                    Dust.NewDust(npc.position, npc.height, npc.width,
+                        DustID.Blood, hitDirection, -1f);
+                }
             }
+            else
+            {
+                for (int i = 0; i < 50; i++)
+                {
+                    Dust.NewDust(npc.position, npc.height, npc.width,
+                        DustID.Blood, hitDirection * 2.5f, -2.5f);
+                }
+            }
+            int goreHead = mod.GetGoreSlot("Gores/Clerk1");
+            int goreArms = mod.GetGoreSlot("Gores/Clerk2");
+            int goreLegs = mod.GetGoreSlot("Gores/Clerk3");
+            Gore.NewGore(npc.position, npc.velocity, goreHead, 1f);
+            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 20f), npc.velocity, goreArms, 1f);
+            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 20f), npc.velocity, goreArms, 1f);
+            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 34f), npc.velocity, goreLegs, 1f);
+            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 34f), npc.velocity, goreLegs, 1f);
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)
@@ -99,6 +114,8 @@ namespace Expeditions.NPCs
                     return "Isabelle"; //Animal Crossing
             }
         }
+
+        #region AI Behaviours
 
         private bool danger = false;
         private float wasSittingTimer = 0f;
@@ -239,6 +256,102 @@ namespace Expeditions.NPCs
             npc.netUpdate = true;
         }
 
+        #endregion
+        #region AI Attacks
+
+        private int getWeaponType()
+        {
+            if (Main.hardMode)
+            { return 2; }
+            else if (NPC.downedBoss1)
+            { return 1; }
+            return 0;
+        }
+
+        public override void TownNPCAttackStrength(ref int damage, ref float knockback)
+        {
+            switch (getWeaponType())
+            {
+                case 2:
+                    damage = 40;
+                    knockback = 5f;
+                    break;
+                case 1:
+                    damage = 21;
+                    knockback = 5f;
+                    break;
+                default:
+                    damage = 10;
+                    knockback = 0f;
+                    break;
+            }
+        }
+        public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
+        {
+            switch (getWeaponType())
+            {
+                case 2:
+                    cooldown = 32; //min cooldown from START of attack (no inc. attack time)
+                    randExtraCooldown = 33;
+                    break;
+                case 1:
+                    cooldown = 36; //min cooldown from START of attack (no inc. attack time)
+                    randExtraCooldown = 26;
+                    break;
+                default:
+                    cooldown = 40; //min cooldown from START of attack (no inc. attack time)
+                    randExtraCooldown = 20;
+                    break;
+            }
+        }
+        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
+        {
+            switch (getWeaponType())
+            {
+                case 2:
+                    projType = ProjectileID.CrystalPulse;
+                    attackDelay = 30; //how many frames before projectile spawns
+                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 109);
+                    break;
+                case 1:
+                    projType = ProjectileID.AmethystBolt; //ruby stats though
+                    attackDelay = 30; //how many frames before projectile spawns
+                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 43);
+                    break;
+                default:
+                    projType = ProjectileID.Spark;
+                    attackDelay = 30; //how many frames before projectile spawns
+                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 8);
+                    break;
+            }
+        }
+        public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
+        {
+            gravityCorrection = 0f;
+            switch (getWeaponType())
+            {
+                case 2:
+                    multiplier = 13f;
+                    randomOffset = 0.6f;
+                    break;
+                case 1:
+                    multiplier = 9f;
+                    randomOffset = 0.3f;
+                    break;
+                default:
+                    multiplier = 9f;
+                    randomOffset = 0.5f;
+                    gravityCorrection = 1f;
+                    break;
+            }
+        }
+        public override void TownNPCAttackMagic(ref float auraLightMultiplier)
+        {
+            auraLightMultiplier = 0.5f;
+        }
+
+        #endregion
+
         public override string GetChat()
         {
             //"Ok, here's the deal. I'm really not cut out for adventuring, but my employers are constantly demanding information about WORLDNAME. They also send me goodies whenever I document something new, which I'm more than willing to share... catch my drift? But we'll need a base camp first, and I've got all this stuff lying around..."
@@ -326,96 +439,6 @@ namespace Expeditions.NPCs
         }
 
 
-        private int getWeaponType()
-        {
-            if (Main.hardMode)
-            { return 2; }
-            else if (NPC.downedBoss1)
-            { return 1; }
-            return 0;
-        }
-
-        public override void TownNPCAttackStrength(ref int damage, ref float knockback)
-        {
-            switch(getWeaponType())
-            {
-                case 2:
-                    damage = 40;
-                    knockback = 5f;
-                    break;
-                case 1:
-                    damage = 21;
-                    knockback = 5f;
-                    break;
-                default:
-                    damage = 10;
-                    knockback = 0f;
-                    break;
-            }
-        }
-        public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
-        {
-            switch (getWeaponType())
-            {
-                case 2:
-                    cooldown = 32; //min cooldown from START of attack (no inc. attack time)
-                    randExtraCooldown = 33;
-                    break;
-                case 1:
-                    cooldown = 36; //min cooldown from START of attack (no inc. attack time)
-                    randExtraCooldown = 26;
-                    break;
-                default:
-                    cooldown = 40; //min cooldown from START of attack (no inc. attack time)
-                    randExtraCooldown = 20;
-                    break;
-            }
-        }
-        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
-        {
-            switch (getWeaponType())
-            {
-                case 2:
-                    projType = ProjectileID.CrystalPulse;
-                    attackDelay = 30; //how many frames before projectile spawns
-                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 109);
-                    break;
-                case 1:
-                    projType = ProjectileID.AmethystBolt; //ruby stats though
-                    attackDelay = 30; //how many frames before projectile spawns
-                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 43);
-                    break;
-                default:
-                    projType = ProjectileID.Spark;
-                    attackDelay = 30; //how many frames before projectile spawns
-                    if (npc.localAI[3] == attackDelay - 1) Main.PlaySound(2, npc.Center, 8);
-                    break;
-            }
-        }
-        public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
-        {
-            gravityCorrection = 0f;
-            switch (getWeaponType())
-            {
-                case 2:
-                    multiplier = 13f;
-                    randomOffset = 0.6f;
-                    break;
-                case 1:
-                    multiplier = 9f;
-                    randomOffset = 0.3f;
-                    break;
-                default:
-                    multiplier = 9f;
-                    randomOffset = 0.5f;
-                    gravityCorrection = 1f;
-                    break;
-            }
-        }
-        public override void TownNPCAttackMagic(ref float auraLightMultiplier)
-        {
-            auraLightMultiplier = 0.5f;
-        }
 
     }
 }
