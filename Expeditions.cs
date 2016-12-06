@@ -25,7 +25,8 @@ namespace Expeditions
         public static int npcClerk { get { return _npcClerk; } }
 
         private static ModExpedition tier1ExpPointer;
-        private static ModExpedition tier2ExpPointer;
+        private static ModExpedition tier2ExpPointerA;
+        private static ModExpedition tier2ExpPointerB;
         private static ModExpedition tier3ExpPointer;
         private static ModExpedition tier4ExpPointer;
         private static ModExpedition tier5ExpPointer;
@@ -36,16 +37,16 @@ namespace Expeditions
         private static ModExpedition tier10ExpPointer;
         private static ModExpedition tier11ExpPointer;
         public static bool unlockedTier1Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier2Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier3Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier4Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier5Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier6Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier7Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier8Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier9Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier10Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier11Quests { get { return tier1ExpPointer.expedition.completed; } }
+        public static bool unlockedTier2Quests { get { return tier2ExpPointerA.expedition.completed || tier2ExpPointerB.expedition.completed; } }
+        public static bool unlockedTier3Quests { get { return false; } }
+        public static bool unlockedTier4Quests { get { return false; } }
+        public static bool unlockedTier5Quests { get { return false; } }
+        public static bool unlockedTier6Quests { get { return false; } }
+        public static bool unlockedTier7Quests { get { return false; } }
+        public static bool unlockedTier8Quests { get { return false; } }
+        public static bool unlockedTier9Quests { get { return false; } }
+        public static bool unlockedTier010Quests { get { return false; } }
+        public static bool unlockedTier011Quests { get { return false; } }
 
 
         public Expeditions()
@@ -74,10 +75,14 @@ namespace Expeditions
             expeditionUserInterface.SetState(expeditionUI);
 
             tier1ExpPointer = new Tier1Quest();
+            tier2ExpPointerA = new Tier2QuestCorruption();
+            tier2ExpPointerB = new Tier2QuestCrimson();
 
             //add quests
             AddExpeditionToList(new ExampleExpedition(), this);
             AddExpeditionToList(tier1ExpPointer, this);
+            AddExpeditionToList(tier2ExpPointerA, this);
+            AddExpeditionToList(tier2ExpPointerB, this);
         }
         /// <summary>
         /// Adds the designated expedition to the list of active expeditions.
