@@ -213,7 +213,7 @@ namespace Expeditions
                     {
                         Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
-                        Main.NewText(unlockedTier1Quests + " : tier 1 expeditions");
+                        Main.NewText(GetCurrentExpeditionTier() + " : expedition tier");
                     }
                     if (Main.time % 60 == 30)
                     {
