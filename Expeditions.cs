@@ -35,18 +35,6 @@ namespace Expeditions
         private static ModExpedition tier9ExpPointer;
         private static ModExpedition tier10ExpPointer;
         private static ModExpedition tier11ExpPointer;
-        public static bool unlockedTier1Quests { get { return tier1ExpPointer.expedition.completed; } }
-        public static bool unlockedTier2Quests { get { return tier2ExpPointer.expedition.completed; } }
-        public static bool unlockedTier3Quests { get { return false; } }
-        public static bool unlockedTier4Quests { get { return false; } }
-        public static bool unlockedTier5Quests { get { return false; } }
-        public static bool unlockedTier6Quests { get { return false; } }
-        public static bool unlockedTier7Quests { get { return false; } }
-        public static bool unlockedTier8Quests { get { return false; } }
-        public static bool unlockedTier9Quests { get { return false; } }
-        public static bool unlockedTier010Quests { get { return false; } }
-        public static bool unlockedTier011Quests { get { return false; } }
-
 
         public Expeditions()
         {
@@ -94,6 +82,7 @@ namespace Expeditions
             //GetExpeditionsList().Add(modExpedition);
             //GetExpeditionsList().Add(modExpedition);
         }
+        
         /// <summary>
         /// Returns the expedition list
         /// </summary>
@@ -144,7 +133,7 @@ namespace Expeditions
                 mex.expedition.WorldInitialise();
             }
         }
-
+        
         public override void AddRecipes()
         {
             //initiliase expedition defaults, values reset in PlayerExplorer
@@ -355,6 +344,26 @@ namespace Expeditions
 
                 ClientNetSpawnItem(coinType, stack);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static int GetCurrentExpeditionTier()
+        {
+            if (tier11ExpPointer.expedition.completed) return 11;
+            if (tier10ExpPointer.expedition.completed) return 10;
+            if (tier9ExpPointer.expedition.completed) return 9;
+            if (tier8ExpPointer.expedition.completed) return 8;
+            if (tier7ExpPointer.expedition.completed) return 7;
+            if (tier6ExpPointer.expedition.completed) return 6;
+            if (tier5ExpPointer.expedition.completed) return 5;
+            if (tier4ExpPointer.expedition.completed) return 4;
+            if (tier3ExpPointer.expedition.completed) return 3;
+            if (tier2ExpPointer.expedition.completed) return 2;
+            if (tier1ExpPointer.expedition.completed) return 1;
+            return 0;
         }
     }
 }

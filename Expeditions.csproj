@@ -48,8 +48,7 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />
-    <Compile Include="Quests\CoreQuests\Tier2QuestCrimson.cs" />
-    <Compile Include="Quests\CoreQuests\Tier2QuestCorruption.cs" />
+    <Compile Include="Quests\CoreQuests\Tier2Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier1Quest.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
@@ -83,8 +82,8 @@
     <Reference Include="Terraria">
       <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\Terraria.exe</HintPath>
     </Reference>
-    <Reference Include="tModLoader835">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\tModLoader835.exe</HintPath>
+    <Reference Include="tModLoader">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\tModLoader.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

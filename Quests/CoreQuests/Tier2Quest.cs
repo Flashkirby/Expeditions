@@ -41,5 +41,10 @@ namespace Expeditions.Quests
                 AddRewardPrefix(WorldGen.ironBar, 10);
             }
         }
+
+        public override bool CheckPrerequisites(Player player)
+        {
+            return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
+        }
     }
 }
