@@ -34,7 +34,7 @@ namespace Expeditions.Quests
         }
         public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
         {
-            if (NPC.downedBoss2 && !condition1) condition1 = player.ZoneDungeon;
+            if (NPC.downedBoss3 && !condition1) condition1 = player.ZoneDungeon;
             return condition1;
         }
     }
