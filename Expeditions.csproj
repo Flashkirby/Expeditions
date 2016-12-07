@@ -48,7 +48,9 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />
-    <Compile Include="Quests\CaveExplorationKit.cs" />
+    <Compile Include="Quests\CoreQuests\Tier2QuestCrimson.cs" />
+    <Compile Include="Quests\CoreQuests\Tier2QuestCorruption.cs" />
+    <Compile Include="Quests\CoreQuests\Tier1Quest.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
     <Compile Include="UI\UITextButton.cs" />
@@ -92,6 +94,8 @@
     <Content Include="Tiles\BountyBoard.png" />
     <Content Include="UI\Sorting_Categories.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Gores\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

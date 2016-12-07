@@ -250,6 +250,14 @@ namespace Expeditions
             //net message sender
         }
 
+        /// <summary> Add items and such after world init </summary>
+        public void WorldInitialise()
+        {
+            deliverables.Clear();
+            rewards.Clear();
+            if (mex != null) mex.AddItemsOnLoad();
+        }
+
         /// <summary>
         /// Add an item to be handed in for the expedition to be successful
         /// </summary>

@@ -140,6 +140,13 @@ namespace Expeditions
                     + (mex.expedition.trackingActive ? "T" : "n") + ")";
             }
         }
+        internal static void WorldInit()
+        {
+            foreach (ModExpedition mex in GetExpeditionsList())
+            {
+                mex.expedition.WorldInitialise();
+            }
+        }
 
         public override void AddRecipes()
         {

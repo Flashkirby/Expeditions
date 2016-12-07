@@ -14,7 +14,12 @@ namespace Expeditions
 
         public override void Initialize()
         {
+            // Set main list to loaded
             Main.player[Main.myPlayer].GetModPlayer<PlayerExplorer>(mod).CopyLocalExpeditionsToMain();
+            // Reset list items
+            Expeditions.WorldInit();
+
+            // Reset bools
             savedClerk = false;
         }
 

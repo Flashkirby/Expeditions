@@ -51,9 +51,16 @@ namespace Expeditions
 
         #region Virtual Methods
         /// <summary>
-        /// The initialisation method for mods using this. Use it to set the title, rewards etc.
+        /// The initialisation method for mods using this. Use it to set the title and category
         /// </summary>
         public virtual void SetDefaults()
+        {
+
+        }
+        /// <summary>
+        /// Called on world load, used to initialise the deliverables and rewards.
+        /// </summary>
+        public virtual void AddItemsOnLoad()
         {
 
         }
