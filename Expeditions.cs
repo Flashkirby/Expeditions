@@ -198,7 +198,10 @@ namespace Expeditions
                 {
                     if (me.CheckPrerequisites(player))
                     {
-                        me.expedition.ConditionsMet();
+                        if (!me.expedition.completed || me.expedition.repeatable)
+                        {
+                            me.expedition.ConditionsMet();
+                        }
                     }
                 }
             }
