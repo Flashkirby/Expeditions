@@ -400,10 +400,10 @@ namespace Expeditions
                 Expedition e = current.expedition;
                 anyMatch = 0;
                 // line 1
-                if (e.defeat && this._categoryButtons[0].IsOn) { anyMatch++; }
-                if (e.deliver && this._categoryButtons[1].IsOn) { anyMatch++; }
-                if (e.explore && this._categoryButtons[2].IsOn) { anyMatch++; }
-                if (e.important && this._categoryButtons[3].IsOn) { anyMatch++; }
+                if (e.ctgSlay && this._categoryButtons[0].IsOn) { anyMatch++; }
+                if (e.ctgCollect && this._categoryButtons[1].IsOn) { anyMatch++; }
+                if (e.ctgExplore && this._categoryButtons[2].IsOn) { anyMatch++; }
+                if (e.ctgImportant && this._categoryButtons[3].IsOn) { anyMatch++; }
                 if (anyMatch == 0) continue;
                 // line 2
                 if (e.completed && !this._categoryButtons[4].IsOn) { continue; }
@@ -447,7 +447,7 @@ namespace Expeditions
 			if (sortedList.Count > 0)
 			{
                 int tier = currentME.expedition.difficulty;
-                if (currentME.expedition.important && !currentME.expedition.completed) tier = -12;
+                if (currentME.expedition.ctgImportant && !currentME.expedition.completed) tier = -12;
                 _titleHeader.SetColour(UIColour.GetColourFromRarity(tier));
             }
 			else

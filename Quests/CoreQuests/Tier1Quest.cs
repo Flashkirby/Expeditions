@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Cave Exploration kit";
             expedition.difficulty = 1;
-            expedition.explore = true;
-            expedition.important = true;
+            expedition.ctgExplore = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Enter the Underground";
             expedition.conditionDescription2 = "Reach the Cavern layer";

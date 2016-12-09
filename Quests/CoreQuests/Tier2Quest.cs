@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Tier 2 Quest";
             expedition.difficulty = 2;
-            expedition.deliver = true;
-            expedition.important = true;
+            expedition.ctgCollect = true;
+            expedition.ctgImportant = true;
         }
         public override void AddItemsOnLoad()
         {

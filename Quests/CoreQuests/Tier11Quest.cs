@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Terrarian Enemy No. 1";
             expedition.difficulty = 11;
-            expedition.defeat = true;
-            expedition.important = true;
+            expedition.ctgSlay = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Defeat an eldritch demon";
 

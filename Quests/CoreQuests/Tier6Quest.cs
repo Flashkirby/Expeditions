@@ -11,9 +11,9 @@ namespace Expeditions.Quests
         {
             expedition.name = "Mecha Revenge";
             expedition.difficulty = 6;
-            expedition.defeat = true;
-            expedition.deliver = true;
-            expedition.important = true;
+            expedition.ctgSlay = true;
+            expedition.ctgCollect = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Face against a mechanical boss";
 

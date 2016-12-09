@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Dungeon Admission";
             expedition.difficulty = 3;
-            expedition.defeat = true;
-            expedition.important = true;
+            expedition.ctgSlay = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Gain access to the Dungeon";
 

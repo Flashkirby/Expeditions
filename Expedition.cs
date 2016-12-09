@@ -30,13 +30,13 @@ namespace Expeditions
         /// <summary>Check if expedition is being tracked, this calls conditions met</summary>
         public bool trackingActive = false;
         /// <summary>Category: Is prioritised on the board</summary>
-        public bool important = false;
+        public bool ctgImportant = false;
         /// <summary>Category: Involves discovering things</summary>
-        public bool explore = false;
+        public bool ctgExplore = false;
         /// <summary>Category: Involves collecting items</summary>
-        public bool deliver = false;
+        public bool ctgCollect = false;
         /// <summary>Category: Involves defeating monsters</summary>
-        public bool defeat = false;
+        public bool ctgSlay = false;
         /// <summary>Tracks the conditionals not related to deliverable items</summary>
         public bool condition1Met = false;
         public bool condition2Met = false;

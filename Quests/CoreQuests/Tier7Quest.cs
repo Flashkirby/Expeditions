@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Thrashing Wilds";
             expedition.difficulty = 7;
-            expedition.deliver = true;
-            expedition.important = true;
+            expedition.ctgCollect = true;
+            expedition.ctgImportant = true;
 
         }
         public override void AddItemsOnLoad()

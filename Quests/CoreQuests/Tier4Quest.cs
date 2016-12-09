@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Underworld Mystery";
             expedition.difficulty = 4;
-            expedition.defeat = true;
-            expedition.important = true;
+            expedition.ctgSlay = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Enter the Underworld";
             expedition.conditionDescription2 = "Investigate voodoo doll ritual";

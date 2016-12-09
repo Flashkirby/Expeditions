@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Back to the Dungeons";
             expedition.difficulty = 9;
-            expedition.defeat = true;
-            expedition.important = true;
+            expedition.ctgSlay = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Fight the Rusted Company";
             expedition.conditionDescription2 = "Fight the Marching Bones";

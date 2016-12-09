@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Temple Raid";
             expedition.difficulty = 8;
-            expedition.deliver = true;
-            expedition.important = true;
+            expedition.ctgCollect = true;
+            expedition.ctgImportant = true;
 
         }
         public override void AddItemsOnLoad()

@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "Soaring the Skies";
             expedition.difficulty = 5;
-            expedition.defeat = true;
-            expedition.important = true;
+            expedition.ctgSlay = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Equip wings";
 

@@ -11,8 +11,8 @@ namespace Expeditions.Quests
         {
             expedition.name = "The Temple Conspiracy";
             expedition.difficulty = 10;
-            expedition.defeat = true;
-            expedition.important = true;
+            expedition.ctgSlay = true;
+            expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Investigate the lihzahrd altar";
             expedition.conditionDescription2 = "Investigate the dungeon's coven";
