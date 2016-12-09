@@ -9,17 +9,19 @@ namespace Expeditions.Quests
     {
         public override void SetDefaults()
         {
-            expedition.name = "Placeholder8";
+            expedition.name = "Temple Raid";
             expedition.difficulty = 8;
+            expedition.deliver = true;
             expedition.important = true;
+
+            expedition.AddDeliverable(ItemID.SolarTablet, 3);
+
+            AddRewardItem(ItemID.GoldCoin, 15);
+            AddRewardItem(ItemID.LihzahrdPowerCell, 3);
         }
         public override string Description(bool complete)
         {
-            return "";
-        }
-        public override void AddItemsOnLoad()
-        {
-
+            return "I WANT YOU!... to investigate that jungle temple. But how can we get in I wonder. Knowing this place you'll probably need to defeat a bigger, scarier jungle boss, like with Skeletron for the dungeon.";
         }
 
         public override bool CheckPrerequisites(Player player)
