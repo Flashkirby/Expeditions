@@ -280,7 +280,7 @@ namespace Expeditions
             {
                 Main.PlaySound(22, -1, -1, 1);
             }
-            UpdateIndex();
+            ListRecalculate();
         }
 
         private string StrTick(bool ticked)
