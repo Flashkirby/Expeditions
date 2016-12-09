@@ -48,6 +48,15 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />
+    <Compile Include="Quests\CoreQuests\Tier11Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier10Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier9Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier8Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier7Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier6Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier5Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier4Quest.cs" />
+    <Compile Include="Quests\CoreQuests\Tier3Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier2Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier1Quest.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
@@ -79,9 +88,6 @@
       <HintPath>..\..\Output\CheatSheet\Mono.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="Terraria">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\Terraria.exe</HintPath>
-    </Reference>
     <Reference Include="tModLoader">
       <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\tModLoader.exe</HintPath>
     </Reference>

@@ -9,17 +9,18 @@ namespace Expeditions.Quests
     {
         public override void SetDefaults()
         {
-            expedition.name = "Placeholder7";
+            expedition.name = "Thrashing Wilds";
             expedition.difficulty = 7;
+            expedition.deliver = true;
             expedition.important = true;
+
+            expedition.AddDeliverable(ItemID.ChlorophyteOre, 3);
+
+            AddRewardItem(ItemID.GoldCoin, 10);
         }
         public override string Description(bool complete)
         {
-            return "";
-        }
-        public override void AddItemsOnLoad()
-        {
-
+            return "I don't know how, but defeating those mechanical bosses seems to have triggered a sudden aggressiveness from the jungle. Don't suppose you could... take a peek? You'll be fine! ";
         }
 
         public override bool CheckPrerequisites(Player player)
