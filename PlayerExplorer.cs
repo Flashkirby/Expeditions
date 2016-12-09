@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions
 {
-    public class PlayerExplorer : ModPlayer
+    class PlayerExplorer : ModPlayer
     {
         private static int _version = _versionCurrent;
         private const int _versionCurrent = 0;
@@ -161,6 +161,31 @@ namespace Expeditions
                 {
                     Expeditions.CloseExpeditionMenu();
                 }
+            }
+        }
+
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if(player.whoAmI == Main.myPlayer)
+            {
+                HitNPC(target);
+            }
+        }
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        {
+            if (player.whoAmI == Main.myPlayer)
+            {
+                HitNPC(target);
+            }
+        }
+        private void HitNPC(NPC target)
+        {
+            if (!target.active) return;
+            if (target.realLife >= 0 && target.realLife != target.whoAmI) return;
+            Expeditions.lastHitNPC = target;
+            if( target.life <= 0)
+            {
+                Expeditions.lastKilledNPC = target;
             }
         }
     }

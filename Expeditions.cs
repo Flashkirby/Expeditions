@@ -36,6 +36,11 @@ namespace Expeditions
         private static ModExpedition tier10ExpPointer;
         private static ModExpedition tier11ExpPointer;
 
+        internal static NPC lastHitNPC;
+        public static NPC LastHitNPC { get { return lastHitNPC; } }
+        internal static NPC lastKilledNPC;
+        public static NPC LastKilledNPC { get { return lastKilledNPC; } }
+
         public Expeditions()
         {
             Properties = new ModProperties()
@@ -128,6 +133,8 @@ namespace Expeditions
         }
         internal static void WorldInit()
         {
+            lastHitNPC = new NPC();
+            lastKilledNPC = lastKilledNPC;
             foreach (ModExpedition mex in GetExpeditionsList())
             {
                 mex.expedition.WorldInitialise();
