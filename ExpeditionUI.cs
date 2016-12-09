@@ -194,8 +194,9 @@ namespace Expeditions
                 {
                     uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
                 }
-                if(j == 1 || j == 3)
+                if(j == 1 || j == 2)
                 {
+                    // Set repeat only, and sort by alphabet as false
                     uIToggleImage.SetState(false);
                 }
                 this._categoryButtons.Add(uIToggleImage);
@@ -279,7 +280,7 @@ namespace Expeditions
             {
                 Main.PlaySound(22, -1, -1, 1);
             }
-            //UpdateIndex();
+            UpdateIndex();
         }
 
         private string StrTick(bool ticked)
