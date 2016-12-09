@@ -14,8 +14,8 @@ namespace Expeditions.Quests
             expedition.defeat = true;
             expedition.important = true;
 
-            expedition.conditionDescription1 = "Investigate the Jungle Temple";
-            expedition.conditionDescription2 = "Investigate the dungeon's mysterious coven";
+            expedition.conditionDescription1 = "Investigate the lihzahrd altar";
+            expedition.conditionDescription2 = "Investigate the dungeon's coven";
 
             AddRewardItem(ItemID.GoldCoin, 25);
             AddRewardItem(ItemID.IronskinPotion, 10);
@@ -23,8 +23,8 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
-            if(expedition.condition1Met) return "Some strange people have moved into the dungeon ever since the golem was destroyed. They look real suspicious worshipping that tablet, what looks like it was plundered from the temple. But I would've thought sun worshippers would look, I dunno, more grossly incandescent?";
-            return "Have you explored much of that jungle temple yet? According to the artifacts so far, there seems to be some kind of lihzahrd fascination with, and worship of the sun. Maybe there's an altar hidden somewhere? ";
+            if(expedition.condition1Met) return "Some strange people have moved into the dungeon ever since that golem was destroyed. They look real suspicious worshipping that tablet, what looks like it was plundered from the temple. But I would've thought sun worshippers would look, I dunno, more grossly incandescent?";
+            return "Have you explored much of that jungle temple yet? According to the artifacts so far, there seems to be some kind of lihzahrd fascination with, and worship of the sun. Maybe there's an altar buried deep? ";
         }
 
         public override bool CheckPrerequisites(Player player)
