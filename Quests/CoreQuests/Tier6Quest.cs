@@ -17,6 +17,9 @@ namespace Expeditions.Quests
 
             expedition.conditionDescription1 = "Face against a mechanical boss";
 
+        }
+        public override void AddItemsOnLoad()
+        {
             expedition.AddDeliverable(ItemID.HallowedBar, 3);
 
             AddRewardItem(ItemID.GoldCoin, 8);

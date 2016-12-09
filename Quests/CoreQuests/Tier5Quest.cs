@@ -16,6 +16,9 @@ namespace Expeditions.Quests
 
             expedition.conditionDescription1 = "Equip wings";
 
+        }
+        public override void AddItemsOnLoad()
+        {
             AddRewardItem(ItemID.GoldCoin, 5);
         }
         public override string Description(bool complete)

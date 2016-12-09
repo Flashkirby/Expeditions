@@ -14,10 +14,6 @@ namespace Expeditions.Quests
             expedition.deliver = true;
             expedition.important = true;
         }
-        public override string Description(bool complete)
-        {
-            return "Hey, do you think the " + (WorldGen.crimson ? "crimson" : "corruption") + " hides some ore that could be made into workable metal? I mean it's a possibility considering how it transforms things. Please investigate it! ";
-        }
         public override void AddItemsOnLoad()
         {
             if (!WorldGen.crimson)
@@ -40,6 +36,10 @@ namespace Expeditions.Quests
                 AddRewardPrefix(WorldGen.copperBar, 10);
                 AddRewardPrefix(WorldGen.ironBar, 10);
             }
+        }
+        public override string Description(bool complete)
+        {
+            return "Hey, do you think the " + (WorldGen.crimson ? "crimson" : "corruption") + " hides some ore that could be made into workable metal? I mean it's a possibility considering how it transforms things. Please investigate it! ";
         }
 
         public override bool CheckPrerequisites(Player player)

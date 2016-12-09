@@ -16,15 +16,14 @@ namespace Expeditions.Quests
 
             expedition.conditionDescription1 = "Defeat an eldritch demon";
 
+        }
+        public override void AddItemsOnLoad()
+        {
             AddRewardItem(ItemID.GoldCoin, 50);
         }
         public override string Description(bool complete)
         {
             return "Ok, serious time. The whole kerfuffle with cultists and pillars, looks to be leading to the summoning of a huge, eldritch demon. Plus, it doesn't look like there's a way to remove the pillars without triggering this event, so I guess you'll have to face it soon. Prepare yourself, looks like it might get messy. ";
-        }
-        public override void AddItemsOnLoad()
-        {
-
         }
 
         public override bool CheckPrerequisites(Player player)

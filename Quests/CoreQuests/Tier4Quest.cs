@@ -17,6 +17,9 @@ namespace Expeditions.Quests
             expedition.conditionDescription1 = "Enter the Underworld";
             expedition.conditionDescription2 = "Investigate voodoo doll ritual";
 
+        }
+        public override void AddItemsOnLoad()
+        {
             AddRewardItem(ItemID.GoldCoin, 4);
             AddRewardItem(ItemID.HealingPotion, 20);
             AddRewardItem(ItemID.ManaPotion, 20);

@@ -18,6 +18,9 @@ namespace Expeditions.Quests
             expedition.conditionDescription2 = "Fight the Marching Bones";
             expedition.conditionDescription3 = "Fight the Molten Legion";
 
+        }
+        public override void AddItemsOnLoad()
+        {
             AddRewardItem(ItemID.GoldCoin, 20);
         }
         public override string Description(bool complete)

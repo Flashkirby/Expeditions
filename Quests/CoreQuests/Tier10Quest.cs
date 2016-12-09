@@ -17,6 +17,9 @@ namespace Expeditions.Quests
             expedition.conditionDescription1 = "Investigate the lihzahrd altar";
             expedition.conditionDescription2 = "Investigate the dungeon's coven";
 
+        }
+        public override void AddItemsOnLoad()
+        {
             AddRewardItem(ItemID.GoldCoin, 25);
             AddRewardItem(ItemID.IronskinPotion, 10);
             AddRewardItem(ItemID.EndurancePotion, 10);

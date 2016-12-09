@@ -68,11 +68,29 @@ namespace Expeditions
 
             tier1ExpPointer = new Tier1Quest();
             tier2ExpPointer = new Tier2Quest();
+            tier3ExpPointer = new Tier3Quest();
+            tier4ExpPointer = new Tier4Quest();
+            tier5ExpPointer = new Tier5Quest();
+            tier6ExpPointer = new Tier6Quest();
+            tier7ExpPointer = new Tier7Quest();
+            tier8ExpPointer = new Tier8Quest();
+            tier9ExpPointer = new Tier9Quest();
+            tier10ExpPointer = new Tier10Quest();
+            tier11ExpPointer = new Tier11Quest();
 
             //add quests
             AddExpeditionToList(new ExampleExpedition(), this);
             AddExpeditionToList(tier1ExpPointer, this);
             AddExpeditionToList(tier2ExpPointer, this);
+            AddExpeditionToList(tier3ExpPointer, this);
+            AddExpeditionToList(tier4ExpPointer, this);
+            AddExpeditionToList(tier5ExpPointer, this);
+            AddExpeditionToList(tier6ExpPointer, this);
+            AddExpeditionToList(tier7ExpPointer, this);
+            AddExpeditionToList(tier8ExpPointer, this);
+            AddExpeditionToList(tier9ExpPointer, this);
+            AddExpeditionToList(tier10ExpPointer, this);
+            AddExpeditionToList(tier11ExpPointer, this);
         }
         /// <summary>
         /// Adds the designated expedition to the list of active expeditions.

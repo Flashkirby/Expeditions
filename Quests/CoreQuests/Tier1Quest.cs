@@ -16,7 +16,9 @@ namespace Expeditions.Quests
 
             expedition.conditionDescription1 = "Enter the Underground";
             expedition.conditionDescription2 = "Reach the Cavern layer";
-
+        }
+        public override void AddItemsOnLoad()
+        {
             AddRewardItem(ItemID.CopperChainmail, 1);
             AddRewardItem(ItemID.CopperGreaves, 1);
             AddRewardItem(ItemID.IronPickaxe, 1);

@@ -16,6 +16,9 @@ namespace Expeditions.Quests
 
             expedition.conditionDescription1 = "Gain access to the Dungeon";
 
+        }
+        public override void AddItemsOnLoad()
+        {
             AddRewardItem(ItemID.GoldCoin, 2);
             AddRewardItem(ItemID.GoldenKey, 1);
             AddRewardItem(ItemID.AnkletoftheWind, 1);

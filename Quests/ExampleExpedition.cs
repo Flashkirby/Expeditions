@@ -16,22 +16,10 @@ namespace Expeditions.Quests
             expedition.repeatable = true;
             expedition.conditionDescription1 = "Stand on the ground";
             expedition.conditionDescription2 = "Run at 30mph";
+        }
+        public override void AddItemsOnLoad()
+        {
             expedition.AddDeliverable(ItemID.DirtBlock, 1);
-            /*
-            expedition.AddDeliverable(ItemID.Silk, 151);
-            expedition.AddDeliverable(ItemID.SiltBlock, 151);
-            expedition.AddDeliverable(ItemID.SilverAndBlackDye, 151);
-            expedition.AddDeliverable(ItemID.Bacon, 151);
-            expedition.AddDeliverable(ItemID.YellowAndGreenBulb, 151);
-            expedition.AddDeliverable(ItemID.Holly, 151);
-            expedition.AddDeliverable(ItemID.Hive, 151);
-            expedition.AddDeliverable(ItemID.GiantBow, 1);
-            expedition.AddDeliverable(ItemID.AnglerFishBanner, 151);
-            expedition.AddDeliverable(ItemID.AngryBonesBanner, 151);
-            expedition.AddDeliverable(ItemID.BanquetTable, 151);
-            expedition.AddDeliverable(ItemID.BatBanner, 151);
-            expedition.AddDeliverable(ItemID.Bananarang, 6);
-            */
 
             AddRewardItem(ItemID.DirtBlock, 2);
             AddRewardPrefix(ItemID.Shackle, 65);

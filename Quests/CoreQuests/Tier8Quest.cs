@@ -14,6 +14,9 @@ namespace Expeditions.Quests
             expedition.deliver = true;
             expedition.important = true;
 
+        }
+        public override void AddItemsOnLoad()
+        {
             expedition.AddDeliverable(ItemID.SolarTablet, 3);
 
             AddRewardItem(ItemID.GoldCoin, 15);
