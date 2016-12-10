@@ -2,7 +2,7 @@ author = Flashkirby99
 version = 0.1
 displayName = Expeditions
 
-homepage = 
+homepage = http://forums.terraria.org/index.php?threads/expeditions-mod-modular-quest-system.52517/
 hideCode = false
 hideResources = false
 includeSource = true

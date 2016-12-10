@@ -1,1 +1,8 @@
-Expeditions is a pretty cool mod, it does...this. Modify this file with a description of your mod.
+Add Expeditions, a quest system accesible via both NPC and Expedition Board craftable tile.
+Expedition system features:
+
+* Meeting conditions and handing in items
+* Getting various rewards, including accessory prefix applicators
+* Clerk NPC that provides Expedition access and a shop
+* NPC spawns hidden near around spawn area, search a bit!
+* Mod in your own expeditions!
