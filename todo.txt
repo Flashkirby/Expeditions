@@ -1,14 +1,13 @@
-core quewsts
-add explorer tag to quests
+fix client sitting
+API easier access to obvious vars
 
-Add clerk gores
+daily quests?
+
+core quewsts
+
 wayfarer 
 	magic
 	summons
-
-Share expedition complete events via network packets
-https://github.com/bluemagic123/tModLoader/wiki/Mod#public-modpacket-getpacketint-capacity--256
-
 
 
 Expeditions has NPC heads, can get using

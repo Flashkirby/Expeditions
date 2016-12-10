@@ -189,49 +189,46 @@ namespace Expeditions.NPCs
         }
         private void SitAtBountyBoard()
         {
-            if (Main.netMode != 1)
+            // Sit down on expedition boards
+            if (npc.ai[0] == 1f && !danger && npc.velocity.Y == 0f && Main.dayTime)
             {
-                // Sit down on expedition boards
-                if (npc.ai[0] == 1f && !danger && npc.velocity.Y == 0f && Main.dayTime)
-                {
-                    // Get my tile
-                    Point point2 = npc.Center.ToTileCoordinates();
-                    bool flag61 = WorldGen.InWorld(point2.X, point2.Y, 1);
+                // Get my tile
+                Point point2 = npc.Center.ToTileCoordinates();
+                bool flag61 = WorldGen.InWorld(point2.X, point2.Y, 1);
 
-                    // Check first if anyone else is sitting here
-                    if (flag61)
+                // Check first if anyone else is sitting here
+                if (flag61)
+                {
+                    for (int num471 = 0; num471 < 200; num471++)
                     {
-                        for (int num471 = 0; num471 < 200; num471++)
+                        if (Main.npc[num471].active && Main.npc[num471].aiStyle == 7 && Main.npc[num471].townNPC && Main.npc[num471].ai[0] == 5f)
                         {
-                            if (Main.npc[num471].active && Main.npc[num471].aiStyle == 7 && Main.npc[num471].townNPC && Main.npc[num471].ai[0] == 5f)
+                            Point a = Main.npc[num471].Center.ToTileCoordinates();
+                            if (a.Equals(point2))
                             {
-                                Point a = Main.npc[num471].Center.ToTileCoordinates();
-                                if (a.Equals(point2))
-                                {
-                                    flag61 = false;
-                                    break;
-                                }
+                                flag61 = false;
+                                break;
                             }
                         }
                     }
+                }
+                if (flag61)
+                {
+                    Tile tile2 = Main.tile[point2.X, point2.Y];
+                    flag61 = (tile2.type == mod.TileType("BountyBoard"));
+                    // disregard parts with no seat
+                    if (tile2.frameY <= 52)
+                    {
+                        if (tile2.frameX < 54) flag61 = false;
+                    }
+                    else
+                    {
+                        if (tile2.frameX >= 16) flag61 = false;
+                    }
                     if (flag61)
                     {
-                        Tile tile2 = Main.tile[point2.X, point2.Y];
-                        flag61 = (tile2.type == mod.TileType("BountyBoard"));
-                        // disregard parts with no seat
-                        if (tile2.frameY <= 52)
-                        {
-                            if (tile2.frameX < 54) flag61 = false;
-                        }
-                        else
-                        {
-                            if (tile2.frameX >= 16) flag61 = false;
-                        }
-                        if (flag61)
-                        {
-                            TakeSeat(point2, tile2);
-                            npc.ai[1] = (float)(900 + Main.rand.Next(10800));
-                        }
+                        TakeSeat(point2, tile2);
+                        npc.ai[1] = (float)(900 + Main.rand.Next(10800));
                     }
                 }
             }
@@ -253,7 +250,10 @@ namespace Expeditions.NPCs
             npc.Bottom = new Vector2((float)(point2.X * 16 + 8 + 2 * npc.direction), (float)(point2.Y * 16 + 32));
             npc.velocity = Vector2.Zero;
             npc.localAI[3] = 0f;
-            npc.netUpdate = true;
+            if (Main.netMode != 1)
+            {
+                npc.netUpdate = true;
+            }
         }
 
         #endregion
@@ -352,6 +352,8 @@ namespace Expeditions.NPCs
 
         #endregion
 
+        #region Talk Shop
+
         public override string GetChat()
         {
             //"Ok, here's the deal. I'm really not cut out for adventuring, but my employers are constantly demanding information about WORLDNAME. They also send me goodies whenever I document something new, which I'm more than willing to share... catch my drift? But we'll need a base camp first, and I've got all this stuff lying around..."
@@ -438,7 +440,7 @@ namespace Expeditions.NPCs
             }
         }
 
-
+        #endregion
 
     }
 }
