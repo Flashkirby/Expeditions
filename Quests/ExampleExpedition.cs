@@ -14,6 +14,7 @@ namespace Expeditions.Quests
             expedition.ctgCollect = true;
             expedition.ctgImportant = false;
             expedition.repeatable = true;
+            expedition.partyShare = true;
             expedition.conditionDescription1 = "Stand on the ground";
             expedition.conditionDescription2 = "Run at 30mph";
         }

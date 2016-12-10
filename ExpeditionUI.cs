@@ -276,11 +276,14 @@ namespace Expeditions
             {
                 currentME.expedition.CompleteExpedition();
                 Main.PlaySound(12, -1, -1, 1);
-            }else
+
+                if(!currentME.expedition.partyShare || Main.netMode != 1) ListRecalculate();
+            }
+            else
             {
                 Main.PlaySound(22, -1, -1, 1);
+                ListRecalculate();
             }
-            ListRecalculate();
         }
 
         private string StrTick(bool ticked)

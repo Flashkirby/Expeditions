@@ -210,8 +210,25 @@ namespace Expeditions
         /// <summary>
         /// Sets the expedition to complete, removing tracking and dropping items (check net as well)
         /// </summary>
-        public void CompleteExpedition()
+        /// <param name="serverMessage">Force the method to forego sending packets, and just run </param>
+        public void CompleteExpedition(bool serverMessage = false)
         {
+            // What to do if the call wasn't made from a server's packet send (ie. client code)
+            if (!serverMessage)
+            {
+                // Check if this is a shared expedition on a multiplayer server
+                if (partyShare && Main.netMode == 1 && mex != null)
+                {
+                    // Send net message and return early without running the rest of the code
+                    Expeditions.SendNet_PartyComplete(
+                        this.mex.mod,
+                        Main.player[Main.myPlayer].team,
+                        this.mex);
+                    return;
+                }
+            }
+            
+
             // check mod hook first
             if (mex != null && !mex.CompleteExpedition(rewards)) return;
 
@@ -247,7 +264,11 @@ namespace Expeditions
 
             completed = true;
 
-            //net message sender
+            // Force the expeditions list to recalculate in this instance
+            if (ExpeditionUI.visible)
+            {
+                Expeditions.expeditionUI.ListRecalculate();
+            }
         }
 
         /// <summary> Add items and such after world init </summary>

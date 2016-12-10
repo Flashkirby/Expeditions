@@ -307,6 +307,28 @@ namespace Expeditions
                         }
                     }
                     break;
+                case packetID_partyComplete:
+                    // Get variables
+                    int expIndex = reader.ReadInt32();
+                    int senderTeam = reader.ReadInt32();
+
+                    if (Main.netMode == 2)
+                    {
+                        if (DEBUG) Console.WriteLine("Packet for team " + senderTeam);
+                        ModPacket packet = GetPacket();
+                        packet.Write(packetID_partyComplete);
+                        packet.Write(expIndex);
+                        packet.Write(senderTeam);
+                        foreach (Player player in Main.player)
+                        {
+                            if (player.active && player.team == senderTeam) packet.Send(player.whoAmI);
+                        }
+                    }
+                    else
+                    {
+                        Receive_PartyComplete(expIndex);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -333,7 +355,33 @@ namespace Expeditions
             Main.NewText("This is a net test from " + Main.player[senderWhoAmI].name +  ", with message: " + message);
         }
 
-
+        public static void SendNet_PartyComplete(Mod mod, int team, ModExpedition expedition)
+        {
+            if (Main.netMode == 1 && team > 0)
+            {
+                int index = GetExpeditionsList().IndexOf(expedition);
+                if (index >= 0)
+                {
+                    // Generate a new packet
+                    ModPacket packet = mod.GetPacket();
+                    // Add the variables
+                    packet.Write(packetID_partyComplete);
+                    packet.Write(index);
+                    packet.Write(team);
+                    // Send to the server
+                    packet.Send();
+                }
+            }
+            else
+            {
+                expedition.expedition.CompleteExpedition(true);
+            }
+        }
+        private void Receive_PartyComplete(int expeditionIndex)
+        {
+            Expedition expedition = GetExpeditionsList()[expeditionIndex].expedition;
+            expedition.CompleteExpedition(true);
+        }
 
         /// <summary>
         /// Opens the expediton menu
