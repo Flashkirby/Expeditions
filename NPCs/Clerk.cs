@@ -62,6 +62,7 @@ namespace Expeditions.NPCs
         {
             if (npc.life > 0)
             {
+                // Not Dead
                 for (int i = 0; i < damage / npc.lifeMax * 100.0; i++)
                 {
                     Dust.NewDust(npc.position, npc.height, npc.width,
@@ -70,20 +71,22 @@ namespace Expeditions.NPCs
             }
             else
             {
+                // Probably Dead
                 for (int i = 0; i < 50; i++)
                 {
                     Dust.NewDust(npc.position, npc.height, npc.width,
                         DustID.Blood, hitDirection * 2.5f, -2.5f);
                 }
+                // Spawn gores á la vanilla
+                int goreHead = mod.GetGoreSlot("Gores/Clerk1");
+                int goreArms = mod.GetGoreSlot("Gores/Clerk2");
+                int goreLegs = mod.GetGoreSlot("Gores/Clerk3");
+                Gore.NewGore(npc.position, npc.velocity, goreHead, 1f);
+                Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 20f), npc.velocity, goreArms, 1f);
+                Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 20f), npc.velocity, goreArms, 1f);
+                Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 34f), npc.velocity, goreLegs, 1f);
+                Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 34f), npc.velocity, goreLegs, 1f);
             }
-            int goreHead = mod.GetGoreSlot("Gores/Clerk1");
-            int goreArms = mod.GetGoreSlot("Gores/Clerk2");
-            int goreLegs = mod.GetGoreSlot("Gores/Clerk3");
-            Gore.NewGore(npc.position, npc.velocity, goreHead, 1f);
-            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 20f), npc.velocity, goreArms, 1f);
-            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 20f), npc.velocity, goreArms, 1f);
-            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 34f), npc.velocity, goreLegs, 1f);
-            Gore.NewGore(new Vector2(npc.position.X, npc.position.Y + 34f), npc.velocity, goreLegs, 1f);
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)
