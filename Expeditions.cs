@@ -15,7 +15,7 @@ using Expeditions.Quests;
 
 namespace Expeditions
 {
-    public class Expeditions : Mod
+    class Expeditions : Mod
     {
         internal const bool DEBUG = true;
 
@@ -288,6 +288,13 @@ namespace Expeditions
                         Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
                         Main.NewText(GetCurrentExpeditionTier() + " : expedition tier");
+                        int[] stacks = DivideValueIntoMoneyStack(1234567);
+                        Main.NewText("stacks: " +
+                            stacks[0] + "plat, " +
+                            stacks[1] + "gold, " +
+                            stacks[2] + "silv, " +
+                            stacks[3] + "copr, "
+                            );
                         SendTestModPacket(Main.myPlayer, 1337);
                     }
                     if (Main.time % 60 == 30)
@@ -527,17 +534,18 @@ namespace Expeditions
             int index;
             while (value > 0)
             {
+                if (DEBUG) Main.NewText("    value is now: " + value, 255, 255, 100);
                 if (value >= 1000000) //platinum
                 {
                     index = 0;
                     denomination = 1000000;
                 }
-                if (value >= 10000) //gold
+                else if (value >= 10000) //gold
                 {
                     index = 1;
                     denomination = 10000;
                 }
-                if (value >= 100) //silver
+                else if (value >= 100) //silver
                 {
                     index = 2;
                     denomination = 100;
@@ -553,6 +561,7 @@ namespace Expeditions
                 // Reduce value by denomination * calculated stack
                 value -= stacks[index] * denomination;
             }
+            if (DEBUG) Main.NewText("    value is now: " + value, 255, 255, 100);
             return stacks;
         }
 

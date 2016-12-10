@@ -19,7 +19,7 @@ namespace Expeditions.NPCs
     /// 
     /// Uses magic gratuitously in everyday life, akin to the Wizard.
     /// </summary>
-    public class Clerk : ModNPC
+    class Clerk : ModNPC
     {
         public override void SetDefaults()
         {

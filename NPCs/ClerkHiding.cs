@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.NPCs
 {
-    public class ClerkHiding : ModNPC
+    class ClerkHiding : ModNPC
     {
         public override void SetDefaults()
         {

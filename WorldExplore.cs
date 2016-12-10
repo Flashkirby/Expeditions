@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions
 {
-    public class WorldExplore : ModWorld
+    class WorldExplore : ModWorld
     {
         private static int _version = _versionCurrent;
         private const int _versionCurrent = 0;

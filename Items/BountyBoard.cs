@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-	public class BountyBoard : ModItem
+	class BountyBoard : ModItem
 	{
 		public override void SetDefaults()
 		{
