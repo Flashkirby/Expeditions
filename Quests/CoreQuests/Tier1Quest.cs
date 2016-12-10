@@ -19,6 +19,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
+            AddRewardMoney(Item.buyPrice(0, 0, 25, 0));
             AddRewardItem(ItemID.CopperChainmail, 1);
             AddRewardItem(ItemID.CopperGreaves, 1);
             AddRewardItem(ItemID.IronPickaxe, 1);

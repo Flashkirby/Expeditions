@@ -89,7 +89,11 @@ namespace Expeditions
             tier11ExpPointer = new Tier11Quest();
 
             //add quests
-            AddExpeditionToList(new ExampleExpedition(), this);
+            if (DEBUG)
+            {
+                AddExpeditionToList(new ExampleExpedition(), this);
+                AddExpeditionToList(new HeaderTest(), this);
+            }
             AddExpeditionToList(tier1ExpPointer, this);
             AddExpeditionToList(tier2ExpPointer, this);
             AddExpeditionToList(tier3ExpPointer, this);
@@ -176,6 +180,14 @@ namespace Expeditions
             foreach (ModExpedition mex in GetExpeditionsList())
             {
                 mex.SetDefaults();
+                if (!mex.expedition.ctgCollect &&
+                    !mex.expedition.ctgExplore &&
+                    !mex.expedition.ctgImportant &&
+                    !mex.expedition.ctgSlay
+                    )
+                {
+                    mex.expedition.ctgExplore = true;
+                }
             }
         }
 

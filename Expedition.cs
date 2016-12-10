@@ -31,7 +31,7 @@ namespace Expeditions
         public bool trackingActive = false;
         /// <summary>Category: Is prioritised on the board</summary>
         public bool ctgImportant = false;
-        /// <summary>Category: Involves discovering things</summary>
+        /// <summary>Category: Involves discovering things, is default if not specified</summary>
         public bool ctgExplore = false;
         /// <summary>Category: Involves collecting items</summary>
         public bool ctgCollect = false;
