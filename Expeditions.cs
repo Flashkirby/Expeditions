@@ -270,31 +270,60 @@ namespace Expeditions
         }
 
         public const ushort packetID_test = 0;
+        public const ushort packetID_partyComplete = 1;
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
+            //get my packet type
             int packetID = reader.ReadUInt16();
+            if (DEBUG)
+            {
+                if(Main.netMode == 2)
+                {
+                    Console.WriteLine("Received a Packet with id " + packetID + " for " + whoAmI);
+                }else
+                {
+                    Main.NewText("Received a Packet with id " + packetID + " for " + whoAmI, 50, 50, 100);
+                }
+            }
             switch (packetID)
             {
                 case packetID_test:
+                    // get the sender and content
                     int senderAmI = reader.ReadInt32();
                     int message = reader.ReadInt32();
                     ReceiveTestModPacket(senderAmI, message);
+
+                    // As the server, resdistribute to all clients
+                    if (Main.netMode == 2)
+                    {
+                        if (DEBUG) Console.WriteLine("Sending packet to clients");
+                        ModPacket packet = GetPacket();
+                        packet.Write(packetID_test);
+                        packet.Write(senderAmI);
+                        packet.Write(message);
+                        foreach (Player player in Main.player)
+                        {
+                            if (player.active) packet.Send(player.whoAmI);
+                        }
+                    }
                     break;
                 default:
-                    return;
+                    break;
             }
         }
 
         private void SendTestModPacket(int senderWhoAmI, int message)
         {
-            if (Main.netMode > 0)
+            if (Main.netMode == 1)
             {
+                if (DEBUG) Main.NewText("sending packet", 50, 50, 100);
                 ModPacket packet = GetPacket();
                 packet.Write(packetID_test);
                 packet.Write(senderWhoAmI);
                 packet.Write(message);
-                packet.Send(-1, senderWhoAmI);
-            }else
+                packet.Send();
+            }
+            else
             {
                 ReceiveTestModPacket(senderWhoAmI, message);
             }
