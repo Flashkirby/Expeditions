@@ -232,13 +232,34 @@ namespace Expeditions
             // Keep track of active expeditions in-game
             if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
             {
-                foreach (ModExpedition me in GetExpeditionsList())
+                if(Main.time == 0.0 && Main.dayTime)
                 {
-                    if (me.CheckPrerequisites(player))
+                    foreach (ModExpedition me in GetExpeditionsList())
                     {
-                        if (!me.expedition.completed || me.expedition.repeatable)
+                        // Dawn of a new day
+                        me.expedition.UpdateNewDay();
+                        // Check conditions as long as prerequisites are met
+                        if (me.expedition.PrerequisitesMet())
                         {
-                            me.expedition.ConditionsMet();
+                            // As long as an expedition is not completed yet, or repeats, check this
+                            if (!me.expedition.completed || me.expedition.repeatable)
+                            {
+                                me.expedition.ConditionsMet();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (ModExpedition me in GetExpeditionsList())
+                    {
+                        // Check conditions as long as prerequisites are met
+                        if (me.expedition.PrerequisitesMet())
+                        {
+                            if (!me.expedition.completed || me.expedition.repeatable)
+                            {
+                                me.expedition.ConditionsMet();
+                            }
                         }
                     }
                 }
@@ -475,37 +496,52 @@ namespace Expeditions
         /// <param name="value"></param>
         public static void ClientNetSpawnItemMoney(int value)
         {
+            int[] stacks = DivideValueIntoMoneyStack(value);
+            if (stacks[0] > 0) ClientNetSpawnItem(74, stacks[0]);
+            if (stacks[1] > 0) ClientNetSpawnItem(73, stacks[1]);
+            if (stacks[2] > 0) ClientNetSpawnItem(72, stacks[2]);
+            if (stacks[3] > 0) ClientNetSpawnItem(71, stacks[3]);
+        }
+
+        /// <summary>
+        /// Takes a value and divides it into stacks of coins.
+        /// </summary>
+        /// <param name="value">int[4] array of coin stacks from plat to copper</param>
+        /// <returns></returns>
+        public static int[] DivideValueIntoMoneyStack(int value)
+        {
+            int[] stacks = new int[4];
             int denomination;
-            int coinType;
-            int stack;
+            int index;
             while (value > 0)
             {
                 if (value >= 1000000) //platinum
                 {
+                    index = 0;
                     denomination = 1000000;
-                    coinType = 74;
                 }
                 if (value >= 10000) //gold
                 {
+                    index = 1;
                     denomination = 10000;
-                    coinType = 73;
                 }
                 if (value >= 100) //silver
                 {
+                    index = 2;
                     denomination = 100;
-                    coinType = 72;
                 }
-                else
+                else            //copper
                 {
+                    index = 3;
                     denomination = 1;
-                    coinType = 71;
                 }
 
-                stack = value / denomination;
-                value -= stack * denomination;
-
-                ClientNetSpawnItem(coinType, stack);
+                // Get rounded down stacks as value/denomination
+                stacks[index] = value / denomination;
+                // Reduce value by denomination * calculated stack
+                value -= stacks[index] * denomination;
             }
+            return stacks;
         }
 
         /// <summary>

@@ -1,4 +1,3 @@
-fix client sitting
 API easier access to obvious vars
 
 daily quests?
@@ -14,3 +13,5 @@ Expeditions has NPC heads, can get using
 public static int TypeToNum(int type) in NPC
 
 height, 5
+
+git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\

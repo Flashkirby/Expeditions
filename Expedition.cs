@@ -227,10 +227,10 @@ namespace Expeditions
                     return;
                 }
             }
-            
 
-            // check mod hook first
-            if (mex != null && !mex.CompleteExpedition(rewards)) return;
+
+            // check mod hook
+            mex.PreCompleteExpedition(rewards);
 
             // deduct deliverables
             CheckRequiredItems(true);
@@ -240,7 +240,6 @@ namespace Expeditions
             {
                 Expeditions.ClientNetSpawnItem(item);
             }
-
 
             //complete this
             Main.PlaySound(24, -1, -1, 1);
@@ -254,15 +253,12 @@ namespace Expeditions
             {
                 Main.NewText("Expeditions: '" + name + "' recompleted!", textColour.R, textColour.G, textColour.B);
             }
-            condition1Met = false;
-            condition2Met = false;
-            condition3Met = false;
 
-            trackCondition = false;
-            trackItems = false;
-            trackingActive = false;
-
+            ResetProgress(false);
             completed = true;
+
+            // check mod hook
+            mex.PostCompleteExpedition(rewards);
 
             // Force the expeditions list to recalculate in this instance
             if (ExpeditionUI.visible)
@@ -313,9 +309,13 @@ namespace Expeditions
             }
             return deliverables;
         }
-        public void ResetProgress()
+        /// <summary>
+        /// Reset the progress and tracking on this expedition
+        /// </summary>
+        /// <param name="resetComplete">Should we also reset expedition complete?</param>
+        public void ResetProgress(bool resetComplete = true)
         {
-            completed = false;
+            if (resetComplete) completed = false;
             trackCondition = false;
             trackingActive = false;
             trackItems = false;
@@ -365,6 +365,15 @@ namespace Expeditions
                 rewards[i] = this.rewards[i].Clone();
             }
             return rewards;
+        }
+
+        public void UpdateNewDay()
+        {
+            if (mex != null)
+            {
+                mex.OnNewDay();
+            }
+            return;
         }
 
         public static int GetHashID(Expedition expedition)
