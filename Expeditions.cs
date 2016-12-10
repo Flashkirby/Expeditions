@@ -1,11 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.UI;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 using Terraria.DataStructures;
+
 using Expeditions.Quests;
 
 namespace Expeditions
@@ -55,16 +60,21 @@ namespace Expeditions
 
         public override void Load()
         {
+            // Load textures
             if (Main.netMode != 2)
             {
                 sortingTexture = GetTexture("UI/Sorting_Categories");
             }
+
             _npcClerk = NPCType("Clerk");
 
-            expeditionUI = new ExpeditionUI();
-            expeditionUI.Activate();
-            expeditionUserInterface = new UserInterface();
-            expeditionUserInterface.SetState(expeditionUI);
+            if (Main.netMode != 2)
+            {
+                expeditionUI = new ExpeditionUI();
+                expeditionUI.Activate();
+                expeditionUserInterface = new UserInterface();
+                expeditionUserInterface.SetState(expeditionUI);
+            }
 
             tier1ExpPointer = new Tier1Quest();
             tier2ExpPointer = new Tier2Quest();
@@ -101,9 +111,7 @@ namespace Expeditions
         {
             modExpedition.mod = mod;
             GetExpeditionsList().Add(modExpedition);
-            // TODO: delet
-            //GetExpeditionsList().Add(modExpedition);
-            //GetExpeditionsList().Add(modExpedition);
+            if (Main.netMode == 2) Console.WriteLine("  > Adding Expedition: " + modExpedition.GetType().ToString());
         }
         
         /// <summary>
@@ -141,6 +149,7 @@ namespace Expeditions
         /// <summary> Reset progress and detach references </summary>
         internal static void ResetExpeditions()
         {
+            if (Main.netMode == 2) Console.WriteLine("  > Resetting Expeditions");
             //initiliase all the expeditions
             foreach (ModExpedition mex in GetExpeditionsList())
             {
@@ -151,8 +160,9 @@ namespace Expeditions
         }
         internal static void WorldInit()
         {
+            if (Main.netMode == 2) Console.WriteLine("  > WorldInit");
             lastHitNPC = new NPC();
-            lastKilledNPC = lastKilledNPC;
+            lastKilledNPC = lastHitNPC;
             foreach (ModExpedition mex in GetExpeditionsList())
             {
                 mex.expedition.WorldInitialise();
@@ -162,6 +172,7 @@ namespace Expeditions
         public override void AddRecipes()
         {
             //initiliase expedition defaults, values reset in PlayerExplorer
+            if (Main.netMode == 2) Console.WriteLine("  > Setting Defaults");
             foreach (ModExpedition mex in GetExpeditionsList())
             {
                 mex.SetDefaults();
@@ -215,6 +226,8 @@ namespace Expeditions
 
         public override void PostUpdateInput()
         {
+            if (Main.netMode == 2) return;
+
             Player player = Main.player[Main.myPlayer];
             // Keep track of active expeditions in-game
             if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
@@ -242,6 +255,7 @@ namespace Expeditions
                         Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
                         Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
                         Main.NewText(GetCurrentExpeditionTier() + " : expedition tier");
+                        SendTestModPacket(Main.myPlayer, 1337);
                     }
                     if (Main.time % 60 == 30)
                     {
@@ -255,6 +269,41 @@ namespace Expeditions
             }
         }
 
+        public const ushort packetID_test = 0;
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            int packetID = reader.ReadUInt16();
+            switch (packetID)
+            {
+                case packetID_test:
+                    int senderAmI = reader.ReadInt32();
+                    int message = reader.ReadInt32();
+                    ReceiveTestModPacket(senderAmI, message);
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        private void SendTestModPacket(int senderWhoAmI, int message)
+        {
+            if (Main.netMode > 0)
+            {
+                ModPacket packet = GetPacket();
+                packet.Write(packetID_test);
+                packet.Write(senderWhoAmI);
+                packet.Write(message);
+                packet.Send(-1, senderWhoAmI);
+            }else
+            {
+                ReceiveTestModPacket(senderWhoAmI, message);
+            }
+        }
+        private void ReceiveTestModPacket(int senderWhoAmI, int message)
+        {
+            Main.NewText("This is a net test from " + Main.player[senderWhoAmI].name +  ", with message: " + message);
+        }
+
 
 
         /// <summary>
@@ -263,6 +312,8 @@ namespace Expeditions
         /// <param name="viewMode"></param>
         public static void OpenExpeditionMenu(ushort viewMode)
         {
+            if (Main.netMode == 2) return;
+
             if (DEBUG) Main.NewText("OpenMethod UI : " + viewMode);
             Player player = Main.player[Main.myPlayer];
             
@@ -287,6 +338,8 @@ namespace Expeditions
         /// </summary>
         public static void CloseExpeditionMenu(bool silent = false)
         {
+            if (Main.netMode == 2) return;
+
             if (DEBUG) Main.NewText("CloseMethod UI");
             Main.npcChatText = "";
 
@@ -299,6 +352,8 @@ namespace Expeditions
         /// </summary>
         public static void ToggleExpeditionMenu(ushort viewMode)
         {
+            if (Main.netMode == 2) return;
+
             if (ExpeditionUI.visible)
             {
                 Expeditions.CloseExpeditionMenu();
@@ -316,6 +371,8 @@ namespace Expeditions
         /// <param name="stack"></param>
         public static void ClientNetSpawnItem(int itemType, int stack = 1, int prefix = 0)
         {
+            if (Main.netMode == 2) return;
+
             int id = Item.NewItem(
                 (int)Main.player[Main.myPlayer].position.X,
                 (int)Main.player[Main.myPlayer].position.Y,
@@ -380,6 +437,8 @@ namespace Expeditions
         /// <returns></returns>
         public static int GetCurrentExpeditionTier()
         {
+            if (Main.netMode == 2) return 0;
+
             if (tier11ExpPointer.expedition.completed) return 11;
             if (tier10ExpPointer.expedition.completed) return 10;
             if (tier9ExpPointer.expedition.completed) return 9;

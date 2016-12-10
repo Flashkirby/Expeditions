@@ -14,8 +14,16 @@ namespace Expeditions
 
         public override void Initialize()
         {
-            // Set main list to loaded
-            Main.player[Main.myPlayer].GetModPlayer<PlayerExplorer>(mod).CopyLocalExpeditionsToMain();
+            if (Main.netMode == 2)
+            {
+                Console.WriteLine("Expeditions: World Initialising");
+            }
+            else
+            {
+                // Set main list to loaded
+                Main.player[Main.myPlayer].GetModPlayer<PlayerExplorer>(mod).CopyLocalExpeditionsToMain();
+            }
+
             // Reset list items
             Expeditions.WorldInit();
 
