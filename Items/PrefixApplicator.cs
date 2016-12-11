@@ -28,7 +28,6 @@ namespace Expeditions.Items
             // look for favourited items from that point, looping 
             // back to where my index is
             int myIndex = -1;
-            Item invItem;
             
             // iterate first time to find me and items past me
             for(int i = 0; i < player.inventory.Length; i++)
