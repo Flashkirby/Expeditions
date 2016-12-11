@@ -297,7 +297,7 @@ namespace Expeditions
                             );
                         SendTestModPacket(Main.myPlayer, 1337);
                     }
-                    if (Main.time % 60 == 30)
+                    if (Main.time % 60 == 20)
                     {
 
                         if (PlayerExplorer.svmsg != null)
@@ -305,7 +305,7 @@ namespace Expeditions
                             Main.NewTextMultiline(PlayerExplorer.svmsg, false, Color.LightSeaGreen);
                         }
                     }
-                    if (Main.time % 60 == 45)
+                    if (Main.time % 60 == 40)
                     {
 
                         if (PlayerExplorer.dbgmsg != null)

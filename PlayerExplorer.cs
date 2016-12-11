@@ -37,8 +37,22 @@ namespace Expeditions
             // Save the counts
             int count = expeditions.Count;
             int unknownCount = 0;
+            
+            // If 'O-K-0' is held
+            bool resetProgress =
+                 Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.O) &&
+                 Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.K) &&
+                 Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D0);
+            // If '#' is held
+            bool discardUnknowns = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.OemQuotes);
+
             if (_unusedExpeditionData != null) unknownCount = _unusedExpeditionData.Count;
             if (Expeditions.DEBUG) svmsg += "| c:" + count + "?" + unknownCount;
+
+            // Apply resets where applicable
+            if (resetProgress) { count = 0; unknownCount = 0; }
+            if (discardUnknowns) unknownCount = 0;
+
             writer.Write(count); byteCount += 4;
             writer.Write(unknownCount); byteCount += 4;
 
@@ -80,8 +94,19 @@ namespace Expeditions
             // Bin this now, we don't need it
             _unusedExpeditionData = new List<Expedition>();
 
+            if (Expeditions.DEBUG)
+            {
+                svmsg += " Filesize = " + byteCount + "B";
 
-            svmsg += " Filesize = " + byteCount + "B";
+                if (resetProgress)
+                {
+                    svmsg += "\n[cmd OK0]: FORCE DELETE ALL PROGRESS!";
+                }
+                else if (discardUnknowns)
+                {
+                    svmsg += "\n[cmd #]: FORCE DELETE UNKNOWNS!";
+                }
+            }
 
             // Reset this
             _localExpeditionList = new List<Expedition>();
