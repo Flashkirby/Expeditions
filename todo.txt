@@ -1,11 +1,13 @@
 For v1.0:
 Balance Core Expeditions
-Disable DEBUG
 Wayfarer Items
 	magic
 	summons
 	potion
 Remove/Fix placeholder images
+Disable DEBUG
+
+
 
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
