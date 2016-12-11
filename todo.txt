@@ -1,17 +1,18 @@
-API easier access to obvious vars
-
-daily quests?
-
-core quewsts
-
-wayfarer 
+For v1.0:
+Balance Core Expeditions
+Disable DEBUG
+Wayfarer Items
 	magic
 	summons
+	potion
+Remove/Fix placeholder images
 
-
-Expeditions has NPC heads, can get using
-public static int TypeToNum(int type) in NPC
-
-height, 5
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
+
+Credits:
+Flashkirby99 - I am making this mod.
+jopojelly - Advice on mod referencing and .tmod usage
+
+REMINDER:
+Compile, move .dll and .xml to ExpeditionAddons template

@@ -7,6 +7,9 @@ using Terraria.ModLoader;
 
 namespace Expeditions
 {
+    /// <summary>
+    /// Class that holds all the important data for expeditions.
+    /// </summary>
     public class Expedition
     {
         public readonly static Color textColour = new Color(80, 255, 160);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -9,7 +10,8 @@ namespace Expeditions
     class PlayerExplorer : ModPlayer
     {
         private static int _version = _versionCurrent;
-        private const int _versionCurrent = 0;
+        private const int _versionCurrent = 1;
+        public static string svmsg;
         public static string dbgmsg;
 
         public int[] tileOpened = new int[2];
@@ -18,23 +20,34 @@ namespace Expeditions
         /// Stores "empty" expeditions that serve to store only progress information
         /// </summary>
         private List<Expedition> _localExpeditionList;
+        /// <summary>
+        /// Stores expeditions which were loaded with no match found.
+        /// </summary>
+        private List<Expedition> _unusedExpeditionData;
 
         public override void SaveCustomData(BinaryWriter writer)
         {
             writer.Write(_versionCurrent);
             int byteCount = 4;
-            if (Expeditions.DEBUG) dbgmsg = "\nSAVE v: " + _versionCurrent;
+            if (Expeditions.DEBUG) { svmsg = "\nSAVE v: " + _versionCurrent; dbgmsg = ""; }
 
             // Expeditions
             List<ModExpedition> expeditions = Expeditions.GetExpeditionsList();
+
             // Save the counts
             int count = expeditions.Count;
-            if (Expeditions.DEBUG) dbgmsg += "| c:" + count;
+            int unknownCount = 0;
+            if (_unusedExpeditionData != null) unknownCount = _unusedExpeditionData.Count;
+            if (Expeditions.DEBUG) svmsg += "| c:" + count + "?" + unknownCount;
             writer.Write(count); byteCount += 4;
+            writer.Write(unknownCount); byteCount += 4;
+
+
+
             for (int i = 0; i < count; i++)
             {
                 // Save the ID as 4 bytes, and its booleans as another byte
-                if (Expeditions.DEBUG) dbgmsg += "  [" + expeditions[i].expedition.name + " : " + Expedition.GetHashID(expeditions[i].expedition).ToString("X") + " : " + expeditions[i].expedition.completed + " & " + expeditions[i].expedition.trackingActive + "] ";
+                if (Expeditions.DEBUG) svmsg += "  [" + expeditions[i].expedition.name + " : " + Expedition.GetHashID(expeditions[i].expedition).ToString("X") + " : " + expeditions[i].expedition.completed + " & " + expeditions[i].expedition.trackingActive + "] ";
                 writer.Write(Expedition.GetHashID(expeditions[i].expedition)); byteCount += 4;
                 writer.Write(new BitsByte(
                     expeditions[i].expedition.completed,
@@ -44,7 +57,31 @@ namespace Expeditions
                     expeditions[i].expedition.condition3Met
                     )); byteCount += 1;
             }
-            dbgmsg += "\nFilesize = " + byteCount + "B";
+
+
+            // Attempt to keep unknown data
+            if (unknownCount > 0)
+            {
+                for (int i = 0; i < unknownCount; i++)
+                {
+                    // Save the ID as 4 bytes, and its booleans as another byte
+                    int hashID = Convert.ToInt32(_unusedExpeditionData[i].name);
+                    if (Expeditions.DEBUG) svmsg += "  [" + _unusedExpeditionData[i].name + " : ?" + hashID.ToString("X") + "? : " + _unusedExpeditionData[i].completed + " & " + _unusedExpeditionData[i].trackingActive + "] ";
+                    writer.Write(hashID); byteCount += 4;
+                    writer.Write(new BitsByte(
+                        _unusedExpeditionData[i].completed,
+                        _unusedExpeditionData[i].trackingActive,
+                        _unusedExpeditionData[i].condition1Met,
+                        _unusedExpeditionData[i].condition2Met,
+                        _unusedExpeditionData[i].condition3Met
+                        )); byteCount += 1;
+                }
+            }
+            // Bin this now, we don't need it
+            _unusedExpeditionData = new List<Expedition>();
+
+
+            svmsg += " Filesize = " + byteCount + "B";
 
             // Reset this
             _localExpeditionList = new List<Expedition>();
@@ -88,8 +125,11 @@ namespace Expeditions
 
                 // Read expeditions
                 int count = reader.ReadInt32();
-                if (Expeditions.DEBUG) dbgmsg += "|c:" + count;
-                for (int i = 0; i < count; i++)
+                int unknownCount = reader.ReadInt32();
+                if (Expeditions.DEBUG) dbgmsg += "|c:" + count + "?" + unknownCount;
+
+                // Iterating
+                for (int i = 0; i < count + unknownCount; i++)
                 {
                     int expeditionID = reader.ReadInt32();
                     BitsByte flags = reader.ReadByte();
@@ -105,9 +145,19 @@ namespace Expeditions
                         e.condition3Met = flags[4];
                         if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";" + (e.completed ? "`" : ".") + (e.trackingActive ? "`" : ".") + "]";
                     }
-                    else // No match found
+                    else 
                     {
-                        
+                        // Make a new one if not initialised
+                        if (_unusedExpeditionData == null) _unusedExpeditionData = new List<Expedition>();
+                        // No match found
+                        Expedition e = new Expedition();
+                        e.completed = flags[0];
+                        e.trackingActive = flags[1];
+                        e.condition1Met = flags[2];
+                        e.condition2Met = flags[3];
+                        e.condition3Met = flags[4];
+                        e.name = "" + expeditionID;
+                        _unusedExpeditionData.Add(e);
                         if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";-]";
                     }
                 }
@@ -115,7 +165,7 @@ namespace Expeditions
             else
             {
                 if (_version < 0) return;
-                if (Expeditions.DEBUG) dbgmsg += "\n (( LOAD v: " + _version + " / " + _versionCurrent + ")) ";
+                if (Expeditions.DEBUG) dbgmsg += "(( LOAD v: " + _version + " / " + _versionCurrent + ")) ";
                 ErrorLogger.Log("Expeditions: Player save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
             }
         }

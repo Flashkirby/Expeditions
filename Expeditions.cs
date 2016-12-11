@@ -300,9 +300,17 @@ namespace Expeditions
                     if (Main.time % 60 == 30)
                     {
 
+                        if (PlayerExplorer.svmsg != null)
+                        {
+                            Main.NewTextMultiline(PlayerExplorer.svmsg, false, Color.LightSeaGreen);
+                        }
+                    }
+                    if (Main.time % 60 == 45)
+                    {
+
                         if (PlayerExplorer.dbgmsg != null)
                         {
-                            Main.NewTextMultiline(PlayerExplorer.dbgmsg);
+                            Main.NewTextMultiline(PlayerExplorer.dbgmsg, false, Color.LightSteelBlue);
                         }
                     }
                 }
