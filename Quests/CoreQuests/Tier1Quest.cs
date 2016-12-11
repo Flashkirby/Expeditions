@@ -30,7 +30,8 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
-            return "When you reach the caverns, report back for some basic tools. You should be able to tell by the surrounding walls becoming noticeably more rocky. More expeditions should be available after this. ";
+            if (complete) return "The caverns should contain more interesting stuff than up on the surface right? Well look for awesome loot, and watch out for the bad guys! ";
+            return "When you get down far enough, the walls around you should look more grey and rocky - that's the cavern layer. WHen you get there, report back to me or at an Expedition Board, and I can deliver some useful mining equipment! ";
         }
 
         public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)

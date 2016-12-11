@@ -20,26 +20,28 @@ namespace Expeditions.Quests
             if (!WorldGen.crimson)
             {
                 expedition.name = "A Demon's Metal";
-                expedition.AddDeliverable(ItemID.DemoniteOre, 10);
+                expedition.AddDeliverable(ItemID.DemoniteOre, 20);
                 AddRewardItem(ItemID.GoldCoin, 1);
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 79); //Intrepid
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 66); //Arcane
-                AddRewardPrefix(WorldGen.copperBar, 10);
-                AddRewardPrefix(WorldGen.ironBar, 10);
+                AddRewardPrefix(ItemID.DemoniteBar, 8);
             }
             else
             {
                 expedition.name = "Streaks of Crimson";
-                expedition.AddDeliverable(ItemID.CrimtaneOre, 10);
+                expedition.AddDeliverable(ItemID.CrimtaneOre, 20);
                 AddRewardItem(ItemID.GoldCoin, 1);
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 64); //Armored
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 75); //Hasty
-                AddRewardPrefix(WorldGen.copperBar, 10);
-                AddRewardPrefix(WorldGen.ironBar, 10);
+                AddRewardPrefix(ItemID.CrimtaneBar, 8);
             }
+            AddRewardPrefix(WorldGen.ironBar, 10);
+            AddRewardPrefix(ItemID.Gel, 50);
+            AddRewardPrefix(ItemID.Wood, 100);
         }
         public override string Description(bool complete)
         {
+            if (complete) return "Woah, did not expect " + (WorldGen.crimson ? "'crimtane'" : "'demonite'") + "to come from a giant boss... well that's one for the books! ";
             return "Hey, do you think the " + (WorldGen.crimson ? "crimson" : "corruption") + " hides some ore that could be made into workable metal? I mean it's a possibility considering how it transforms things. Please investigate it! ";
         }
 
