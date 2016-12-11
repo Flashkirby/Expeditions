@@ -6,5 +6,5 @@ homepage = http://forums.terraria.org/index.php?threads/expeditions-mod-modular-
 hideCode = false
 hideResources = false
 includeSource = true
-buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, *.suo, *.sln, .git, *.md, .git\*, *.fw.png
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, *.suo, *.sln, .git, *.md, .git\*, *.fw.png *.TMP
 includePDB = false
