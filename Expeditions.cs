@@ -25,6 +25,7 @@ namespace Expeditions
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
         private static List<ModExpedition> expeditionList;
         public static Texture2D sortingTexture;
+        public static Texture2D bountyBoardTexture;
 
         private static int _npcClerk;
         public static int npcClerk { get { return _npcClerk; } }
@@ -64,6 +65,7 @@ namespace Expeditions
             if (Main.netMode != 2)
             {
                 sortingTexture = GetTexture("UI/Sorting_Categories");
+                bountyBoardTexture = GetTexture("Items/BountyBoard");
             }
 
             _npcClerk = NPCType("Clerk");

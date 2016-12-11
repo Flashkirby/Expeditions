@@ -31,6 +31,7 @@ namespace Expeditions
         private const int _expPanelWidth = 460;
         private UIPanel _expeditionPanel;
         private UITextWrap _titleHeader;
+        private UIImage _headImage;
         private UITextWrap _description;
         private UITextWrap _conditionHeader;
         private UITextWrap _conditionsDesc;
@@ -102,9 +103,14 @@ namespace Expeditions
             _rewardSlots.Left.Set(14, 0);
             _rewardSlots.Top.Set(8, 0);
             _rewardSlots.Width.Set(_expPanelWidth - 20, 0);
+            
+            _headImage = new UIImage(Main.npcHeadTexture[0]);
+            _headImage.Left.Set(_expPanelWidth - 38, 0);
+            _headImage.Top.Set(10, 0);
 
             Color invis = new Color(0, 0, 0, 0);
             _titleHeader = AppendTextPan2("Title", _expPanelWidth/2, 16, Color.White, Color.Black, true);
+            _expeditionPanel.Append(_headImage);
             _description = AppendTextPan2("The character '_' fills a large amount of space, eg. ___________________________________________. Cool!",
                 16, 16, Color.White, invis);
             _conditionHeader = AppendTextPan2("Goals", _expPanelWidth / 2, 16, Color.White, Color.Black, true);
@@ -304,6 +310,22 @@ namespace Expeditions
                 _titleHeader.SetText(currentME.expedition.name + (currentME.expedition.completed ? " (Completed)" : "") + (Expeditions.DEBUG?" #"+Expedition.GetHashID(currentME.expedition).ToString("X"):""));
                 yBottom += _titleHeader.TextHeight + 10;
 
+                try
+                {
+                    if (currentME.expedition.npcHead > 0)
+                    {
+                        _headImage.SetImage(Main.npcHeadTexture[currentME.expedition.npcHead]);
+                    }
+                    else
+                    {
+                        _headImage.SetImage(Expeditions.bountyBoardTexture);
+                    }
+                }
+                catch (Exception e) // On a fail, we'll just default to unknown
+                {
+                    _headImage.SetImage(Expeditions.bountyBoardTexture);
+                }
+
                 _description.SetText(currentME.expedition.GetDescription());
                 _description.Top.Set(yBottom, 0f);
                 yBottom += _description.TextHeight;
@@ -368,6 +390,7 @@ namespace Expeditions
             else
             {
                 _titleHeader.SetText("No Expeditions Posted");
+                _headImage.SetImage(Expeditions.bountyBoardTexture);
                 _description.SetText("");
                 _conditionHeader.SetText("");
                 _conditionsDesc.SetText("");

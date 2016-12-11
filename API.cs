@@ -21,6 +21,8 @@ namespace Expeditions
         public static NPC LastHitNPC { get { return Expeditions.LastHitNPC; } }
         /// <summary> The NPC that was last killed by the player. </summary>
         public static NPC LastKilledNPC { get { return Expeditions.LastKilledNPC; } }
+        /// <summary> The NPC type of the Clerk NPC </summary>
+        public static int NPCIDClerk { get { return Expeditions.npcClerk; } }
         /// <summary>
         /// 
         /// </summary>

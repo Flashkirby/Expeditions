@@ -24,6 +24,8 @@ namespace Expeditions
 
         /// <summary>Title of expedition</summary>
         public string name = "";
+        /// <summary>The NPC Head that will be shown with the quest. By default, 0 will show the expediiton board</summary>
+        public int npcHead = 0;
         /// <summary>Description of conditions to be met</summary>
         public string conditionDescription1 = "";
         public string conditionDescription2 = "";

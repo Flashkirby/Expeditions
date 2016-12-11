@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Expeditions
@@ -61,6 +63,51 @@ namespace Expeditions
             if (stacks[3] > 0) AddRewardItem(71, stacks[3]);
         }
 
+        /// <summary>
+        /// Attempts to set the head sprite associated with this npc.
+        /// </summary>
+        /// <param name="npcType">Type of NPC. Clerk's type is accessed via API.NPCIDClerk </param>
+        public void SetNPCHead(int npcType)
+        {
+            //First run through known vanilla NPC head slots
+            switch (npcType)
+            {
+                case NPCID.Guide: expedition.npcHead = 1; return;
+                case NPCID.Merchant: expedition.npcHead = 2; return;
+                case NPCID.Nurse: expedition.npcHead = 3; return;
+                case NPCID.Demolitionist: expedition.npcHead = 4; return;
+                case NPCID.Dryad: expedition.npcHead = 5; return;
+                case NPCID.ArmsDealer: expedition.npcHead = 6; return;
+                case NPCID.Clothier: expedition.npcHead = 7; return;
+                case NPCID.Mechanic: expedition.npcHead = 8; return;
+                case NPCID.GoblinTinkerer: expedition.npcHead = 9; return;
+                case NPCID.Wizard: expedition.npcHead = 10; return;
+                case NPCID.SantaClaus: expedition.npcHead = 11; return;
+                case NPCID.Truffle: expedition.npcHead = 12; return;
+                case NPCID.Steampunker: expedition.npcHead = 13; return;
+                case NPCID.DyeTrader: expedition.npcHead = 14; return;
+                case NPCID.PartyGirl: expedition.npcHead = 15; return;
+                case NPCID.Cyborg: expedition.npcHead = 16; return;
+                case NPCID.Painter: expedition.npcHead = 17; return;
+                case NPCID.WitchDoctor: expedition.npcHead = 18; return;
+                case NPCID.Pirate: expedition.npcHead = 19; return;
+                case NPCID.Stylist: expedition.npcHead = 20; return;
+                case NPCID.TravellingMerchant: expedition.npcHead = 21; return;
+                case NPCID.Angler: expedition.npcHead = 22; return;
+                case NPCID.TaxCollector: expedition.npcHead = 23; return;
+                default:
+                    try
+                    {
+                        //Then if all else fails, see if a modded one exists
+                        MethodInfo method = typeof(NPCHeadLoader).GetMethod("GetNPCHeadSlot", BindingFlags.NonPublic | BindingFlags.Static);
+                        object result = method.Invoke(null, new object[] { npcType });
+                        expedition.npcHead = (int)result;
+                        PlayerExplorer.dbgmsg += "\ninvoke result: " + result;
+                    }
+                    catch (System.Exception e) { }
+                    break;
+            }
+        }
         #region Virtual Methods
         /// <summary>
         /// The initialisation method for mods using this. Use it to set the title and category
