@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Back to the Dungeons";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 9;
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;

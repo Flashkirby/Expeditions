@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "The Temple Conspiracy";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 10;
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;

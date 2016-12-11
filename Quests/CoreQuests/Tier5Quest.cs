@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Soaring the Skies";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 5;
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;

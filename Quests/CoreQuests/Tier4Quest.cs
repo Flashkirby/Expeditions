@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Underworld Mystery";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 4;
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;

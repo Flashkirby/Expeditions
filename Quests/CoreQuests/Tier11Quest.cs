@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Terrarian Enemy No. 1";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 11;
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;

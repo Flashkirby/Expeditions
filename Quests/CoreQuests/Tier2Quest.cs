@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Tier 2 Quest";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 2;
             expedition.ctgCollect = true;
             expedition.ctgImportant = true;

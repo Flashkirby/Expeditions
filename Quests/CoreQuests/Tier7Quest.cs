@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Thrashing Wilds";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 7;
             expedition.ctgCollect = true;
             expedition.ctgImportant = true;

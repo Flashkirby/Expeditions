@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Mecha Revenge";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 6;
             expedition.ctgSlay = true;
             expedition.ctgCollect = true;

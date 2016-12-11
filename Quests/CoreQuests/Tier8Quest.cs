@@ -10,6 +10,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Temple Raid";
+            SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 8;
             expedition.ctgCollect = true;
             expedition.ctgImportant = true;
