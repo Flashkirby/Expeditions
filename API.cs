@@ -5,6 +5,15 @@ using Terraria.ModLoader;
 
 namespace Expeditions
 {
+    /// <summary>
+    /// Big Friendly Class provides access to all the important and useful methods
+    /// required to interface with this mod!
+    /// <para>
+    /// To create an expedition, create a new .cs file which extends ModExpedition. 
+    /// Once you've set them all up, add them to the game via the Mod class' Load()
+    /// override method by calling AddExpedition()
+    /// </para> 
+    /// </summary>
     public static class API
     {
         #region Expeditions.cs Fields
@@ -31,6 +40,15 @@ namespace Expeditions
         public static void AddExpedition(Mod mod, ModExpedition modExpedition)
         {
             Expeditions.AddExpeditionToList(modExpedition, mod);
+        }
+
+        /// <summary>
+        /// Returns the list that manages the expeditions. Don't mess with it unless you know what you're doing... consider FindExpedition().
+        /// </summary>
+        /// <returns>The list of ModExpeditions. Will not return null, only an empty list.</returns>
+        public static List<ModExpedition> GetExpeditionsList()
+        {
+            return Expeditions.GetExpeditionsList();
         }
 
         /// <summary>

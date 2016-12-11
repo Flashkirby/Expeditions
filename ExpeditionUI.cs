@@ -214,7 +214,7 @@ namespace Expeditions
             }
             Main.inventoryScale = 0.6f;
             ItemSlot.Draw(Main.spriteBatch, ref item,
-                Context, new Vector2(x, y), default(Microsoft.Xna.Framework.Color));
+                Context, new Vector2(x, y), default(Color));
         }
 
         private void IncrementIndexClick(UIMouseEvent evt, UIElement listeningElement)
@@ -537,8 +537,12 @@ namespace Expeditions
         }
     }
     
+    /// <summary>
+    /// Visual only ItemSlot as a UIElement, for displaying items
+    /// </summary>
     public class UIItemSlots : UIElement
     {
+        /// <summary>Scale of item slot</summary>
         public const int itemSlotSize = (int)(50 * 0.6f + 4); //scale being used
 
         private int _context = 7;
@@ -553,6 +557,8 @@ namespace Expeditions
             }
         }
 
+        /// <summary> Create a new ItemSlot </summary>
+        /// <param name="context">Set the context for how the itemslot is drawn, see Terraria.UI/ItemSlot.cs </param>
         public UIItemSlots(int context = 7)
         {
             _context = context;
