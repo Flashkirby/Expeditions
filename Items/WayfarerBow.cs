@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    public class WayfarerBow : ModItem
+    class WayfarerBow : ModItem
     {
         public override void SetDefaults()
         {

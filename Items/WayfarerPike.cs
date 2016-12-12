@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    public class WayfarerPike : ModItem
+    class WayfarerPike : ModItem
     {
         public override void SetDefaults()
         {
