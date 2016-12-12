@@ -157,6 +157,7 @@ namespace Expeditions
 
         /// <summary>
         /// Called before deducting items and granting the rewards of an expedition. 
+        /// Use this to modify the rewards before distributing
         /// </summary>
         /// <param name="rewards">List of items to be rewarded</param>
         public virtual void PreCompleteExpedition(List<Item> rewards)
@@ -166,8 +167,7 @@ namespace Expeditions
         /// <summary>
         /// Called after expedition is completed. 
         /// </summary>
-        /// <param name="rewards">List of items to be rewarded</param>
-        public virtual void PostCompleteExpedition(List<Item> rewards)
+        public virtual void PostCompleteExpedition()
         {
             return;
         }

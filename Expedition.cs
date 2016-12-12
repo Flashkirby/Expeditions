@@ -12,8 +12,11 @@ namespace Expeditions
     /// </summary>
     public class Expedition
     {
+        /// <summary> Colour of important text. Bright green. </summary>
         public readonly static Color textColour = new Color(80, 255, 160);
+        /// <summary> Colour of mild positive text. Dull green. </summary>
         public readonly static Color muteColour = new Color(75, 150, 112);
+        /// <summary> Colour of mild negative text. Dull red. </summary>
         public readonly static Color poorColour = new Color(150, 75, 75);
 
         public ModExpedition mex
@@ -24,11 +27,13 @@ namespace Expeditions
 
         /// <summary>Title of expedition</summary>
         public string name = "";
-        /// <summary>The NPC Head that will be shown with the quest. By default, 0 will show the expediiton board</summary>
+        /// <summary>The NPC Head that will be shown with the quest. By default, 0 and invalid integers will show the expediiton board. See ModExpedition's SetNPCHead()</summary>
         public int npcHead = 0;
-        /// <summary>Description of conditions to be met</summary>
+        /// <summary>Description of a condition to be met - see condition1Met</summary>
         public string conditionDescription1 = "";
+        /// <summary>Description of a condition to be met - see condition2Met</summary>
         public string conditionDescription2 = "";
+        /// <summary>Description of a condition to be met - see condition3Met</summary>
         public string conditionDescription3 = "";
         /// <summary>Tier of expedition, same as item rarity</summary>
         public int difficulty = 0;
@@ -42,9 +47,11 @@ namespace Expeditions
         public bool ctgCollect = false;
         /// <summary>Category: Involves defeating monsters</summary>
         public bool ctgSlay = false;
-        /// <summary>Tracks the conditionals not related to deliverable items</summary>
+        /// <summary>Tracks a conditional, will be displayed when conditionDescription1 is not empty</summary>
         public bool condition1Met = false;
+        /// <summary>Tracks a conditional, will be displayed when conditionDescription2 is not empty</summary>
         public bool condition2Met = false;
+        /// <summary>Tracks a conditional, will be displayed when conditionDescription3 is not empty</summary>
         public bool condition3Met = false;
         /// <summary>Completed expeditions are archived and cannot be redone unless repeatable</summary>
         public bool completed = false;
@@ -72,7 +79,7 @@ namespace Expeditions
 
 
         /// <summary>
-        /// Checks against all conditions to see if completeable
+        /// Checks against all conditions to see if completeable. 
         /// </summary>
         /// <returns></returns>
         public bool ConditionsMet()
@@ -122,7 +129,10 @@ namespace Expeditions
             }
             return !(mex != null && !checkConditions);
         }
-
+        /// <summary>
+        /// Checks against arbitrary conditions to see if visible. 
+        /// </summary>
+        /// <returns></returns>
         public bool PrerequisitesMet()
         {
             if (Main.netMode == 2) return false;
@@ -165,7 +175,7 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Check against itemTypes to see if it matches, if so add to corrosponding index in stack counter
+        /// Check against itemTypes to see if it matches, if so add to corrosponding index in stack counter. 
         /// </summary>
         /// <param name="item"></param>
         /// <param name="itemTypes"></param>
@@ -213,9 +223,9 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Sets the expedition to complete, removing tracking and dropping items (check net as well)
+        /// Sets the expedition to complete, removing tracking and dropping items (check net as well). 
         /// </summary>
-        /// <param name="serverMessage">Force the method to forego sending packets, and just run </param>
+        /// <param name="serverMessage">Force the method to forego sending packets, and just run. </param>
         public void CompleteExpedition(bool serverMessage = false)
         {
             // What to do if the call wasn't made from a server's packet send (ie. client code)
@@ -233,6 +243,14 @@ namespace Expeditions
                 }
             }
 
+
+            // Initialise a new set of rewards that don't affect the original listed
+            List<Item> tempRewards = new List<Item>();
+            foreach(Item i in rewards)
+            {
+                // Create new editable instance of this item
+                tempRewards.Add(i.Clone());
+            }
 
             // check mod hook
             mex.PreCompleteExpedition(rewards);
@@ -263,7 +281,7 @@ namespace Expeditions
             completed = true;
 
             // check mod hook
-            mex.PostCompleteExpedition(rewards);
+            mex.PostCompleteExpedition();
 
             // Force the expeditions list to recalculate in this instance
             if (ExpeditionUI.visible)
@@ -272,7 +290,7 @@ namespace Expeditions
             }
         }
 
-        /// <summary> Add items and such after world init </summary>
+        /// <summary> Add items and such after world init. </summary>
         public void WorldInitialise()
         {
             deliverables.Clear();
@@ -281,7 +299,7 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Add an item to be handed in for the expedition to be successful
+        /// Add an item to be handed in for the expedition to be successful. 
         /// </summary>
         /// <param name="type"></param>
         /// <param name="stack"></param>
@@ -293,15 +311,29 @@ namespace Expeditions
                 stack
                 ));
         }
+        /// <summary>
+        /// Add an item to be handed in for the expedition to be successful. 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="stack"></param>
         public void AddDeliverable(Item item, int stack)
         {
             AddDeliverable(item.type, stack);
         }
+        /// <summary>
+        /// Add an item to be handed in for the expedition to be successful. 
+        /// </summary>
+        /// <param name="moditem"></param>
+        /// <param name="stack"></param>
         public void AddDeliverable(ModItem moditem, int stack)
         {
             AddDeliverable(moditem.item.type, stack);
         }
 
+        /// <summary>
+        /// Gets the required items list as an array. 
+        /// </summary>
+        /// <returns></returns>
         public Item[] GetDeliverablesArray()
         {
             Item[] deliverables = new Item[this.deliverables.Count];
@@ -315,7 +347,7 @@ namespace Expeditions
             return deliverables;
         }
         /// <summary>
-        /// Reset the progress and tracking on this expedition
+        /// Reset the progress and tracking on this expedition. 
         /// </summary>
         /// <param name="resetComplete">Should we also reset expedition complete?</param>
         public void ResetProgress(bool resetComplete = true)
@@ -328,6 +360,10 @@ namespace Expeditions
             condition2Met = false;
             condition3Met = false;
         }
+        /// <summary>
+        /// Copy attributes of an expedition from the target. 
+        /// </summary>
+        /// <param name="e">The Expedition to copy progress from</param>
         public void CopyProgress(Expedition e)
         {
             completed = e.completed;
@@ -340,7 +376,7 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Add an item to be given out to participants who finished the expedition
+        /// Add an item to be given out to participants who finished the expedition. 
         /// </summary>
         /// <param name="item"></param>
         /// <param name="stack"></param>
@@ -348,11 +384,19 @@ namespace Expeditions
         {
             rewards.Add(item);
         }
+        /// <summary>
+        /// Add an item to be given out to participants who finished the expedition. 
+        /// </summary>
+        /// <param name="moditem"></param>
         public void AddReward(ModItem moditem)
         {
             AddReward(moditem.item);
         }
 
+        /// <summary>
+        /// Gets the current reward list as an array. 
+        /// </summary>
+        /// <returns></returns>
         public Item[] GetRewardsArray()
         {
             Item[] rewards = new Item[this.rewards.Count];
@@ -362,6 +406,10 @@ namespace Expeditions
             }
             return rewards;
         }
+        /// <summary>
+        /// Clones the items in the rewards list and returns it in a new array. 
+        /// </summary>
+        /// <returns></returns>
         public Item[] GetRewardsCloneToArray()
         {
             Item[] rewards = new Item[this.rewards.Count];
@@ -372,6 +420,9 @@ namespace Expeditions
             return rewards;
         }
 
+        /// <summary>
+        /// Called at the start of each day, aka (Main.time == 0.0 && Main.dayTime). 
+        /// </summary>
         public void UpdateNewDay()
         {
             if (mex != null)
@@ -381,6 +432,12 @@ namespace Expeditions
             return;
         }
 
+        /// <summary>
+        /// Returns the unique ID of this expedition generated by a consistent algorithm,
+        /// based on the mod name and expedition's class name. 
+        /// </summary>
+        /// <param name="expedition"></param>
+        /// <returns></returns>
         public static int GetHashID(Expedition expedition)
         {
             String identifier = "";

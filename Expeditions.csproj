@@ -53,6 +53,7 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />
+    <Compile Include="Quests\CoreQuests\HardModeQuest.cs" />
     <Compile Include="Quests\CoreQuests\Tier11Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier10Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier9Quest.cs" />
