@@ -63,7 +63,7 @@ namespace Expeditions
         public bool completed = false;
         /// <summary>Allows archived expeditions to be redone</summary>
         public bool repeatable = false;
-        /// <summary>Calls expedition success to all party members when completed</summary>
+        /// <summary>Calls expedition success to all party members when completed. Does not work with repeatable after the first completion</summary>
         public bool partyShare = false;
         private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
         private List<Item> rewards = new List<Item>();
@@ -264,6 +264,8 @@ namespace Expeditions
                 }
             }
 
+            // What if I receive this from someone else who hasn't finished it yet?
+            if (completed && (!repeatable || partyShare)) return;
 
             // Initialise a new set of rewards that don't affect the original listed
             List<Item> tempRewards = new List<Item>();
