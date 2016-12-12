@@ -253,13 +253,13 @@ namespace Expeditions
             }
 
             // check mod hook
-            mex.PreCompleteExpedition(rewards);
+            mex.PreCompleteExpedition(tempRewards);
 
             // deduct deliverables
             CheckRequiredItems(true);
 
             // grant items
-            foreach (Item item in rewards)
+            foreach (Item item in tempRewards)
             {
                 Expeditions.ClientNetSpawnItem(item);
             }
