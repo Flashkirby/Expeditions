@@ -1,5 +1,4 @@
 For v1.0:
-Colour blip difficulty colours
 Balance Core Expeditions
 Wayfarer Items
 	magic

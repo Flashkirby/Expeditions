@@ -464,7 +464,14 @@ namespace Expeditions
                 _scrollBar.MinValue = 0;
                 _scrollBar.MaxValue = 0;
             }
-            //UpdateIndex();
+            // set scrollbar blip colours
+            Color[] colours = new Color[sortedList.Count];
+            for(int i = 0; i < colours.Length; i++)
+            {
+                colours[i] = UIColour.GetColourFromRarity(sortedList[i].expedition.difficulty);
+            }
+            _scrollBar.SetBlipColours(colours);
+            
             //Main.NewText("Re-sorted List: " + sortedList.Count);
         }
 

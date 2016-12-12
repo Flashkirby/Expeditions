@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -13,6 +14,8 @@ namespace Expeditions.UI
         Texture2D bar = Main.colorBarTexture;
         Texture2D blip = Main.colorBlipTexture;
         Texture2D slider = Main.colorSliderTexture; //80 range with offset 3
+
+        private List<Color> _blipColourList;
 
         private int _minValue = 0;
         private int _maxValue = 4;
@@ -53,6 +56,8 @@ namespace Expeditions.UI
             _widthRange = 160f;
             Width.Set(178f, 0f);
             Height.Set(25f, 0f);
+
+            _blipColourList = new List<Color>();
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -66,6 +71,15 @@ namespace Expeditions.UI
             _dragging = false;
         }
 
+        public void SetBlipColours(Color[] colours)
+        {
+            _blipColourList.Clear();
+            foreach (Color c in colours)
+            {
+                _blipColourList.Add(c);
+            }
+        }
+
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
@@ -77,9 +91,12 @@ namespace Expeditions.UI
 
             // Draw blips on bar
             int range = _maxValue - _minValue;
+            Color c;
             for (int i = 0; i < range + 1; i++)
             {
-                spriteBatch.Draw(blip, pos + new Vector2(8f + (160f / range) * i, 8f), blip.Bounds, Color.LightSlateGray);
+                try { c = _blipColourList[i]; }
+                catch { c = Color.LightSlateGray; }
+                spriteBatch.Draw(blip, pos + new Vector2(8f + (160f / range) * i, 8f), blip.Bounds, c);
             }
 
 
