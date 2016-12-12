@@ -43,9 +43,15 @@ namespace Expeditions
         private static ModExpedition tier11ExpPointer;
 
         internal static NPC lastHitNPC;
-        public static NPC LastHitNPC { get { return lastHitNPC; } }
+        public static NPC LastHitNPC
+        {
+            get { return lastHitNPC == null ? new NPC() : lastHitNPC; }
+        }
         internal static NPC lastKilledNPC;
-        public static NPC LastKilledNPC { get { return lastKilledNPC; } }
+        public static NPC LastKilledNPC
+        {
+            get { return lastKilledNPC == null ? new NPC() : lastKilledNPC; }
+        }
 
         public Expeditions()
         {
@@ -238,7 +244,7 @@ namespace Expeditions
             }
 
         }
-
+        
         public override void PostUpdateInput()
         {
             if (Main.netMode == 2) return;
@@ -259,6 +265,7 @@ namespace Expeditions
                             // As long as an expedition is not completed yet, or repeats, check this
                             if (!me.expedition.completed || me.expedition.repeatable)
                             {
+                                me.expedition.UpdateCountable();
                                 me.expedition.ConditionsMet();
                             }
                         }
@@ -273,13 +280,21 @@ namespace Expeditions
                         {
                             if (!me.expedition.completed || me.expedition.repeatable)
                             {
+                                me.expedition.UpdateCountable();
                                 me.expedition.ConditionsMet();
                             }
                         }
                     }
                 }
+
+                // Reset the NPC after checking
+                if (lastHitNPC != null)
+                {
+                    lastHitNPC = null;
+                    if (DEBUG) Main.NewText("Reset Hit NPC");
+                }
+                if (lastKilledNPC != null) lastKilledNPC = null;
             }
-                    
 
             //DEBUG INFO
             if (DEBUG)

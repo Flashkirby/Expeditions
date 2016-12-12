@@ -35,6 +35,8 @@ namespace Expeditions
         public string conditionDescription2 = "";
         /// <summary>Description of a condition to be met - see condition3Met</summary>
         public string conditionDescription3 = "";
+        /// <summary>Description of a condition to be met - see conditionCount</summary>
+        public string conditionDescriptionCountable = "";
         /// <summary>Tier of expedition, same as item rarity</summary>
         public int difficulty = 0;
         /// <summary>Check if expedition is being tracked, this calls conditions met</summary>
@@ -53,6 +55,10 @@ namespace Expeditions
         public bool condition2Met = false;
         /// <summary>Tracks a conditional, will be displayed when conditionDescription3 is not empty</summary>
         public bool condition3Met = false;
+        /// <summary>Tracks a conditional, will be displayed when conditionDescriptionCountable is not empty</summary>
+        public ushort conditionCounted = 0;
+        /// <summary>Tracks a conditional, will be displayed when conditionDescriptionCountable is not empty and is > 0. Returns true by default when set to 0. </summary>
+        public ushort conditionCountedMax = 0;
         /// <summary>Completed expeditions are archived and cannot be redone unless repeatable</summary>
         public bool completed = false;
         /// <summary>Allows archived expeditions to be redone</summary>
@@ -77,6 +83,18 @@ namespace Expeditions
             return "";
         }
 
+        /// <summary>
+        /// Updates the countable once per frame, after which NPC trackers are reset
+        /// </summary>
+        public void UpdateCountable()
+        {
+            if (mex != null)
+            {
+                meetc = conditionCounted >= conditionCountedMax;
+                mex.CheckConditionCountable(Main.player[Main.myPlayer], ref conditionCounted, conditionCountedMax);
+            }
+        }
+        private bool meetc = false;
 
         /// <summary>
         /// Checks against all conditions to see if completeable. 
@@ -90,7 +108,7 @@ namespace Expeditions
             bool meet3 = condition3Met;
 
             // check conditions
-            bool checkConditions = mex.CheckConditions(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met);
+            bool checkConditions = mex.CheckConditions(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax);
             if (!trackCondition && checkConditions) { trackCondition = true; }
             if (trackCondition && !checkConditions) { trackCondition = false; }
 
@@ -101,10 +119,13 @@ namespace Expeditions
                 if (!meet1 && condition1Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription1 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
                 if (!meet2 && condition2Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription2 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
                 if (!meet3 && condition3Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription3 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                if(!meetc && conditionCounted >= conditionCountedMax) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescriptionCountable + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+
                 // Apply red colour to lossess
                 if (meet1 && !condition1Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription1 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
                 if (meet2 && !condition2Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription2 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
                 if (meet3 && !condition3Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription3 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                if (meetc && conditionCounted < conditionCountedMax) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescriptionCountable + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
             }
             
             if (deliverables.Count > 0)
@@ -127,7 +148,7 @@ namespace Expeditions
                     return false;
                 }
             }
-            return !(mex != null && !checkConditions);
+            return (mex == null || checkConditions) && meetc;
         }
         /// <summary>
         /// Checks against arbitrary conditions to see if visible. 
@@ -359,6 +380,7 @@ namespace Expeditions
             condition1Met = false;
             condition2Met = false;
             condition3Met = false;
+            conditionCounted = 0;
         }
         /// <summary>
         /// Copy attributes of an expedition from the target. 
@@ -373,6 +395,7 @@ namespace Expeditions
             condition1Met = e.condition1Met;
             condition2Met = e.condition2Met;
             condition3Met = e.condition3Met;
+            conditionCounted = e.conditionCounted;
         }
 
         /// <summary>

@@ -351,6 +351,12 @@ namespace Expeditions
                         conditionals += "\n" + StrTick(currentME.expedition.condition3Met) +
                               currentME.expedition.conditionDescription3;
                     }
+                    if (currentME.expedition.conditionDescriptionCountable != "")
+                    {
+                        conditionals += "\n[" + currentME.expedition.conditionCounted
+                            + (currentME.expedition.conditionCountedMax>0 ? "/" + currentME.expedition.conditionCountedMax : "") 
+                            + "] " + currentME.expedition.conditionDescriptionCountable;
+                    }
                 }
                 _conditionsDesc.SetText(conditionals);
                 _conditionsDesc.Top.Set(yBottom, 0f);

@@ -10,7 +10,7 @@ namespace Expeditions
     class PlayerExplorer : ModPlayer
     {
         private static int _version = _versionCurrent;
-        private const int _versionCurrent = 1;
+        private const int _versionCurrent = 2;
         public static string svmsg;
         public static string dbgmsg;
 
@@ -70,6 +70,7 @@ namespace Expeditions
                     expeditions[i].expedition.condition2Met,
                     expeditions[i].expedition.condition3Met
                     )); byteCount += 1;
+                writer.Write(expeditions[i].expedition.conditionCounted); byteCount += 1;
             }
 
 
@@ -89,6 +90,7 @@ namespace Expeditions
                         _unusedExpeditionData[i].condition2Met,
                         _unusedExpeditionData[i].condition3Met
                         )); byteCount += 1;
+                    writer.Write(_unusedExpeditionData[i].conditionCounted); byteCount += 1;
                 }
             }
             // Bin this now, we don't need it
@@ -158,6 +160,7 @@ namespace Expeditions
                 {
                     int expeditionID = reader.ReadInt32();
                     BitsByte flags = reader.ReadByte();
+                    ushort countedCond = reader.ReadUInt16();
                     int index;
                     if (hashToIndex.TryGetValue(expeditionID, out index))
                     {
@@ -168,6 +171,7 @@ namespace Expeditions
                         e.condition1Met = flags[2];
                         e.condition2Met = flags[3];
                         e.condition3Met = flags[4];
+                        e.conditionCounted = countedCond;
                         if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";" + (e.completed ? "`" : ".") + (e.trackingActive ? "`" : ".") + "]";
                     }
                     else 
@@ -181,6 +185,7 @@ namespace Expeditions
                         e.condition1Met = flags[2];
                         e.condition2Met = flags[3];
                         e.condition3Met = flags[4];
+                        e.conditionCounted = countedCond;
                         e.name = "" + expeditionID;
                         _unusedExpeditionData.Add(e);
                         if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";-]";
@@ -190,8 +195,14 @@ namespace Expeditions
             else
             {
                 if (_version < 0) return;
-                if (Expeditions.DEBUG) dbgmsg += "(( LOAD v: " + _version + " / " + _versionCurrent + ")) ";
-                ErrorLogger.Log("Expeditions: Player save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
+                if (Expeditions.DEBUG)
+                {
+                    dbgmsg += "(( LOAD v: " + _version + " / " + _versionCurrent + ")) ";
+                }
+                else
+                {
+                    ErrorLogger.Log("Expeditions: Player save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
+                }
             }
         }
 

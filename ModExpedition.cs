@@ -102,12 +102,14 @@ namespace Expeditions
                         MethodInfo method = typeof(NPCHeadLoader).GetMethod("GetNPCHeadSlot", BindingFlags.NonPublic | BindingFlags.Static);
                         object result = method.Invoke(null, new object[] { npcType });
                         expedition.npcHead = (int)result;
-                        PlayerExplorer.dbgmsg += "\ninvoke result: " + result;
+                        //PlayerExplorer.dbgmsg += "\ninvoke result: " + result;
                     }
                     catch (System.Exception e) { }
                     break;
             }
         }
+
+
         #region Virtual Methods
         /// <summary>
         /// The initialisation method for mods using this. Use it to set the title and category
@@ -132,16 +134,25 @@ namespace Expeditions
         {
             return "";
         }
-
-
+        
         /// <summary>
-        /// Put in any checks here to determine whether the expedition is complete, sans deliverables
+        /// Put in any checks here to determine whether to modify count. If count >= max, this condition is cleared
         /// </summary>
-        /// <param name="condition1">Used to keep track of a saved condition</param>
-        /// <param name="condition2">Used to keep track of a saved condition</param>
-        /// <param name="condition3">Used to keep track of a saved condition</param>
+        /// <param name="count"></param>
+        /// <param name="max"></param>
+        public virtual void CheckConditionCountable(Player player, ref ushort count, ushort max)
+        {
+
+        }
+        /// <summary>
+        /// Put in any checks here to determine whether the expedition is complete, sans deliverables and the counted condition.
+        /// </summary>
+        /// <param name="cond1">Used to keep track of a saved condition</param>
+        /// <param name="cond2">Used to keep track of a saved condition</param>
+        /// <param name="cond3">Used to keep track of a saved condition</param>
+        /// <param name="condCount">Used to keep track of a the counted condition</param>
         /// <returns>True if custom conditions are met</returns>
-        public virtual bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
+        public virtual bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             return true;
         }

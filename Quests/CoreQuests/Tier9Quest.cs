@@ -34,16 +34,16 @@ namespace Expeditions.Quests
             return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
         }
 
-        public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
+        public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if(player.ZoneDungeon && !condition1 && !condition2 && !condition3)
+            if(player.ZoneDungeon && !cond1 && !cond2 && !cond3)
             {
                 NPC npc = Expeditions.LastHitNPC;
-                if (npc.type >= 269 && npc.type <= 272) condition1 = true; // Rusty Bones
-                if (npc.type >= 273 && npc.type <= 276) condition2 = true; // Blue Bones
-                if (npc.type >= 277 && npc.type <= 280) condition3 = true; // Hell Bones)
+                if (npc.type >= 269 && npc.type <= 272) cond1 = true; // Rusty Bones
+                if (npc.type >= 273 && npc.type <= 276) cond2 = true; // Blue Bones
+                if (npc.type >= 277 && npc.type <= 280) cond3 = true; // Hell Bones)
             }
-            return condition1 && condition2 && condition3;
+            return cond1 && cond2 && cond3;
         }
     }
 }

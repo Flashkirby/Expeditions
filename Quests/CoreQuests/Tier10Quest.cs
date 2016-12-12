@@ -36,14 +36,14 @@ namespace Expeditions.Quests
             return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
         }
 
-        public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
+        public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (!condition1) { condition1 = NPC.downedGolemBoss; }
+            if (!cond1) { cond1 = NPC.downedGolemBoss; }
             else
             {
-                if (!condition2) condition2 = Expeditions.LastHitNPC.type == NPCID.CultistBoss;
+                if (!cond2) cond2 = Expeditions.LastHitNPC.type == NPCID.CultistBoss;
             }
-            return condition1 && condition2;
+            return cond1 && cond2;
         }
     }
 }

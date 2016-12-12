@@ -68,6 +68,7 @@
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Quests\HeaderTest.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
+    <Compile Include="UI\UIItemSlots.cs" />
     <Compile Include="UI\UITextButton.cs" />
     <Compile Include="UI\UIColour.cs" />
     <Compile Include="UI\UITextWrap.cs" />

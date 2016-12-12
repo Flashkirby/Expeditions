@@ -52,18 +52,18 @@ namespace Expeditions.Quests
             return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
         }
 
-        public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
+        public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (!condition1) condition1 = player.ZoneUnderworldHeight;
-            if (condition1 && player.ZoneUnderworldHeight && !condition2)
+            if (!cond1) cond1 = player.ZoneUnderworldHeight;
+            if (cond1 && player.ZoneUnderworldHeight && !cond2)
             {
-                condition2 = Main.hardMode;
-                if(!condition2) //check if we've seen the WoF
+                cond2 = Main.hardMode;
+                if(!cond2) //check if we've seen the WoF
                 {
-                    condition2 = player.HasBuff(BuffID.Horrified) >= 0;
+                    cond2 = player.HasBuff(BuffID.Horrified) >= 0;
                 }
             }
-            return condition1 && condition2;
+            return cond1 && cond2;
         }
     }
 }

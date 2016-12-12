@@ -19,6 +19,8 @@ namespace Expeditions.Quests
             expedition.partyShare = true;
             expedition.conditionDescription1 = "Stand on the ground";
             expedition.conditionDescription2 = "Run at 30mph";
+            expedition.conditionCountedMax = 120;
+            expedition.conditionDescriptionCountable = "Jump in the air for " + expedition.conditionCountedMax + " ticks";
         }
         public override void AddItemsOnLoad()
         {
@@ -37,15 +39,23 @@ namespace Expeditions.Quests
             return "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. ";
         }
 
-        public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
+        public override void CheckConditionCountable(Player player, ref ushort count, ushort max)
         {
-            condition1 = player.velocity.Y == 0f;
-            if (!condition2 && condition1) 
+            if(player.velocity.Y != 0f)
+            {
+                count++;
+            }
+        }
+
+        public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
+        {
+            cond1 = player.velocity.Y == 0f;
+            if (!cond2 && cond1) 
             {
                 //if(Expeditions.DEBUG) Main.NewText(Math.Abs(player.velocity.X) + " is < 6");
-                condition2 = Math.Abs(player.velocity.X) > 6;
+                cond2 = Math.Abs(player.velocity.X) > 6;
             }
-            return condition1 && condition2;
+            return cond1 && cond2;
         }
 
         public override bool CheckPrerequisites(Player player)
@@ -64,6 +74,13 @@ namespace Expeditions.Quests
         {
             rewards[2].SetDefaults(ItemID.PalladiumBar);
             rewards[2].stack = 2;
+        }
+
+        public override void OnNewDay()
+        {
+            expedition.ResetProgress(true);
+            if (Expeditions.DEBUG) Main.NewText("Expedition was reset.", 
+                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
     }
 }

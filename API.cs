@@ -17,9 +17,9 @@ namespace Expeditions
     public static class API
     {
         #region Expeditions.cs Fields
-        /// <summary> The NPC that was last struck my the player. </summary>
+        /// <summary> The NPC that was last struck my the player this frame, or an empty NPC type 0 </summary>
         public static NPC LastHitNPC { get { return Expeditions.LastHitNPC; } }
-        /// <summary> The NPC that was last killed by the player. </summary>
+        /// <summary> The NPC that was last killed by the player this frame, or an empty NPC type 0 </summary>
         public static NPC LastKilledNPC { get { return Expeditions.LastKilledNPC; } }
         /// <summary> The NPC type of the Clerk NPC </summary>
         public static int NPCIDClerk { get { return Expeditions.npcClerk; } }

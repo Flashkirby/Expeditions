@@ -35,15 +35,15 @@ namespace Expeditions.Quests
             return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
         }
 
-        public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
+        public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if(!condition1 && !Main.dayTime)
+            if(!cond1 && !Main.dayTime)
             {
                 foreach(NPC npc in Main.npc)
                 {
                     if (npc.active && npc.boss)
                     {
-                        condition1 = npc.type == NPCID.Spazmatism
+                        cond1 = npc.type == NPCID.Spazmatism
                             || npc.type == NPCID.Retinazer
                             || npc.type == NPCID.TheDestroyer
                             || npc.type == NPCID.SkeletronPrime;
@@ -51,7 +51,7 @@ namespace Expeditions.Quests
                     }
                 }
             }
-            return condition1;
+            return cond1;
         }
     }
 }

@@ -26,10 +26,10 @@ namespace Expeditions.Quests
             return "This mod adds Expeditions, which are basically quests that have conditions and give rewards. Neato! ";
         }
 
-        public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
+        public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            condition1 = true;
-            return condition1 && condition2;
+            cond1 = true;
+            return cond1 && cond2;
         }
 
         public override bool CheckPrerequisites(Player player)
