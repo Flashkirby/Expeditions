@@ -1,9 +1,11 @@
 For v1.0:
 Balance Core Expeditions
+Colour blip difficulty colours
 Wayfarer Items
 	magic
 	summons
 	potion
+Log book
 Remove/Fix placeholder images
 Disable DEBUG
 

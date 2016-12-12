@@ -34,21 +34,13 @@ namespace Expeditions.Quests
 
         public override bool CheckPrerequisites(Player player)
         {
-            return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
+            return API.FindExpedition(mod, "Tier4Quest").completed;
         }
 
         public override bool CheckConditions(Player player, ref bool condition1, ref bool condition2, ref bool condition3)
         {
-            if (!condition1) condition1 = player.ZoneUnderworldHeight;
-            if (condition1 && player.ZoneUnderworldHeight && !condition2)
-            {
-                condition2 = Main.hardMode;
-                if (!condition2) //check if we've seen the WoF
-                {
-                    condition2 = player.HasBuff(BuffID.Horrified) >= 0;
-                }
-            }
-            return condition1 && condition2;
+            condition1 = Main.hardMode;
+            return condition1;
         }
     }
 }

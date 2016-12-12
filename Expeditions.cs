@@ -99,7 +99,7 @@ namespace Expeditions
             AddExpeditionToList(tier1ExpPointer, this);
             AddExpeditionToList(tier2ExpPointer, this);
             AddExpeditionToList(tier3ExpPointer, this);
-            AddExpeditionToList(new Tier4Quest, this);
+            AddExpeditionToList(new Tier4Quest(), this);
             AddExpeditionToList(tier4ExpPointer, this);
             AddExpeditionToList(tier5ExpPointer, this);
             AddExpeditionToList(tier6ExpPointer, this);
