@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Expeditions;
+using System.Collections.Generic;
 
 namespace Expeditions.Quests
 {
@@ -25,6 +26,10 @@ namespace Expeditions.Quests
 
             AddRewardItem(ItemID.DirtBlock, 2);
             AddRewardPrefix(ItemID.Shackle, 65);
+            Item item = new Item();
+            item.SetDefaults(ItemID.CobaltBar);
+            item.name = "Cobalt or Palladium Bar";
+            expedition.AddReward(item);
         }
         public override string Description(bool complete)
         {
@@ -53,6 +58,12 @@ namespace Expeditions.Quests
                 }
             }
             return false;
+        }
+
+        public override void PreCompleteExpedition(List<Item> rewards)
+        {
+            rewards[2].SetDefaults(ItemID.PalladiumBar);
+            rewards[2].stack = 2;
         }
     }
 }
