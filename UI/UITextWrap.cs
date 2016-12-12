@@ -5,7 +5,7 @@ using Terraria.UI;
 
 namespace Expeditions.UI
 {
-    internal class UITextWrap : UIElement
+    public class UITextWrap : UIElement
     {
         private string _text = "";
         private int _maxLines = 10;

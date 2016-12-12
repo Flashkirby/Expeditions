@@ -3,7 +3,7 @@ using Terraria;
 
 namespace Expeditions.UI
 {
-    internal class UIColour
+    public class UIColour
     {
         public readonly static Color backgroundColour = new Color(63, 65, 151, 200);
         public readonly static Color borderColour = new Color(18, 18, 31, 200);

@@ -6,7 +6,7 @@ using Terraria.UI;
 
 namespace Expeditions.UI
 {
-    internal class UIValueBar : UIElement
+    public class UIValueBar : UIElement
     {
         private static Color barColour = new Color(43, 56, 101, 200);
 

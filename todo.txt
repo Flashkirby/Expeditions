@@ -1,6 +1,6 @@
 For v1.0:
-Balance Core Expeditions
 Colour blip difficulty colours
+Balance Core Expeditions
 Wayfarer Items
 	magic
 	summons

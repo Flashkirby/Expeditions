@@ -5,7 +5,7 @@ using Terraria.UI;
 
 namespace Expeditions.UI
 {
-    internal class UITextButton : UIElement
+    public class UITextButton : UIElement
     {
         private string _text = "";
         private float _textScale = 1f;
