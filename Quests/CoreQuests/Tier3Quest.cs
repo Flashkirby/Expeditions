@@ -20,12 +20,12 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            AddRewardItem(ItemID.GoldCoin, 2);
+            AddRewardMoney(Item.buyPrice(0, 2, 0, 0));
             AddRewardItem(ItemID.GoldenKey, 1);
             AddRewardItem(ItemID.AnkletoftheWind, 1);
-            AddRewardPrefix(ItemID.HealingPotion, 15);
-            AddRewardPrefix(ItemID.ManaPotion, 15);
-            AddRewardPrefix(ItemID.Bomb, 10);
+            AddRewardItem(ItemID.HealingPotion, 15);
+            AddRewardItem(ItemID.ManaPotion, 15);
+            AddRewardItem(ItemID.Bomb, 10);
         }
         public override string Description(bool complete)
         {
