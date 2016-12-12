@@ -24,6 +24,8 @@ namespace Expeditions.Quests
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 65); //Warding
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 72); //Menacing
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 76); //Quick
+            AddRewardItem(ItemID.CalmingPotion, 5);
+            AddRewardItem(ItemID.HunterPotion, 5);
             AddRewardItem(ItemID.PurificationPowder, 30);
         }
         public override string Description(bool complete)
