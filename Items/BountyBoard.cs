@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,8 +9,7 @@ namespace Expeditions.Items
 		public override void SetDefaults()
 		{
 			item.name = "Expeditions Board";
-			item.toolTip = "Manage tracking on your expeditions";
-            //item.toolTip2 = "Allows the Clerk to move in";
+			item.toolTip = "View, Track and Complete expeditions";
             item.width = 30;
             item.height = 36;
             item.maxStack = 99;
@@ -22,7 +22,7 @@ namespace Expeditions.Items
             item.useAnimation = 15;
             item.useTime = 10;
             item.autoReuse = true;
-            item.value = 100;
+            item.value = Item.sellPrice(0, 0, 0, 20);
         }
         public override void AddRecipes()
 		{
