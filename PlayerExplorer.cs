@@ -245,32 +245,23 @@ namespace Expeditions
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            HitNPC(target);
+            if (!proj.npcProj) HitNPC(target);
         }
+
         private void HitNPC(NPC target)
         {
-            // Ignore inactive just in case
-            if (!target.active) return;
-            
-            if(player.whoAmI != Main.myPlayer)
-            {
-                Player client = Main.player[Main.myPlayer];
-                if (player.team == 0) return;
-                if (player.team != client.team) return;
-            }
-
-
             // Only record NPCs the client hit
-            if (player.whoAmI == Main.myPlayer) Expeditions.lastHitNPC = target;
+            if (player.whoAmI != Main.myPlayer) return;
 
-            // Record NPCs any party member hit
-            if (target.life <= 0
-                && (
-                    player.whoAmI == Main.myPlayer ||
-                    (
-                        player.team != 0 &&
-                        player.team == Main.player[Main.myPlayer].team)
-                )) Expeditions.lastKilledNPC = target;
+            if (Expeditions.DEBUG && Expeditions.lastHitNPC != target) Main.NewText("EXP Hit: " + target.name, 119, 119, 255);
+            Expeditions.lastHitNPC = target;
+            
+            // Record NPCs killed
+            if (target.life <= 0 || !target.active)
+            {
+                if (Expeditions.DEBUG) Main.NewText("EXP Kill: " + target.name, 255, 119, 119);
+                Expeditions.lastKilledNPC = target;
+            }
         }
     }
 }
