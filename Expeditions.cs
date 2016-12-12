@@ -81,7 +81,7 @@ namespace Expeditions
             tier1ExpPointer = new Tier1Quest();
             tier2ExpPointer = new Tier2Quest();
             tier3ExpPointer = new Tier3Quest();
-            tier4ExpPointer = new Tier4Quest();
+            tier4ExpPointer = new HardModeQuest();
             tier5ExpPointer = new Tier5Quest();
             tier6ExpPointer = new Tier6Quest();
             tier7ExpPointer = new Tier7Quest();
@@ -99,6 +99,7 @@ namespace Expeditions
             AddExpeditionToList(tier1ExpPointer, this);
             AddExpeditionToList(tier2ExpPointer, this);
             AddExpeditionToList(tier3ExpPointer, this);
+            AddExpeditionToList(new Tier4Quest, this);
             AddExpeditionToList(tier4ExpPointer, this);
             AddExpeditionToList(tier5ExpPointer, this);
             AddExpeditionToList(tier6ExpPointer, this);
