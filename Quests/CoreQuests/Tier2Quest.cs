@@ -21,7 +21,7 @@ namespace Expeditions.Quests
             {
                 expedition.name = "A Demon's Metal";
                 expedition.AddDeliverable(ItemID.DemoniteOre, 20);
-                AddRewardItem(ItemID.GoldCoin, 1);
+                AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 79); //Intrepid
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 66); //Arcane
                 AddRewardPrefix(ItemID.DemoniteBar, 8);
@@ -30,7 +30,7 @@ namespace Expeditions.Quests
             {
                 expedition.name = "Streaks of Crimson";
                 expedition.AddDeliverable(ItemID.CrimtaneOre, 20);
-                AddRewardItem(ItemID.GoldCoin, 1);
+                AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 64); //Armored
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 75); //Hasty
                 AddRewardPrefix(ItemID.CrimtaneBar, 8);
