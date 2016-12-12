@@ -21,7 +21,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            AddRewardItem(ItemID.GoldCoin, 1);
+            AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
             AddRewardItem(ItemID.HellstoneBar, 10);
             AddRewardItem(ItemID.HealingPotion, 20);
             AddRewardItem(ItemID.ManaPotion, 20);

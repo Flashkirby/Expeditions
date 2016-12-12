@@ -20,7 +20,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            AddRewardItem(ItemID.GoldCoin, 3);
+            AddRewardMoney(Item.buyPrice(0, 3, 0, 0));
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 65); //Warding
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 72); //Menacing
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 76); //Quick
