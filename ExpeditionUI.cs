@@ -386,8 +386,11 @@ namespace Expeditions
                     if (!previewMode)
                     {
                         _completeButton.SetText((currentME.expedition.ConditionsMet() ? "Complete" : "In Progress"));
-                        _completeButton.Top.Set(yBottom + 10f, 0f);
+                    }else
+                    {
+                        _completeButton.SetText("");
                     }
+                    _completeButton.Top.Set(yBottom + 10f, 0f);
                     yBottom += 10;
                 }
 
