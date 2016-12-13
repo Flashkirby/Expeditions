@@ -4,7 +4,6 @@ Wayfarer Items
 	magic
 	summons
 	potion
-Log book
 Remove/Fix placeholder images
 Disable DEBUG
 

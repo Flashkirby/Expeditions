@@ -30,6 +30,7 @@ namespace Expeditions
         private static int _npcClerk;
         public static int npcClerk { get { return _npcClerk; } }
 
+        private static ModExpedition tier0ExpPointer;
         private static ModExpedition tier1ExpPointer;
         private static ModExpedition tier2ExpPointer;
         private static ModExpedition tier3ExpPointer;
@@ -84,6 +85,7 @@ namespace Expeditions
                 expeditionUserInterface.SetState(expeditionUI);
             }
 
+            tier0ExpPointer = new WelcomeQuest();
             tier1ExpPointer = new Tier1Quest();
             tier2ExpPointer = new Tier2Quest();
             tier3ExpPointer = new Tier3Quest();
@@ -102,6 +104,7 @@ namespace Expeditions
                 AddExpeditionToList(new ExampleExpedition(), this);
                 AddExpeditionToList(new HeaderTest(), this);
             }
+            AddExpeditionToList(tier0ExpPointer, this);
             AddExpeditionToList(tier1ExpPointer, this);
             AddExpeditionToList(tier2ExpPointer, this);
             AddExpeditionToList(tier3ExpPointer, this);
@@ -611,6 +614,12 @@ namespace Expeditions
             if (tier2ExpPointer.expedition.completed) return 2;
             if (tier1ExpPointer.expedition.completed) return 1;
             return 0;
+        }
+
+        public static bool CompletedWelcomeQuest()
+        {
+            if (Main.netMode == 2) return false;
+            return tier0ExpPointer.expedition.completed;
         }
     }
 }

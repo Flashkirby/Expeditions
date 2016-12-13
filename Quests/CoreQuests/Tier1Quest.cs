@@ -34,6 +34,11 @@ namespace Expeditions.Quests
             return "When you get down far enough, the walls around you should look more grey and rocky - that's the cavern layer. WHen you get there, report back to me or at an Expedition Board, and I can deliver some useful mining equipment! ";
         }
 
+        public override bool CheckPrerequisites(Player player)
+        {
+            return Expeditions.CompletedWelcomeQuest();
+        }
+
         public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if(!cond1) cond1 = (player.position.Y + player.height) * 2f / 16f - Main.worldSurface * 2.0 > 0;
