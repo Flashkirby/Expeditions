@@ -18,7 +18,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            expedition.AddDeliverable(ItemID.SolarTablet, 3);
+            expedition.AddDeliverable(ItemID.SolarTablet, 1);
 
             AddRewardItem(ItemID.GoldCoin, 15);
             AddRewardItem(ItemID.LihzahrdPowerCell, 3);

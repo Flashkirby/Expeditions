@@ -36,7 +36,7 @@ namespace Expeditions.Quests
 
         public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if(player.ZoneDungeon && !cond1 && !cond2 && !cond3)
+            if(player.ZoneDungeon && !cond1 || !cond2 || !cond3)
             {
                 NPC npc = Expeditions.LastHitNPC;
                 if (npc.type >= 269 && npc.type <= 272) cond1 = true; // Rusty Bones

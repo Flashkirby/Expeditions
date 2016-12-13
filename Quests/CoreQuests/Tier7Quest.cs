@@ -29,7 +29,9 @@ namespace Expeditions.Quests
 
         public override bool CheckPrerequisites(Player player)
         {
-            return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
+            return 
+                Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1
+                && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3;
         }
     }
 }

@@ -66,6 +66,7 @@
     <Compile Include="Quests\CoreQuests\Tier3Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier2Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier1Quest.cs" />
+    <Compile Include="Quests\CoreQuests\WelcomeQuest.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Quests\HeaderTest.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />

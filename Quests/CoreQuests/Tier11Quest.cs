@@ -16,6 +16,8 @@ namespace Expeditions.Quests
             expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Defeat an eldritch demon";
+            expedition.conditionDescriptionCountable = "Destroy the pillars";
+            expedition.conditionCountedMax = 4;
 
         }
         public override void AddItemsOnLoad()
@@ -29,9 +31,19 @@ namespace Expeditions.Quests
 
         public override bool CheckPrerequisites(Player player)
         {
-            return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
+            return 
+                Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1
+                && NPC.downedAncientCultist;
         }
 
+        public override void CheckConditionCountable(Player player, ref ushort count, ushort max)
+        {
+            count = 0;
+            if (NPC.downedTowerSolar) count++;
+            if (NPC.downedTowerVortex) count++;
+            if (NPC.downedTowerNebula) count++;
+            if (NPC.downedTowerStardust) count++;
+        }
         public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (!cond1) cond1 = NPC.downedMoonlord;

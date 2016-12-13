@@ -5,6 +5,7 @@ Wayfarer Items
 	summons
 	potion
 Remove/Fix placeholder images
+NPC chat and items
 Disable DEBUG
 
 

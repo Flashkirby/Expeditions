@@ -37,14 +37,7 @@ namespace Expeditions.Quests
         {
             if (!cond1)
             {
-                foreach(Item i in player.miscEquips)
-                {
-                    if (i.wingSlot > 0)
-                    {
-                        cond1 = true;
-                        continue;
-                    }
-                }
+                cond1 = player.wings > 0;
             }
             return cond1;
         }
