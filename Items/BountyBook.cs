@@ -9,7 +9,7 @@ namespace Expeditions.Items
         {
             item.name = "Expedition Log";
             item.toolTip = "Manage tracking on your expeditions";
-            item.toolTip2 = "'They joy of discovery!'";
+            item.toolTip2 = "'The joys of discovery!'";
             item.width = 30;
             item.height = 36;
             item.maxStack = 1;
