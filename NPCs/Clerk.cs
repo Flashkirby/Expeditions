@@ -357,6 +357,7 @@ namespace Expeditions.NPCs
 
         public override string GetChat()
         {
+            Expeditions.CloseExpeditionMenu(true); // Stop conflict caused by Bounty Book
             //"Ok, here's the deal. I'm really not cut out for adventuring, but my employers are constantly demanding information about WORLDNAME. They also send me goodies whenever I document something new, which I'm more than willing to share... catch my drift? But we'll need a base camp first, and I've got all this stuff lying around..."
             if(npc.homeless)
             {
