@@ -20,10 +20,16 @@ namespace Expeditions.Items
         Item matchingAccessory = null;
         public override bool CanRightClick()
         {
-            return matchingAccessory != null;
+            return matchingAccessory != null && item.prefix != 0;
         }
         public override void UpdateInventory(Player player)
         {
+            if (item.prefix == 0)
+            {
+                item.toolTip2 = "Apply to: No prefix to apply";
+                return;
+            }
+
             // Search through the inventory for where I am, then
             // look for favourited items from that point, looping 
             // back to where my index is
@@ -60,6 +66,7 @@ namespace Expeditions.Items
             {
                 if (invItem.accessory &&
                     invItem.type != item.type &&
+                    invItem.prefix != item.prefix &&
                     invItem.favorited)
                 {
                     matchingAccessory = invItem;
@@ -70,21 +77,28 @@ namespace Expeditions.Items
             return false;
         }
 
+        bool consume;
         public override void RightClick(Player player)
         {
-            if (matchingAccessory != null)
+            if (matchingAccessory != null && item.prefix != 0)
             {
-                int type = matchingAccessory.type;
-                int stack = matchingAccessory.stack;
-                int prefix = item.prefix;
-                matchingAccessory.SetDefaults(0);
-                item.SetDefaults(0);
-                Expeditions.ClientNetSpawnItem(type, stack, prefix);
+                // Apply the new prefix
+                matchingAccessory.Prefix(item.prefix);
+
+                // Make it obvious it's changed
+                matchingAccessory.favorited = false;
+                matchingAccessory.newAndShiny = true;
+
+                consume = true;
             }
             else
             {
-                item.stack++; //cancel consuming this
+                consume = false;
             }
+        }
+        public override bool ConsumeItem(Player player)
+        {
+            return consume;
         }
     }
 }
