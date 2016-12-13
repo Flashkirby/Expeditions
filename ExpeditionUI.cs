@@ -106,7 +106,7 @@ namespace Expeditions
             
             _headImage = new UIImage(Main.npcHeadTexture[0]);
             _headImage.Left.Set(_expPanelWidth - 38, 0);
-            _headImage.Top.Set(10, 0);
+            _headImage.Top.Set(6, 0);
 
             Color invis = new Color(0, 0, 0, 0);
             _titleHeader = AppendTextPan2("Title", _expPanelWidth/2, 16, Color.White, Color.Black, true);
