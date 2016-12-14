@@ -12,25 +12,42 @@ namespace Expeditions.Quests
             expedition.name = "Temple Raid";
             SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 8;
-            expedition.ctgCollect = true;
+            expedition.ctgSlay = true;
+            expedition.ctgExplore = true;
             expedition.ctgImportant = true;
 
+            expedition.conditionDescription1 = "Gain access to the Jungle Temple";
         }
         public override void AddItemsOnLoad()
         {
-            expedition.AddDeliverable(ItemID.SolarTablet, 1);
-
             AddRewardItem(ItemID.GoldCoin, 15);
+
+            // Cells for more boss summons!
             AddRewardItem(ItemID.LihzahrdPowerCell, 3);
         }
         public override string Description(bool complete)
         {
-            return "I WANT YOU!... to investigate that jungle temple. But how can we get in I wonder. Knowing this place you'll probably need to defeat a bigger, scarier jungle boss, like with Skeletron for the dungeon.";
+            return "I WANT YOU!... to investigate that jungle temple. But how can we get in I wonder. Knowing this place you'll probably need to defeat a bigger, scarier jungle boss, like the dungeon's Skeletron hijinks.";
         }
 
         public override bool CheckPrerequisites(Player player)
         {
             return Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1;
+        }
+        public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
+        {
+            if (NPC.downedPlantBoss && !cond1)
+            {
+                try
+                {
+                    cond1 = Main.tile[
+                        (int)(player.Center.X / 16f),
+                        (int)(player.Center.Y / 16f)
+                        ].wall == WallID.LihzahrdBrickUnsafe;
+                }
+                catch { }
+            }
+            return cond1;
         }
     }
 }
