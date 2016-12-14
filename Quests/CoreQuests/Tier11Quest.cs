@@ -15,17 +15,32 @@ namespace Expeditions.Quests
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;
 
-            expedition.conditionDescription1 = "Defeat an eldritch demon";
+            expedition.conditionDescription1 = "Defeat the Moon Lord";
             expedition.conditionDescriptionCountable = "Destroy the pillars";
             expedition.conditionCountedMax = 4;
 
         }
         public override void AddItemsOnLoad()
         {
-            AddRewardItem(ItemID.GoldCoin, 50);
+            expedition.conditionDescription1 = "Defeat an eldritch demon";
+
+            AddRewardItem(ItemID.GoldCoin, Item.buyPrice(0, 50));
+
+            // More accessory fine-tuning
+            AddRewardPrefix(mod.ItemType("PrefixApplicator"), 68); //Lucky
+
+            // Enough or 44 of one type (need 45 for full armour)
+            AddRewardItem(ItemID.FragmentSolar, 1);
+            AddRewardItem(ItemID.FragmentVortex, 1);
+            AddRewardItem(ItemID.FragmentNebula, 1);
+            AddRewardItem(ItemID.FragmentStardust, 1);
+
+            // Always need chests
+            AddRewardItem(ItemID.MartianChest, 1);
         }
         public override string Description(bool complete)
         {
+            return "Wow! You did it! This is most definitely one for the books! Phew... pat yourself on the back a job well done, but we're not done yet - far from it! There's always more to discover, take a look around; perhaps its time to visit new lands? There's more to the world than just " + Main.worldName + ", y'know. " ;
             return "Ok, serious time. The whole kerfuffle with cultists and pillars, looks to be leading to the summoning of a huge, eldritch demon. Plus, it doesn't look like there's a way to remove the pillars without triggering this event, so I guess you'll have to face it soon. Prepare yourself, looks like it might get messy. ";
         }
 
@@ -38,11 +53,17 @@ namespace Expeditions.Quests
 
         public override void CheckConditionCountable(Player player, ref ushort count, ushort max)
         {
-            count = 0;
-            if (NPC.downedTowerSolar) count++;
-            if (NPC.downedTowerVortex) count++;
-            if (NPC.downedTowerNebula) count++;
-            if (NPC.downedTowerStardust) count++;
+            if (count < 4)
+            {
+                count = 0;
+                if (NPC.downedTowerSolar) count++;
+                if (NPC.downedTowerVortex) count++;
+                if (NPC.downedTowerNebula) count++;
+                if (NPC.downedTowerStardust) count++;
+            }else
+            {
+                expedition.conditionDescription1 = "Defeat the Moon Lord";
+            }
         }
         public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
