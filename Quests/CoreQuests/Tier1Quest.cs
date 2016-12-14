@@ -30,6 +30,9 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.Torch, 99);
             AddRewardItem(ItemID.RopeCoil, 10);
             AddRewardItem(ItemID.SpelunkerPotion, 10);
+
+            // Always need chests
+            AddRewardItem(ItemID.Chest);
         }
         public override string Description(bool complete)
         {

@@ -45,6 +45,9 @@ namespace Expeditions.Quests
             AddRewardPrefix(WorldGen.ironBar, 10);
             AddRewardPrefix(ItemID.Gel, 50);
             AddRewardPrefix(ItemID.Wood, 100);
+
+            // Always need chests
+            AddRewardItem(ItemID.Chest);
         }
         public override string Description(bool complete)
         {

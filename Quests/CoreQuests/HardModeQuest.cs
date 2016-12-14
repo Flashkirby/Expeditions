@@ -21,9 +21,13 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 3, 0, 0));
+
+            // Accessory tweakers, for improved survivalbity
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 65); //Warding
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 72); //Menacing
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 76); //Quick
+
+            // Items to help avoid death
             AddRewardItem(ItemID.CalmingPotion, 5);
             AddRewardItem(ItemID.HunterPotion, 5);
             AddRewardItem(ItemID.PurificationPowder, 30);

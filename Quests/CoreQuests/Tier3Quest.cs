@@ -34,6 +34,9 @@ namespace Expeditions.Quests
 
             // Blow up spikes!
             AddRewardItem(ItemID.Bomb, 10);
+
+            // Always need chests
+            AddRewardItem(ItemID.GoldChest);
         }
         public override string Description(bool complete)
         {

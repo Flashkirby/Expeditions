@@ -32,6 +32,9 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.ArcheryPotion, 2);
             AddRewardItem(ItemID.MagicPowerPotion, 2);
             AddRewardItem(ItemID.SummoningPotion, 2);
+
+            // Always need chests
+            AddRewardItem(ItemID.Chest);
         }
         public override string Description(bool complete)
         {

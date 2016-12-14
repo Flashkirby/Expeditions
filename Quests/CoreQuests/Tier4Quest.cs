@@ -34,6 +34,9 @@ namespace Expeditions.Quests
 
             // For building a runway
             AddRewardItem(ItemID.AshBlock, 500);
+
+            // Always need chests
+            AddRewardItem(ItemID.ShadowChest);
         }
         public override string Description(bool complete)
         {
