@@ -29,6 +29,11 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.GravitationPotion, 3);
             AddRewardItem(ItemID.WrathPotion, 3);
             AddRewardItem(ItemID.RagePotion, 3);
+
+            // Always need chests
+            AddRewardItem(ItemID.PinkDungeonChest);
+            AddRewardItem(ItemID.GreenDungeonChest);
+            AddRewardItem(ItemID.BlueDungeonChest);
         }
         public override string Description(bool complete)
         {

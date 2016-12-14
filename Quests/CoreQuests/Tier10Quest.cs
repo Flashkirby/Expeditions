@@ -31,6 +31,9 @@ namespace Expeditions.Quests
             // Staying alive potions
             AddRewardItem(ItemID.IronskinPotion, 10);
             AddRewardItem(ItemID.EndurancePotion, 10);
+
+            // Always need chests
+            AddRewardItem(ItemID.GoldChest, 2);
         }
         public override string Description(bool complete)
         {

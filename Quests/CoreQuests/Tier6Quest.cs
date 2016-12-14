@@ -38,6 +38,8 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.GreaterHealingPotion, 10);
             AddRewardItem(ItemID.GreaterManaPotion, 10);
 
+            // Always need chests
+            AddRewardItem(ItemID.SteampunkChest);
         }
         public override string Description(bool complete)
         {

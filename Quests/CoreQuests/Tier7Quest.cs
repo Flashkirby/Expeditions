@@ -32,11 +32,12 @@ namespace Expeditions.Quests
             // Find more life fruit and chlorophyte
             AddRewardItem(ItemID.MiningPotion, 20);
             AddRewardItem(ItemID.SpelunkerPotion, 20);
-
-
+            
             // Mushrooms for ranged stuff, enough for a small biome
             AddRewardItem(ItemID.DarkBlueSolution, 20);
 
+            // Always need chests
+            AddRewardItem(ItemID.IvyChest);
         }
         public override string Description(bool complete)
         {

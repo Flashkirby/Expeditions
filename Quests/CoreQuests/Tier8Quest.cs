@@ -25,13 +25,13 @@ namespace Expeditions.Quests
             // Boss summons!
             AddRewardItem(ItemID.LihzahrdPowerCell, 3);
 
-            // Always need chests
-            AddRewardItem(ItemID.LihzahrdChest);
-
             // Dungeon prep
             AddRewardItem(ItemID.EndurancePotion, 3);
             AddRewardItem(ItemID.GravitationPotion, 3);
             AddRewardItem(ItemID.InfernoPotion, 1);
+
+            // Always need chests
+            AddRewardItem(ItemID.LihzahrdChest);
         }
         public override string Description(bool complete)
         {

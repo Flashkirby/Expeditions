@@ -34,7 +34,7 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.SummoningPotion, 2);
 
             // Always need chests
-            AddRewardItem(ItemID.Chest);
+            AddRewardItem(ItemID.SkywareChest);
         }
         public override string Description(bool complete)
         {
