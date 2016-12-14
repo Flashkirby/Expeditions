@@ -25,8 +25,11 @@ namespace Expeditions.Quests
 
             AddRewardItem(ItemID.GoldCoin, 8);
 
+            // Give a taster of life fruits if not obtained yet
+            AddRewardItem(ItemID.LifeFruit, 1);
+
             // Standard useful boss items
-            if(WorldGen.crimson)    AddRewardItem(ItemID.IchorCampfire);
+            if (WorldGen.crimson)    AddRewardItem(ItemID.IchorCampfire);
             else                    AddRewardItem(ItemID.CursedCampfire);
             AddRewardItem(ItemID.HeartStatue, 1);
             AddRewardItem(ItemID.HeartLantern, 3);
