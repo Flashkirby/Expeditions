@@ -22,7 +22,7 @@ namespace Expeditions.Quests
         {
             AddRewardMoney(Item.buyPrice(0, 5, 0, 0));
 
-            // enough for mining tool
+            // Enough for mining tool
             AddRewardItem(ItemID.CobaltBar, 15); 
             AddRewardItem(ItemID.WoodenCrate, 2);
 

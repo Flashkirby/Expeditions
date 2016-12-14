@@ -21,8 +21,11 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 0, 25, 0));
+            // Basic armour
             AddRewardItem(ItemID.CopperChainmail, 1);
             AddRewardItem(ItemID.CopperGreaves, 1);
+
+            // Useful mining tools
             AddRewardItem(ItemID.IronPickaxe, 1);
             AddRewardItem(ItemID.Torch, 99);
             AddRewardItem(ItemID.RopeCoil, 10);

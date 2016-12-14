@@ -21,10 +21,18 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 2, 0, 0));
+
+            // A key for the dungeon
             AddRewardItem(ItemID.GoldenKey, 1);
+
+            // Highly useful accessory as part of lightning boots
             AddRewardItem(ItemID.AnkletoftheWind, 1);
+
+            // Stay alaive for a bit longer
             AddRewardItem(ItemID.HealingPotion, 15);
             AddRewardItem(ItemID.ManaPotion, 15);
+
+            // Blow up spikes!
             AddRewardItem(ItemID.Bomb, 10);
         }
         public override string Description(bool complete)

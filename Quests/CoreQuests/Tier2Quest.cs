@@ -20,7 +20,10 @@ namespace Expeditions.Quests
             if (!WorldGen.crimson)
             {
                 expedition.name = "A Demon's Metal";
+                // Enough Ore for 6 or so bars
                 expedition.AddDeliverable(ItemID.DemoniteOre, 20);
+
+                // Helpful biome-styled prefixes and enough bars for a bow
                 AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 79); //Intrepid
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 66); //Arcane
@@ -29,12 +32,16 @@ namespace Expeditions.Quests
             else
             {
                 expedition.name = "Streaks of Crimson";
+                // Enough Ore for 6 or so bars
                 expedition.AddDeliverable(ItemID.CrimtaneOre, 20);
+
+                // Helpful biome-styled prefixes and enough bars for a bow
                 AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 64); //Armored
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 75); //Hasty
                 AddRewardPrefix(ItemID.CrimtaneBar, 8);
             }
+            // Other useful items
             AddRewardPrefix(WorldGen.ironBar, 10);
             AddRewardPrefix(ItemID.Gel, 50);
             AddRewardPrefix(ItemID.Wood, 100);

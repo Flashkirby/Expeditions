@@ -22,11 +22,18 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
+
+            // Hellstone bars to help get equipment faster in case you did this on accident
             AddRewardItem(ItemID.HellstoneBar, 10);
-            AddRewardItem(ItemID.HealingPotion, 20);
-            AddRewardItem(ItemID.ManaPotion, 20);
+            
+            // Helpful for not dying in boss fights
+            AddRewardItem(ItemID.HealingPotion, 5);
+            AddRewardItem(ItemID.ManaPotion, 5);
             AddRewardItem(ItemID.IronskinPotion, 5);
             AddRewardItem(ItemID.GravitationPotion, 1);
+
+            // For building a runway
+            AddRewardItem(ItemID.AshBlock, 500);
         }
         public override string Description(bool complete)
         {
