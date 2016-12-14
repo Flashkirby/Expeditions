@@ -24,6 +24,16 @@ namespace Expeditions.Quests
             expedition.AddDeliverable(ItemID.HallowedBar, 3);
 
             AddRewardItem(ItemID.GoldCoin, 8);
+
+            // Standard useful boss items
+            if(WorldGen.crimson)    AddRewardItem(ItemID.IchorCampfire);
+            else                    AddRewardItem(ItemID.CursedCampfire);
+            AddRewardItem(ItemID.HeartStatue, 1);
+            AddRewardItem(ItemID.HeartLantern, 3);
+            AddRewardItem(ItemID.StarinaBottle, 3);
+            AddRewardItem(ItemID.GreaterHealingPotion, 10);
+            AddRewardItem(ItemID.GreaterManaPotion, 10);
+
         }
         public override string Description(bool complete)
         {
