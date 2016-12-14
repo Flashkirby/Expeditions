@@ -34,6 +34,7 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.HeartStatue, 1);
             AddRewardItem(ItemID.HeartLantern, 3);
             AddRewardItem(ItemID.StarinaBottle, 3);
+            AddRewardItem(ItemID.BuilderPotion, 5);
             AddRewardItem(ItemID.GreaterHealingPotion, 10);
             AddRewardItem(ItemID.GreaterManaPotion, 10);
 
