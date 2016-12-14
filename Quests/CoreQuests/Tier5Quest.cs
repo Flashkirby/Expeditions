@@ -21,6 +21,17 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 5, 0, 0));
+
+            // enough for mining tool
+            AddRewardItem(ItemID.CobaltBar, 15); 
+            AddRewardItem(ItemID.WoodenCrate, 2);
+
+            // Weapon Buff potions are really useful
+            if (WorldGen.crimson) { AddRewardItem(ItemID.FlaskofIchor, 2); }
+            else { AddRewardItem(ItemID.FlaskofCursedFlames, 2); }
+            AddRewardItem(ItemID.ArcheryPotion, 2);
+            AddRewardItem(ItemID.MagicPowerPotion, 2);
+            AddRewardItem(ItemID.SummoningPotion, 2);
         }
         public override string Description(bool complete)
         {
