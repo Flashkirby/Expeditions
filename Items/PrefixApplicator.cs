@@ -12,7 +12,7 @@ namespace Expeditions.Items
             item.width = 32;
             item.height = 24;
             item.consumable = true;
-            item.rare = 9;
+            item.rare = 0; // Shouldn't be at this value anyway because prefixes
             item.accessory = true;
             item.value = Item.sellPrice(0, 1, 0, 0);
         }
