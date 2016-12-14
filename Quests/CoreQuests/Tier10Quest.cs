@@ -22,6 +22,13 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardItem(ItemID.GoldCoin, 25);
+
+            // More accessory fine-tuning
+            AddRewardPrefix(mod.ItemType("PrefixApplicator"), 65); //Warding
+            AddRewardPrefix(mod.ItemType("PrefixApplicator"), 72); //Menacing
+            AddRewardPrefix(mod.ItemType("PrefixApplicator"), 76); //Quick
+
+            // Staying alive potions
             AddRewardItem(ItemID.IronskinPotion, 10);
             AddRewardItem(ItemID.EndurancePotion, 10);
         }
