@@ -23,9 +23,16 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardItem(ItemID.GoldCoin, 20);
+
+            // Lunar event prep
+            AddRewardItem(ItemID.LifeforcePotion, 3);
+            AddRewardItem(ItemID.GravitationPotion, 3);
+            AddRewardItem(ItemID.WrathPotion, 3);
+            AddRewardItem(ItemID.RagePotion, 3);
         }
         public override string Description(bool complete)
         {
+            if (complete) return "Woah, sounds like a bone-a-fide party of skeletons down there then? Eh? Not funny? Oh well. But in all seriousness it seems like different skeletons only show up in specific parts of the dungeon. ";
             return "You must've heard those spooky screams, right? Do skeletons even scream? That's for you to go down and find out! ";
         }
 
