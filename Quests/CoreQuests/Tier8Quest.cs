@@ -22,8 +22,16 @@ namespace Expeditions.Quests
         {
             AddRewardItem(ItemID.GoldCoin, 15);
 
-            // Cells for more boss summons!
+            // Boss summons!
             AddRewardItem(ItemID.LihzahrdPowerCell, 3);
+
+            // Always need chests
+            AddRewardItem(ItemID.LihzahrdChest);
+
+            // Dungeon prep
+            AddRewardItem(ItemID.EndurancePotion, 3);
+            AddRewardItem(ItemID.GravitationPotion, 3);
+            AddRewardItem(ItemID.InfernoPotion, 1);
         }
         public override string Description(bool complete)
         {
