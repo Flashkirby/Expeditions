@@ -35,6 +35,7 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
+            if (complete) return "You had to fight a huge man-eating plant to recover the keys to the Temple? That sounds so cool! Like one of those action movies, y'know? Anyway, while you were down there, I posted another urgent expedition for you to look at.";
             return "I WANT YOU!... to investigate that jungle temple. But how can we get in I wonder. Knowing this place you'll probably need to defeat a bigger, scarier jungle boss, like the dungeon's Skeletron hijinks.";
         }
 
