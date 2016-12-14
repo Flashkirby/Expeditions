@@ -32,7 +32,7 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.SpelunkerPotion, 10);
 
             // Always need chests
-            AddRewardItem(ItemID.Chest);
+            AddRewardItem(ItemID.Barrel);
         }
         public override string Description(bool complete)
         {
