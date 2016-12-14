@@ -24,9 +24,15 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.GoldCoin, 10);
             AddRewardItem(ItemID.GoldenCrate, 1);
 
+            // More accessory fine-tuning
+            AddRewardPrefix(mod.ItemType("PrefixApplicator"), 65); //Warding
+            AddRewardPrefix(mod.ItemType("PrefixApplicator"), 72); //Menacing
+            AddRewardPrefix(mod.ItemType("PrefixApplicator"), 76); //Quick
+
             // Find more life fruit and chlorophyte
             AddRewardItem(ItemID.MiningPotion, 20);
             AddRewardItem(ItemID.SpelunkerPotion, 20);
+
 
             // Mushrooms for ranged stuff, enough for a small biome
             AddRewardItem(ItemID.DarkBlueSolution, 20);
