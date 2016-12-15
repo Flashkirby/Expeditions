@@ -1,5 +1,4 @@
 For v1.0:
-Balance Core Expeditions
 Wayfarer Items
 	magic
 	summons
