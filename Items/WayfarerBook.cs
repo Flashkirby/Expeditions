@@ -16,11 +16,11 @@ namespace Expeditions.Items
 
             item.mana = 20;
             item.damage = 8;
-            item.useAnimation = 26;
-            item.useTime = 26;
+            item.useAnimation = 40;
+            item.useTime = 40;
             item.knockBack = 7f;
             item.shoot = mod.ProjectileType("Gust");
-            item.shootSpeed = 11f;
+            item.shootSpeed = 7f;
 
             item.value = Item.sellPrice(0, 3, 0, 0);
         }

@@ -1,6 +1,5 @@
 For v1.0:
 Wayfarer Items
-	magic
 	summons
 	potion
 Remove/Fix placeholder images
