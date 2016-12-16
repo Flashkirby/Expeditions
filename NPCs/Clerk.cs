@@ -408,31 +408,42 @@ namespace Expeditions.NPCs
                     shop.item[nextSlot].SetDefaults(ItemID.TinPickaxe); nextSlot++;
                     shop.item[nextSlot].SetDefaults(ItemID.TinAxe); nextSlot++;
                 }
+                return;
+            }
+
+            // Sell default items
+            shop.item[nextSlot].SetDefaults(mod.ItemType("BountyBook")); nextSlot++;
+            if (WorldGen.GoldTierOre == TileID.Gold)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.GoldPickaxe); nextSlot++;
+                shop.item[nextSlot].SetDefaults(ItemID.GoldAxe); nextSlot++;
             }
             else
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("BountyBook")); nextSlot++;
-                if (WorldGen.GoldTierOre == TileID.Gold)
-                {
-                    shop.item[nextSlot].SetDefaults(ItemID.GoldPickaxe); nextSlot++;
-                    shop.item[nextSlot].SetDefaults(ItemID.GoldAxe); nextSlot++;
-                }
-                else
-                {
-                    shop.item[nextSlot].SetDefaults(ItemID.PlatinumPickaxe); nextSlot++;
-                    shop.item[nextSlot].SetDefaults(ItemID.PlatinumAxe); nextSlot++;
-                }
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSword")); nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerPike")); nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBow")); nextSlot++;
-                if (!WorldGen.crimson)
-                {
-                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerCarbine")); nextSlot++;
-                }
-                else
-                {
-                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerRepeater")); nextSlot++;
-                }
+                shop.item[nextSlot].SetDefaults(ItemID.PlatinumPickaxe); nextSlot++;
+                shop.item[nextSlot].SetDefaults(ItemID.PlatinumAxe); nextSlot++;
+            }
+
+            // Gold tier expensive weapons
+            shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSword")); nextSlot++;
+            shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerPike")); nextSlot++;
+            shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBow")); nextSlot++;
+
+            // Biome gun
+            if (!WorldGen.crimson)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerCarbine")); nextSlot++;
+            }
+            else
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerRepeater")); nextSlot++;
+            }
+
+            // Give some magic from eye of cthulu
+            if(NPC.downedBoss1)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBook")); nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerStaff")); nextSlot++;
             }
         }
 

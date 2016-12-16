@@ -22,7 +22,7 @@ namespace Expeditions.Items
             item.shoot = mod.ProjectileType("Gust");
             item.shootSpeed = 7f;
 
-            item.value = Item.sellPrice(0, 3, 0, 0);
+            item.value = Item.sellPrice(0, 8, 0, 0);
         }
         public override Vector2? HoldoutOffset()
         {
