@@ -75,7 +75,8 @@ namespace Expeditions.Projs
                     Main.dust[d].noGravity = true;
 
                     d = Dust.NewDust(projectile.Center - new Vector2(4, 4), 0, 0, 173,
-                        projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f);
+                        projectile.velocity.X * -1f, projectile.velocity.Y * -1f, 0, default(Color), 2f);
+                    Main.dust[d].velocity *= 3f;
                 }
             }
         }
