@@ -70,7 +70,7 @@ namespace Expeditions.Quests
                 cond2 = Main.hardMode;
                 if(!cond2) //check if we've seen the WoF
                 {
-                    cond2 = player.HasBuff(BuffID.Horrified) >= 0;
+                    cond2 = player.FindBuffIndex(BuffID.Horrified) >= 0;
                 }
             }
             return cond1 && cond2;

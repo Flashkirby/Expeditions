@@ -140,7 +140,7 @@ namespace Expeditions
             return expeditionList;
         }
         /// <summary>
-        /// Finds the specified expedition
+        /// Finds the specified mod expedition or null
         /// </summary>
         /// <param name="mod"></param>
         /// <param name="name"></param>
@@ -156,11 +156,33 @@ namespace Expeditions
             }
             return null;
         }
+        /// <summary>
+        /// Finds the specified expedition or null
+        /// </summary>
+        /// <param name="mod"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Expedition FindExpedition(Mod mod, string name)
         {
             ModExpedition e = FindModExpedition(mod, name);
             if (e == null) return null;
             return e.expedition;
+        }
+        /// <summary>
+        /// Finds the specified expedition via hashID, or null
+        /// </summary>
+        /// <param name="hashID">Expedition.GetHashID</param>
+        /// <returns></returns>
+        public static Expedition FindExpedition(int hashID)
+        {
+            foreach (ModExpedition me in GetExpeditionsList())
+            {
+                if (Expedition.GetHashID(me.expedition) == hashID)
+                {
+                    return me.expedition;
+                }
+            }
+            return null;
         }
         /// <summary> Reset progress and detach references </summary>
         internal static void ResetExpeditions()
@@ -338,8 +360,8 @@ namespace Expeditions
             }
         }
 
-        public const ushort packetID_test = 0;
-        public const ushort packetID_partyComplete = 1;
+        public const int packetID_test = 0;
+        public const int packetID_partyComplete = 1;
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             //get my packet type
@@ -456,7 +478,7 @@ namespace Expeditions
         /// Opens the expediton menu
         /// </summary>
         /// <param name="viewMode"></param>
-        public static void OpenExpeditionMenu(ushort viewMode)
+        public static void OpenExpeditionMenu(int viewMode)
         {
             if (Main.netMode == 2) return;
 
@@ -496,7 +518,7 @@ namespace Expeditions
         /// <summary>
         /// Toggle expedition menu visibility
         /// </summary>
-        public static void ToggleExpeditionMenu(ushort viewMode)
+        public static void ToggleExpeditionMenu(int viewMode)
         {
             if (Main.netMode == 2) return;
 

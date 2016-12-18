@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace Expeditions
 {
@@ -17,27 +18,22 @@ namespace Expeditions
         public int[] tileOpened = new int[2];
 
         /// <summary>
-        /// Stores "empty" expeditions that serve to store only progress information
+        /// Stores expedition progress data.
         /// </summary>
-        private List<Expedition> _localExpeditionList;
+        private List<ProgressData> _localExpeditionList;
         /// <summary>
         /// Stores expeditions which were loaded with no match found.
         /// </summary>
-        private List<Expedition> _unusedExpeditionData;
+        private List<ProgressData> _orphanData;
 
-        public override void SaveCustomData(BinaryWriter writer)
+        public override TagCompound Save()
         {
-            writer.Write(_versionCurrent);
-            int byteCount = 4;
-            if (Expeditions.DEBUG) { svmsg = "\nSAVE v: " + _versionCurrent; dbgmsg = ""; }
+            //the tag to save
+            TagCompound tag = new TagCompound();
 
-            // Expeditions
+            // Get the current expedition list
             List<ModExpedition> expeditions = Expeditions.GetExpeditionsList();
 
-            // Save the counts
-            int count = expeditions.Count;
-            int unknownCount = 0;
-            
             // If 'O-K-0' is held
             bool resetProgress =
                  Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.O) &&
@@ -46,87 +42,144 @@ namespace Expeditions
             // If '#' is held
             bool discardUnknowns = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.OemQuotes);
 
-            if (_unusedExpeditionData != null) unknownCount = _unusedExpeditionData.Count;
-            if (Expeditions.DEBUG) svmsg += "| c:" + count + "?" + unknownCount;
-
-            // Apply resets where applicable
-            if (resetProgress) { count = 0; unknownCount = 0; }
-            if (discardUnknowns) unknownCount = 0;
-
-            writer.Write(count); byteCount += 4;
-            writer.Write(unknownCount); byteCount += 4;
-
-
-
-            for (int i = 0; i < count; i++)
+            List<ProgressData> saveData = new List<ProgressData>();
+            
+            if (Expeditions.DEBUG) svmsg += "\n" + player.name + " : Save";
+            if (!resetProgress && expeditions != null)
             {
-                // Save the ID as 4 bytes, and its booleans as another byte
-                if (Expeditions.DEBUG) svmsg += "  [" + expeditions[i].expedition.name + " : " + Expedition.GetHashID(expeditions[i].expedition).ToString("X") + " : " + expeditions[i].expedition.completed + " & " + expeditions[i].expedition.trackingActive + "] ";
-                writer.Write(Expedition.GetHashID(expeditions[i].expedition)); byteCount += 4;
-                writer.Write(new BitsByte(
-                    expeditions[i].expedition.completed,
-                    expeditions[i].expedition.trackingActive,
-                    expeditions[i].expedition.condition1Met,
-                    expeditions[i].expedition.condition2Met,
-                    expeditions[i].expedition.condition3Met
-                    )); byteCount += 1;
-                writer.Write(expeditions[i].expedition.conditionCounted); byteCount += 1;
-            }
-
-
-            // Attempt to keep unknown data
-            if (unknownCount > 0)
-            {
-                for (int i = 0; i < unknownCount; i++)
+                // Save expedition progress
+                foreach (ModExpedition me in expeditions)
                 {
-                    // Save the ID as 4 bytes, and its booleans as another byte
-                    int hashID = Convert.ToInt32(_unusedExpeditionData[i].name);
-                    if (Expeditions.DEBUG) svmsg += "  [" + _unusedExpeditionData[i].name + " : ?" + hashID.ToString("X") + "? : " + _unusedExpeditionData[i].completed + " & " + _unusedExpeditionData[i].trackingActive + "] ";
-                    writer.Write(hashID); byteCount += 4;
-                    writer.Write(new BitsByte(
-                        _unusedExpeditionData[i].completed,
-                        _unusedExpeditionData[i].trackingActive,
-                        _unusedExpeditionData[i].condition1Met,
-                        _unusedExpeditionData[i].condition2Met,
-                        _unusedExpeditionData[i].condition3Met
-                        )); byteCount += 1;
-                    writer.Write(_unusedExpeditionData[i].conditionCounted); byteCount += 1;
+                    saveData.Add(new ProgressData(me.expedition));
                 }
-            }
-            // Bin this now, we don't need it
-            _unusedExpeditionData = new List<Expedition>();
 
-            if (Expeditions.DEBUG)
-            {
-                svmsg += " Filesize = " + byteCount + "B";
-
-                if (resetProgress)
+                // Carry on unknown progress
+                if (!discardUnknowns && _orphanData != null && _orphanData.Count > 0)
                 {
-                    svmsg += "\n[cmd OK0]: FORCE DELETE ALL PROGRESS!";
+                    foreach (ProgressData pd in _orphanData)
+                    {
+                        saveData.Add(pd);
+                    }
                 }
-                else if (discardUnknowns)
-                {
-                    svmsg += "\n[cmd #]: FORCE DELETE UNKNOWNS!";
-                }
-            }
 
-            // Reset this
-            _localExpeditionList = new List<Expedition>();
+                try
+                {
+                    ConvertProgressToTag(tag, saveData);
+                }catch(Exception e)
+                {
+                    ErrorLogger.Log("Expeditions: " + e.ToString());
+                }
+
+            }
+            return tag;
         }
 
-        public override void LoadCustomData(BinaryReader reader)
+        private static void ConvertProgressToTag(TagCompound tag, List<ProgressData> saveData)
+        {
+            // Generate save data arrays for NBT
+            IList<int> h = new List<int>();
+            IList<byte> c = new List<byte>();
+            IList<int> cc = new List<int>();
+
+            // Add all values to arrays
+            foreach (ProgressData pd in saveData)
+            {
+                if (Expeditions.DEBUG) svmsg += pd.completed ? ":" : ".";
+                h.Add(pd.hash);
+                c.Add(new BitsByte(
+                    pd.completed,
+                    pd.trackingActive,
+                    pd.condition1Met,
+                    pd.condition2Met,
+                    pd.condition3Met
+                    ));
+                cc.Add(pd.conditionCounted);
+            }
+            tag.Add("ProgressData.hash", h);
+            tag.Add("ProgressData.bools", c);
+            tag.Add("ProgressData.condCount", cc);
+        }
+
+        public override void Load(TagCompound tag)
+        {
+            if (Expeditions.DEBUG) svmsg += "\n" + player.name + " : Load";
+
+            List<ProgressData> progress = ConvertTagToProgress(tag);
+
+            _localExpeditionList = new List<ProgressData>();
+            _orphanData = new List<ProgressData>();
+
+            if (progress != null)
+            {
+                // Create carbon copy of loaded expedition list
+                for (int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
+                {
+                    _localExpeditionList.Add(new ProgressData(0, false, false, false, false, false, 0));
+                }
+
+                // Find hash matches and add progress
+                for (int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
+                {
+                    Expedition e = Expeditions.GetExpeditionsList()[i].expedition;
+                    foreach (ProgressData pd in progress)
+                    {
+                        if(pd.hash == Expedition.GetHashID(e))
+                        {
+                            if (Expeditions.DEBUG) svmsg += e.completed ? ":" : ".";
+                            _localExpeditionList[i] = pd;
+
+                            // Remove from the list after use
+                            progress.Remove(pd);
+                            break;
+                        }
+                    }
+                }
+
+                // Still remaining? Put them in the unknown pile
+                if(progress.Count > 0)
+                {
+                    foreach(ProgressData pd in progress)
+                    {
+                        if (Expeditions.DEBUG) svmsg += pd.completed ? "`" : "`";
+                        _orphanData.Add(pd);
+                    }
+                }
+            }
+            if (Expeditions.DEBUG) svmsg += " c:" + progress.Count;
+        }
+
+        private static List<ProgressData> ConvertTagToProgress(TagCompound tag)
+        {
+            List<ProgressData> progress = new List<ProgressData>();
+            IList<int> h = tag.GetList<int>("ProgressData.hash");
+            IList<byte> c = tag.GetList<byte>("ProgressData.bools");
+            IList<int> cc = tag.GetList<int>("ProgressData.condCount");
+            if (Expeditions.DEBUG) svmsg += " L:" + h.Count + "'" + c.Count + "'" + cc.Count;
+            for (int i = 0; i < h.Count; i++)
+            {
+                BitsByte bb = c[i];
+                progress.Add(new ProgressData(
+                    h[i], bb[0], bb[1],
+                    bb[2], bb[3], bb[4], cc[i]
+                    ));
+            }
+            return progress;
+        }
+
+        public override void LoadLegacy(BinaryReader reader)
         {
             _version = reader.ReadInt32();
             if (_version == _versionCurrent)
             {
-                if (Expeditions.DEBUG) dbgmsg += "\nLOAD v:" + _version + "/" + _versionCurrent;
+                //!/ if (Expeditions.DEBUG) dbgmsg += "\nLOAD v:" + _version + "/" + _versionCurrent;
 
                 // Create a new progress storage
-                _localExpeditionList = new List<Expedition>();
+                //_localExpeditionList = new List<Expedition>();
+                _localExpeditionList = new List<ProgressData>();
 
                 // Create a dictionary of keys -> index
                 Dictionary<int, int> hashToIndex = new Dictionary<int, int>();
-                for(int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
+                for (int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
                 {
                     Expedition e = Expeditions.GetExpeditionsList()[i].expedition;
                     // Populate both lists
@@ -136,12 +189,13 @@ namespace Expeditions
                             Expedition.GetHashID(e), // The hashcode
                             i               // The index
                             );
-                        _localExpeditionList.Add(new Expedition());
+                        //_localExpeditionList.Add(new Expedition());
+                        _localExpeditionList.Add(new ProgressData(0, false, false, false, false, false, 0));
                     }
                     catch
                     {
                         string errorList = "";
-                        foreach(ModExpedition me in Expeditions.GetExpeditionsList())
+                        foreach (ModExpedition me in Expeditions.GetExpeditionsList())
                         {
                             errorList += "\n" + Expedition.GetHashID(me.expedition).ToString("X") + " -> " + me.expedition.name + " (" + (object)(me).GetType().Name + ")";
                         }
@@ -153,7 +207,7 @@ namespace Expeditions
                 // Read expeditions
                 int count = reader.ReadInt32();
                 int unknownCount = reader.ReadInt32();
-                if (Expeditions.DEBUG) dbgmsg += "|c:" + count + "?" + unknownCount;
+                //!/ if (Expeditions.DEBUG) dbgmsg += "|c:" + count + "?" + unknownCount;
 
                 // Iterating
                 for (int i = 0; i < count + unknownCount; i++)
@@ -165,30 +219,35 @@ namespace Expeditions
                     if (hashToIndex.TryGetValue(expeditionID, out index))
                     {
                         // Write match found at index
-                        Expedition e = _localExpeditionList[index];
+                        //Expedition e = _localExpeditionList[index];
+                        ProgressData e = _localExpeditionList[index];
                         e.completed = flags[0];
                         e.trackingActive = flags[1];
                         e.condition1Met = flags[2];
                         e.condition2Met = flags[3];
                         e.condition3Met = flags[4];
                         e.conditionCounted = countedCond;
-                        if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";" + (e.completed ? "`" : ".") + (e.trackingActive ? "`" : ".") + "]";
+                        //!/ if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";" + (e.completed ? "`" : ".") + (e.trackingActive ? "`" : ".") + "]";
                     }
-                    else 
+                    else
                     {
                         // Make a new one if not initialised
-                        if (_unusedExpeditionData == null) _unusedExpeditionData = new List<Expedition>();
+                        //if (_unusedExpeditionData == null) _unusedExpeditionData = new List<Expedition>();
+                        if (_orphanData == null) _orphanData = new List<ProgressData>();
                         // No match found
-                        Expedition e = new Expedition();
+                        //Expedition e = new Expedition();
+                        ProgressData e = new ProgressData(0, false, false, false, false, false, 0);
                         e.completed = flags[0];
                         e.trackingActive = flags[1];
                         e.condition1Met = flags[2];
                         e.condition2Met = flags[3];
                         e.condition3Met = flags[4];
                         e.conditionCounted = countedCond;
-                        e.name = "" + expeditionID;
-                        _unusedExpeditionData.Add(e);
-                        if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";-]";
+                        //e.name = "" + expeditionID;
+                        e.hash = expeditionID;
+                        //_unusedExpeditionData.Add(e);
+                        _orphanData.Add(e);
+                        //!/ if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";-]";
                     }
                 }
             }
@@ -215,10 +274,13 @@ namespace Expeditions
                 if (_localExpeditionList != null)
                 {
                     // Set the expeditions to use this list
-                    for(int i = 0;i < _localExpeditionList.Count;i++)
+                    for (int i = 0; i < _localExpeditionList.Count; i++)
                     {
+                        //Expeditions.GetExpeditionsList()[i].expedition.CopyProgress(
+                        //    _localExpeditionList[i]);
                         Expeditions.GetExpeditionsList()[i].expedition.CopyProgress(
-                            _localExpeditionList[i]);
+                            _localExpeditionList[i].ToExpedition());
+
                         dbgmsg += "(" + Expeditions.GetExpeditionsList()[i].expedition.name
                             + (_localExpeditionList[i].trackingActive ? "T-" : "n-")
                             + (Expeditions.GetExpeditionsList()[i].expedition.trackingActive ? ">T" : ">n") + ")";
@@ -229,7 +291,7 @@ namespace Expeditions
 
         public override void PostUpdate()
         {
-            if(ExpeditionUI.visible && ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile)
+            if (ExpeditionUI.visible && ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile)
             {
                 Rectangle tileRange = new Rectangle(
                     (int)(player.Center.X - (float)(Player.tileRangeX * 16)),
@@ -243,7 +305,7 @@ namespace Expeditions
                     3 * 16
                     );
                 if (Expeditions.DEBUG) Dust.NewDust(boardRect.TopLeft(), boardRect.Width, boardRect.Height, 175);
-                if(!tileRange.Intersects(boardRect))
+                if (!tileRange.Intersects(boardRect))
                 {
                     Expeditions.CloseExpeditionMenu();
                 }
@@ -266,13 +328,66 @@ namespace Expeditions
 
             if (Expeditions.DEBUG && Expeditions.lastHitNPC != target) Main.NewText("EXP Hit: " + target.name, 119, 119, 255);
             Expeditions.lastHitNPC = target;
-            
+
             // Record NPCs killed
             if (target.life <= 0 || !target.active)
             {
                 if (Expeditions.DEBUG) Main.NewText("EXP Kill: " + target.name, 255, 119, 119);
                 Expeditions.lastKilledNPC = target;
             }
+        }
+    }
+
+    /// <summary>
+    /// Trimmed down expedition class that only stores important data. To be refactored eventually.
+    /// </summary>
+    class ProgressData
+    {
+        public int hash;
+        public bool completed;
+        public bool trackingActive;
+        public bool condition1Met;
+        public bool condition2Met;
+        public bool condition3Met;
+        public int conditionCounted;
+
+        public ProgressData(int hash, bool completed, bool tracking, bool cond1, bool cond2, bool cond3, int condC)
+        {
+            this.hash = hash;
+            this.completed = completed;
+            this.trackingActive = tracking;
+            this.condition1Met = cond1;
+            this.condition2Met = cond2;
+            this.condition3Met = cond3;
+            this.conditionCounted = condC;
+        }
+
+        public ProgressData(Expedition expedition)
+        {
+            this.hash = Expedition.GetHashID(expedition);
+            this.completed = expedition.completed;
+            this.trackingActive = expedition.trackingActive;
+            this.condition1Met = expedition.condition1Met;
+            this.condition2Met = expedition.condition2Met;
+            this.condition3Met = expedition.condition3Met;
+            this.conditionCounted = expedition.conditionCounted;
+        }
+
+        /// <summary>
+        /// Create an empty expedition with the set progress
+        /// </summary>
+        /// <returns></returns>
+        public Expedition ToExpedition()
+        {
+            Expedition e = new Expedition();
+            e.name = "" + hash;
+            e.completed = completed;
+            e.trackingActive = trackingActive;
+            e.condition1Met = condition1Met;
+            e.condition2Met = condition2Met;
+            e.condition3Met = condition3Met;
+            e.conditionCounted = conditionCounted;
+            return e;
         }
     }
 }

@@ -140,7 +140,7 @@ namespace Expeditions
         /// </summary>
         /// <param name="count"></param>
         /// <param name="max"></param>
-        public virtual void CheckConditionCountable(Player player, ref ushort count, ushort max)
+        public virtual void CheckConditionCountable(Player player, ref int count, int max)
         {
 
         }

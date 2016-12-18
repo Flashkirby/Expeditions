@@ -12,7 +12,7 @@ namespace Expeditions.Items
             item.CloneDefaults(ItemID.WaterBolt);
             item.name = "Wayfarer's Wind";
             item.toolTip = "Casts a mighty gust of wind";
-            item.useSound = 34;
+            item.UseSound = SoundID.Item34;
 
             item.mana = 20;
             item.damage = 8;

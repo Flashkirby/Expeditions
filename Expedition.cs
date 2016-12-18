@@ -56,9 +56,9 @@ namespace Expeditions
         /// <summary>Tracks a conditional, will be displayed when conditionDescription3 is not empty</summary>
         public bool condition3Met = false;
         /// <summary>Tracks a conditional, will be displayed when conditionDescriptionCountable is not empty</summary>
-        public ushort conditionCounted = 0;
+        public int conditionCounted = 0;
         /// <summary>Tracks a conditional, will be displayed when conditionDescriptionCountable is not empty and is > 0. Returns true by default when set to 0. </summary>
-        public ushort conditionCountedMax = 0;
+        public int conditionCountedMax = 0;
         /// <summary>Completed expeditions are archived and cannot be redone unless repeatable</summary>
         public bool completed = false;
         /// <summary>Allows archived expeditions to be redone</summary>

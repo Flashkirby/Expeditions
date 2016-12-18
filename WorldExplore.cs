@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace Expeditions
 {
     class WorldExplore : ModWorld
     {
-        private static int _version = _versionCurrent;
-        private const int _versionCurrent = 0;
         public static bool savedClerk = false;
 
         public override void Initialize()
@@ -31,29 +30,25 @@ namespace Expeditions
             savedClerk = false;
         }
 
-        public override void SaveCustomData(BinaryWriter writer)
+        public override TagCompound Save()
         {
-            writer.Write(_version);
-
-            // Booleans
-            writer.Write(new BitsByte(
-                savedClerk
-                ));
+            return new TagCompound
+            {
+                { "savedClerk", savedClerk }
+            };
         }
-        public override void LoadCustomData(BinaryReader reader)
+
+        public override void Load(TagCompound tag)
         {
-            _version = reader.ReadInt32();
-            if (_version == _versionCurrent)
-            {
-                // Booleans
-                BitsByte flags = reader.ReadByte();
-                savedClerk = flags[0];
-            }
-            else
-            {
-                if (_version < 0) return;
-                ErrorLogger.Log("Expeditions: World save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
-            }
+            savedClerk = tag.GetBool("savedClerk");
+        }
+
+        public override void LoadLegacy(BinaryReader reader)
+        {
+            int _version = reader.ReadInt32();
+            // Booleans
+            BitsByte flags = reader.ReadByte();
+            savedClerk = flags[0];
         }
     }
 }

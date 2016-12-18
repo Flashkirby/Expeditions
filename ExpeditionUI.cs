@@ -14,14 +14,14 @@ namespace Expeditions
 {
     class ExpeditionUI : UIState
     {
-        public const ushort viewMode_NPC = 0;
-        public const ushort viewMode_Tile = 1;
-        public const ushort viewMode_Menu = 2;
+        public const int viewMode_NPC = 0;
+        public const int viewMode_Tile = 1;
+        public const int viewMode_Menu = 2;
 
         //First Panel
         private const int _navPanelWidth = 400;
         public static bool visible = false;
-        public static ushort viewMode = 0;
+        public static int viewMode = 0;
         private UIPanel _navigationPanel;
         private UIValueBar _scrollBar;
         private UITextWrap _indexText;

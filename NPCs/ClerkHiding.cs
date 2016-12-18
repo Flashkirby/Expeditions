@@ -21,8 +21,8 @@ namespace Expeditions.NPCs
             npc.damage = 10;
             npc.defense = 15;
             npc.lifeMax = 250;
-            npc.soundHit = 1;
-            npc.soundKilled = 1;
+            npc.HitSound = SoundID.NPCHit1;
+            npc.DeathSound = SoundID.NPCDeath1;
             npc.knockBackResist = 0.5f;
             npc.rarity = 1;
         }

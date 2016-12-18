@@ -14,7 +14,7 @@ namespace Expeditions.Items
             item.toolTip = "Shoots an explosive bolt";
             item.width = 42;
             item.height = 14;
-            item.useSound = 72;
+            item.UseSound = SoundID.Item72;
 
             item.mana = 12;
             item.damage = 20;

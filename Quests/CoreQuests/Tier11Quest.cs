@@ -51,7 +51,7 @@ namespace Expeditions.Quests
                 && NPC.downedAncientCultist;
         }
 
-        public override void CheckConditionCountable(Player player, ref ushort count, ushort max)
+        public override void CheckConditionCountable(Player player, ref int count, int max)
         {
             if (count < 4)
             {

@@ -39,7 +39,7 @@ namespace Expeditions.Quests
             return "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. ";
         }
 
-        public override void CheckConditionCountable(Player player, ref ushort count, ushort max)
+        public override void CheckConditionCountable(Player player, ref int count, int max)
         {
             if(player.velocity.Y != 0f)
             {
