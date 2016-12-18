@@ -51,7 +51,7 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
-            if (complete) return "Woah, did not expect " + (WorldGen.crimson ? "'crimtane'" : "'demonite'") + "to come from a giant boss... well that's one for the books! ";
+            if (complete) return "Woah, did not expect this " + (WorldGen.crimson ? "'crimtane'" : "'demonite'") + " to come from a giant boss... well that's one for the books! ";
             return "Hey, do you think the " + (WorldGen.crimson ? "crimson" : "corruption") + " hides some ore that could be made into workable metal? I mean it's a possibility considering how it transforms things. Please investigate it! ";
         }
 
