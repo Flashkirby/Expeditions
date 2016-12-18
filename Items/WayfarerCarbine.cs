@@ -20,7 +20,7 @@ namespace Expeditions.Items
             item.knockBack = 2f;
             item.shootSpeed = 7f;
 
-            item.value = Item.sellPrice(0, 1, 50, 0);
+            item.value = Item.buyPrice(0, 3, 0, 0);
         }
         public override Vector2? HoldoutOffset()
         {
