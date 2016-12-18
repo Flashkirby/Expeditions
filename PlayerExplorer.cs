@@ -170,9 +170,9 @@ namespace Expeditions
         public override void LoadLegacy(BinaryReader reader)
         {
             _version = reader.ReadInt32();
-            if (_version == _versionCurrent)
+            if (_version == 2)
             {
-                //!/ if (Expeditions.DEBUG) dbgmsg += "\nLOAD v:" + _version + "/" + _versionCurrent;
+                //!/ if (Expeditions.DEBUG) dbgmsg += "\nLOAD v:" + _version + "/" + 2;
 
                 // Create a new progress storage
                 //_localExpeditionList = new List<Expedition>();
@@ -257,7 +257,7 @@ namespace Expeditions
                 if (_version < 0) return;
                 if (Expeditions.DEBUG)
                 {
-                    dbgmsg += "(( LOAD v: " + _version + " / " + _versionCurrent + ")) ";
+                    dbgmsg += "(( LOAD v: " + _version + " / " + 2 + ")) ";
                 }
                 else
                 {
