@@ -8,14 +8,15 @@ using Terraria.ModLoader.IO;
 
 namespace Expeditions
 {
-    class PlayerExplorer : ModPlayer
+    public class PlayerExplorer : ModPlayer
     {
-        private static int _version = _versionCurrent;
-        private const int _versionCurrent = 2;
-        public static string svmsg;
-        public static string dbgmsg;
-
         public int[] tileOpened = new int[2];
+
+
+        #region Save/Load
+        private static int _version = 2;
+        internal static string svmsg;
+        internal static string dbgmsg;
 
         /// <summary>
         /// Stores expedition progress data.
@@ -287,6 +288,14 @@ namespace Expeditions
                     }
                 }
             }
+        }
+
+        #endregion
+
+        public bool familiarMinion;
+        public override void ResetEffects()
+        {
+            familiarMinion = false;
         }
 
         public override void PostUpdate()
