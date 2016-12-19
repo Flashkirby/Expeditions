@@ -12,7 +12,7 @@ namespace Expeditions.Items
             item.CloneDefaults(ItemID.HornetStaff);
             item.name = "Wayfarer's Bell";
             item.toolTip = "Summons a familiar to fight for you";
-            item.UseSound = SoundID.Item34;
+            item.UseSound = SoundID.Item44;
             
             item.damage = 11;
             item.knockBack = 3f;

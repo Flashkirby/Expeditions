@@ -9,6 +9,13 @@ namespace Expeditions.Projs
     {
         public override void AI()
         {
+            CheckActive();
+
+            ManageFrames(ref projectile.frame, ref projectile.frameCounter);
+        }
+
+        private void CheckActive()
+        {
             Player player = Main.player[projectile.owner];
             PlayerExplorer modPlayer = player.GetModPlayer<PlayerExplorer>(mod);
             if (player.dead)
@@ -19,11 +26,9 @@ namespace Expeditions.Projs
             {
                 projectile.timeLeft = 2;
             }
-
-            ManageFrames(ref projectile.frame, ref projectile.frameCounter);
         }
 
-        public void ManageFrames(ref int frame, ref int frameCounter)
+        private void ManageFrames(ref int frame, ref int frameCounter)
         {
             
         }
