@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
+    <Compile Include="Buffs\FamiliarMinion.cs" />
     <Compile Include="ExpeditionUI.cs" />
     <Compile Include="Expedition.cs" />
     <Compile Include="Items\BountyBoard.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="Items\WayfarerPike.cs" />
     <Compile Include="Items\WayfarerRepeater.cs" />
     <Compile Include="Items\WayfarerStaff.cs" />
+    <Compile Include="Items\WayfarerSummon.cs" />
     <Compile Include="Items\WayfarerSword.cs" />
     <Compile Include="Items\WayfarerBook.cs" />
     <Compile Include="ModExpedition.cs" />
@@ -56,8 +58,10 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\Gust.cs" />
+    <Compile Include="Projs\MinionFox.cs" />
     <Compile Include="Projs\VacuumOrb.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />
+    <Compile Include="Projs\FamiliarMinion.cs" />
     <Compile Include="Quests\CoreQuests\HardModeQuest.cs" />
     <Compile Include="Quests\CoreQuests\Tier11Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier10Quest.cs" />
@@ -107,6 +111,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Buffs\FamiliarMinion.png" />
     <Content Include="build.txt" />
     <Content Include="description.txt" />
     <Content Include="Items\BountyBoard.png" />

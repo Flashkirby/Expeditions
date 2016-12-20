@@ -18,7 +18,24 @@ namespace Expeditions.Items
             item.knockBack = 3f;
             item.shoot = mod.ProjectileType("MinionFox");
 
+            // Create buff that manages the modPlayer's minion bool
+            item.buffType = mod.BuffType("FamiliarMinion");
+            item.buffTime = 3600;
+
             item.value = Item.buyPrice(0, 5, 0, 0);
+        }
+        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+            position = Main.MouseWorld - new Vector2(12, 10);
+            speedX = 0f;
+            speedY = 0f;
+
+            for (int i = 0; i < 20; i++)
+            {
+                Dust.NewDust(position, 24, 24, 12);
+            }
+
+            return true;
         }
         public override Vector2? HoldoutOffset()
         {
