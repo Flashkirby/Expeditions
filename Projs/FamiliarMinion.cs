@@ -397,11 +397,11 @@ namespace Expeditions.Projs
                     {
                         if (AIPrioritiseNearPlayer)
                         {
-                            distance = (npc.Center - projectile.Center).Length();
+                            distance = (npc.Center - Main.player[projectile.owner].Center).Length();
                         }
                         else
                         {
-                            distance = (npc.Center - Main.player[projectile.owner].Center).Length();
+                            distance = (npc.Center - projectile.Center).Length();
                         }
                         if (AIPrioritiseFarEnemies)
                         {
