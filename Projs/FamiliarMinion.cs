@@ -26,14 +26,14 @@ namespace Expeditions.Projs
         public int fallFrameSpeed = 0;
 
         // Code Constants
-        public const float separatedDistance = 500f; // Distance before returning
+        public const float separatedDistance = 700f; // Distance before returning
         public const float separatedReturnAccel = 10f; // Max return speed, inceases to player speed
         public const float joinAccel = 0.1f; // Acceleration to catching up
         public const int joinDistance = 200; // Distance at which can stop flying
         public const int joinCloseDistance = 60; // Distance to stay close to
 
         public const float targetRange = 800f; // Range to find NPCs
-        public const float chaseRange = 400f; // Range to begin chasing
+        public const float chaseRange = 600f; // Range to begin chasing
 
         public const int attackAnimationMax = 15; //Time spent in attack state
         public const float attackRange = 30f; // Range to start attack state
@@ -175,6 +175,7 @@ namespace Expeditions.Projs
                 if (Math.Abs(projectile.velocity.X) < quickStop * 2f)
                 {
                     projectile.velocity.X = 0f;
+                    projectile.direction = Main.player[projectile.owner].direction;
                 }
             }
 
@@ -314,9 +315,12 @@ namespace Expeditions.Projs
             // Chase if the enemy is visibly within chase distance
             Vector2 vectorToNPC = (target.Center - projectile.Center);
             float distance = vectorToNPC.Length();
-            if (distance < maxChase && Collision.CanHit(
-                projectile.position, projectile.width, projectile.height,
-                target.position, target.width, target.height))
+            bool canHit = Collision.CanHit(
+                projectile.position - new Vector2(0, 4),
+                projectile.width, projectile.height,
+                target.position, target.width, target.height);
+
+            if (distance < maxChase && canHit)
             {
                 goalVector = target.Center;
                 // Jump if the goal is too high
@@ -364,6 +368,7 @@ namespace Expeditions.Projs
             //!/ Main.NewText("<Fox> Target is still null...");
             if (target == null)
             {
+                float maxChase = targetRange;
                 // Try the same but for everything else
                 for (int i = 0; i < 200; i++)
                 {
@@ -371,9 +376,8 @@ namespace Expeditions.Projs
                     npc = Main.npc[i];
                     if (npc.CanBeChasedBy(projectile, false))
                     {
-                        float maxChase = targetRange;
                         float distance = (npc.Center - projectile.Center).Length();
-                        if (distance < targetRange)
+                        if (distance < maxChase)
                         {
                             target = npc;
                             maxChase = distance;
@@ -534,15 +538,13 @@ namespace Expeditions.Projs
                         if (projectile.frame < idleFrame || projectile.frame > idleFrame + idleFrameCount - 1) projectile.frame = idleFrame;
 
                         projectile.frame = idleFrame;
-
-                        projectile.direction = Main.player[projectile.owner].direction;
                     }
                     else
                     {
                         if (projectile.frame < runFrame || projectile.frame > runFrame + runFrameCount - 1) projectile.frame = runFrame;
 
                         projectile.frameCounter -= (int)Math.Min(
-                            512f, 
+                            512f,
                             512f * Math.Abs(projectile.velocity.X * runFrameSpeedMod));
                         if (projectile.frameCounter <= 0f)
                         {
@@ -553,8 +555,8 @@ namespace Expeditions.Projs
                                 projectile.frame = runFrame;
                             }
                         }
-
-                    }                }
+                    }
+                }
             }
         }
 

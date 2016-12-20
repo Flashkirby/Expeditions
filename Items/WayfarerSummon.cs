@@ -29,12 +29,6 @@ namespace Expeditions.Items
             position = Main.MouseWorld - new Vector2(12, 10);
             speedX = 0f;
             speedY = 0f;
-
-            for (int i = 0; i < 20; i++)
-            {
-                Dust.NewDust(position, 24, 24, 12);
-            }
-
             return true;
         }
         public override Vector2? HoldoutOffset()
