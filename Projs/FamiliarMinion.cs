@@ -43,6 +43,11 @@ namespace Expeditions.Projs
         public const float quickStopAccel = 0.3f; // Speedup/Slowing down if moving wrong way
         public const float quickStopFastAccel = 0.5f; // Speedup/Slowing down if moving wrong way, if moving faster than normal (see topSpeed)
 
+        /// <summary> Targetting uses player not projectile </summary>
+        public bool AIPrioritiseNearPlayer = false;
+        /// <summary> Targetting constantly looks for furthest away enemy </summary>
+        public bool AIPrioritiseFarEnemies = false;
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
@@ -166,7 +171,9 @@ namespace Expeditions.Projs
                 }
 
                 pathBlocked = CheckForPathBlocking(pathBlocked, dirMod);
+                //if (pathBlocked) Main.NewText("<Fox> Path is blocked!");
 
+                
             }
             else //Very close to goal
             {
@@ -222,7 +229,17 @@ namespace Expeditions.Projs
                 {
                     Vector2 checkPoint = projectile.position;
                     checkPoint.X += i * projectile.width / 2;
+                    checkPoint.X += dirMod + (int)projectile.velocity.X;
                     Point cTile = Utils.ToTileCoordinates(checkPoint);
+
+                    /*
+                    if (pathBlocked) Main.NewText("<Fox> Thinking of jumping!");
+                    for (int wd = 0; wd < 12; wd++)
+                    { Dust d = Main.dust[Dust.NewDust(cTile.ToVector2() * 16f, 16, 16, 16)];
+                        d.noGravity = true;
+                        d.velocity = Vector2.Zero;
+                    }
+                    */
 
                     // If I need to jump...
                     if (WorldGen.SolidTile(cTile.X, cTile.Y) ||
@@ -369,6 +386,8 @@ namespace Expeditions.Projs
             if (target == null)
             {
                 float maxChase = targetRange;
+                if (AIPrioritiseFarEnemies) maxChase = 0;
+                float distance = targetRange;
                 // Try the same but for everything else
                 for (int i = 0; i < 200; i++)
                 {
@@ -376,11 +395,29 @@ namespace Expeditions.Projs
                     npc = Main.npc[i];
                     if (npc.CanBeChasedBy(projectile, false))
                     {
-                        float distance = (npc.Center - projectile.Center).Length();
-                        if (distance < maxChase)
+                        if (AIPrioritiseNearPlayer)
                         {
-                            target = npc;
-                            maxChase = distance;
+                            distance = (npc.Center - projectile.Center).Length();
+                        }
+                        else
+                        {
+                            distance = (npc.Center - Main.player[projectile.owner].Center).Length();
+                        }
+                        if (AIPrioritiseFarEnemies)
+                        {
+                            if (distance > maxChase && distance < targetRange)
+                            {
+                                target = npc;
+                                maxChase = distance;
+                            }
+                        }
+                        else
+                        {
+                            if (distance < maxChase)
+                            {
+                                target = npc;
+                                maxChase = distance;
+                            }
                         }
                     }
                 }

@@ -21,6 +21,9 @@ namespace Expeditions.Projs
             projectile.timeLeft *= 5;
             projectile.netImportant = true;
 
+            AIPrioritiseNearPlayer = false;
+            AIPrioritiseFarEnemies = false;
+
             Main.projFrames[projectile.type] = 12;
             ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
             ProjectileID.Sets.Homing[projectile.type] = true;
