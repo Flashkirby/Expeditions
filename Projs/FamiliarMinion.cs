@@ -130,7 +130,7 @@ namespace Expeditions.Projs
             //!/Main.NewText("SetGoalToTargetAndAttack Fine");
             if (target != null)
             {
-                goalVector = SetGoalToTargetAndAttack(goalVector, target);
+                goalVector = SetGoalToTargetAndAttack(goalVector, target, player);
             }
             // Manage ai state for being separated from the player
             //!/Main.NewText("CheckSeparated Fine");
@@ -325,7 +325,7 @@ namespace Expeditions.Projs
             }
         }
 
-        private Vector2 SetGoalToTargetAndAttack(Vector2 goalVector, NPC target)
+        private Vector2 SetGoalToTargetAndAttack(Vector2 goalVector, NPC target, Player player)
         {
             // Define chase range, reduced underground for reasons of space/visibility
             float maxChase = chaseRange;
@@ -335,13 +335,19 @@ namespace Expeditions.Projs
             // Chase if the enemy is visibly within chase distance
             Vector2 vectorToNPC = (target.Center - projectile.Center);
             float distance = vectorToNPC.Length();
-            //I don't know why this is called...
-            //bool canHit = Collision.CanHit(
-            //    projectile.position - new Vector2(0, 4),
-            //    projectile.width, projectile.height,
-            //    target.position, target.width, target.height);
 
-            if (distance < maxChase)
+            ////Check if can reach
+            bool canHit = Collision.CanHit(
+                projectile.position - new Vector2(0, 4),
+                projectile.width, projectile.height,
+                target.position, target.width, target.height);
+            //// If can't reach, but near enough to player, try chase anyway
+            if (!canHit && Vector2.Distance(projectile.Center, player.Center) < separatedDistance)
+            {
+                canHit = true;
+            }
+
+            if (distance < maxChase && canHit)
             {
                 goalVector = target.Center;
                 // Jump if the goal is too high
