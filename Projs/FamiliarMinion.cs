@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Projs
 {
-    public abstract class FamiliarMinion : ModProjectile
+    abstract class FamiliarMinion : ModProjectile
     {
         // Animation Frames
         public int idleFrame = 0;
@@ -18,10 +18,10 @@ namespace Expeditions.Projs
         public int runFrameCount = 7;
         public float runFrameSpeedMod = 1f; //frames incremented per 2px
         public int flyFrame = 8;
-        public int flyFrameCount = 3;
+        public int flyFrameCount = 4;
         public int flyFrameSpeed = 6;
         public float flyRotationMod = 0.7f;
-        public int fallFrame = 11;
+        public int fallFrame = 12;
         public int fallFrameCount = 1;
         public int fallFrameSpeed = 0;
 

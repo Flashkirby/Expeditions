@@ -17,7 +17,11 @@ namespace Expeditions.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             PlayerExplorer modPlayer = player.GetModPlayer<PlayerExplorer>(mod);
-            if (player.ownedProjectileCounts[mod.ProjectileType("MinionFox")] > 0)
+            int minionCount = 0;
+            minionCount += player.ownedProjectileCounts[mod.ProjectileType("MinionFox")];
+            minionCount += player.ownedProjectileCounts[mod.ProjectileType("MinionChicken")];
+            //minionCount += player.ownedProjectileCounts[mod.ProjectileType("MinionDeer")];
+            if (minionCount > 0)
             {
                 modPlayer.familiarMinion = true;
             }

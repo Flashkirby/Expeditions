@@ -26,6 +26,13 @@ namespace Expeditions.Items
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            Main.NewText("<Item> slotsMinions = " + player.slotsMinions);
+            int foxes = player.ownedProjectileCounts[mod.ProjectileType("MinionFox")];
+            int chickens = player.ownedProjectileCounts[mod.ProjectileType("MinionChicken")];
+            if (foxes > chickens)
+            {
+                type = mod.ProjectileType("MinionChicken");
+            }
             position = Main.MouseWorld - new Vector2(12, 10);
             speedX = 0f;
             speedY = 0f;
