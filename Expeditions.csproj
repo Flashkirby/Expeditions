@@ -58,6 +58,8 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\Gust.cs" />
+    <Compile Include="Projs\MinionCat.cs" />
+    <Compile Include="Projs\MinionChicken.cs" />
     <Compile Include="Projs\MinionFox.cs" />
     <Compile Include="Projs\VacuumOrb.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />

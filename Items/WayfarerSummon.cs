@@ -5,6 +5,12 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
+    /// <summary>
+    /// Summons 3 types of familiars:
+    /// Fox guards the player's space
+    /// Chicken chases enemies normally
+    /// Cat attacks away from the player
+    /// </summary>
     class WayfarerSummon : ModItem
     {
         public override void SetDefaults()
@@ -12,7 +18,7 @@ namespace Expeditions.Items
             item.CloneDefaults(ItemID.HornetStaff);
             item.name = "Wayfarer's Bell";
             item.toolTip = "Summons a familiar to fight for you";
-            item.UseSound = SoundID.Item44;
+            item.UseSound = SoundID.Item25;
             
             item.damage = 11;
             item.knockBack = 3f;
@@ -23,6 +29,8 @@ namespace Expeditions.Items
             item.buffTime = 3600;
 
             item.value = Item.buyPrice(0, 5, 0, 0);
+
+            ItemID.Sets.StaffMinionSlotsRequired[item.type] = 1;
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
