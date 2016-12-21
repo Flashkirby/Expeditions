@@ -18,7 +18,7 @@ namespace Expeditions.Projs
             projectile.timeLeft *= 5;
             projectile.netImportant = true;
 
-            AIPrioritiseNearPlayer = false;
+            AIPrioritiseNearPlayer = true;
             AIPrioritiseFarEnemies = true;
 
             // Animation Frames
