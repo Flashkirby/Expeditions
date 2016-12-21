@@ -444,6 +444,7 @@ namespace Expeditions.NPCs
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBook")); nextSlot++;
                 shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerStaff")); nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSummon")); nextSlot++;
             }
         }
 
