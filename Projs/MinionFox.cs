@@ -23,6 +23,7 @@ namespace Expeditions.Projs
 
             Main.projFrames[projectile.type] = 13;
             ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
+            ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
             ProjectileID.Sets.Homing[projectile.type] = true;
 
             drawOriginOffsetY = (Main.projectileTexture[projectile.type].Width - projectile.width) / 2 ;
