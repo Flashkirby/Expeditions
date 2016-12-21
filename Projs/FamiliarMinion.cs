@@ -182,7 +182,6 @@ namespace Expeditions.Projs
                 if (Math.Abs(projectile.velocity.X) < quickStop * 2f)
                 {
                     projectile.velocity.X = 0f;
-                    projectile.direction = Main.player[projectile.owner].direction;
                 }
             }
 
@@ -202,6 +201,10 @@ namespace Expeditions.Projs
             if (projectile.velocity.X * dirMod > quickStop * dirMod)
             {
                 projectile.direction = dirMod;
+            }
+            if (projectile.velocity.X == 0f && projectile.velocity.Y == 0f)
+            {
+                projectile.direction = Main.player[projectile.owner].direction;
             }
         }
 
@@ -229,7 +232,7 @@ namespace Expeditions.Projs
                 {
                     Vector2 checkPoint = projectile.position;
                     checkPoint.X += i * projectile.width / 2;
-                    checkPoint.X += dirMod + (int)projectile.velocity.X;
+                    checkPoint.X += dirMod * 8 + (int)projectile.velocity.X;
                     Point cTile = Utils.ToTileCoordinates(checkPoint);
 
                     /*
@@ -332,12 +335,13 @@ namespace Expeditions.Projs
             // Chase if the enemy is visibly within chase distance
             Vector2 vectorToNPC = (target.Center - projectile.Center);
             float distance = vectorToNPC.Length();
-            bool canHit = Collision.CanHit(
-                projectile.position - new Vector2(0, 4),
-                projectile.width, projectile.height,
-                target.position, target.width, target.height);
+            //I don't know why this is called...
+            //bool canHit = Collision.CanHit(
+            //    projectile.position - new Vector2(0, 4),
+            //    projectile.width, projectile.height,
+            //    target.position, target.width, target.height);
 
-            if (distance < maxChase && canHit)
+            if (distance < maxChase)
             {
                 goalVector = target.Center;
                 // Jump if the goal is too high
