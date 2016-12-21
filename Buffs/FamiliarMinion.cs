@@ -8,7 +8,7 @@ namespace Expeditions.Buffs
     {
         public override void SetDefaults()
         {
-            Main.buffName[Type] = "Wayfarer's Familiars";
+            Main.buffName[Type] = "Familiar";
             Main.buffTip[Type] = "The familiar will fight for you";
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
