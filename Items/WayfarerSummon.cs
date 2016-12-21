@@ -26,9 +26,9 @@ namespace Expeditions.Items
 
             // Create buff that manages the modPlayer's minion bool
             item.buffType = mod.BuffType("FamiliarMinion");
-            item.buffTime = 3600;
 
-            item.value = Item.buyPrice(0, 5, 0, 0);
+            item.value = Item.buyPrice(0, 40, 0, 0);
+            item.rare = 2;
 
             ItemID.Sets.StaffMinionSlotsRequired[item.type] = 1;
         }
