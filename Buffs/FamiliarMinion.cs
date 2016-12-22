@@ -21,7 +21,6 @@ namespace Expeditions.Buffs
             minionCount += player.ownedProjectileCounts[mod.ProjectileType("MinionFox")];
             minionCount += player.ownedProjectileCounts[mod.ProjectileType("MinionChicken")];
             minionCount += player.ownedProjectileCounts[mod.ProjectileType("MinionCat")];
-            //minionCount += player.ownedProjectileCounts[mod.ProjectileType("MinionDeer")];
             if (minionCount > 0)
             {
                 modPlayer.familiarMinion = true;
