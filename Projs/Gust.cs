@@ -43,7 +43,9 @@ namespace Expeditions.Projs
 
             projectile.ai[0]++;
 
-            if (projectile.velocity.Length() < 0.1f || projectile.wet)
+            if (Math.Abs(projectile.velocity.X) < 0.2f ||
+                Math.Abs(projectile.velocity.Y) < 0.2f ||
+                projectile.wet)
             {
                 projectile.Kill();
             }
