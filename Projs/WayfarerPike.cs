@@ -15,7 +15,7 @@ namespace Expeditions.Projs
             projectile.scale = 1.1f;
         }
 
-        public const float extend = 0.85f;
+        public const float extend = 0.9f;
         public const float retract = 1.1f;
         public override void AI()
         {
