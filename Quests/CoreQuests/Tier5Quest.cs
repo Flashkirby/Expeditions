@@ -15,7 +15,7 @@ namespace Expeditions.Quests
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;
 
-            expedition.conditionDescription1 = "Equip wings";
+            expedition.conditionDescription1 = "Equip some wings";
 
         }
         public override void AddItemsOnLoad()

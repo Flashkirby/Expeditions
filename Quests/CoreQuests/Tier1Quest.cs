@@ -9,7 +9,7 @@ namespace Expeditions.Quests
     {
         public override void SetDefaults()
         {
-            expedition.name = "Cave Exploration kit";
+            expedition.name = "Cave Exploration Kit";
             SetNPCHead(API.NPCIDClerk);
             expedition.difficulty = 1;
             expedition.ctgExplore = true;

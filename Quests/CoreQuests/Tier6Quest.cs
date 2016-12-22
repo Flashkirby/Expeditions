@@ -43,8 +43,8 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
-            if (complete) return "A mechanical what now!? Well, you know the drill. Hey, if you haven't done it yet, you should totally build an arena and fight on your terms! That'll show 'em. ";
-            return "I have a theory that there's some kind of hallowed equivalent to the " + (WorldGen.crimson ? "crimtane" : "demonite") + " metals that we found in said biome. Thing is, they dropped from bosses... so I wonder if there are counterparts to things like the Eye of Cthulu we haven't seen yet. ";
+            if (complete) return "A mechanical what now!? Well, you know the drill. Hey, if you haven't done it yet, you should totally build an arena and fight on your terms; I'm thinking long platforms and buffs; That'll show 'em who's in charge! ";
+            return "I have a theory that there's some kind of hallowed equivalent to the " + (WorldGen.crimson ? "crimtane" : "demonite") + " metals. Thing is, those materials dropped from bosses... so I wonder if there are counterparts to things like the Eye of Cthulu we haven't seen yet. ";
         }
 
         public override bool CheckPrerequisites(Player player)

@@ -40,11 +40,10 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
+            string npcName = "the Guide";
+            if (NPC.FindFirstNPC(NPCID.Guide) != -1) npcName = NPC.firstNPCName(NPCID.Guide);
             if (complete)
             {
-                string npcName = "the Guide";
-                if (NPC.FindFirstNPC(NPCID.Guide) != -1) npcName = NPC.firstNPCName(NPCID.Guide);
-
                 if (Main.hardMode)
                 {
                     return "So sacrificing " + npcName + " summons a great big horrifying flesh wall? Well uh... that's new. But defeating it releases spirits? I've never heard of such a thing! ";
@@ -54,7 +53,7 @@ namespace Expeditions.Quests
                     return "So sacrificing " + npcName + " summons a great big horrifying flesh wall? Well uh... that's new. If you want to defeat that thing you'll probably need to be as well-equipped as possible. ";
                 }
             }
-            return "So I've been trying to decipher these dungeon books, but so far not much luck. However there are a couple that seem to illustrate some kind of underworld ritual using... voodoo dolls? Mind taking a look - it could be something big! ";
+            return "So I've been trying to decipher these dungeon books, but so far not much luck. However there are a couple that seem to illustrate some kind of underworld ritual using... voodoo dolls... of " + npcName + "? This could be something big! ";
         }
 
         public override bool CheckPrerequisites(Player player)

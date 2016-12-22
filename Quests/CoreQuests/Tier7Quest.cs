@@ -42,7 +42,7 @@ namespace Expeditions.Quests
         public override string Description(bool complete)
         {
             if (complete) return "Some kind of... super tough, organic ore? I wonder if it can grow like other plants? Oh and those life fruits - fascinating! Please, keep a lookout and see if there's anything else of note. I'd greatly appreciate it. ";
-            return "I don't know how, but defeating that mechanical boss seems to have triggered a certain... change from the jungle. Don't suppose you could take a peek? You'll be fine! ";
+            return "Hey, have you been to the jungle recently? Only defeating that mechanical boss seems to have triggered a certain... change to the jungle. Don't suppose you could take a peek? You'll be fine! ";
         }
 
         public override bool CheckPrerequisites(Player player)
