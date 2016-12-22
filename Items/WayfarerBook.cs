@@ -14,8 +14,8 @@ namespace Expeditions.Items
             item.toolTip = "Casts a mighty gust of wind";
             item.UseSound = SoundID.Item34;
 
-            item.mana = 20;
-            item.damage = 8;
+            item.mana = 18;
+            item.damage = 6;
             item.useAnimation = 40;
             item.useTime = 40;
             item.knockBack = 7f;
