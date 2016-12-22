@@ -45,6 +45,8 @@
     <Compile Include="Expeditions.cs" />
     <Compile Include="Items\BountyBook.cs" />
     <Compile Include="Items\PrefixApplicator.cs" />
+    <Compile Include="Items\StockBox2.cs" />
+    <Compile Include="Items\StockBox.cs" />
     <Compile Include="Items\WayfarerBow.cs" />
     <Compile Include="Items\WayfarerCarbine.cs" />
     <Compile Include="Items\WayfarerPike.cs" />

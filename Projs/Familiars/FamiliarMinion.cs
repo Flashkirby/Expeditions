@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Expeditions.Projs
+namespace Expeditions.Projs.Familiars
 {
     abstract class FamiliarMinion : ModProjectile
     {
@@ -145,237 +145,8 @@ namespace Expeditions.Projs
             }
         }
 
-        private void ControlMovementPhysics(Player player, Vector2 goalVector)
-        {
-            // Calculate movement values
-            float quickStop = quickStopAccel;
-            float maxTopSpeed = Math.Max(topSpeed, Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y));
-            if (maxTopSpeed > topSpeed) quickStop = quickStopFastAccel;
-
-            // Used for checking for tiles in the way
-            bool pathBlocked = false;
-
-            float diffX = goalVector.X - projectile.Center.X;
-            int dirMod = Math.Sign(diffX);
-            // Over 5px away
-            if (Math.Abs(diffX) > 5f)
-            {
-                // Moving backwards fast
-                if (projectile.velocity.X * dirMod < topSpeed)
-                {
-                    projectile.velocity.X += quickStop * dirMod;
-                }
-                else // Not moving backwards fast, or moving forwards
-                {
-                    projectile.velocity.X += slowStopAccel * dirMod;
-                }
-
-                pathBlocked = CheckForPathBlocking(pathBlocked, dirMod);
-                //if (pathBlocked) Main.NewText("<Fox> Path is blocked!");
-
-                
-            }
-            else //Very close to goal
-            {
-                // Slowdown, then stop
-                projectile.velocity.X *= 0.9f;
-                if (Math.Abs(projectile.velocity.X) < quickStop * 2f)
-                {
-                    projectile.velocity.X = 0f;
-                }
-            }
-
-            // Step up collision physics
-            Collision.StepUp(ref projectile.position, ref projectile.velocity,
-                projectile.width, projectile.height, ref projectile.stepSpeed,
-                ref projectile.gfxOffY, 1, false, 0);
-
-            // Jump over blocked path if grounded
-            TryJumpingOverObstacle(pathBlocked, dirMod);
-
-            // Clamp velocity X
-            Math.Min(Math.Max(projectile.velocity.X, maxTopSpeed), -maxTopSpeed);
-
-            // Set direction
-            projectile.direction = Math.Sign(projectile.velocity.X);
-            if (projectile.velocity.X * dirMod > quickStop * dirMod)
-            {
-                projectile.direction = dirMod;
-            }
-            if (projectile.velocity.X == 0f && projectile.velocity.Y == 0f)
-            {
-                projectile.direction = Main.player[projectile.owner].direction;
-            }
-        }
-
-        private bool CheckForPathBlocking(bool pathBlocked, int direction)
-        {
-            // Check ahead to see if there is a tile blocking me
-            Point checkTile = Utils.ToTileCoordinates(projectile.Top);
-            checkTile.X += direction + (int)projectile.velocity.X;
-            for (int y = checkTile.Y; y < checkTile.Y + projectile.height / 16 + 1; y++)
-            {
-                if (WorldGen.SolidTile(checkTile.X, y))
-                {
-                    pathBlocked = true;
-                    break;
-                }
-            }
-
-            return pathBlocked;
-        }
-        private void TryJumpingOverObstacle(bool pathBlocked, int dirMod)
-        {
-            if (projectile.velocity.Y == 0f && pathBlocked)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Vector2 checkPoint = projectile.position;
-                    checkPoint.X += i * projectile.width / 2;
-                    checkPoint.X += dirMod * 8 + (int)projectile.velocity.X;
-                    Point cTile = Utils.ToTileCoordinates(checkPoint);
-
-                    /*
-                    if (pathBlocked) Main.NewText("<Fox> Thinking of jumping!");
-                    for (int wd = 0; wd < 12; wd++)
-                    { Dust d = Main.dust[Dust.NewDust(cTile.ToVector2() * 16f, 16, 16, 16)];
-                        d.noGravity = true;
-                        d.velocity = Vector2.Zero;
-                    }
-                    */
-
-                    // If I need to jump...
-                    if (WorldGen.SolidTile(cTile.X, cTile.Y) ||
-                        Main.tile[cTile.X, cTile.Y].halfBrick() ||
-                        Main.tile[cTile.X, cTile.Y].slope() > 0 ||
-                        (
-                            TileID.Sets.Platforms[(int)Main.tile[cTile.X, cTile.Y].type] &&
-                            Main.tile[cTile.X, cTile.Y].active() && !Main.tile[cTile.X, cTile.Y].inActive()
-                            ))
-                    {
-                        try
-                        {
-                            cTile = Utils.ToTileCoordinates(projectile.Center);
-                            cTile.X += dirMod + (int)projectile.velocity.X;
-                            if (!WorldGen.SolidTile(cTile.X, cTile.Y - 1) && !WorldGen.SolidTile(cTile.X, cTile.Y - 2))
-                            {
-                                projectile.velocity.Y = -5.1f;
-                            }
-                            else if (!WorldGen.SolidTile(cTile.X, cTile.Y - 2))
-                            {
-                                projectile.velocity.Y = -7.1f;
-                            }
-                            else if (WorldGen.SolidTile(cTile.X, cTile.Y - 5))
-                            {
-                                projectile.velocity.Y = -11.1f;
-                            }
-                            else if (WorldGen.SolidTile(cTile.X, cTile.Y - 4))
-                            {
-                                projectile.velocity.Y = -10.1f;
-                            }
-                            else
-                            {
-                                projectile.velocity.Y = -9.1f;
-                            }
-                        }
-                        catch
-                        {
-                            projectile.velocity.Y = -9.1f;
-                        }
-                    }
-                }
-            }
-        }
-
-
-        private void CheckSeparated(Player player)
-        {
-            float distance = Vector2.Distance(projectile.Center, player.Center);
-            
-            // Too far away, just teleport
-            if (!TeleportIfFarAway(player, distance))
-            {
-                // Otherwise become seperated, or if flying
-                if (distance > separatedDistance 
-                    || Math.Abs(projectile.Center.Y - player.Center.Y) > 300f
-                    || player.rocketDelay2 > 0)
-                {
-                    aiState = 1;
-                    projectile.netUpdate = true;
-                    projectile.velocity.Y = 0f;
-                }
-            }
-        }
-
-        private void ExecuteAttackState()
-        {
-            projectile.friendly = true;
-
-            // Apply gravity
-            projectile.velocity.Y = Math.Min(projectile.velocity.Y + 0.4f, 10f);
-
-            // Count down and end attack state/animation
-            aiAttackAnimation--;
-            if (aiAttackAnimation <= 0)
-            {
-                aiAttackAnimation = 0;
-                aiState = 0;
-                projectile.friendly = false;
-                projectile.netUpdate = true;
-            }
-        }
-
-        private Vector2 SetGoalToTargetAndAttack(Vector2 goalVector, NPC target, Player player)
-        {
-            // Define chase range, reduced underground for reasons of space/visibility
-            float maxChase = chaseRange;
-            if (projectile.position.Y > Main.worldSurface * 16.0)
-            { maxChase *= 0.7f; };
-
-            // Chase if the enemy is visibly within chase distance
-            Vector2 vectorToNPC = (target.Center - projectile.Center);
-            float distance = vectorToNPC.Length();
-
-            ////Check if can reach
-            bool canHit = Collision.CanHit(
-                projectile.position - new Vector2(0, 4),
-                projectile.width, projectile.height,
-                target.position, target.width, target.height);
-            //// If can't reach, but near enough to player, try chase anyway
-            if (!canHit && Vector2.Distance(projectile.Center, player.Center) < separatedDistance)
-            {
-                canHit = true;
-            }
-
-            if (distance < maxChase && canHit)
-            {
-                goalVector = target.Center;
-                // Jump if the goal is too high
-                JumpToReach(goalVector);
-            }
-            if (distance < attackRange)
-            {
-                aiState = 2;
-                aiAttackAnimation = attackAnimationMax;
-                projectile.netUpdate = true;
-            }
-
-            return goalVector;
-        }
-        private void JumpToReach(Vector2 goalVector)
-        {
-            float jumpDistance = goalVector.Y - projectile.Center.Y;
-            if (projectile.velocity.Y == 0f) // Am grounded
-            {
-                if (jumpDistance < -10) projectile.velocity.Y = -6f;
-                if (jumpDistance < -70) projectile.velocity.Y = -10f;
-                if (jumpDistance < -120f) projectile.velocity.Y = -13f;
-                if (jumpDistance < -210f) projectile.velocity.Y = -15f;
-                if (jumpDistance < -270f) projectile.velocity.Y = -17f;
-                if (jumpDistance < -310f) projectile.velocity.Y = -18f;
-            }
-        }
-
+        #region LogicManager Methods
+        
         private NPC SelectTarget(NPC target)
         {
             // Start with ownerMinion, then cycle through first 200 if not
@@ -502,7 +273,6 @@ namespace Expeditions.Projs
                 }
             }
         }
-
         private bool TeleportIfFarAway(Player player, float distance)
         {
             if (distance > 2000f)
@@ -512,7 +282,242 @@ namespace Expeditions.Projs
             }
             return false;
         }
+
+        private void ExecuteAttackState()
+        {
+            projectile.friendly = true;
+
+            // Apply gravity
+            projectile.velocity.Y = Math.Min(projectile.velocity.Y + 0.4f, 10f);
+
+            // Count down and end attack state/animation
+            aiAttackAnimation--;
+            if (aiAttackAnimation <= 0)
+            {
+                aiAttackAnimation = 0;
+                aiState = 0;
+                projectile.friendly = false;
+                projectile.netUpdate = true;
+            }
+        }
+
+        private Vector2 SetGoalToTargetAndAttack(Vector2 goalVector, NPC target, Player player)
+        {
+            // Define chase range, reduced underground for reasons of space/visibility
+            float maxChase = chaseRange;
+            if (projectile.position.Y > Main.worldSurface * 16.0)
+            { maxChase *= 0.7f; };
+
+            // Chase if the enemy is visibly within chase distance
+            Vector2 vectorToNPC = (target.Center - projectile.Center);
+            float distance = vectorToNPC.Length();
+
+            //// Check projectile can see the npc
+            bool canHit = Collision.CanHit(
+                projectile.position - new Vector2(0, 4),
+                projectile.width, projectile.height,
+                target.position, target.width, target.height);
+            //// If can't see the npc, but I'm close to player, carry on.
+            //!/ Main.NewText("<Fam> " + canHit + " & " + Vector2.Distance(projectile.Center, player.Center) + " < " + separatedDistance);
+            if (!canHit)
+            {
+                // Too far away then go back to player otherwise carry on
+                if (!CheckSeparated(player))
+                {
+                    canHit = true;
+                }
+            }
+
+            if (distance < maxChase && canHit)
+            {
+                goalVector = target.Center;
+                // Jump if the goal is too high
+                JumpToReach(goalVector);
+            }
+            if (distance < attackRange)
+            {
+                aiState = 2;
+                aiAttackAnimation = attackAnimationMax;
+                projectile.netUpdate = true;
+            }
+
+            return goalVector;
+        }
+        private void JumpToReach(Vector2 goalVector)
+        {
+            float jumpDistance = goalVector.Y - projectile.Center.Y;
+            if (projectile.velocity.Y == 0f) // Am grounded
+            {
+                if (jumpDistance < -10) projectile.velocity.Y = -6f;
+                if (jumpDistance < -70) projectile.velocity.Y = -10f;
+                if (jumpDistance < -120f) projectile.velocity.Y = -13f;
+                if (jumpDistance < -210f) projectile.velocity.Y = -15f;
+                if (jumpDistance < -270f) projectile.velocity.Y = -17f;
+                if (jumpDistance < -310f) projectile.velocity.Y = -18f;
+            }
+        }
         
+        private bool CheckSeparated(Player player)
+        {
+            float distance = Vector2.Distance(projectile.Center, player.Center);
+            
+            // Too far away, just teleport
+            if (!TeleportIfFarAway(player, distance))
+            {
+                // Otherwise become seperated, or if flying
+                if (distance > separatedDistance 
+                    || Math.Abs(projectile.Center.Y - player.Center.Y) > 300f
+                    || player.rocketDelay2 > 0)
+                {
+                    aiState = 1;
+                    projectile.netUpdate = true;
+                    projectile.velocity.Y = 0f;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ControlMovementPhysics(Player player, Vector2 goalVector)
+        {
+            // Calculate movement values
+            float quickStop = quickStopAccel;
+            float maxTopSpeed = Math.Max(topSpeed, Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y));
+            if (maxTopSpeed > topSpeed) quickStop = quickStopFastAccel;
+
+            // Used for checking for tiles in the way
+            bool pathBlocked = false;
+
+            float diffX = goalVector.X - projectile.Center.X;
+            int dirMod = Math.Sign(diffX);
+            // Over 5px away
+            if (Math.Abs(diffX) > 5f)
+            {
+                // Moving backwards fast
+                if (projectile.velocity.X * dirMod < topSpeed)
+                {
+                    projectile.velocity.X += quickStop * dirMod;
+                }
+                else // Not moving backwards fast, or moving forwards
+                {
+                    projectile.velocity.X += slowStopAccel * dirMod;
+                }
+
+                pathBlocked = CheckForPathBlocking(pathBlocked, dirMod);
+                //if (pathBlocked) Main.NewText("<Fox> Path is blocked!");
+
+
+            }
+            else //Very close to goal
+            {
+                // Slowdown, then stop
+                projectile.velocity.X *= 0.9f;
+                if (Math.Abs(projectile.velocity.X) < quickStop * 2f)
+                {
+                    projectile.velocity.X = 0f;
+                }
+            }
+
+            // Step up collision physics
+            Collision.StepUp(ref projectile.position, ref projectile.velocity,
+                projectile.width, projectile.height, ref projectile.stepSpeed,
+                ref projectile.gfxOffY, 1, false, 0);
+
+            // Jump over blocked path if grounded
+            TryJumpingOverObstacle(pathBlocked, dirMod);
+
+            // Clamp velocity X
+            Math.Min(Math.Max(projectile.velocity.X, maxTopSpeed), -maxTopSpeed);
+
+            // Set direction
+            projectile.direction = Math.Sign(projectile.velocity.X);
+            if (projectile.velocity.X * dirMod > quickStop * dirMod)
+            {
+                projectile.direction = dirMod;
+            }
+        }
+        private bool CheckForPathBlocking(bool pathBlocked, int direction)
+        {
+            // Check ahead to see if there is a tile blocking me
+            Point checkTile = Utils.ToTileCoordinates(projectile.Top);
+            checkTile.X += direction + (int)projectile.velocity.X;
+            for (int y = checkTile.Y; y < checkTile.Y + projectile.height / 16 + 1; y++)
+            {
+                if (WorldGen.SolidTile(checkTile.X, y))
+                {
+                    pathBlocked = true;
+                    break;
+                }
+            }
+
+            return pathBlocked;
+        }
+        private void TryJumpingOverObstacle(bool pathBlocked, int dirMod)
+        {
+            if (projectile.velocity.Y == 0f && pathBlocked)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Vector2 checkPoint = projectile.position;
+                    checkPoint.X += i * projectile.width / 2;
+                    checkPoint.X += dirMod * 8 + (int)projectile.velocity.X;
+                    Point cTile = Utils.ToTileCoordinates(checkPoint);
+
+                    /*
+                    if (pathBlocked) Main.NewText("<Fox> Thinking of jumping!");
+                    for (int wd = 0; wd < 12; wd++)
+                    { Dust d = Main.dust[Dust.NewDust(cTile.ToVector2() * 16f, 16, 16, 16)];
+                        d.noGravity = true;
+                        d.velocity = Vector2.Zero;
+                    }
+                    */
+
+                    // If I need to jump...
+                    if (WorldGen.SolidTile(cTile.X, cTile.Y) ||
+                        Main.tile[cTile.X, cTile.Y].halfBrick() ||
+                        Main.tile[cTile.X, cTile.Y].slope() > 0 ||
+                        (
+                            TileID.Sets.Platforms[(int)Main.tile[cTile.X, cTile.Y].type] &&
+                            Main.tile[cTile.X, cTile.Y].active() && !Main.tile[cTile.X, cTile.Y].inActive()
+                            ))
+                    {
+                        try
+                        {
+                            cTile = Utils.ToTileCoordinates(projectile.Center);
+                            cTile.X += dirMod + (int)projectile.velocity.X;
+                            if (!WorldGen.SolidTile(cTile.X, cTile.Y - 1) && !WorldGen.SolidTile(cTile.X, cTile.Y - 2))
+                            {
+                                projectile.velocity.Y = -5.1f;
+                            }
+                            else if (!WorldGen.SolidTile(cTile.X, cTile.Y - 2))
+                            {
+                                projectile.velocity.Y = -7.1f;
+                            }
+                            else if (WorldGen.SolidTile(cTile.X, cTile.Y - 5))
+                            {
+                                projectile.velocity.Y = -11.1f;
+                            }
+                            else if (WorldGen.SolidTile(cTile.X, cTile.Y - 4))
+                            {
+                                projectile.velocity.Y = -10.1f;
+                            }
+                            else
+                            {
+                                projectile.velocity.Y = -9.1f;
+                            }
+                        }
+                        catch
+                        {
+                            projectile.velocity.Y = -9.1f;
+                        }
+                    }
+                }
+            }
+        }
+        
+        #endregion
+
+
         private void ManageFrames(ref int frame, ref int frameCounter)
         {
             // Flying
@@ -563,7 +568,8 @@ namespace Expeditions.Projs
                 projectile.spriteDirection = projectile.direction;
                 projectile.rotation = 0f;
 
-                if (projectile.velocity.Y != 0f)
+                // Falling, take into account weird slope behaviour
+                if (projectile.velocity.Y != 0f && (projectile.oldVelocity.Y != 0f && projectile.velocity.Y != 0.4f))
                 {
                     if (projectile.frame < fallFrame || projectile.frame > fallFrame + fallFrameCount - 1) projectile.frame = fallFrame;
 

@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 
-namespace Expeditions.Projs
+namespace Expeditions.Projs.Familiars
 {
     class MinionChicken : FamiliarMinion
     {
