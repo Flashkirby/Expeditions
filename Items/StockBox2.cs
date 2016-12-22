@@ -13,7 +13,7 @@ namespace Expeditions.Items
             item.height = 24;
             item.toolTip = "Right click to open";
             item.toolTip2 = "'Its contents, an engima...'";
-            item.rare = 1;
+            item.rare = 2;
         }
 
         public override bool CanRightClick()
