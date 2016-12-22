@@ -300,7 +300,18 @@ namespace Expeditions
                 Main.NewText("Expeditions: '" + name + "' recompleted!", textColour.R, textColour.G, textColour.B);
             }
 
-            ResetProgress(false);
+            if (!repeatable)
+            {
+                // Save conditions used to finish, on 1 time expeditions
+                trackCondition = false;
+                trackingActive = false;
+                trackItems = false;
+            }
+            else
+            {
+                // Repeatables always restart once completed
+                ResetProgress(false);
+            }
             completed = true;
 
             // check mod hook
