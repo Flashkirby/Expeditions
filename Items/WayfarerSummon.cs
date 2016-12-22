@@ -34,6 +34,8 @@ namespace Expeditions.Items
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            player.AddBuff(item.buffType, 3600, true);
+
             int foxes = player.ownedProjectileCounts[mod.ProjectileType("MinionFox")];
             int chickens = player.ownedProjectileCounts[mod.ProjectileType("MinionChicken")];
             int cats = player.ownedProjectileCounts[mod.ProjectileType("MinionCat")];
