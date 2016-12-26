@@ -60,12 +60,12 @@
     <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Projs\Gust.cs" />
-    <Compile Include="Projs\MinionCat.cs" />
-    <Compile Include="Projs\MinionChicken.cs" />
-    <Compile Include="Projs\MinionFox.cs" />
+    <Compile Include="Projs\Familiars\MinionCat.cs" />
+    <Compile Include="Projs\Familiars\MinionChicken.cs" />
+    <Compile Include="Projs\Familiars\MinionFox.cs" />
     <Compile Include="Projs\VacuumOrb.cs" />
     <Compile Include="Projs\WayfarerPike.cs" />
-    <Compile Include="Projs\FamiliarMinion.cs" />
+    <Compile Include="Projs\Familiars\FamiliarMinion.cs" />
     <Compile Include="Quests\CoreQuests\HardModeQuest.cs" />
     <Compile Include="Quests\CoreQuests\Tier11Quest.cs" />
     <Compile Include="Quests\CoreQuests\Tier10Quest.cs" />

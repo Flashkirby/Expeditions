@@ -336,27 +336,31 @@ namespace Expeditions
 
                 // build conditionals strings
                 string conditionals = "";
+                string firstLine = "";
                 if (currentME.expedition.conditionDescription1 != "")
                 {
                     conditionals += StrTick(currentME.expedition.condition1Met) + 
                         currentME.expedition.conditionDescription1;
-
-                    if (currentME.expedition.conditionDescription2 != "")
-                    {
-                        conditionals += "\n" + StrTick(currentME.expedition.condition2Met) +
-                              currentME.expedition.conditionDescription2;
-                    }
-                    if (currentME.expedition.conditionDescription3 != "")
-                    {
-                        conditionals += "\n" + StrTick(currentME.expedition.condition3Met) +
-                              currentME.expedition.conditionDescription3;
-                    }
-                    if (currentME.expedition.conditionDescriptionCountable != "")
-                    {
-                        conditionals += "\n[" + currentME.expedition.conditionCounted
-                            + (currentME.expedition.conditionCountedMax>0 ? "/" + currentME.expedition.conditionCountedMax : "") 
-                            + "] " + currentME.expedition.conditionDescriptionCountable;
-                    }
+                    firstLine = "\n";
+                }
+                if (currentME.expedition.conditionDescription2 != "")
+                {
+                    conditionals += firstLine + StrTick(currentME.expedition.condition2Met) +
+                          currentME.expedition.conditionDescription2;
+                    firstLine = "\n";
+                }
+                if (currentME.expedition.conditionDescription3 != "")
+                {
+                    conditionals += firstLine + StrTick(currentME.expedition.condition3Met) +
+                          currentME.expedition.conditionDescription3;
+                    firstLine = "\n";
+                }
+                if (currentME.expedition.conditionDescriptionCountable != "")
+                {
+                    conditionals += firstLine + "[" + currentME.expedition.conditionCounted
+                        + (currentME.expedition.conditionCountedMax > 0 ? "/" + currentME.expedition.conditionCountedMax : "")
+                        + "] " + currentME.expedition.conditionDescriptionCountable;
+                    firstLine = "\n";
                 }
                 _conditionsDesc.SetText(conditionals);
                 _conditionsDesc.Top.Set(yBottom, 0f);

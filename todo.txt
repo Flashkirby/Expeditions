@@ -1,10 +1,11 @@
 For v1.0:
-Wayfarer Items
-	summons
-	potion
-Remove/Fix placeholder images
-NPC chat and items
-Disable DEBUG
+
+addon:
+prerequisite
+conditions
+kill expeditions
+
+NPC chat
 
 
 
@@ -13,7 +14,9 @@ git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
 
 Credits:
 Flashkirby99 - I am making this mod.
-jopojelly - Advice on mod referencing and .tmod usage
+jopojelly - Additional advice on mod referencing and .tmod usage
+Supeh Mario - Original sprite for fox
 
 REMINDER:
-Compile, move .dll and .xml to ExpeditionAddons template
+Compile, 
+\Expeditions\bin\Debug move .dll and .xml to ExpeditionAddons template
