@@ -14,7 +14,6 @@ namespace Expeditions.Quests
             expedition.difficulty = 11;
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;
-            expedition.repeatable = true;
 
             expedition.conditionDescription1 = "Defeat the Moon Lord";
             expedition.conditionDescriptionCountable = "Destroy the pillars";
