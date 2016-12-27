@@ -20,7 +20,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            AddRewardItem(ItemID.GoldCoin, 15);
+            AddRewardMoney(Item.buyPrice(0, 15, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Boss summons!

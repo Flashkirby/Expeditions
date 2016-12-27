@@ -21,7 +21,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            AddRewardItem(ItemID.GoldCoin, 25);
+            AddRewardMoney(Item.buyPrice(0, 25, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // More accessory fine-tuning

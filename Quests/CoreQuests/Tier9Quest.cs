@@ -22,7 +22,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            AddRewardItem(ItemID.GoldCoin, 20);
+            AddRewardMoney(Item.buyPrice(0, 20, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Lunar event prep

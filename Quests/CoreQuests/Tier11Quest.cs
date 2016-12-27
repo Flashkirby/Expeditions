@@ -25,8 +25,8 @@ namespace Expeditions.Quests
         {
             expedition.conditionDescription1 = "Defeat an eldritch demon";
 
-            AddRewardItem(ItemID.GoldCoin, Item.buyPrice(0, 50));
-            AddRewardItem(mod.ItemType("StockBox2"), 3);
+            AddRewardMoney(Item.buyPrice(0, 30, 0, 0));
+            AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // More accessory fine-tuning
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 68); //Lucky

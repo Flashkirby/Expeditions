@@ -23,7 +23,7 @@ namespace Expeditions.Quests
         {
             expedition.AddDeliverable(ItemID.HallowedBar, 3);
 
-            AddRewardItem(ItemID.GoldCoin, 8);
+            AddRewardMoney(Item.buyPrice(0, 8, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Give a taster of life fruits if not obtained yet
