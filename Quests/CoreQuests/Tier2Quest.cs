@@ -25,6 +25,7 @@ namespace Expeditions.Quests
 
                 // Helpful biome-styled prefixes and enough bars for a bow
                 AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
+                AddRewardItem(mod.ItemType("StockBox"), 1);
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 79); //Intrepid
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 66); //Arcane
                 AddRewardPrefix(ItemID.DemoniteBar, 8);

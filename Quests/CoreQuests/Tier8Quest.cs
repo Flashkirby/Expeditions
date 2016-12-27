@@ -21,6 +21,7 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardItem(ItemID.GoldCoin, 15);
+            AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Boss summons!
             AddRewardItem(ItemID.LihzahrdPowerCell, 3);

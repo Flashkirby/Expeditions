@@ -22,7 +22,7 @@ namespace Expeditions.Quests
             expedition.AddDeliverable(ItemID.LifeFruit, 1);
 
             AddRewardItem(ItemID.GoldCoin, 10);
-            AddRewardItem(ItemID.GoldenCrate, 1);
+            AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // More accessory fine-tuning
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 65); //Warding

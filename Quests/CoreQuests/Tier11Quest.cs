@@ -14,6 +14,7 @@ namespace Expeditions.Quests
             expedition.difficulty = 11;
             expedition.ctgSlay = true;
             expedition.ctgImportant = true;
+            expedition.repeatable = true;
 
             expedition.conditionDescription1 = "Defeat the Moon Lord";
             expedition.conditionDescriptionCountable = "Destroy the pillars";
@@ -25,28 +26,29 @@ namespace Expeditions.Quests
             expedition.conditionDescription1 = "Defeat an eldritch demon";
 
             AddRewardItem(ItemID.GoldCoin, Item.buyPrice(0, 50));
+            AddRewardItem(mod.ItemType("StockBox2"), 3);
 
             // More accessory fine-tuning
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 68); //Lucky
 
-            // Enough or 44 of one type (need 45 for full armour)
-            AddRewardItem(ItemID.FragmentSolar, 1);
-            AddRewardItem(ItemID.FragmentVortex, 1);
-            AddRewardItem(ItemID.FragmentNebula, 1);
-            AddRewardItem(ItemID.FragmentStardust, 1);
+            // A few extra fragments
+            AddRewardItem(ItemID.FragmentSolar, 10);
+            AddRewardItem(ItemID.FragmentVortex, 10);
+            AddRewardItem(ItemID.FragmentNebula, 10);
+            AddRewardItem(ItemID.FragmentStardust, 10);
 
             // Always need chests
             AddRewardItem(ItemID.MartianChest, 1);
         }
         public override string Description(bool complete)
         {
-            return "Wow! You did it! This is most definitely one for the books! Phew... pat yourself on the back a job well done, but we're not done yet - far from it! There's always more to discover, take a look around; perhaps its time to visit new lands? There's more to the world than just " + Main.worldName + ", y'know. " ;
+            if (complete) return "Wow! You did it! This is most definitely one for the books! Phew... pat yourself on the back a job well done, but we're not done yet - far from it! There's always more to discover, take a look around; perhaps its time to visit new lands? There's more to the world than just " + Main.worldName + ", y'know. ";
             return "Ok, serious time. The whole kerfuffle with cultists and pillars, looks to be leading to the summoning of a huge, eldritch demon. Plus, it doesn't look like there's a way to remove the pillars without triggering this event, so I guess you'll have to face it soon. Prepare yourself, looks like it might get messy. ";
         }
 
         public override bool CheckPrerequisites(Player player)
         {
-            return 
+            return
                 Expeditions.GetCurrentExpeditionTier() >= expedition.difficulty - 1
                 && NPC.downedAncientCultist;
         }
@@ -60,7 +62,8 @@ namespace Expeditions.Quests
                 if (NPC.downedTowerVortex) count++;
                 if (NPC.downedTowerNebula) count++;
                 if (NPC.downedTowerStardust) count++;
-            }else
+            }
+            else
             {
                 expedition.conditionDescription1 = "Defeat the Moon Lord";
             }

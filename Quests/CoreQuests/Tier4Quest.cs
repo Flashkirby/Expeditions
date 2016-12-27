@@ -22,6 +22,7 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
+            AddRewardItem(mod.ItemType("StockBox"), 1);
 
             // Hellstone bars to help get equipment faster in case you did this on accident
             AddRewardItem(ItemID.HellstoneBar, 10);

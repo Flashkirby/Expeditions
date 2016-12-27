@@ -24,6 +24,7 @@ namespace Expeditions.Quests
             expedition.AddDeliverable(ItemID.HallowedBar, 3);
 
             AddRewardItem(ItemID.GoldCoin, 8);
+            AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Give a taster of life fruits if not obtained yet
             AddRewardItem(ItemID.LifeFruit, 1);

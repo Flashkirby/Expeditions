@@ -21,6 +21,7 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 2, 0, 0));
+            AddRewardItem(mod.ItemType("StockBox"), 1);
 
             // A key for the dungeon
             AddRewardItem(ItemID.GoldenKey, 1);

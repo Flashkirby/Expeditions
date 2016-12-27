@@ -22,6 +22,7 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardItem(ItemID.GoldCoin, 25);
+            AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // More accessory fine-tuning
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 65); //Warding

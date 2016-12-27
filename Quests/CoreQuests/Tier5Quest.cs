@@ -21,6 +21,7 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardMoney(Item.buyPrice(0, 5, 0, 0));
+            AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Enough for mining tool
             AddRewardItem(ItemID.CobaltBar, 15); 

@@ -23,6 +23,7 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             AddRewardItem(ItemID.GoldCoin, 20);
+            AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Lunar event prep
             AddRewardItem(ItemID.LifeforcePotion, 3);
