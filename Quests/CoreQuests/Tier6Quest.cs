@@ -21,8 +21,6 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            expedition.AddDeliverable(ItemID.HallowedBar, 3);
-
             AddRewardMoney(Item.buyPrice(0, 8, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
