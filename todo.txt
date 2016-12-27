@@ -1,13 +1,6 @@
 For v1.0:
-
-addon:
-prerequisite
-conditions
-kill expeditions
-
 NPC chat
-
-
+cat set defaults error
 
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\

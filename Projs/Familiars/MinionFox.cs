@@ -26,6 +26,9 @@ namespace Expeditions.Projs.Familiars
             ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
             ProjectileID.Sets.Homing[projectile.type] = true;
 
+            // What does the fox say? "pls don't reference null instances"
+            if (Main.netMode == 2) return;
+
             drawOriginOffsetY = (Main.projectileTexture[projectile.type].Width - projectile.width) / 2 ;
             drawOffsetX = (Main.projectileTexture[projectile.type].Height / Main.projFrames[projectile.type]) - projectile.height - 4;
         }
