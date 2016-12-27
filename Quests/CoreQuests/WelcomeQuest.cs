@@ -37,7 +37,7 @@ namespace Expeditions.Quests
             {
                 for (int i = 0; i < 200; i++)
                 {
-                    if (!Main.npc[i].active) continue;
+                    if (!Main.npc[i].active || Main.npc[i].type == NPCID.OldMan) continue;
                     if (Main.npc[i].townNPC && !Main.npc[i].homeless) cond1 = true;
                 }
             }
