@@ -72,7 +72,7 @@ namespace Expeditions.NPCs
                     return 1f; //guaranteed to spawn on next call (because we want to be found)
                 }
             }
-            catch(Exception e) { } //I hate array errors
+            catch { } //I hate array errors
             return 0f;
         }
 

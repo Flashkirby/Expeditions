@@ -82,6 +82,7 @@ namespace Expeditions
         /// </summary>
         /// <param name="itemType">ItemID item type</param>
         /// <param name="stack"></param>
+        /// <param name="prefix"></param>
         public static void ClientSpawnItem(int itemType, int stack = 1, int prefix = 0)
         {
             Expeditions.ClientNetSpawnItem(itemType, stack, prefix);

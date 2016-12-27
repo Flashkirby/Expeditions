@@ -188,7 +188,7 @@ namespace Expeditions
                     if (hasStacks[i] < stacks[i]) return false;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
@@ -198,9 +198,6 @@ namespace Expeditions
         /// <summary>
         /// Check against itemTypes to see if it matches, if so add to corrosponding index in stack counter. 
         /// </summary>
-        /// <param name="item"></param>
-        /// <param name="itemTypes"></param>
-        /// <param name="itemStackCount"></param>
         private void addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount, int[]itemStacks, bool deductItems = false)
         {
             for (int i = 0; i < itemTypes.Length; i++)
@@ -457,7 +454,7 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Called at the start of each day, aka (Main.time == 0.0 && Main.dayTime). 
+        /// Called at the start of each day, aka (Main.time == 0.0 and Main.dayTime). 
         /// </summary>
         public void UpdateNewDay()
         {
