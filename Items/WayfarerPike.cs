@@ -20,7 +20,7 @@ namespace Expeditions.Items
             item.shoot = mod.ProjectileType("WayfarerPike");
             item.shootSpeed = 3.6f;
 
-            item.value = Item.sellPrice(0, 0, 25, 0);
+            item.value = Item.buyPrice(0, 0, 50, 0);
         }
     }
 }

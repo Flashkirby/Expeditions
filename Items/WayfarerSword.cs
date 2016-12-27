@@ -18,7 +18,7 @@ namespace Expeditions.Items
             item.useAnimation = 21;
             item.knockBack = 6f;
             
-            item.value = Item.sellPrice(0, 0, 25, 0);
+            item.value = Item.buyPrice(0, 0, 50, 0);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Expeditions.Items
             item.shoot = mod.ProjectileType("VacuumOrb");
             item.shootSpeed = 7f;
 
-            item.value = Item.buyPrice(0, 35, 0, 0);
+            item.value = Item.buyPrice(0, 5, 0, 0);
         }
         public override Vector2? HoldoutOffset()
         {
