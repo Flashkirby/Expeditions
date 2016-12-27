@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -358,20 +358,82 @@ namespace Expeditions.NPCs
         public override string GetChat()
         {
             Expeditions.CloseExpeditionMenu(true); // Stop conflict caused by Bounty Book
-            //"Ok, here's the deal. I'm really not cut out for adventuring, but my employers are constantly demanding information about WORLDNAME. They also send me goodies whenever I document something new, which I'm more than willing to share... catch my drift? But we'll need a base camp first, and I've got all this stuff lying around..."
-            if(npc.homeless)
+
+            if (npc.homeless)
             {
-                return "Hmm... a tent over here, a campfire over there...";
+                switch (Main.rand.Next(3))
+                {
+                    case 1:
+                        return "Hmm... maybe a tent over here... ";
+                    case 2:
+                        return "Now, you wouldn't happen to know a realtor, would you? ";
+                    default:
+                        return "I could really do with a coffee right now. Or a water cooler. Or an office. ";
+                }
             }
-            return "Oh... um... ignore me. I'm waiting for my assignment. ";
 
-            //bloodmoon
-            //  paper work
-            //  go really far away
-            //bountyboard in underworld
-            //stapler
-            //how does X you ask? Magic.
+            List<string> speech = new List<string>();
 
+            if (Terraria.GameContent.Events.BirthdayParty.PartyIsUp && Main.rand.Next(3) == 0)
+            {
+                return "Let's make this party one to remember! And also cake. Lots of cake. ";
+            }
+            if (Main.dayTime)
+            {
+                if (Main.raining) speech.Add("Watch out! There's water coming from the sky! Haha, just kidding. ");
+
+                if (Main.time < 16200.0)
+                {
+                    speech.Add("Good morning, d'you need to look at today's agenda? ");
+                    speech.Add("I hate mondays. *Yawn*. ");
+                    speech.Add("How do I post expeditions on every notice board? Magic. ");
+                }
+                else if (Main.time <= 37800.0)
+                {
+                    speech.Add("Good afternoon, how are your explorations faring? ");
+                    speech.Add("Hmm. Need more stamp ink. Oh hello, what do you need today? ");
+                    speech.Add("I drew a smiley face on my boss once. " +
+                        (Main.rand.Next(2) == 0 ? "He" : "She") +
+                        " was NOT happy. ");
+                }
+                else
+                {
+                    speech.Add("Good evening, do you have any completed expeditions for me to sign off? ");
+                    speech.Add("I could really do with a holiday one of these days. ");
+                    speech.Add("Why can I hold all these items? Magic. ");
+                }
+            }
+            else
+            {
+                if (Main.bloodMoon)
+                {
+                    speech.Add("Ahem. I believe you have my stapler. ");
+                    speech.Add("Sorry, you'll just have to wait. I am VERY busy, and this paperwork will not sort itself. ");
+                    speech.Add("Did you know there's a blood moon outside? If ONLY I knew someone who could go and out and deal with it... ");
+                }
+                else
+                {
+                    speech.Add("I'll have you know I am unbeaten in waste paper basketball. ");
+                    speech.Add("I'll have you know I excel at spreadsheets. ");
+                    speech.Add("Sometimes I miss the urban sprawl. Less of everything trying to kill you - well most of the time. ");
+                    speech.Add("What is 'sleep'? ");
+                }
+            }
+             
+
+            string name = NPC.GetFirstNPCNameOrNull(NPCID.Guide);
+            if (name != null) speech.Add(name + " seems like a really helpful guy, but I heard he has a notorious reputation for inappropriate door opening. ");
+
+            name = NPC.GetFirstNPCNameOrNull(NPCID.TravellingMerchant);
+            if (name != null) speech.Add(name + " seems to have been to all sorts of places, only he never tells me where exactly. ");
+
+            name = NPC.GetFirstNPCNameOrNull(NPCID.Wizard);
+            if (name != null) speech.Add(name + " has been showing me some cool tricks, wanna to see? No? Ok. ");
+
+            name = NPC.GetFirstNPCNameOrNull(NPCID.TaxCollector);
+            if (name != null) speech.Add("I keep telling " +name + " that I don't handle finances, so he'll just have to settle for stationary. ");
+
+            return speech[Main.rand.Next(speech.Count)];
         }
 
         public override void SetChatButtons(ref string button, ref string button2)

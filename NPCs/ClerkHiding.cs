@@ -121,7 +121,15 @@ namespace Expeditions.NPCs
 
         public override string GetChat()
         {
-            return "Woah! I wasn't sleeping on the job, honest! ";
+            switch(Main.rand.Next(3))
+            {
+                case 1:
+                    return "Waah!? I wasn't sleeping on the job, honest. ";
+                case 2:
+                    return "Oh! Don't mind me, I was just taking a power nap. ";
+                default:
+                    return "Y-yes sir? Wait a minute, you're not my boss. ";
+            }
         }
     }
 }

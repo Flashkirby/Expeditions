@@ -1,7 +1,5 @@
 For v1.0:
 NPC chat
-cat set defaults error
-
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
 
