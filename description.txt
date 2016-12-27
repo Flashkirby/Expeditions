@@ -6,3 +6,8 @@ Expedition system features:
 * Clerk NPC that provides Expedition access and a shop
 * NPC spawns hidden near around spawn area, search a bit!
 * Mod in your own expeditions!
+
+Credits:
+Flashkirby99 - I am making this mod.
+jopojelly - Additional advice on mod referencing and .tmod usage
+Supeh Mario - Original sprite for fox.
