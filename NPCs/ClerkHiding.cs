@@ -98,17 +98,14 @@ namespace Expeditions.NPCs
             {
                 if(p.active && p.talkNPC == npc.whoAmI)
                 {
-                    //appear out of the grass
-                    for(int i = 0; i < 40; i++)
-                    {
-                        Dust.NewDust(npc.position, npc.width, npc.height,
-                            DustID.GrassBlades, (i - 20) * 0.1f, -1.5f);
-                    }
-                    Main.PlaySound(6, npc.Center);
-
-                    npc.dontTakeDamage = false;
-                    npc.Transform(mod.NPCType("Clerk"));
+                    WakeUp();
                 }
+            }
+
+            // Also wake up if falling
+            if(npc.velocity.Y != 0f)
+            {
+                WakeUp();
             }
 
             // Floor friction
@@ -118,10 +115,24 @@ namespace Expeditions.NPCs
                 npc.velocity.X = 0f;
             }
         }
+        private void WakeUp()
+        {
+            //appear out of the grass
+            for (int i = 0; i < 40; i++)
+            {
+                Dust.NewDust(npc.position, npc.width, npc.height,
+                    DustID.GrassBlades, (i - 20) * 0.1f, -1.5f);
+            }
+            Main.PlaySound(6, npc.Center);
+
+            npc.dontTakeDamage = false;
+            npc.Transform(mod.NPCType("Clerk"));
+        }
 
         public override string GetChat()
         {
-            switch(Main.rand.Next(3))
+            WakeUp();
+            switch (Main.rand.Next(3))
             {
                 case 1:
                     return "Waah!? I wasn't sleeping on the job, honest. ";
