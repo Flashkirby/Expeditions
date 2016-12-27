@@ -43,6 +43,7 @@ namespace Expeditions.Quests
         public override string Description(bool complete)
         {
             if (complete) return "Well big scary skeletons aside, that went pretty smoothly, don'tcha think? ";
+            if (expedition.condition2Met && !expedition.condition1Met) return "Ouch, that sounds... painful. Looks like you'll have to help the old man with his curse. ";
             return "Sooner or later we'll need access to the dungeon so we can map it out. That's where you come in! Maybe try asking that old guy nicely? ";
         }
 
