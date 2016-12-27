@@ -16,6 +16,7 @@ namespace Expeditions.Quests
             expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Gain access to the Dungeon";
+            expedition.conditionDescription2 = "Enter the Dungeon";
 
         }
         public override void AddItemsOnLoad()
@@ -51,8 +52,9 @@ namespace Expeditions.Quests
         }
         public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (NPC.downedBoss3 && !cond1) cond1 = player.ZoneDungeon;
-            return cond1;
+            if (NPC.downedBoss3 && !cond1) cond1 = NPC.downedBoss3;
+            if (!cond2) cond2 = player.ZoneDungeon;
+            return cond1 && cond2;
         }
     }
 }

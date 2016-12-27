@@ -28,7 +28,7 @@ namespace Expeditions.Quests
                 AddRewardItem(mod.ItemType("StockBox"), 1);
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 79); //Intrepid
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 66); //Arcane
-                AddRewardPrefix(ItemID.DemoniteBar, 8);
+                AddRewardItem(ItemID.DemoniteBar, 8);
             }
             else
             {
@@ -40,12 +40,12 @@ namespace Expeditions.Quests
                 AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 64); //Armored
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 75); //Hasty
-                AddRewardPrefix(ItemID.CrimtaneBar, 8);
+                AddRewardItem(ItemID.CrimtaneBar, 8);
             }
             // Other useful items
-            AddRewardPrefix(WorldGen.ironBar, 10);
-            AddRewardPrefix(ItemID.Gel, 50);
-            AddRewardPrefix(ItemID.Wood, 100);
+            AddRewardItem(WorldGen.ironBar, 10);
+            AddRewardItem(ItemID.Gel, 50);
+            AddRewardItem(ItemID.Wood, 100);
 
             // Always need chests
             AddRewardItem(ItemID.Chest);
