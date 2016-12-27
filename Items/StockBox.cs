@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    class StockBox : ModItem
+    public class StockBox : ModItem
     {
         public override void SetDefaults()
         {

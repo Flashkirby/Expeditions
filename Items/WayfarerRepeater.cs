@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    class WayfarerRepeater : ModItem
+    public class WayfarerRepeater : ModItem
     {
         public override void SetDefaults()
         {

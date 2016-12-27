@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    class WayfarerBook : ModItem
+    public class WayfarerBook : ModItem
     {
         public override void SetDefaults()
         {

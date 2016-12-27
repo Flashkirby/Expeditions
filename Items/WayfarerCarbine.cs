@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    class WayfarerCarbine : ModItem
+    public class WayfarerCarbine : ModItem
     {
         public override void SetDefaults()
         {

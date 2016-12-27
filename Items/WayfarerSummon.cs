@@ -11,7 +11,7 @@ namespace Expeditions.Items
     /// Chicken chases enemies normally
     /// Cat attacks away from the player
     /// </summary>
-    class WayfarerSummon : ModItem
+    public class WayfarerSummon : ModItem
     {
         public override void SetDefaults()
         {

@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    class WayfarerSword : ModItem
+    public class WayfarerSword : ModItem
     {
         public override void SetDefaults()
         {

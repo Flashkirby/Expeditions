@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    class PrefixApplicator : ModItem
+    public class PrefixApplicator : ModItem
     {
         public override void SetDefaults()
         {

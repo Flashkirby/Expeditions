@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Expeditions.Items
 {
-    class WayfarerStaff : ModItem
+    public class WayfarerStaff : ModItem
     {
         public override void SetDefaults()
         {
