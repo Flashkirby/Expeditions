@@ -378,14 +378,19 @@ namespace Expeditions.NPCs
             {
                 return "Let's make this party one to remember! And also cake. Lots of cake. ";
             }
+
             if (Main.dayTime)
             {
                 if (Main.raining) speech.Add("Watch out! There's water coming from the sky! Haha, just kidding. ");
+                if (Main.slimeRain) speech.Add("Uhm yeah, I'm just going to stay indoors until the slimes are gone, thanks. ");
+
+                GetTheTime(speech);
 
                 if (Main.time < 16200.0)
                 {
                     speech.Add("Good morning, d'you need to look at today's agenda? ");
                     speech.Add("I hate mondays. *Yawn*. ");
+                    speech.Add("Did you know, 63% of all statistics are made up? ");
                     speech.Add("How do I post expeditions on every notice board? Magic. ");
                 }
                 else if (Main.time <= 37800.0)
@@ -395,11 +400,13 @@ namespace Expeditions.NPCs
                     speech.Add("I drew a smiley face on my boss once. " +
                         (Main.rand.Next(2) == 0 ? "He" : "She") +
                         " was NOT happy. ");
+                    speech.Add("How do you float a paperclip on water? Magic. ");
                 }
                 else
                 {
                     speech.Add("Good evening, do you have any completed expeditions for me to sign off? ");
-                    speech.Add("I could really do with a holiday one of these days. ");
+                    speech.Add("I tried using a magic self-writing quill once. All my notes ended up looking like tabloids. ");
+                    speech.Add("Does the fact that everything seems to carry money strike you as weird? Or is it just me. ");
                     speech.Add("Why can I hold all these items? Magic. ");
                 }
             }
@@ -410,13 +417,17 @@ namespace Expeditions.NPCs
                     speech.Add("Ahem. I believe you have my stapler. ");
                     speech.Add("Sorry, you'll just have to wait. I am VERY busy, and this paperwork will not sort itself. ");
                     speech.Add("Did you know there's a blood moon outside? If ONLY I knew someone who could go and out and deal with it... ");
+                    speech.Add("I'm stressed. I'm holding a sharpened quill. I'd stay out of my way if I were you. ");
                 }
                 else
                 {
+                    GetTheTime(speech);
+
                     speech.Add("I'll have you know I am unbeaten in waste paper basketball. ");
                     speech.Add("I'll have you know I excel at spreadsheets. ");
                     speech.Add("Sometimes I miss the urban sprawl. Less of everything trying to kill you - well most of the time. ");
-                    speech.Add("What is 'sleep'? ");
+                    speech.Add("What is 'sleep' anyways? ");
+                    speech.Add("How do I stay up all night? Coffee. Uh... I mean magic. ");
                 }
             }
              
@@ -434,6 +445,19 @@ namespace Expeditions.NPCs
             if (name != null) speech.Add("I keep telling " +name + " that I don't handle finances, so he'll just have to settle for stationary. ");
 
             return speech[Main.rand.Next(speech.Count)];
+        }
+
+        private static void GetTheTime(List<string> speech)
+        {
+            double fullTime = Main.time;
+            string twelveHr = "AM";
+            if (!Main.dayTime) fullTime += 54000.0;
+            fullTime = (fullTime / 86400.0 * 24.0) - 19.75;
+            if (fullTime < 0.0) fullTime += 24.0;
+            if (fullTime >= 12.0) twelveHr = "PM";
+            int minutes = (int)((fullTime - (int)fullTime) * 60.0);
+
+            speech.Add("Have I got the time? Sure, it's " + string.Concat((int)fullTime, ":", minutes, " ", twelveHr) + ".");
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
