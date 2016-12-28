@@ -11,3 +11,4 @@ Credits:
 Flashkirby99 - I am making this mod.
 jopojelly - Additional advice on mod referencing and .tmod usage
 Supeh Mario - Original sprite for fox.
+Eli10293 - Resprite of Wayfarer's Staff.

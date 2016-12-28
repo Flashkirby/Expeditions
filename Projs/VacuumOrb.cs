@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -40,6 +41,7 @@ namespace Expeditions.Projs
                 d = Dust.NewDust(projectile.position, projectile.width, projectile.height, 71,
                     0, 0, 50, default(Color), 0.5f);
                 Main.dust[d].velocity *= 0.1f;
+                if (projectile.scale > 0) projectile.scale *= 0.9f;
             }
 
             if (projectile.penetrate != projectile.maxPenetrate && projectile.penetrate > 0)
@@ -51,7 +53,6 @@ namespace Expeditions.Projs
                 projectile.penetrate = -1;
                 projectile.damage = 0;
                 projectile.tileCollide = false;
-                projectile.hide = true;
                 projectile.velocity = projectile.velocity * 0.25f;
 
                 Main.PlaySound(2, projectile.Center, 24);
@@ -61,6 +62,8 @@ namespace Expeditions.Projs
             {
                 if(projectile.timeLeft == explosionTimeLeft) Main.PlaySound(2, projectile.Center, 27);
                 projectile.damage = (int)projectile.localAI[0];
+
+                projectile.hide = true;
 
                 projectile.Center = projectile.BottomRight;
                 projectile.width = 64;
@@ -79,12 +82,30 @@ namespace Expeditions.Projs
                     Main.dust[d].velocity *= 3f;
                 }
             }
+
+            projectile.rotation += projectile.direction;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             projectile.penetrate = 1;
             projectile.velocity = Vector2.Zero;
+            return false;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Texture2D t = Main.projectileTexture[projectile.type];
+            Vector2 p = projectile.position - Main.screenPosition;
+            Vector2 c = new Vector2(Main.projectileTexture[projectile.type].Width / 2, Main.projectileTexture[projectile.type].Height / 2);
+            spriteBatch.Draw(t,
+                p + c,
+                null, new Color(255, 255, 255, projectile.alpha),
+                projectile.rotation,
+                c,
+                projectile.scale,
+                SpriteEffects.None,
+                0f);
             return false;
         }
     }

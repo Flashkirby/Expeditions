@@ -12,9 +12,10 @@ namespace Expeditions.Items
             item.CloneDefaults(ItemID.AquaScepter);
             item.name = "Wayfarer's Cane";
             item.toolTip = "Shoots an explosive bolt";
-            item.width = 42;
-            item.height = 14;
+            item.width = 36;
+            item.height = 36;
             item.UseSound = SoundID.Item72;
+            Item.staff[item.type] = true;
 
             item.mana = 12;
             item.damage = 20;
