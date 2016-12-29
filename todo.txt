@@ -1,5 +1,7 @@
-For v1.0:
-NPC chat
+https://forums.terraria.org/index.php?threads/abluescarabs-mods.47835/#WingSlot
+Fix wingslot conflict (maybe just read wingTimeMax > 0)
+
+
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
 
