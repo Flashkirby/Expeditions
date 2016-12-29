@@ -19,6 +19,12 @@ namespace Expeditions
         /// <summary> Colour of mild negative text. Dull red. </summary>
         public readonly static Color poorColour = new Color(150, 75, 75);
 
+        public static string ExpeditionTrackerTemplate = "Expedition Tracker: ";
+        public static string ExpeditionTrackerAccomplished = " accomplished!";
+        public static string ExpeditionTrackerNotValid = " is no longer valid...";
+
+        
+
         public ModExpedition mex
         {
             get;
@@ -59,6 +65,12 @@ namespace Expeditions
         public int conditionCounted = 0;
         /// <summary>Tracks a conditional, will be displayed when conditionDescriptionCountable is not empty and is > 0. Returns true by default when set to 0. </summary>
         public int conditionCountedMax = 0;
+
+        /// <summary> Should the tracker tell the player when the count is halfway complete? TrackQuarterCompleted will override this. </summary>
+        public bool conditionCountedTrackHalfCompleted = false;
+        /// <summary> Should the tracker tell the player when each quarter of the count is reached? This field will override TrackHalfCompleted. </summary>
+        public bool conditionCountedTrackQuarterCompleted = false;
+
         /// <summary>Completed expeditions are archived and cannot be redone unless repeatable</summary>
         public bool completed = false;
         /// <summary>Allows archived expeditions to be redone</summary>
@@ -95,6 +107,7 @@ namespace Expeditions
             }
         }
         private bool meetc = false;
+        private int lastCounted = 0;
 
         /// <summary>
         /// Checks against all conditions to see if completeable. 
@@ -116,25 +129,55 @@ namespace Expeditions
             if (trackingActive)
             {
                 // Apply green colour to gains
-                if (!meet1 && condition1Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription1 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
-                if (!meet2 && condition2Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription2 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
-                if (!meet3 && condition3Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription3 + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
-                if(!meetc && conditionCounted >= conditionCountedMax) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescriptionCountable + " accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                if (!meet1 && condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!meet2 && condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!meet3 && condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!meetc)
+                {
+                    if (conditionCounted >= conditionCountedMax)
+                    {
+                        Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                    }
+                    else if (
+                       conditionCountedTrackQuarterCompleted ||
+                       conditionCountedTrackHalfCompleted
+                       )
+                    {
+                        if (
+                            (lastCounted < conditionCountedMax / 2 &&
+                            conditionCounted >= conditionCountedMax / 2
+                            ) ||
+                            (lastCounted < conditionCountedMax / 4 &&
+                            conditionCounted >= conditionCountedMax / 4 &&
+                            conditionCountedTrackQuarterCompleted
+                            ) ||
+                            (lastCounted < 3 * conditionCountedMax / 4 &&
+                            conditionCounted >= 3 * conditionCountedMax / 4 &&
+                            conditionCountedTrackQuarterCompleted)
+                            )
+                        {
+                            Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + " Progress is [" + conditionCounted + "/" + conditionCountedMax + "]", muteColour.R, muteColour.G, muteColour.B);
+                        }
+                    }
+                }
 
                 // Apply red colour to lossess
-                if (meet1 && !condition1Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription1 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
-                if (meet2 && !condition2Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription2 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
-                if (meet3 && !condition3Met) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescription3 + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
-                if (meetc && conditionCounted < conditionCountedMax) Main.NewText("Expedition Tracker: '" + name + "' " + conditionDescriptionCountable + " is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                if (meet1 && !condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                if (meet2 && !condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                if (meet3 && !condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                if (meetc && conditionCounted < conditionCountedMax) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
             }
-            
+
+            // Set last counted after use
+            lastCounted = conditionCounted;
+
             if (deliverables.Count > 0)
             {
                 if (CheckRequiredItems())
                 {
-                    if(trackingActive && !trackItems)
+                    if (trackingActive && !trackItems)
                     {
-                        Main.NewText("Expedition Tracker: '" + name + "' Collect expedition items accomplished!", muteColour.R, muteColour.G, muteColour.B);
+                        Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' Collect expedition items" + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
                         trackItems = true;
                     }
                 }
@@ -142,7 +185,7 @@ namespace Expeditions
                 {
                     if (trackingActive && trackItems && Main.mouseItem.type == 0)
                     {
-                        Main.NewText("Expedition Tracker: '" + name + "' Collect expedition items is no longer valid...", poorColour.R, poorColour.G, poorColour.B);
+                        Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' Collect expedition items" + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
                         trackItems = false;
                     }
                     return false;
