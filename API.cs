@@ -23,13 +23,28 @@ namespace Expeditions
         public static NPC LastKilledNPC { get { return Expeditions.LastKilledNPC; } }
         /// <summary> The NPC type of the Clerk NPC </summary>
         public static int NPCIDClerk { get { return Expeditions.npcClerk; } }
-        /// <summary>
-        /// 
+        /// <summary> 
+        /// Get the current tier of major expeditions completed.
+        /// <para/> Tier 1: Reaching the caverns, roughly gold/plat armour.
+        /// <para/> Tier 2: Defeated the eye of cthulu, 200+ life and demonite equips.
+        /// <para/> Tier 3: Entered the dungeon after beating skeletron. Meteor and dungeon items.
+        /// <para/> Tier 4: Faced (not defeated) Wall of Flesh. 400 life, Jungle, Necro and Molten.
+        /// <para/> Tier 5: Obtained wings, usually done during altar smashing. 
+        /// <para/> Tier 6: Faced (not defeated) a mechanical boss. Gives the player arena materials.
+        /// <para/> Tier 7: Defeated all mechanical bosses. Hallowed gear for chlorophyte and life fruit.
+        /// <para/> Tier 8: Defeated plantera, and entered the temple. Lime and yellow gear.
+        /// <para/> Tier 9: Been through the new dungeon and found all skeleton types. Maybe also bonus bosses and events. 
+        /// <para/> Tier 10: Faced (not defeated) the cultist.
+        /// <para/> Tier 11: Defeated the lunar event. The end of vanilla Terraria's progression.
         /// </summary>
-        /// <returns></returns>
         public static int CurrentTierExpedition()
         {
             return Expeditions.GetCurrentExpeditionTier();
+        }
+        /// <summary> Check if the initial housing quest has been completed. </summary>
+        public static bool CompletedInitialQuest()
+        {
+            return Expeditions.CompletedWelcomeQuest();
         }
         #endregion
         #region Expeditions.cs Methods
