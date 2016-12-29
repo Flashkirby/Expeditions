@@ -18,6 +18,7 @@ namespace Expeditions.Quests
             expedition.conditionDescription1 = "Defeat the Moon Lord";
             expedition.conditionDescriptionCountable = "Destroy the pillars";
             expedition.conditionCountedMax = 4;
+            expedition.conditionCountedTrackQuarterCompleted = true;
 
         }
         public override void AddItemsOnLoad()
