@@ -1,9 +1,13 @@
 https://forums.terraria.org/index.php?threads/abluescarabs-mods.47835/#WingSlot
 Fix wingslot conflict (maybe just read wingTimeMax > 0)
 
+Fix gust disappearing
 
+making new player uses the progress of the last character
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
+
+http://javid.ddns.net/tModLoader/widget/widgetimage/Expeditions.png
 
 Credits:
 Flashkirby99 - I am making this mod.

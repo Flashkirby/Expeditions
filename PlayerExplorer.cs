@@ -27,6 +27,12 @@ namespace Expeditions
         /// </summary>
         private List<ProgressData> _orphanData;
 
+        public override void Initialize()
+        {
+            _localExpeditionList = new List<ProgressData>();
+            _orphanData = new List<ProgressData>();
+        }
+
         public override TagCompound Save()
         {
             //the tag to save
@@ -288,6 +294,18 @@ namespace Expeditions
                     }
                 }
             }
+        }
+
+        public override void OnEnterWorld(Player player)
+        {
+            if (Main.netMode != 2)
+            {
+                // Set main list to loaded
+               CopyLocalExpeditionsToMain();
+            }
+
+            // Reset list items
+            Expeditions.WorldInit();
         }
 
         #endregion
