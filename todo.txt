@@ -1,5 +1,3 @@
-Fix gust disappearing
-
 Fix dialgoue minute in 10s
 
 Serious mod balancing becuase i am bad at terraria

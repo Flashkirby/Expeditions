@@ -122,6 +122,8 @@ namespace Expeditions.NPCs
         private float wasSittingTimer = 0f;
         public override void PostAI()
         {
+            Main.NewText(GetTheTime());
+
             Player player = Main.player[Main.myPlayer];
             // You 'saved' me!
             WorldExplore.savedClerk = true;
@@ -358,7 +360,7 @@ namespace Expeditions.NPCs
         public override string GetChat()
         {
             Expeditions.CloseExpeditionMenu(true); // Stop conflict caused by Bounty Book
-
+            string theTime = GetTheTime();
             if (npc.homeless)
             {
                 switch (Main.rand.Next(3))
@@ -384,7 +386,8 @@ namespace Expeditions.NPCs
                 if (Main.raining) speech.Add("Watch out! There's water coming from the sky! Haha, just kidding. ");
                 if (Main.slimeRain) speech.Add("Uhm yeah, I'm just going to stay indoors until the slimes are gone, thanks. ");
 
-                GetTheTime(speech);
+                speech.Add(theTime);
+                speech.Add(theTime);
 
                 if (Main.time < 16200.0)
                 {
@@ -421,7 +424,7 @@ namespace Expeditions.NPCs
                 }
                 else
                 {
-                    GetTheTime(speech);
+                    speech.Add(theTime);
 
                     speech.Add("I'll have you know I am unbeaten in waste paper basketball. ");
                     speech.Add("I'll have you know I excel at spreadsheets. ");
@@ -447,7 +450,7 @@ namespace Expeditions.NPCs
             return speech[Main.rand.Next(speech.Count)];
         }
 
-        private static void GetTheTime(List<string> speech)
+        private static string GetTheTime()
         {
             double fullTime = Main.time;
             string twelveHr = "AM";
@@ -455,9 +458,12 @@ namespace Expeditions.NPCs
             fullTime = (fullTime / 86400.0 * 24.0) - 19.75;
             if (fullTime < 0.0) fullTime += 24.0;
             if (fullTime >= 12.0) twelveHr = "PM";
-            int minutes = (int)((fullTime - (int)fullTime) * 60.0);
 
-            speech.Add("Have I got the time? Sure, it's " + string.Concat((int)fullTime, ":", minutes, " ", twelveHr) + ".");
+            int minutes = (int)((fullTime - (int)fullTime) * 60.0);
+            string divider = ":";
+            if (minutes < 10) divider += "0";
+
+            return "Have I got the time? Sure, it's " + string.Concat((int)fullTime, divider, minutes, " ", twelveHr) + ".";
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
