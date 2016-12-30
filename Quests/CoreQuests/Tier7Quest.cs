@@ -18,7 +18,7 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            expedition.AddDeliverable(ItemID.ChlorophyteOre, 1);
+            expedition.AddDeliverable(ItemID.ChlorophyteOre, 4);
             expedition.AddDeliverable(ItemID.LifeFruit, 1);
 
             AddRewardMoney(Item.buyPrice(0, 12, 0, 0));
