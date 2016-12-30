@@ -200,9 +200,9 @@ namespace Expeditions
                 {
                     uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
                 }
-                if(j == 1 || j == 2)
+                if(j != 3)
                 {
-                    // Set repeat only, and sort by alphabet as false
+                    // Set include completed, repeat only, and sort by alphabet as false
                     uIToggleImage.SetState(false);
                 }
                 this._categoryButtons.Add(uIToggleImage);
