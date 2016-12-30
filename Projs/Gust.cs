@@ -33,8 +33,8 @@ namespace Expeditions.Projs
 
                 int alpha = (int)MathHelper.Clamp(255 - projectile.timeLeft, 0, 256);
                 int g = Gore.NewGore(new Vector2(
-                    projectile.position.X + Main.rand.Next(extraSize + 1), 
-                    projectile.position.Y + Main.rand.Next(extraSize + 1)), 
+                    projectile.position.X + Main.rand.Next(extraSize + 1),
+                    projectile.position.Y + Main.rand.Next(extraSize + 1)),
                     default(Vector2), Main.rand.Next(11, 14), 1f);
                 Main.gore[g].velocity += projectile.velocity * 2;
                 Main.gore[g].velocity *= 0.2f;
@@ -43,9 +43,11 @@ namespace Expeditions.Projs
 
             projectile.ai[0]++;
 
-            if (Math.Abs(projectile.velocity.X) < 0.2f ||
-                Math.Abs(projectile.velocity.Y) < 0.2f ||
-                projectile.wet)
+            if (
+                (Math.Abs(projectile.velocity.X) < 0.2f &&
+                Math.Abs(projectile.velocity.Y) < 0.2f) ||
+                projectile.wet
+                )
             {
                 projectile.Kill();
             }
