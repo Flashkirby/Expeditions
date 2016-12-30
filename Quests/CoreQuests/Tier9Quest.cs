@@ -27,7 +27,6 @@ namespace Expeditions.Quests
 
             // Lunar event prep
             AddRewardItem(ItemID.LifeforcePotion, 3);
-            AddRewardItem(ItemID.GravitationPotion, 3);
             AddRewardItem(ItemID.WrathPotion, 3);
             AddRewardItem(ItemID.RagePotion, 3);
 

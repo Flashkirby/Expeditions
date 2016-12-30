@@ -30,8 +30,8 @@ namespace Expeditions.Quests
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 76); //Quick
 
             // Staying alive potions
-            AddRewardItem(ItemID.IronskinPotion, 10);
-            AddRewardItem(ItemID.EndurancePotion, 10);
+            AddRewardItem(ItemID.IronskinPotion, 5);
+            AddRewardItem(ItemID.EndurancePotion, 5);
 
             // Always need chests
             AddRewardItem(ItemID.GoldChest, 2);

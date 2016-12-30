@@ -43,9 +43,8 @@ namespace Expeditions.Quests
                 AddRewardItem(ItemID.CrimtaneBar, 8);
             }
             // Other useful items
-            AddRewardItem(WorldGen.ironBar, 10);
-            AddRewardItem(ItemID.Gel, 50);
-            AddRewardItem(ItemID.Wood, 100);
+            AddRewardItem(WorldGen.ironBar, 5);
+            AddRewardItem(ItemID.Gel, 15);
 
             // Always need chests
             AddRewardItem(ItemID.Chest);

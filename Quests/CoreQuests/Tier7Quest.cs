@@ -30,8 +30,8 @@ namespace Expeditions.Quests
             AddRewardPrefix(mod.ItemType("PrefixApplicator"), 76); //Quick
 
             // Find more life fruit and chlorophyte
-            AddRewardItem(ItemID.MiningPotion, 20);
-            AddRewardItem(ItemID.SpelunkerPotion, 20);
+            AddRewardItem(ItemID.MiningPotion, 3);
+            AddRewardItem(ItemID.SpelunkerPotion, 3);
             
             // Mushrooms for ranged stuff, enough for a small biome
             AddRewardItem(ItemID.DarkBlueSolution, 20);

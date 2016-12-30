@@ -26,10 +26,9 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.CopperGreaves, 1);
 
             // Useful mining tools
-            AddRewardItem(ItemID.IronPickaxe, 1);
-            AddRewardItem(ItemID.Torch, 99);
+            AddRewardItem(ItemID.Torch, 10);
             AddRewardItem(ItemID.RopeCoil, 10);
-            AddRewardItem(ItemID.SpelunkerPotion, 10);
+            AddRewardItem(ItemID.SpelunkerPotion, 2);
 
             // Always need chests
             AddRewardItem(ItemID.Barrel);

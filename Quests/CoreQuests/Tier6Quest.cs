@@ -31,11 +31,11 @@ namespace Expeditions.Quests
             if (WorldGen.crimson)    AddRewardItem(ItemID.IchorCampfire);
             else                    AddRewardItem(ItemID.CursedCampfire);
             AddRewardItem(ItemID.HeartStatue, 1);
-            AddRewardItem(ItemID.HeartLantern, 3);
-            AddRewardItem(ItemID.StarinaBottle, 3);
-            AddRewardItem(ItemID.BuilderPotion, 5);
-            AddRewardItem(ItemID.GreaterHealingPotion, 10);
-            AddRewardItem(ItemID.GreaterManaPotion, 10);
+            AddRewardItem(ItemID.HeartLantern, 2);
+            AddRewardItem(ItemID.StarinaBottle, 2);
+            AddRewardItem(ItemID.BuilderPotion, 1);
+            AddRewardItem(ItemID.GreaterHealingPotion, 5);
+            AddRewardItem(ItemID.GreaterManaPotion, 5);
 
             // Always need chests
             AddRewardItem(ItemID.SteampunkChest);

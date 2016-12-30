@@ -23,16 +23,12 @@ namespace Expeditions.Quests
             AddRewardMoney(Item.buyPrice(0, 5, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
-            // Enough for mining tool
-            AddRewardItem(ItemID.CobaltBar, 15); 
-            AddRewardItem(ItemID.WoodenCrate, 2);
-
             // Weapon Buff potions are really useful
-            if (WorldGen.crimson) { AddRewardItem(ItemID.FlaskofIchor, 2); }
-            else { AddRewardItem(ItemID.FlaskofCursedFlames, 2); }
-            AddRewardItem(ItemID.ArcheryPotion, 2);
-            AddRewardItem(ItemID.MagicPowerPotion, 2);
-            AddRewardItem(ItemID.SummoningPotion, 2);
+            if (WorldGen.crimson) { AddRewardItem(ItemID.FlaskofIchor, 1); }
+            else { AddRewardItem(ItemID.FlaskofCursedFlames, 1); }
+            AddRewardItem(ItemID.ArcheryPotion, 1);
+            AddRewardItem(ItemID.MagicPowerPotion, 1);
+            AddRewardItem(ItemID.SummoningPotion, 1);
 
             // Always need chests
             AddRewardItem(ItemID.SkywareChest);

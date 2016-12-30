@@ -25,12 +25,11 @@ namespace Expeditions.Quests
             AddRewardItem(mod.ItemType("StockBox"), 1);
 
             // Hellstone bars to help get equipment faster in case you did this on accident
-            AddRewardItem(ItemID.HellstoneBar, 10);
+            AddRewardItem(ItemID.HellstoneBar, 5);
             
             // Helpful for not dying in boss fights
             AddRewardItem(ItemID.HealingPotion, 5);
             AddRewardItem(ItemID.ManaPotion, 5);
-            AddRewardItem(ItemID.IronskinPotion, 5);
             AddRewardItem(ItemID.GravitationPotion, 1);
 
             // For building a runway

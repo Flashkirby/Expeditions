@@ -24,12 +24,10 @@ namespace Expeditions.Quests
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // Boss summons!
-            AddRewardItem(ItemID.LihzahrdPowerCell, 3);
+            AddRewardItem(ItemID.LihzahrdPowerCell, 2);
 
             // Dungeon prep
-            AddRewardItem(ItemID.EndurancePotion, 3);
-            AddRewardItem(ItemID.GravitationPotion, 3);
-            AddRewardItem(ItemID.InfernoPotion, 1);
+            AddRewardItem(ItemID.InfernoPotion, 2);
 
             // Always need chests
             AddRewardItem(ItemID.LihzahrdChest);

@@ -24,15 +24,9 @@ namespace Expeditions.Quests
             AddRewardMoney(Item.buyPrice(0, 2, 0, 0));
             AddRewardItem(mod.ItemType("StockBox"), 1);
 
-            // A key for the dungeon
-            AddRewardItem(ItemID.GoldenKey, 1);
-
-            // Highly useful accessory as part of lightning boots
-            AddRewardItem(ItemID.AnkletoftheWind, 1);
-
             // Stay alaive for a bit longer
-            AddRewardItem(ItemID.HealingPotion, 15);
-            AddRewardItem(ItemID.ManaPotion, 15);
+            AddRewardItem(ItemID.HealingPotion, 5);
+            AddRewardItem(ItemID.ManaPotion, 5);
 
             // Blow up spikes!
             AddRewardItem(ItemID.Bomb, 10);
