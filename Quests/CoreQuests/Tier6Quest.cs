@@ -24,9 +24,6 @@ namespace Expeditions.Quests
             AddRewardMoney(Item.buyPrice(0, 8, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
-            // Give a taster of life fruits if not obtained yet
-            AddRewardItem(ItemID.LifeFruit, 1);
-
             // Standard useful boss items
             if (WorldGen.crimson)    AddRewardItem(ItemID.IchorCampfire);
             else                    AddRewardItem(ItemID.CursedCampfire);
@@ -34,8 +31,6 @@ namespace Expeditions.Quests
             AddRewardItem(ItemID.HeartLantern, 2);
             AddRewardItem(ItemID.StarinaBottle, 2);
             AddRewardItem(ItemID.BuilderPotion, 1);
-            AddRewardItem(ItemID.GreaterHealingPotion, 5);
-            AddRewardItem(ItemID.GreaterManaPotion, 5);
 
             // Always need chests
             AddRewardItem(ItemID.SteampunkChest);

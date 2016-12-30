@@ -1,6 +1,9 @@
-Fix dialgoue minute in 10s
+Bar matierls support
+bounty for quest 8 gave me a life fruit, yet part of quest 9's objective is to find a life fruit.  
+The Temple Access quest only requires the player to stand in front of Lihzard brick walls, which can be done without opening the door. Maybe change it so the player needs to have defeated Plantera? 
 
 Serious mod balancing becuase i am bad at terraria
+What about fishing though?
 
 
 
