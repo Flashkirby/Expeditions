@@ -23,8 +23,9 @@ namespace Expeditions.Quests
                 // Enough Ore for 6 or so bars
                 expedition.AddDeliverable(ItemID.DemoniteOre, 20);
 
+                AddRewardMoney(Item.buyPrice(0, 0, 50, 0));
+
                 // Helpful biome-styled prefixes and enough bars for a bow
-                AddRewardMoney(Item.buyPrice(0, 1, 0, 0));
                 AddRewardItem(mod.ItemType("StockBox"), 1);
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 79); //Intrepid
                 AddRewardPrefix(mod.ItemType("PrefixApplicator"), 66); //Arcane

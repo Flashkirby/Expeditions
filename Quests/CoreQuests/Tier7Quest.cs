@@ -21,7 +21,7 @@ namespace Expeditions.Quests
             expedition.AddDeliverable(ItemID.ChlorophyteOre, 1);
             expedition.AddDeliverable(ItemID.LifeFruit, 1);
 
-            AddRewardMoney(Item.buyPrice(0, 10, 0, 0));
+            AddRewardMoney(Item.buyPrice(0, 12, 0, 0));
             AddRewardItem(mod.ItemType("StockBox2"), 1);
 
             // More accessory fine-tuning
