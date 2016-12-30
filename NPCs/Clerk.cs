@@ -483,6 +483,7 @@ namespace Expeditions.NPCs
 
         public override void SetupShop(Chest shop, ref int nextSlot)
         {
+            // Before EoC
             if (!NPC.downedBoss1)
             {
                 // Until completing quest, has the bare basics
@@ -498,46 +499,53 @@ namespace Expeditions.NPCs
                     shop.item[nextSlot].SetDefaults(ItemID.TinPickaxe); nextSlot++;
                     shop.item[nextSlot].SetDefaults(ItemID.TinAxe); nextSlot++;
                 }
-                return;
             }
 
-            // Sell default items
-            shop.item[nextSlot].SetDefaults(mod.ItemType("BountyBook")); nextSlot++;
-            if (WorldGen.GoldTierOre == TileID.Gold)
+            if (Expeditions.CompletedWelcomeQuest())
             {
-                shop.item[nextSlot].SetDefaults(ItemID.GoldPickaxe); nextSlot++;
-                shop.item[nextSlot].SetDefaults(ItemID.GoldAxe); nextSlot++;
-            }
-            else
-            {
-                shop.item[nextSlot].SetDefaults(ItemID.PlatinumPickaxe); nextSlot++;
-                shop.item[nextSlot].SetDefaults(ItemID.PlatinumAxe); nextSlot++;
+                // Sell default items
+                shop.item[nextSlot].SetDefaults(mod.ItemType("BountyBook")); nextSlot++;
             }
 
-            // Gold tier weapons after beating the eye
-            shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSword")); nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerPike")); nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBow")); nextSlot++;
-
-            // Rare1 after beating corruption/crimson
-            if (NPC.downedBoss2)
+            // After EoC
+            if (NPC.downedBoss1)
             {
-                if (!WorldGen.crimson)
+                if (WorldGen.GoldTierOre == TileID.Gold)
                 {
-                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerCarbine")); nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.GoldPickaxe); nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.GoldAxe); nextSlot++;
                 }
                 else
                 {
-                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerRepeater")); nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.PlatinumPickaxe); nextSlot++;
+                    shop.item[nextSlot].SetDefaults(ItemID.PlatinumAxe); nextSlot++;
                 }
-            }
 
-            // Give some rare2 after opening the dungeon or defeating the bee
-            if(NPC.downedBoss3 || NPC.downedQueenBee)
-            {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBook")); nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerStaff")); nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSummon")); nextSlot++;
+                // Gold tier weapons after beating the eye
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSword")); nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerPike")); nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBow")); nextSlot++;
+
+                // Rare1 after beating corruption/crimson
+                if (NPC.downedBoss2)
+                {
+                    if (!WorldGen.crimson)
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerCarbine")); nextSlot++;
+                    }
+                    else
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerRepeater")); nextSlot++;
+                    }
+                }
+
+                // Give some rare2 after opening the dungeon or defeating the bee
+                if (NPC.downedBoss3 || NPC.downedQueenBee)
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBook")); nextSlot++;
+                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerStaff")); nextSlot++;
+                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSummon")); nextSlot++;
+                }
             }
         }
 
