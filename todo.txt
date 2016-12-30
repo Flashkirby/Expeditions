@@ -1,17 +1,20 @@
-Bar matierls support
-bounty for quest 8 gave me a life fruit, yet part of quest 9's objective is to find a life fruit.  
-The Temple Access quest only requires the player to stand in front of Lihzard brick walls, which can be done without opening the door. Maybe change it so the player needs to have defeated Plantera? 
 
-Serious mod balancing becuase i am bad at terraria
-What about fishing though?
-
+    Remove the current quests: this mod becomes just the framework. The only items included will be the expedition board/log (sold by merchant/skele merch), and possibly the quest boxes.This also means no need for config files, and also leads into:
+	
+    Turn the current quests and mod items into a mod extension, probably called "Expeditions Main Content". This also means if you want to use the mod for other things without all the kerfuffle of the current inbuilt quests, you can just not load the extension. See Iara's tip #2,6,4,7 (and yes I need help with this very much so - I actually do have a large list of things that need to be made into quests but haven't done so yet).
+	
+    Change quests to revolve around the Guide - literally almost facepalmed that I forgot about that.
+	
+    Clerk spawn conditions to be either something like the Travelling Merchant's 2 person requirement or just after the Guide, Merchant and Nurse move in. Probably the latter for.
+	
+    Clerk item shop (and hence role) will only be for items unlocked via quests. This was the original intention anyway, I just haven't got around to making quests for all the wayfarer things yet because time and effort, same reason as why there are only like 12 quests barely cobbled together (also Iara's tip #1,3).
+	
+    Actually get around to writing that guide on making mod extensions for this.
+    I probably missed a few things.
 
 
 
 For the future: Filter by tracking
-Mod Goals:
-Give guidance to players, make progression more fun???
-Provide catchup in multiplayer for players behind.
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
 
