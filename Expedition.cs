@@ -369,6 +369,7 @@ namespace Expeditions
         {
             deliverables.Clear();
             rewards.Clear();
+            PlayerExplorer.dbgmsg += "\n" + WorldGen.GoldTierOre + " | " + TileID.Gold + " : " + WorldGen.oreTier1 + " | " + TileID.Cobalt;
             if (mex != null) mex.AddItemsOnLoad();
         }
 

@@ -32,6 +32,10 @@ namespace Expeditions.Quests
             item.SetDefaults(ItemID.CobaltBar);
             item.name = "Cobalt or Palladium Bar";
             expedition.AddReward(item);
+            AddRewardItem(WorldGen.copperBar);
+            AddRewardItem(WorldGen.ironBar);
+            AddRewardItem(WorldGen.silverBar);
+            AddRewardItem(WorldGen.goldBar);
         }
         public override string Description(bool complete)
         {
