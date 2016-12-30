@@ -39,7 +39,7 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
-            if (complete) return "With wings you can cover more ground, avoid enemy attacks and easily reach new places! What's not to love? Though, I'm deathly afraid of heights, goodness. ";
+            if (complete) return "With the power of flight you can cover more ground, avoid enemy attacks and easily reach new places! What's not to love? Though, I'm deathly afraid of heights, goodness. ";
             return "Have you seen white, snake-like beasts flying in the skies as of late? I've heard reports that they have harbour powerful souls which could make surviving against these new creatures much easier, if you could find a use for them. What do you suppose? ";
         }
 
@@ -52,7 +52,7 @@ namespace Expeditions.Quests
         {
             if (!cond1)
             {
-                cond1 = player.wings > 0;
+                cond1 = player.wingTimeMax > 0;
             }
             return cond1;
         }
