@@ -17,6 +17,7 @@ namespace Expeditions.Quests
             expedition.ctgImportant = true;
 
             expedition.conditionDescription1 = "Gain access to the Jungle Temple";
+            expedition.conditionDescription1 = "Enter the Jungle Temple";
         }
         public override void AddItemsOnLoad()
         {
@@ -44,18 +45,19 @@ namespace Expeditions.Quests
         }
         public override bool CheckConditions(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (NPC.downedPlantBoss && !cond1)
+            if (!cond1) cond1 = NPC.downedPlantBoss;
+            if (cond1 && !cond2)
             {
                 try
                 {
-                    cond1 = Main.tile[
+                    cond2 = Main.tile[
                         (int)(player.Center.X / 16f),
                         (int)(player.Center.Y / 16f)
                         ].wall == WallID.LihzahrdBrickUnsafe;
                 }
                 catch { }
             }
-            return cond1;
+            return cond1 && cond2;
         }
     }
 }
