@@ -122,8 +122,6 @@ namespace Expeditions.NPCs
         private float wasSittingTimer = 0f;
         public override void PostAI()
         {
-            Main.NewText(GetTheTime());
-
             Player player = Main.player[Main.myPlayer];
             // You 'saved' me!
             WorldExplore.savedClerk = true;
@@ -482,10 +480,10 @@ namespace Expeditions.NPCs
                 Expeditions.OpenExpeditionMenu(ExpeditionUI.viewMode_NPC);
             }
         }
-        
+
         public override void SetupShop(Chest shop, ref int nextSlot)
         {
-            if (!Expeditions.CompletedWelcomeQuest())
+            if (!NPC.downedBoss1)
             {
                 // Until completing quest, has the bare basics
                 if (WorldGen.CopperTierOre == TileID.Copper)
@@ -516,23 +514,26 @@ namespace Expeditions.NPCs
                 shop.item[nextSlot].SetDefaults(ItemID.PlatinumAxe); nextSlot++;
             }
 
-            // Gold tier expensive weapons
+            // Gold tier weapons after beating the eye
             shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerSword")); nextSlot++;
             shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerPike")); nextSlot++;
             shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBow")); nextSlot++;
 
-            // Biome gun
-            if (!WorldGen.crimson)
+            // Rare1 after beating corruption/crimson
+            if (NPC.downedBoss2)
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerCarbine")); nextSlot++;
-            }
-            else
-            {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerRepeater")); nextSlot++;
+                if (!WorldGen.crimson)
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerCarbine")); nextSlot++;
+                }
+                else
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerRepeater")); nextSlot++;
+                }
             }
 
-            // Give some magic from eye of cthulu
-            if(NPC.downedBoss1)
+            // Give some rare2 after opening the dungeon or defeating the bee
+            if(NPC.downedBoss3 || NPC.downedQueenBee)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerBook")); nextSlot++;
                 shop.item[nextSlot].SetDefaults(mod.ItemType("WayfarerStaff")); nextSlot++;

@@ -1,10 +1,16 @@
 Fix dialgoue minute in 10s
 
 Serious mod balancing becuase i am bad at terraria
+
+
+
+
 For the future: Filter by tracking
+Mod Goals:
+Give guidance to players, make progression more fun???
+Provide catchup in multiplayer for players behind.
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
-
 
 http://javid.ddns.net/tModLoader/widget/widgetimage/Expeditions.png
 
