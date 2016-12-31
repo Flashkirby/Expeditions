@@ -1,6 +1,10 @@
 Add Expeditions, a quest system accesible via the Expedition Board craftable tile.
 This is the core mod, providing just the quest system framework, without content.
 
+Commands:
+Hold [O][K][0] when exiting the world to reset ALL quest data.
+Hold [#] when exiting the world to discard quest data from unloaded mods.
+
 Credits:
 Flashkirby99 - I am making this mod.
 jopojelly - Additional advice on mod referencing and .tmod usage
