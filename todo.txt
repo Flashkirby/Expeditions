@@ -1,9 +1,11 @@
 Track new expeditions (show like new item pickups text)
+For the future: Filter by tracking, Multi item turn in
+
+
+
 
 Delete all progress [O][K][0]
 Discard Unknowns [#]
-
-For the future: Filter by tracking
 
 git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\
 

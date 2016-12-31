@@ -71,6 +71,8 @@ namespace Expeditions
         /// <summary> Should the tracker tell the player when each quarter of the count is reached? This field will override TrackHalfCompleted. </summary>
         public bool conditionCountedTrackQuarterCompleted = false;
 
+        /// <summary> Do not show a quest prompt when unlocked </summary>
+        public bool hideQuestUnlock = false;
         /// <summary>Completed expeditions are archived and cannot be redone unless repeatable</summary>
         public bool completed = false;
         /// <summary>Allows archived expeditions to be redone</summary>
@@ -84,6 +86,9 @@ namespace Expeditions
         private bool trackCondition = false;
         /// <summary> All items gathered </summary>
         private bool trackItems = false;
+
+        /// <summary> Track last result of prerequisite </summary>
+        private bool lastPrereq = true;
 
         /// <summary> Gets the description of this expedition </summary>
         public string GetDescription()
@@ -200,7 +205,26 @@ namespace Expeditions
         public bool PrerequisitesMet()
         {
             if (Main.netMode == 2) return false;
-            if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer])) return false;
+            if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer]))
+            {
+                lastPrereq = false;
+                return false;
+            }
+
+            if (!hideQuestUnlock && !lastPrereq)
+            {
+                Item exp = new Item();
+                exp.name = "Expedition: " + name;
+                exp.stack = 1;
+                exp.active = true;
+                exp.Center = Main.player[Main.myPlayer].Center;
+                exp.rare = difficulty;
+                exp.expert = ctgImportant;
+
+                ItemText.NewText(exp, 1, true, true);
+                lastPrereq = true;
+            }
+
             return true;
         }
 
