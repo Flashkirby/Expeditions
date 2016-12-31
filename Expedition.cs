@@ -80,7 +80,9 @@ namespace Expeditions
         /// <summary>Calls expedition success to all party members when completed. Does not work with repeatable after the first completion</summary>
         public bool partyShare = false;
         
+        /// <summary> Deliverables will substitute any wood in the player's inventory. </summary>
         public bool anyWood = true;
+        /// <summary> Deliverables will substitute any ores and bars in the player's inventory. </summary>
         public bool anySameTierOreBar = true;
 
         private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
@@ -90,9 +92,8 @@ namespace Expeditions
         private bool trackCondition = false;
         /// <summary> All items gathered </summary>
         private bool trackItems = false;
-
-        /// <summary> Track last result of prerequisite </summary>
-        private bool lastPrereq = true;
+        
+        private bool lastPrereq = true; // The last result of checkPrerequisites
 
         /// <summary> Gets the description of this expedition </summary>
         public string GetDescription()
@@ -116,7 +117,7 @@ namespace Expeditions
             }
         }
         private bool meetc = false;
-        private int lastCounted = 0;
+        private int lastCounted = 0; // The previous counted value
 
         /// <summary>
         /// Checks against all conditions to see if completeable. 
@@ -403,7 +404,12 @@ namespace Expeditions
 
             PlayerExplorer.dbgmsg += "\n" + WorldGen.GoldTierOre + " | " + TileID.Gold + " : " + WorldGen.oreTier1 + " | " + TileID.Cobalt;
 
-            if (mex != null) mex.AddItemsOnLoad();
+            if (mex != null)
+            {
+                mex.deliveryItemGroups.Clear();
+
+                mex.AddItemsOnLoad();
+            }
         }
 
         /// <summary>
@@ -452,20 +458,27 @@ namespace Expeditions
                 it.stack = Math.Max(1, Math.Min(this.deliverables[i].Value, it.maxStack));
 
                 int itemType = it.type;
-                bool converted = ConvertIDToSameTierOreBar(ref itemType);
-                if (anyWood && converted)
+                int converted = ConvertIDToSameTierOreBar(ref itemType);
+                if (anyWood && converted > 0)
                 {
-                    if (itemType == ItemID.DemoniteBar)
+                    if (converted != 3)
                     {
-                        it.name = Lang.misc[37] + " " + Lang.npcName(NPCID.Demon) + " Bar";
-                    }
-                    else if (itemType == ItemID.DemoniteOre)
-                    {
-                        it.name = Lang.misc[37] + " " + Lang.npcName(NPCID.Demon) + " Ore";
+                        if (itemType == ItemID.DemoniteBar)
+                        {
+                            it.name = Lang.misc[37] + " " + Lang.npcName(NPCID.Demon) + " Bar";
+                        }
+                        else if (itemType == ItemID.DemoniteOre)
+                        {
+                            it.name = Lang.misc[37] + " " + Lang.npcName(NPCID.Demon) + " Ore";
+                        }
+                        else
+                        {
+                            it.name = Lang.misc[37] + " " + Lang.itemName(itemType);
+                        }
                     }
                     else
                     {
-                        it.name = Lang.misc[37] + " " + Lang.itemName(itemType);
+                        it.name = mex.GetCustomItemGroupName(itemType);
                     }
                 }
 
@@ -509,59 +522,67 @@ namespace Expeditions
         /// </summary>
         /// <param name="itemID">The item type which can be changed. DO NOT pass in the raw item.type value. </param>
         /// <returns>True if an item matches a conversion group. </returns>
-        public bool ConvertIDToSameTierOreBar(ref int itemID)
+        public int ConvertIDToSameTierOreBar(ref int itemID)
         {
             if (RecipeGroup.recipeGroups[RecipeGroupID.Wood].ValidItems.Contains(itemID)
                 && anyWood)
             {
                 itemID = ItemID.Wood;
-                return true;
+                return 1;
             }
 
             if (anySameTierOreBar)
             {
                 #region Ores
                 if (itemID == ItemID.CopperOre || itemID == ItemID.TinOre)
-                { itemID = ItemID.CopperOre; return true; }
+                { itemID = ItemID.CopperOre; return 2; }
                 if (itemID == ItemID.IronOre || itemID == ItemID.LeadOre)
-                { itemID = ItemID.IronOre; return true; }
+                { itemID = ItemID.IronOre; return 2; }
                 if (itemID == ItemID.SilverOre || itemID == ItemID.TungstenOre)
-                { itemID = ItemID.SilverOre; return true; }
+                { itemID = ItemID.SilverOre; return 2; }
                 if (itemID == ItemID.GoldOre || itemID == ItemID.PlatinumOre)
-                { itemID = ItemID.GoldOre; return true; }
+                { itemID = ItemID.GoldOre; return 2; }
 
                 if (itemID == ItemID.DemoniteOre || itemID == ItemID.CrimtaneOre)
-                { itemID = ItemID.DemoniteOre; return true; }
+                { itemID = ItemID.DemoniteOre; return 2; }
 
                 if (itemID == ItemID.CobaltOre || itemID == ItemID.PalladiumOre)
-                { itemID = ItemID.CobaltOre; return true; }
+                { itemID = ItemID.CobaltOre; return 2; }
                 if (itemID == ItemID.MythrilOre || itemID == ItemID.OrichalcumOre)
-                { itemID = ItemID.MythrilOre; return true; }
+                { itemID = ItemID.MythrilOre; return 2; }
                 if (itemID == ItemID.AdamantiteOre || itemID == ItemID.TitaniumOre)
-                { itemID = ItemID.AdamantiteOre; return true; }
+                { itemID = ItemID.AdamantiteOre; return 2; }
                 #endregion
                 #region Bars
                 if (itemID == ItemID.CopperBar || itemID == ItemID.TinBar)
-                { itemID = ItemID.CopperBar; return true; }
+                { itemID = ItemID.CopperBar; return 2; }
                 if (itemID == ItemID.IronBar || itemID == ItemID.LeadBar)
-                { itemID = ItemID.IronBar; return true; }
+                { itemID = ItemID.IronBar; return 2; }
                 if (itemID == ItemID.SilverBar || itemID == ItemID.TungstenBar)
-                { itemID = ItemID.SilverBar; return true; }
+                { itemID = ItemID.SilverBar; return 2; }
                 if (itemID == ItemID.GoldBar || itemID == ItemID.PlatinumBar)
-                { itemID = ItemID.GoldBar; return true; }
+                { itemID = ItemID.GoldBar; return 2; }
 
                 if (itemID == ItemID.DemoniteBar || itemID == ItemID.CrimtaneBar)
-                { itemID = ItemID.DemoniteBar; return true; }
+                { itemID = ItemID.DemoniteBar; return 2; }
 
                 if (itemID == ItemID.CobaltBar || itemID == ItemID.PalladiumBar)
-                { itemID = ItemID.CobaltBar; return true; }
+                { itemID = ItemID.CobaltBar; return 2; }
                 if (itemID == ItemID.MythrilBar || itemID == ItemID.OrichalcumBar)
-                { itemID = ItemID.MythrilBar; return true; }
+                { itemID = ItemID.MythrilBar; return 2; }
                 if (itemID == ItemID.AdamantiteBar || itemID == ItemID.TitaniumBar)
-                { itemID = ItemID.AdamantiteBar; return true; }
+                { itemID = ItemID.AdamantiteBar; return 2; }
                 #endregion
             }
-            return false;
+
+            if (mex != null)
+            {
+                if(mex.ConvertCustomItems(ref itemID))
+                {
+                    return 3;
+                }
+            }
+            return 0;
         }
 
         /// <summary>

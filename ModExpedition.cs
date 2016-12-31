@@ -34,6 +34,66 @@ namespace Expeditions
             expedition.AddDeliverable(itemID, itemStack);
         }
 
+        internal List<int[]> deliveryItemGroups = new List<int[]>();
+        /// <summary>
+        /// Adds a group of items with a specified required stack to the expedition deliver conditions. This can be used for optional deliveries, such as Cobalt OR Palladium sword.
+        /// </summary>
+        /// <param name="itemIDs"></param>
+        /// <param name="itemStack"></param>
+        public void AddDeliverableAnyOf(int[] itemIDs, int itemStack = 1)
+        {
+            if (itemIDs.Length <= 0) return;
+            deliveryItemGroups.Add(itemIDs);
+            expedition.AddDeliverable(itemIDs[0], itemStack);
+        }
+
+        internal bool ConvertCustomItems(ref int itemID)
+        {
+            foreach(int[] itemGroup in deliveryItemGroups)
+            {
+                foreach(int itemType in itemGroup)
+                {
+                    if(itemID == itemType)
+                    {
+                        itemID = itemGroup[0];
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        internal string GetCustomItemGroupName(int firstItemIDInGroup)
+        {
+            foreach (int[] itemGroup in deliveryItemGroups)
+            {
+                if (firstItemIDInGroup == itemGroup[0]) // ItemID matches this group
+                {
+                    string itemNames = "";
+                    Item i = new Item();
+                    int index = 0;
+                    foreach (int itemType in itemGroup)
+                    {
+                        i.SetDefaults(itemType);
+                        itemNames += i.name;
+                        if(itemGroup.Length > 1)
+                        {
+                            if(index < itemGroup.Length - 2)
+                            {
+                                itemNames += ", ";
+                            }
+                            else if (index < itemGroup.Length - 1)
+                            {
+                                itemNames += " or ";
+                            }
+                        }
+                        index++;
+                    }
+                    return itemNames;
+                }
+            }
+            return "Unknown Item Group";
+        }
+
         /// <summary>
         /// Add an item with a specified stack to the expedition rewards.
         /// </summary>
@@ -179,7 +239,8 @@ namespace Expeditions
 
         /// <summary>
         /// Called before deducting items and granting the rewards of an expedition. 
-        /// Use this to modify the rewards before distributing
+        /// Use this to modify the rewards before distributing, and checking which 
+        /// of the "any deliverables" were turned in, in inventory order
         /// </summary>
         /// <param name="rewards">List of items to be rewarded</param>
         public virtual void PreCompleteExpedition(List<Item> rewards)

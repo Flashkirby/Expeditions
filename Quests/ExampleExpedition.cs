@@ -24,15 +24,13 @@ namespace Expeditions.Quests
         }
         public override void AddItemsOnLoad()
         {
-            expedition.AddDeliverable(ItemID.PalmWood, 1);
-            expedition.AddDeliverable(ItemID.IronBar, 1);
-            expedition.AddDeliverable(ItemID.TinOre, 1);
-            expedition.AddDeliverable(ItemID.TungstenOre, 1);
-            expedition.AddDeliverable(ItemID.GoldBar, 1);
-            expedition.AddDeliverable(ItemID.CrimtaneBar, 1);
-            expedition.AddDeliverable(ItemID.CobaltOre, 1);
-            expedition.AddDeliverable(ItemID.OrichalcumBar, 1);
-            expedition.AddDeliverable(ItemID.TitaniumOre, 1);
+            AddDeliverable(ItemID.PalmWood, 1);
+            AddDeliverable(ItemID.PalladiumBar, 1);
+            AddDeliverableAnyOf(new int[] {
+                ItemID.WoodenSword,
+                ItemID.CopperBroadsword,
+                ItemID.TinBroadsword
+            }, 1);
 
             AddRewardItem(ItemID.DirtBlock, 2);
             AddRewardPrefix(ItemID.Shackle, 65);
