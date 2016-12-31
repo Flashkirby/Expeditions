@@ -25,6 +25,14 @@ namespace Expeditions.Quests
         public override void AddItemsOnLoad()
         {
             expedition.AddDeliverable(ItemID.DirtBlock, 1);
+            expedition.AddDeliverable(ItemID.IronBar, 1);
+            expedition.AddDeliverable(ItemID.TinOre, 1);
+            expedition.AddDeliverable(ItemID.TungstenOre, 1);
+            expedition.AddDeliverable(ItemID.GoldBar, 1);
+            expedition.AddDeliverable(ItemID.CrimtaneBar, 1);
+            expedition.AddDeliverable(ItemID.CobaltOre, 1);
+            expedition.AddDeliverable(ItemID.OrichalcumBar, 1);
+            expedition.AddDeliverable(ItemID.TitaniumOre, 1);
 
             AddRewardItem(ItemID.DirtBlock, 2);
             AddRewardPrefix(ItemID.Shackle, 65);

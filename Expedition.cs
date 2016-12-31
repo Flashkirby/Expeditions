@@ -79,6 +79,10 @@ namespace Expeditions
         public bool repeatable = false;
         /// <summary>Calls expedition success to all party members when completed. Does not work with repeatable after the first completion</summary>
         public bool partyShare = false;
+        
+        public bool anyWood = true;
+        public bool anySameTierOreBar = true;
+
         private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
         private List<Item> rewards = new List<Item>();
 
@@ -437,6 +441,34 @@ namespace Expeditions
                 Item it = new Item();
                 it.SetDefaults(this.deliverables[i].Key);
                 it.stack = Math.Max(1, Math.Min(this.deliverables[i].Value, it.maxStack));
+
+                if(anyWood)
+                {
+                    if(RecipeGroup.recipeGroups[RecipeGroupID.Wood].ValidItems.Contains(it.type))
+                    {
+                        it.name = Lang.misc[37] + " " + Lang.itemName(ItemID.Wood);
+                    }
+                }
+                if(anySameTierOreBar)
+                {
+                    int itemType = it.type;
+                    if (ConvertIDToSameTierOreBar(ref itemType))
+                    {
+                        if (itemType == ItemID.DemoniteBar)
+                        {
+                            it.name = Lang.misc[37] + "" + Lang.npcName(NPCID.Demon) + " Bar";
+                        }
+                        else if (itemType == ItemID.DemoniteOre)
+                        {
+                            it.name = Lang.misc[37] + "" + Lang.npcName(NPCID.Demon) + " Ore";
+                        }
+                        else
+                        {
+                            it.name = Lang.misc[37] + " " + Lang.itemName(itemType);
+                        }
+                    }
+                }
+
                 deliverables[i] = it;
             }
             return deliverables;
@@ -470,6 +502,56 @@ namespace Expeditions
             condition2Met = e.condition2Met;
             condition3Met = e.condition3Met;
             conditionCounted = e.conditionCounted;
+        }
+
+        /// <summary>
+        /// Modifies the item type if it matches a tiered group.
+        /// </summary>
+        /// <param name="itemID">The item type which can be changed</param>
+        /// <returns>True if an item matches a conversion group. </returns>
+        public static bool ConvertIDToSameTierOreBar(ref int itemID)
+        {
+            #region Ores
+            if (itemID == ItemID.CopperOre || itemID == ItemID.TinOre)
+            { itemID = ItemID.CopperOre; return true; }
+            if (itemID == ItemID.IronOre || itemID == ItemID.LeadOre)
+            { itemID = ItemID.IronOre; return true; }
+            if (itemID == ItemID.SilverOre || itemID == ItemID.TungstenOre)
+            { itemID = ItemID.SilverOre; return true; }
+            if (itemID == ItemID.GoldOre || itemID == ItemID.PlatinumOre)
+            { itemID = ItemID.GoldOre; return true; }
+
+            if (itemID == ItemID.DemoniteOre || itemID == ItemID.CrimtaneOre)
+            { itemID = ItemID.DemoniteOre; return true; }
+
+            if (itemID == ItemID.CobaltOre || itemID == ItemID.PalladiumOre)
+            { itemID = ItemID.CobaltOre; return true; }
+            if (itemID == ItemID.MythrilOre || itemID == ItemID.OrichalcumOre)
+            { itemID = ItemID.MythrilOre; return true; }
+            if (itemID == ItemID.AdamantiteOre || itemID == ItemID.TitaniumOre)
+            { itemID = ItemID.AdamantiteOre; return true; }
+            #endregion
+            #region Bars
+            if (itemID == ItemID.CopperBar || itemID == ItemID.TinBar)
+            { itemID = ItemID.CopperBar; return true; }
+            if (itemID == ItemID.IronBar || itemID == ItemID.LeadBar)
+            { itemID = ItemID.IronBar; return true; }
+            if (itemID == ItemID.SilverBar || itemID == ItemID.TungstenBar)
+            { itemID = ItemID.SilverBar; return true; }
+            if (itemID == ItemID.GoldBar || itemID == ItemID.PlatinumBar)
+            { itemID = ItemID.GoldBar; return true; }
+
+            if (itemID == ItemID.DemoniteBar || itemID == ItemID.CrimtaneBar)
+            { itemID = ItemID.DemoniteBar; return true; }
+
+            if (itemID == ItemID.CobaltBar || itemID == ItemID.PalladiumBar)
+            { itemID = ItemID.CobaltBar; return true; }
+            if (itemID == ItemID.MythrilBar || itemID == ItemID.OrichalcumBar)
+            { itemID = ItemID.MythrilBar; return true; }
+            if (itemID == ItemID.AdamantiteBar || itemID == ItemID.TitaniumBar)
+            { itemID = ItemID.AdamantiteBar; return true; }
+            #endregion
+            return false;
         }
 
         /// <summary>

@@ -513,7 +513,7 @@ namespace Expeditions
         }
 
         private static bool unlockedSoundFrame = false;
-        public static void DisplayUnlockedExpedition(Expedition expedition)
+        internal static void DisplayUnlockedExpedition(Expedition expedition)
         {
             Item exp = new Item();
             exp.name = "Expedition: " + expedition.name;
@@ -531,7 +531,6 @@ namespace Expeditions
                 unlockedSoundFrame = true;
             }
         }
-        
         /// <summary>
         /// Spawn an item from a client input for a player. An increaed options version of QuickSpawnItem()
         /// </summary>

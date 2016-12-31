@@ -25,6 +25,16 @@ namespace Expeditions
         }
 
         /// <summary>
+        /// Add an item with a specified required stack to the expedition deliver conditions.
+        /// </summary>
+        /// <param name="itemID">Item type</param>
+        /// <param name="itemStack">The total amount in the stack, up to the maxStack</param>
+        public void AddDeliverable(int itemID, int itemStack = 1)
+        {
+            expedition.AddDeliverable(itemID, itemStack);
+        }
+
+        /// <summary>
         /// Add an item with a specified stack to the expedition rewards.
         /// </summary>
         /// <param name="itemID">Item type</param>
