@@ -257,7 +257,10 @@ namespace Expeditions
             // Keep track of active expeditions in-game
             if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
             {
-                if(Main.time == 0.0 && Main.dayTime)
+                // RESET Expedition called values
+                unlockedSoundFrame = false;
+
+                if (Main.time == 0.0 && Main.dayTime)
                 {
                     foreach (ModExpedition me in GetExpeditionsList())
                     {
@@ -509,6 +512,26 @@ namespace Expeditions
             }
         }
 
+        private static bool unlockedSoundFrame = false;
+        public static void DisplayUnlockedExpedition(Expedition expedition)
+        {
+            Item exp = new Item();
+            exp.name = "Expedition: " + expedition.name;
+            exp.stack = 1;
+            exp.active = true;
+            exp.Center = Main.player[Main.myPlayer].Center;
+            exp.rare = expedition.difficulty;
+            exp.expert = expedition.ctgImportant;
+
+            ItemText.NewText(exp, 1, true, true);
+
+            if (!unlockedSoundFrame)
+            {
+                Main.PlaySound(SoundID.Chat, Main.player[Main.myPlayer].Center);
+                unlockedSoundFrame = true;
+            }
+        }
+        
         /// <summary>
         /// Spawn an item from a client input for a player. An increaed options version of QuickSpawnItem()
         /// </summary>

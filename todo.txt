@@ -1,4 +1,4 @@
-Track new expeditions (show like new item pickups text)
+
 For the future: Filter by tracking, Multi item turn in
 
 

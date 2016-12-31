@@ -213,16 +213,7 @@ namespace Expeditions
 
             if (!hideQuestUnlock && !lastPrereq)
             {
-                Item exp = new Item();
-                exp.name = "Expedition: " + name;
-                exp.stack = 1;
-                exp.active = true;
-                exp.Center = Main.player[Main.myPlayer].Center;
-                exp.rare = difficulty;
-                exp.expert = ctgImportant;
-
-                ItemText.NewText(exp, 1, true, true);
-                Main.PlaySound(SoundID.Chat, Main.player[Main.myPlayer].Center);
+                Expeditions.DisplayUnlockedExpedition(this);
                 lastPrereq = true;
             }
 
@@ -392,9 +383,13 @@ namespace Expeditions
         /// <summary> Add items and such after world init. </summary>
         public void WorldInitialise()
         {
+            lastPrereq = true;
+
             deliverables.Clear();
             rewards.Clear();
+
             PlayerExplorer.dbgmsg += "\n" + WorldGen.GoldTierOre + " | " + TileID.Gold + " : " + WorldGen.oreTier1 + " | " + TileID.Cobalt;
+
             if (mex != null) mex.AddItemsOnLoad();
         }
 
