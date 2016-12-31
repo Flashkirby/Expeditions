@@ -272,7 +272,7 @@ namespace Expeditions
             }
         }
 
-        public void CopyLocalExpeditionsToMain()
+        internal void CopyLocalExpeditionsToMain()
         {
             if (Main.netMode != 2 && player.whoAmI == Main.myPlayer)
             {
@@ -309,12 +309,6 @@ namespace Expeditions
         }
 
         #endregion
-
-        public bool familiarMinion;
-        public override void ResetEffects()
-        {
-            familiarMinion = false;
-        }
 
         public override void PostUpdate()
         {

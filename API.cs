@@ -16,38 +16,31 @@ namespace Expeditions
     /// </summary>
     public static class API
     {
-        #region Expeditions.cs Fields
+        #region Fields
+
         /// <summary> The NPC that was last struck my the player this frame, or an empty NPC type 0 </summary>
         public static NPC LastHitNPC { get { return Expeditions.LastHitNPC; } }
         /// <summary> The NPC that was last killed by the player this frame, or an empty NPC type 0 </summary>
         public static NPC LastKilledNPC { get { return Expeditions.LastKilledNPC; } }
-        /// <summary> The NPC type of the Clerk NPC </summary>
-        public static int NPCIDClerk { get { return Expeditions.npcClerk; } }
-        /// <summary> 
-        /// Get the current tier of major expeditions completed.
-        /// <para/> Tier 1: Reaching the caverns, roughly gold/plat armour.
-        /// <para/> Tier 2: Defeated the eye of cthulu, 200+ life and demonite equips.
-        /// <para/> Tier 3: Entered the dungeon after beating skeletron. Meteor and dungeon items.
-        /// <para/> Tier 4: Faced (not defeated) Wall of Flesh. 400 life, Jungle, Necro and Molten.
-        /// <para/> Tier 5: Obtained wings, usually done during altar smashing. 
-        /// <para/> Tier 6: Faced (not defeated) a mechanical boss. Gives the player arena materials.
-        /// <para/> Tier 7: Defeated all mechanical bosses. Hallowed gear for chlorophyte and life fruit.
-        /// <para/> Tier 8: Defeated plantera, and entered the temple. Lime and yellow gear.
-        /// <para/> Tier 9: Been through the new dungeon and found all skeleton types. Maybe also bonus bosses and events. 
-        /// <para/> Tier 10: Faced (not defeated) the cultist.
-        /// <para/> Tier 11: Defeated the lunar event. The end of vanilla Terraria's progression.
+
+        /// <summary>
+        /// A list of tiles to check for onscreen.
         /// </summary>
-        public static int CurrentTierExpedition()
-        {
-            return Expeditions.GetCurrentExpeditionTier();
-        }
-        /// <summary> Check if the initial housing quest has been completed. </summary>
-        public static bool CompletedInitialQuest()
-        {
-            return Expeditions.CompletedWelcomeQuest();
-        }
+        public static List<ushort> TileCheckList { get { return WorldExplore.TileCheckList; } }
+
+        /// <summary>
+        /// A list of onscreen tiles found
+        /// </summary>
+        public static List<ushort> TilesChecked { get { return WorldExplore.TilesChecked; } }
+
+        public static int ItemIDExpeditionBook { get { return Expeditions.bookID; } }
+        public static int ItemIDExpeditionBoard { get { return Expeditions.boardID; } }
+        public static int ItemIDRustedBox { get { return Expeditions.stockBox1; } }
+        public static int ItemIDRelicBox { get { return Expeditions.stockBox2; } }
+
         #endregion
-        #region Expeditions.cs Methods
+
+        #region Methods
         /// <summary>
         /// Add your expedition to the list. Call this in your Mod's Load() method. 
         /// No Autoload support yet.
@@ -88,8 +81,6 @@ namespace Expeditions
         {
             return Expeditions.FindExpedition(mod, name);
         }
-
-
         /// <summary>
         /// Net-friendly method to spawn item on top of my player.
         /// An increased options version of player.QuickSpawnItem(). 
@@ -121,6 +112,18 @@ namespace Expeditions
         public static int[] DivideValueIntoMoneyStacks(int value)
         {
             return Expeditions.DivideValueIntoMoneyStack(value);
+        }
+
+
+
+        /// <summary>
+        /// Counts the number of tiles onscreen matching tiles from TileCheckList
+        /// </summary>
+        /// <param name="tileID"></param>
+        /// <returns></returns>
+        public static int CountTilesInCheckedOnScreen(ushort tileID)
+        {
+            return WorldExplore.CountTilesInChecked(tileID);
         }
         #endregion
     }

@@ -12,7 +12,10 @@ using System.Linq;
 
 namespace Expeditions
 {
-    class ExpeditionUI : UIState
+    /// <summary>
+    /// See the API class. Do not use unless you know precisely what you're doing.
+    /// </summary>
+    public class ExpeditionUI : UIState
     {
         public const int viewMode_NPC = 0;
         public const int viewMode_Tile = 1;
@@ -548,7 +551,7 @@ namespace Expeditions
                             text = "Challenger";
                             break;
                         case 4:
-                            text = "Include Completed";
+                            text = "Show Completed";
                             break;
                         case 5:
                             text = "Only Repeatables";

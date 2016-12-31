@@ -15,7 +15,10 @@ using Expeditions.Quests;
 
 namespace Expeditions
 {
-    class Expeditions : Mod
+    /// <summary>
+    /// See the API class. Do not use unless you know precisely what you're doing.
+    /// </summary>
+    public class Expeditions : Mod
     {
         internal const bool DEBUG = true;
 
@@ -27,22 +30,7 @@ namespace Expeditions
         public static Texture2D sortingTexture;
         public static Texture2D bountyBoardTexture;
 
-        private static int _npcClerk;
-        public static int npcClerk { get { return _npcClerk; } }
-
-        private static ModExpedition tier0ExpPointer;
-        private static ModExpedition tier1ExpPointer;
-        private static ModExpedition tier2ExpPointer;
-        private static ModExpedition tier3ExpPointer;
-        private static ModExpedition tier4ExpPointer;
-        private static ModExpedition tier5ExpPointer;
-        private static ModExpedition tier6ExpPointer;
-        private static ModExpedition tier7ExpPointer;
-        private static ModExpedition tier8ExpPointer;
-        private static ModExpedition tier9ExpPointer;
-        private static ModExpedition tier10ExpPointer;
-        private static ModExpedition tier11ExpPointer;
-
+        // NPC Hit checks
         internal static NPC lastHitNPC;
         public static NPC LastHitNPC
         {
@@ -53,6 +41,11 @@ namespace Expeditions
         {
             get { return lastKilledNPC == null ? new NPC() : lastKilledNPC; }
         }
+
+        public static int bookID;
+        public static int boardID;
+        public static int stockBox1;
+        public static int stockBox2;
 
         public Expeditions()
         {
@@ -75,8 +68,6 @@ namespace Expeditions
                 bountyBoardTexture = GetTexture("Items/BountyBoard");
             }
 
-            _npcClerk = NPCType("Clerk");
-
             if (Main.netMode != 2)
             {
                 expeditionUI = new ExpeditionUI();
@@ -85,39 +76,21 @@ namespace Expeditions
                 expeditionUserInterface.SetState(expeditionUI);
             }
 
-            tier0ExpPointer = new WelcomeQuest();
-            tier1ExpPointer = new Tier1Quest();
-            tier2ExpPointer = new Tier2Quest();
-            tier3ExpPointer = new Tier3Quest();
-            tier4ExpPointer = new HardModeQuest();
-            tier5ExpPointer = new Tier5Quest();
-            tier6ExpPointer = new Tier6Quest();
-            tier7ExpPointer = new Tier7Quest();
-            tier8ExpPointer = new Tier8Quest();
-            tier9ExpPointer = new Tier9Quest();
-            tier10ExpPointer = new Tier10Quest();
-            tier11ExpPointer = new Tier11Quest();
+            bookID = ItemType("BountyBook");
+            boardID = ItemType("BountyBoard");
+            stockBox1 = ItemType("StockBox");
+            stockBox2 = ItemType("StockBox2");
 
-            //add quests
+            // Add test quests
             if (DEBUG)
             {
                 AddExpeditionToList(new ExampleExpedition(), this);
                 AddExpeditionToList(new HeaderTest(), this);
             }
-            AddExpeditionToList(tier0ExpPointer, this);
-            AddExpeditionToList(tier1ExpPointer, this);
-            AddExpeditionToList(tier2ExpPointer, this);
-            AddExpeditionToList(tier3ExpPointer, this);
-            AddExpeditionToList(new Tier4Quest(), this);
-            AddExpeditionToList(tier4ExpPointer, this);
-            AddExpeditionToList(tier5ExpPointer, this);
-            AddExpeditionToList(tier6ExpPointer, this);
-            AddExpeditionToList(tier7ExpPointer, this);
-            AddExpeditionToList(tier8ExpPointer, this);
-            AddExpeditionToList(tier9ExpPointer, this);
-            AddExpeditionToList(tier10ExpPointer, this);
-            AddExpeditionToList(tier11ExpPointer, this);
         }
+
+        #region External Expedition Support
+
         /// <summary>
         /// Adds the designated expedition to the list of active expeditions.
         /// </summary>
@@ -184,6 +157,9 @@ namespace Expeditions
             }
             return null;
         }
+
+        #endregion
+
         /// <summary> Reset progress and detach references </summary>
         internal static void ResetExpeditions()
         {
@@ -207,6 +183,9 @@ namespace Expeditions
             }
         }
         
+        /// <summary>
+        /// Set the defaults for each expedition
+        /// </summary>
         public override void AddRecipes()
         {
             //initiliase expedition defaults, values reset in PlayerExplorer
@@ -329,8 +308,6 @@ namespace Expeditions
                     if (Main.time % 60 == 0)
                     {
                         Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
-                        Main.NewText(WorldExplore.savedClerk + " : savedClerk?");
-                        Main.NewText(GetCurrentExpeditionTier() + " : expedition tier");
                         int[] stacks = DivideValueIntoMoneyStack(1234567);
                         Main.NewText("stacks: " +
                             stacks[0] + "plat, " +
@@ -615,33 +592,6 @@ namespace Expeditions
             if (DEBUG) Main.NewText("    value is now: " + value, 255, 255, 100);
             return stacks;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public static int GetCurrentExpeditionTier()
-        {
-            if (Main.netMode == 2) return 0;
-
-            if (tier11ExpPointer.expedition.completed) return 11;
-            if (tier10ExpPointer.expedition.completed) return 10;
-            if (tier9ExpPointer.expedition.completed) return 9;
-            if (tier8ExpPointer.expedition.completed) return 8;
-            if (tier7ExpPointer.expedition.completed) return 7;
-            if (tier6ExpPointer.expedition.completed) return 6;
-            if (tier5ExpPointer.expedition.completed) return 5;
-            if (tier4ExpPointer.expedition.completed) return 4;
-            if (tier3ExpPointer.expedition.completed) return 3;
-            if (tier2ExpPointer.expedition.completed) return 2;
-            if (tier1ExpPointer.expedition.completed) return 1;
-            return 0;
-        }
-
-        public static bool CompletedWelcomeQuest()
-        {
-            if (Main.netMode == 2) return false;
-            return tier0ExpPointer.expedition.completed;
-        }
+        
     }
 }

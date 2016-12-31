@@ -1,46 +1,84 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
+
+using Microsoft.Xna.Framework;
+
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace Expeditions
 {
     class WorldExplore : ModWorld
     {
-        public static bool savedClerk = false;
-
-        public override void Initialize()
+        #region TileChecks
+        protected static List<ushort> tileCheckList;
+        public static List<ushort> TileCheckList
         {
-            if (Main.netMode == 2)
+            get
             {
-                Console.WriteLine("Expeditions: World Initialising");
+                if (tileCheckList == null) { tileCheckList = new List<ushort>(); }
+                return tileCheckList;
             }
-
-            // Reset bools
-            savedClerk = false;
         }
-
-        public override TagCompound Save()
+        protected static List<ushort> tilesChecked;
+        public static List<ushort> TilesChecked
         {
-            return new TagCompound
+            get
             {
-                { "savedClerk", savedClerk }
-            };
+                if (tilesChecked == null) { tilesChecked = new List<ushort>(); }
+                return tilesChecked;
+            }
         }
 
-        public override void Load(TagCompound tag)
+        public static int CountTilesInChecked(ushort tileID)
         {
-            savedClerk = tag.GetBool("savedClerk");
+            int count = 0;
+            foreach (ushort t in TilesChecked)
+            {
+                if (t == tileID) count++;
+            }
+            return count;
         }
-
-        public override void LoadLegacy(BinaryReader reader)
+        #endregion
+        
+        public override void PostUpdate()
         {
-            int _version = reader.ReadInt32();
-            // Booleans
-            BitsByte flags = reader.ReadByte();
-            savedClerk = flags[0];
+            if (Main.netMode == 2) return;
+            // Calculate the dimensions of the viewport
+            Point tPos = Main.screenPosition.ToTileCoordinates();
+            Rectangle viewPortTiles = new Rectangle(tPos.X, tPos.Y, Main.screenWidth / 16, Main.screenHeight / 16);
+
+            TilesChecked.Clear();
+            if (tileCheckList.Count > 0)
+            {
+                for (int y = viewPortTiles.Top; y < viewPortTiles.Bottom; y++)
+                {
+                    for (int x = viewPortTiles.Left; x < viewPortTiles.Right; x++)
+                    {
+                        try
+                        {
+                            // Add tilesChecked if the viewport contains these tiles
+                            ushort type = Main.tile[x, y].type;
+                            if (TileCheckList.Contains(type))
+                            {
+                                TilesChecked.Add(type);
+                            }
+                        }
+                        catch { }
+                    }
+                }
+            }
+            TileCheckList.Clear();
+            /*
+            string tilesfound = "Found |";
+            if (Main.time % 15 == 0)
+            {
+                foreach (ushort type in TilesChecked)
+                {
+                    tilesfound += type + "|";
+                }
+                Main.NewText(tilesfound, Color.Beige.R, Color.Beige.G, Color.Beige.B);
+            }
+            */
         }
     }
 }

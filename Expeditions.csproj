@@ -38,47 +38,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
-    <Compile Include="Buffs\FamiliarMinion.cs" />
     <Compile Include="ExpeditionUI.cs" />
     <Compile Include="Expedition.cs" />
     <Compile Include="Items\BountyBoard.cs" />
     <Compile Include="Expeditions.cs" />
     <Compile Include="Items\BountyBook.cs" />
-    <Compile Include="Items\PrefixApplicator.cs" />
     <Compile Include="Items\StockBox2.cs" />
     <Compile Include="Items\StockBox.cs" />
-    <Compile Include="Items\WayfarerBow.cs" />
-    <Compile Include="Items\WayfarerCarbine.cs" />
-    <Compile Include="Items\WayfarerPike.cs" />
-    <Compile Include="Items\WayfarerRepeater.cs" />
-    <Compile Include="Items\WayfarerStaff.cs" />
-    <Compile Include="Items\WayfarerSummon.cs" />
-    <Compile Include="Items\WayfarerSword.cs" />
-    <Compile Include="Items\WayfarerBook.cs" />
     <Compile Include="ModExpedition.cs" />
-    <Compile Include="NPCs\Clerk.cs" />
-    <Compile Include="NPCs\ClerkHiding.cs" />
     <Compile Include="PlayerExplorer.cs" />
-    <Compile Include="Projs\Gust.cs" />
-    <Compile Include="Projs\Familiars\MinionCat.cs" />
-    <Compile Include="Projs\Familiars\MinionChicken.cs" />
-    <Compile Include="Projs\Familiars\MinionFox.cs" />
-    <Compile Include="Projs\VacuumOrb.cs" />
-    <Compile Include="Projs\WayfarerPike.cs" />
-    <Compile Include="Projs\Familiars\FamiliarMinion.cs" />
-    <Compile Include="Quests\CoreQuests\HardModeQuest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier11Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier10Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier9Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier8Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier7Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier6Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier5Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier4Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier3Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier2Quest.cs" />
-    <Compile Include="Quests\CoreQuests\Tier1Quest.cs" />
-    <Compile Include="Quests\CoreQuests\WelcomeQuest.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Quests\HeaderTest.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
@@ -115,18 +83,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Buffs\FamiliarMinion.png" />
     <Content Include="build.txt" />
     <Content Include="description.txt" />
     <Content Include="Items\BountyBoard.png" />
-    <Content Include="NPCs\Clerk.png" />
-    <Content Include="NPCs\Clerk_Head.png" />
     <Content Include="Tiles\BountyBoard.png" />
     <Content Include="UI\Sorting_Categories.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Gores\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include=".gitignore" />
   </ItemGroup>

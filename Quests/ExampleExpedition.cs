@@ -11,7 +11,7 @@ namespace Expeditions.Quests
         public override void SetDefaults()
         {
             expedition.name = "Hello World";
-            SetNPCHead(API.NPCIDClerk);
+            SetNPCHead(NPCID.Guide);
             expedition.difficulty = 1;
             expedition.ctgCollect = true;
             expedition.ctgImportant = false;

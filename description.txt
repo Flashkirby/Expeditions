@@ -1,14 +1,6 @@
-Add Expeditions, a quest system accesible via both NPC and Expedition Board craftable tile.
-Expedition system features:
-
-* Meeting conditions and handing in items
-* Getting various rewards, including accessory prefix applicators
-* Clerk NPC that provides Expedition access and a shop
-* NPC spawns hidden near around spawn area, search a bit!
-* Mod in your own expeditions!
+Add Expeditions, a quest system accesible via the Expedition Board craftable tile.
+This is the core mod, providing just the quest system framework, without content.
 
 Credits:
 Flashkirby99 - I am making this mod.
 jopojelly - Additional advice on mod referencing and .tmod usage
-Supeh Mario - Original sprite for fox familiar.
-Eli10293 - Resprite of Wayfarer's Staff.
