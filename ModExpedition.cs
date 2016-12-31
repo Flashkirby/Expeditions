@@ -95,6 +95,7 @@ namespace Expeditions
                 case NPCID.TravellingMerchant: expedition.npcHead = 21; return;
                 case NPCID.Angler: expedition.npcHead = 22; return;
                 case NPCID.TaxCollector: expedition.npcHead = 23; return;
+                case NPCID.DD2Bartender: expedition.npcHead = 24; return;
                 default:
                     try
                     {
