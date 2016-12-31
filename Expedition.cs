@@ -222,6 +222,7 @@ namespace Expeditions
                 exp.expert = ctgImportant;
 
                 ItemText.NewText(exp, 1, true, true);
+                Main.PlaySound(SoundID.Chat, Main.player[Main.myPlayer].Center);
                 lastPrereq = true;
             }
 
