@@ -250,7 +250,7 @@ namespace Expeditions
                 {
                     if (hasStacks[i] < stacks[i])
                     {
-                        if (Expeditions.DEBUG) Main.NewText("Missing " + Lang.itemName(items[i]));
+                        if (Expeditions.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
                         return false;
                     }
                 }
@@ -334,7 +334,7 @@ namespace Expeditions
             }
 
             // What if I receive this from someone else who hasn't finished it yet?
-            if (completed && (!repeatable || partyShare)) return;
+            if (completed && !repeatable) return;
 
             // Initialise a new set of rewards that don't affect the original listed
             List<Item> tempRewards = new List<Item>();
