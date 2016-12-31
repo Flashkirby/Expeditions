@@ -1,18 +1,7 @@
+Track new expeditions (show like new item pickups text)
 
-    Remove the current quests: this mod becomes just the framework. The only items included will be the expedition board/log (sold by merchant/skele merch), and possibly the quest boxes.This also means no need for config files, and also leads into:
-	
-    Turn the current quests and mod items into a mod extension, probably called "Expeditions Main Content". This also means if you want to use the mod for other things without all the kerfuffle of the current inbuilt quests, you can just not load the extension. See Iara's tip #2,6,4,7 (and yes I need help with this very much so - I actually do have a large list of things that need to be made into quests but haven't done so yet).
-	
-    Change quests to revolve around the Guide - literally almost facepalmed that I forgot about that.
-	
-    Clerk spawn conditions to be either something like the Travelling Merchant's 2 person requirement or just after the Guide, Merchant and Nurse move in. Probably the latter for.
-	
-    Clerk item shop (and hence role) will only be for items unlocked via quests. This was the original intention anyway, I just haven't got around to making quests for all the wayfarer things yet because time and effort, same reason as why there are only like 12 quests barely cobbled together (also Iara's tip #1,3).
-	
-    Actually get around to writing that guide on making mod extensions for this.
-    I probably missed a few things.
-
-
+Delete all progress [O][K][0]
+Discard Unknowns [#]
 
 For the future: Filter by tracking
 
@@ -23,7 +12,6 @@ http://javid.ddns.net/tModLoader/widget/widgetimage/Expeditions.png
 Credits:
 Flashkirby99 - I am making this mod.
 jopojelly - Additional advice on mod referencing and .tmod usage
-Supeh Mario - Original sprite for fox
 
 REMINDER:
 Compile, 

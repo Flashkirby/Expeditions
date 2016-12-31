@@ -14,7 +14,7 @@ namespace Expeditions
 
 
         #region Save/Load
-        private static int _version = 2;
+        private static int _version = 3;
         internal static string svmsg;
         internal static string dbgmsg;
 
@@ -176,7 +176,7 @@ namespace Expeditions
         public override void LoadLegacy(BinaryReader reader)
         {
             _version = reader.ReadInt32();
-            if (_version == 2)
+            if (_version == 3)
             {
                 //!/ if (Expeditions.DEBUG) dbgmsg += "\nLOAD v:" + _version + "/" + 2;
 
@@ -261,6 +261,7 @@ namespace Expeditions
             else
             {
                 if (_version < 0) return;
+                if (_version == 2) return; // This was a save from v1.0.2
                 if (Expeditions.DEBUG)
                 {
                     dbgmsg += "(( LOAD v: " + _version + " / " + 2 + ")) ";
