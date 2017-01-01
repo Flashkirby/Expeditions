@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.UI;
+using Terraria.GameContent.UI;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 
@@ -48,6 +49,8 @@ namespace Expeditions
         public static int stockBox1;
         public static int stockBox2;
 
+        public static int currencyVoucherID;
+
         public Expeditions()
         {
             Properties = new ModProperties()
@@ -82,6 +85,10 @@ namespace Expeditions
             voucherID = ItemType("BountyVoucher");
             stockBox1 = ItemType("StockBox");
             stockBox2 = ItemType("StockBox2");
+
+            // Register the voucher as a new currency
+            currencyVoucherID = CustomCurrencyManager.RegisterCurrency(new CustomCurrencySingleCoin(voucherID, 999L));
+
 
             // Add test quests
             if (DEBUG)

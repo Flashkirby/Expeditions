@@ -39,6 +39,8 @@ namespace Expeditions
         public static int ItemIDRustedBox { get { return Expeditions.stockBox1; } }
         public static int ItemIDRelicBox { get { return Expeditions.stockBox2; } }
 
+        public static int CustomCurrencyIDExpeditionCoupon { get { return Expeditions.currencyVoucherID; } }
+
         #endregion
 
         #region Methods
@@ -137,6 +139,23 @@ namespace Expeditions
         public static int CountTilesInCheckedOnScreen(ushort tileID)
         {
             return WorldExplore.CountTilesInChecked(tileID);
+        }
+
+
+        /// <summary>
+        /// Add an item to the shop using vouchers as a currency rather than coins. 
+        /// Since specific expeditions give 1-3 depending on difficulty, a pricing guide:
+        /// <para/>1: Small reward item, eg. Relic Box
+        /// <para/>2: Main reward item, eg. A weapon
+        /// <para/>5: Major reward item, eg. Armour set
+        /// </summary>
+        /// <param name="shop">The NPC shop being added to. </param>
+        /// <param name="nextSlot">Shop's next slot. This will get incremented automagically. </param>
+        /// <param name="itemID">Item type being sold. </param>
+        /// <param name="price">Number of coupons needed. </param>
+        public static void AddShopItemVoucher(Chest shop, ref int nextSlot, int itemID, int price)
+        {
+            NPCExplore.AddVoucherPricedItem(shop, ref nextSlot, itemID, price);
         }
         #endregion
     }
