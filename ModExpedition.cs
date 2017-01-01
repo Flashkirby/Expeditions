@@ -175,7 +175,7 @@ namespace Expeditions
                         expedition.npcHead = (int)result;
                         //PlayerExplorer.dbgmsg += "\ninvoke result: " + result;
                     }
-                    catch (System.Exception e) { }
+                    catch { }
                     break;
             }
         }
@@ -205,19 +205,23 @@ namespace Expeditions
         {
             return "";
         }
-        
+
         /// <summary>
-        /// Put in any checks here to determine whether to modify count. If count >= max, this condition is cleared
+        /// Put in any checks here to determine whether to modify count. 
+        /// If count >= max, this condition is cleared. 
         /// </summary>
+        /// <param name="player"></param>
         /// <param name="count"></param>
         /// <param name="max"></param>
         public virtual void CheckConditionCountable(Player player, ref int count, int max)
         {
 
         }
+
         /// <summary>
         /// Put in any checks here to determine whether the expedition is complete, sans deliverables and the counted condition.
         /// </summary>
+        /// <param name="player"></param>
         /// <param name="cond1">Used to keep track of a saved condition</param>
         /// <param name="cond2">Used to keep track of a saved condition</param>
         /// <param name="cond3">Used to keep track of a saved condition</param>
@@ -240,7 +244,9 @@ namespace Expeditions
         /// <summary>
         /// Called before deducting items and granting the rewards of an expedition. 
         /// Use this to modify the rewards before distributing, and checking which 
-        /// of the "any deliverables" were turned in, in inventory order
+        /// of the "any deliverables" were turned in, in inventory order.
+        /// A caution, the lists won't necessarily be correct in multiplayer if a
+        /// quest is completed through party share.
         /// </summary>
         /// <param name="rewards">List of items to be rewarded. </param>
         /// <param name="deliveredItems">List of items being delivered. </param>

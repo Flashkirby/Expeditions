@@ -1,5 +1,4 @@
-
-For the future: Filter by tracking, Multi item turn in
+For the future: Filter by tracking
 
 
 
