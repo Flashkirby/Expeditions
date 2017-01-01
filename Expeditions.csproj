@@ -43,9 +43,11 @@
     <Compile Include="Items\BountyBoard.cs" />
     <Compile Include="Expeditions.cs" />
     <Compile Include="Items\BountyBook.cs" />
+    <Compile Include="Items\BountyVoucher.cs" />
     <Compile Include="Items\StockBox2.cs" />
     <Compile Include="Items\StockBox.cs" />
     <Compile Include="ModExpedition.cs" />
+    <Compile Include="NPCExplore.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Quests\HeaderTest.cs" />
@@ -86,6 +88,7 @@
     <Content Include="build.txt" />
     <Content Include="description.txt" />
     <Content Include="Items\BountyBoard.png" />
+    <Content Include="Items\BountyVoucher.png" />
     <Content Include="Tiles\BountyBoard.png" />
     <Content Include="UI\Sorting_Categories.png" />
   </ItemGroup>
