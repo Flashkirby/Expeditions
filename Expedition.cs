@@ -344,34 +344,17 @@ namespace Expeditions
 
             // Initialise a new set of rewards that don't affect the original listed
             List<Item> tempRewards = new List<Item>();
-            foreach(Item i in rewards)
+            foreach (Item i in rewards)
             {
                 // Create new editable instance of this item
-                tempRewards.Add(i.Clone());
-            }
-            
-            List<Item> validDeliverables = new List<Item>();
-            //get as temp array of required
-            int[] items = new int[deliverables.Count];
-            int[] stacks = new int[deliverables.Count];
-            for (int i = 0; i < items.Length; i++)
-            {
-                items[i] = deliverables[i].Key;
-                stacks[i] = deliverables[i].Value;
+                Item item = new Item();
+                item.SetDefaults(i.type);
+                item.Prefix(i.prefix);
+                tempRewards.Add(item);
             }
 
-            //keep track of stacks player has, as this the total number can be divided across multiple
-            int[] hasStacks = new int[deliverables.Count];
-            Item[] inventory = Main.player[Main.myPlayer].inventory;
-            for (int i = 0; i < inventory.Length; i++)
-            {
-                // Item in inventory matches, we'll add it to the items being delivered
-                if(addToStackIfMatching(inventory[i], items, ref hasStacks, stacks))
-                {
-                    validDeliverables.Add(inventory[i]);
-                }
-            }
-            Main.NewText("list done");
+            List<Item> validDeliverables = new List<Item>();
+            GetConsumedDeliverables(validDeliverables);
 
             // check mod hook
             mex.PreCompleteExpedition(tempRewards, validDeliverables);
@@ -419,6 +402,30 @@ namespace Expeditions
             if (ExpeditionUI.visible)
             {
                 Expeditions.expeditionUI.ListRecalculate();
+            }
+        }
+
+        private void GetConsumedDeliverables(List<Item> validDeliverables)
+        {
+            //get as temp array of required
+            int[] items = new int[deliverables.Count];
+            int[] stacks = new int[deliverables.Count];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = deliverables[i].Key;
+                stacks[i] = deliverables[i].Value;
+            }
+
+            //keep track of stacks player has, as this the total number can be divided across multiple
+            int[] hasStacks = new int[deliverables.Count];
+            Item[] inventory = Main.player[Main.myPlayer].inventory;
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                // Item in inventory matches, we'll add it to the items being delivered
+                if (addToStackIfMatching(inventory[i], items, ref hasStacks, stacks))
+                {
+                    validDeliverables.Add(inventory[i]);
+                }
             }
         }
 
@@ -617,7 +624,6 @@ namespace Expeditions
         /// Add an item to be given out to participants who finished the expedition. 
         /// </summary>
         /// <param name="item"></param>
-        /// <param name="stack"></param>
         public void AddReward(Item item)
         {
             rewards.Add(item);
