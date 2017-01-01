@@ -12,14 +12,17 @@ namespace Expeditions.Items
     /// </summary>
     public class BountyVoucher : ModItem
     {
+        public static string itemName = "Expedition Coupon";
         public override void SetDefaults()
         {
-            item.name = "Expedition Coupon";
-            item.toolTip = "'A proof of achievement'";
+            item.name = itemName;
+            item.toolTip = "Trade in for exclusive items at certain stores";
+            item.toolTip2 = "'A proof of achievement'";
             item.width = 12;
             item.height = 12;
             item.maxStack = 999;
-            item.rare = 3;
+            item.value = 0;
+            item.rare = 2;
         }
     }
 }

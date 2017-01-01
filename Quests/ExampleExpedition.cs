@@ -68,7 +68,7 @@ namespace Expeditions.Quests
             return cond1 && cond2;
         }
 
-        public override bool CheckPrerequisites(Player player)
+        public override bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (Expeditions.DEBUG)
             {

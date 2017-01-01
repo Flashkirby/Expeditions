@@ -87,7 +87,10 @@ namespace Expeditions
             stockBox2 = ItemType("StockBox2");
 
             // Register the voucher as a new currency
-            currencyVoucherID = CustomCurrencyManager.RegisterCurrency(new CustomCurrencySingleCoin(voucherID, 999L));
+            CustomCurrencySingleCoin c = new CustomCurrencySingleCoin(voucherID, 999L);
+            c.CurrencyTextColor = new Color(226, 51, 240); // Purple
+            c.CurrencyTextKey = Items.BountyVoucher.itemName;
+            currencyVoucherID = CustomCurrencyManager.RegisterCurrency(c);
 
 
             // Add test quests
