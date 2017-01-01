@@ -236,7 +236,7 @@ namespace Expeditions
         /// <summary>
         /// Put in any checks here to determine whether the expedition is complete, sans deliverables and the counted condition.
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="player">Main.myPlayer</param>
         /// <param name="cond1">Used to keep track of a saved condition</param>
         /// <param name="cond2">Used to keep track of a saved condition</param>
         /// <param name="cond3">Used to keep track of a saved condition</param>
@@ -250,8 +250,13 @@ namespace Expeditions
         /// <summary>
         /// Put in any checks here to determine whether the expedition is visible yet. Until they are met, expeditions will not call to check conditions, and do not appear in the browser. Effectively acts as if it is active or not. 
         /// </summary>
+        /// <param name="player">Main.myPlayer</param>
+        /// <param name="cond1">Used to keep track of a saved condition</param>
+        /// <param name="cond2">Used to keep track of a saved condition</param>
+        /// <param name="cond3">Used to keep track of a saved condition</param>
+        /// <param name="condCount">Used to keep track of a the counted condition</param>
         /// <returns>True if prerequisites are met</returns>
-        public virtual bool CheckPrerequisites(Player player)
+        public virtual bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             return true;
         }

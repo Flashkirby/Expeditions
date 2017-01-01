@@ -133,7 +133,9 @@ namespace Expeditions
             bool meet3 = condition3Met;
 
             // check conditions
-            bool checkConditions = mex.CheckConditions(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax);
+            bool checkConditions = true;
+            if (mex != null) checkConditions = mex.CheckConditions(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax);
+
             if (!trackCondition && checkConditions) { trackCondition = true; }
             if (trackCondition && !checkConditions) { trackCondition = false; }
 
@@ -212,7 +214,7 @@ namespace Expeditions
         public bool PrerequisitesMet()
         {
             if (Main.netMode == 2) return false;
-            if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer]))
+            if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax))
             {
                 lastPrereq = false;
                 return false;
@@ -221,9 +223,9 @@ namespace Expeditions
             if (!hideQuestUnlock && !lastPrereq)
             {
                 Expeditions.DisplayUnlockedExpedition(this);
-                lastPrereq = true;
             }
 
+            lastPrereq = true;
             return true;
         }
 
