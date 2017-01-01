@@ -81,6 +81,18 @@ namespace Expeditions
         {
             return Expeditions.FindExpedition(mod, name);
         }
+        
+        /// <summary>
+        /// Show the expedition as an item pickup.
+        /// Automatically called when expeditions meet prerequisites, 
+        /// and can also be used eg. daily quests.
+        /// </summary>
+        /// <param name="expedition"></param>
+        public static void ShowExpeditionAsNewItem(Expedition expedition)
+        {
+            Expeditions.DisplayUnlockedExpedition(expedition);
+        }
+
         /// <summary>
         /// Net-friendly method to spawn item on top of my player.
         /// An increased options version of player.QuickSpawnItem(). 

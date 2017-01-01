@@ -513,7 +513,12 @@ namespace Expeditions
         }
 
         private static bool unlockedSoundFrame = false;
-        internal static void DisplayUnlockedExpedition(Expedition expedition)
+        /// <summary>
+        /// Show the expedition as an item being "picked up". Called when an expedition meets
+        /// the prerequisite for the first time.
+        /// </summary>
+        /// <param name="expedition"></param>
+        public static void DisplayUnlockedExpedition(Expedition expedition)
         {
             Item exp = new Item();
             exp.name = "Expedition: " + expedition.name;

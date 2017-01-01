@@ -99,12 +99,19 @@ namespace Expeditions
         /// </summary>
         /// <param name="itemID">Item type</param>
         /// <param name="itemStack">The total amount in the stack, up to the maxStack</param>
-        public void AddRewardItem(int itemID, int itemStack = 1)
+        /// <param name="addTag">Should the item have [addTag] appended to it (eg. as a bonus item)</param>
+        public void AddRewardItem(int itemID, int itemStack = 1, string addTag = "")
         {
             Item i = new Item();
             i.SetDefaults(itemID);
             if (i.maxStack < itemStack) itemStack = i.maxStack;
             i.stack = itemStack;
+
+            if(addTag != "")
+            {
+                i.name = string.Concat("[", addTag, "] ", i.name);
+            }
+
             expedition.AddReward(i);
         }
         /// <summary>
@@ -112,25 +119,33 @@ namespace Expeditions
         /// </summary>
         /// <param name="itemID">Item type</param>
         /// <param name="prefix">See AffixName_Old for a list of prefixes</param>
-        public void AddRewardPrefix(int itemID, byte prefix = 0)
+        /// <param name="addTag">Should the item have [addTag] appended to it (eg. as a bonus item)</param>
+        public void AddRewardPrefix(int itemID, byte prefix = 0, string addTag = "")
         {
             Item i = new Item();
             i.SetDefaults(itemID);
             i.prefix = prefix;
             i.Prefix(i.prefix);
+
+            if (addTag != "")
+            {
+                i.name = string.Concat("[", addTag, "] ", i.name);
+            }
+
             expedition.AddReward(i);
         }
         /// <summary>
         /// Add money reward. For simplicities sake use Item.buyPrice(int platinum, int gold, int silver, int copper) to get your value.
         /// </summary>
         /// <param name="value"></param>
-        public void AddRewardMoney(int value)
+        /// <param name="addTag">Should the item have [addTag] appended to it (eg. as a bonus item)</param>
+        public void AddRewardMoney(int value, string addTag = "")
         {
             int[] stacks = Expeditions.DivideValueIntoMoneyStack(value);
-            if (stacks[0] > 0) AddRewardItem(74, stacks[0]);
-            if (stacks[1] > 0) AddRewardItem(73, stacks[1]);
-            if (stacks[2] > 0) AddRewardItem(72, stacks[2]);
-            if (stacks[3] > 0) AddRewardItem(71, stacks[3]);
+            if (stacks[0] > 0) AddRewardItem(74, stacks[0], addTag);
+            if (stacks[1] > 0) AddRewardItem(73, stacks[1], addTag);
+            if (stacks[2] > 0) AddRewardItem(72, stacks[2], addTag);
+            if (stacks[3] > 0) AddRewardItem(71, stacks[3], addTag);
         }
 
         /// <summary>

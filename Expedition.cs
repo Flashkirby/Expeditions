@@ -19,6 +19,8 @@ namespace Expeditions
         /// <summary> Colour of mild negative text. Dull red. </summary>
         public readonly static Color poorColour = new Color(150, 75, 75);
 
+        public static string ExpeditionBonusCondTag = "(Bonus) ";
+        public static string ExpeditionBonusTag = "Bonus";
         public static string ExpeditionTrackerTemplate = "Expedition Tracker: ";
         public static string ExpeditionTrackerAccomplished = " accomplished!";
         public static string ExpeditionTrackerNotValid = " is no longer valid...";
