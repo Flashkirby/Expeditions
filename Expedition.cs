@@ -236,7 +236,7 @@ namespace Expeditions
                 stacks[i] = deliverables[i].Value;
             }
 
-            //keep track of stacks player has
+            //keep track of stacks player has, as this the total number can be divided across multiple
             int[] hasStacks = new int[deliverables.Count];
             Item[] inventory = Main.player[Main.myPlayer].inventory;
             for (int i = 0; i < inventory.Length; i++)
@@ -249,7 +249,7 @@ namespace Expeditions
             {
                 for (int i = 0; i < stacks.Length; i++)
                 {
-                    if (hasStacks[i] < stacks[i])
+                    if (hasStacks[i] < stacks[i]) // Player doesn't have enough of an item
                     {
                         if (Expeditions.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
                         return false;
@@ -266,7 +266,7 @@ namespace Expeditions
         /// <summary>
         /// Check against itemTypes to see if it matches, if so add to corrosponding index in stack counter. 
         /// </summary>
-        private void addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount, int[]itemStacks, bool deductItems = false)
+        private bool addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount, int[]itemStacks, bool deductItems = false)
         {
             for (int i = 0; i < itemTypes.Length; i++)
             {
@@ -277,6 +277,10 @@ namespace Expeditions
 
                 if (type == checkedType) //the itemtype matches
                 {
+                    // Does this item stack actually count towards deliverables
+                    bool contributeToRequirement = false;
+                    contributeToRequirement = itemStackCount[i] < itemStacks[i];
+
                     if (deductItems) //behaviour if removing items
                     {
                         int deductAmount = itemStacks[i] - itemStackCount[i];
@@ -298,9 +302,10 @@ namespace Expeditions
                         //add to total owned in stack
                         itemStackCount[i] += item.stack;
                     }
-                    return;
+                    return contributeToRequirement;
                 }
             }
+            return false;
         }
         
         /// <summary>
@@ -344,9 +349,32 @@ namespace Expeditions
                 // Create new editable instance of this item
                 tempRewards.Add(i.Clone());
             }
+            
+            List<Item> validDeliverables = new List<Item>();
+            //get as temp array of required
+            int[] items = new int[deliverables.Count];
+            int[] stacks = new int[deliverables.Count];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = deliverables[i].Key;
+                stacks[i] = deliverables[i].Value;
+            }
+
+            //keep track of stacks player has, as this the total number can be divided across multiple
+            int[] hasStacks = new int[deliverables.Count];
+            Item[] inventory = Main.player[Main.myPlayer].inventory;
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                // Item in inventory matches, we'll add it to the items being delivered
+                if(addToStackIfMatching(inventory[i], items, ref hasStacks, stacks))
+                {
+                    validDeliverables.Add(inventory[i]);
+                }
+            }
+            Main.NewText("list done");
 
             // check mod hook
-            mex.PreCompleteExpedition(tempRewards);
+            mex.PreCompleteExpedition(tempRewards, validDeliverables);
 
             // deduct deliverables
             CheckRequiredItems(true);

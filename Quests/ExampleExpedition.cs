@@ -80,9 +80,24 @@ namespace Expeditions.Quests
             return false;
         }
 
-        public override void PreCompleteExpedition(List<Item> rewards)
+        public override void PreCompleteExpedition(List<Item> rewards, List<Item> deliveredItems)
         {
-            rewards[2].SetDefaults(ItemID.PalladiumBar);
+            Main.NewText("PreComplete");
+            bool givePalladium = true;
+            foreach(Item item in deliveredItems)
+            {
+                if(item.type == ItemID.WoodenSword)
+                {
+                    givePalladium = false;
+                }
+            }
+            if(givePalladium)
+            {
+                rewards[2].SetDefaults(ItemID.PalladiumBar);
+            }else
+            {
+                rewards[2].SetDefaults(ItemID.CobaltBar);
+            }
             rewards[2].stack = 2;
         }
 

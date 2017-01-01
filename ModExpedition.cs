@@ -242,8 +242,9 @@ namespace Expeditions
         /// Use this to modify the rewards before distributing, and checking which 
         /// of the "any deliverables" were turned in, in inventory order
         /// </summary>
-        /// <param name="rewards">List of items to be rewarded</param>
-        public virtual void PreCompleteExpedition(List<Item> rewards)
+        /// <param name="rewards">List of items to be rewarded. </param>
+        /// <param name="deliveredItems">List of items being delivered. </param>
+        public virtual void PreCompleteExpedition(List<Item> rewards, List<Item> deliveredItems)
         {
             return;
         }
