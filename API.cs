@@ -35,6 +35,7 @@ namespace Expeditions
 
         public static int ItemIDExpeditionBook { get { return Expeditions.bookID; } }
         public static int ItemIDExpeditionBoard { get { return Expeditions.boardID; } }
+        public static int ItemIDExpeditionCoupon { get { return Expeditions.voucherID; } }
         public static int ItemIDRustedBox { get { return Expeditions.stockBox1; } }
         public static int ItemIDRelicBox { get { return Expeditions.stockBox2; } }
 

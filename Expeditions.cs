@@ -44,6 +44,7 @@ namespace Expeditions
 
         public static int bookID;
         public static int boardID;
+        public static int voucherID;
         public static int stockBox1;
         public static int stockBox2;
 
@@ -78,6 +79,7 @@ namespace Expeditions
 
             bookID = ItemType("BountyBook");
             boardID = ItemType("BountyBoard");
+            voucherID = ItemType("BountyVoucher");
             stockBox1 = ItemType("StockBox");
             stockBox2 = ItemType("StockBox2");
 
