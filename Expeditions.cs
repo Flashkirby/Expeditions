@@ -214,6 +214,8 @@ namespace Expeditions
                     mex.expedition.ctgExplore = true;
                 }
             }
+
+            Items.ItemRewardPool.GenerateRewardPool();
         }
 
         public override void ModifyInterfaceLayers(List<MethodSequenceListItem> layers)

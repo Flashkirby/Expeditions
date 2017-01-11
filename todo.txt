@@ -1,3 +1,5 @@
+Fix stockbox item pool. possibly use equipped armour as rarity? or more normal rewards.
+
 Filter by NPC Head
 For the future: Filter by tracking
 
