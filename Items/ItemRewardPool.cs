@@ -129,42 +129,44 @@ namespace Expeditions.Items
                     item.SetDefaults(mainReward);
                     try { item.modItem.SetDefaults(); } catch { }
 
-                    // No super rares
-                    if (item.rare > rare) continue;
-                }
-
-                int stack = item.maxStack;
-                if (stack > 1) // For multi stack weapons like throwing
-                {
-                    stack += Main.rand.Next(stack * 2);
-                    stack /= 8;
-
-                    stack = Math.Min(stack, item.maxStack);
-                    stack = Math.Max(stack, 1);
-                }
-                rewards.Add(new ItemRewardData(mainReward, stack));
-
-                //Main.NewText("granted " + item.name);
-
-                if (item.useAmmo > 0)
-                {
-                    //Main.NewText(item.name + " uses ammo " + item.useAmmo);
-                    Item ammunition;
-                    foreach (int i in ammos)
+                    // Limit by rare
+                    if (item.rare <= rare)
                     {
-                        ammunition = new Item();
-                        ammunition.SetDefaults(i);
-                        if (ammunition.ammo == item.useAmmo)
+                        int stack = item.maxStack;
+                        if (stack > 1) // For multi stack weapons like throwing
                         {
-                            stack = ammunition.maxStack;
                             stack += Main.rand.Next(stack * 2);
                             stack /= 8;
-                            stack = Math.Min(stack, ammunition.maxStack);
-                            stack = Math.Max(stack, 1);
 
-                            rewards.Add(new ItemRewardData(ammunition.type, stack));
-                            break;
+                            stack = Math.Min(stack, item.maxStack);
+                            stack = Math.Max(stack, 1);
                         }
+                        rewards.Add(new ItemRewardData(mainReward, stack));
+
+                        //Main.NewText("granted " + item.name);
+                        // Check ammo items
+                        if (item.useAmmo > 0)
+                        {
+                            //Main.NewText(item.name + " uses ammo " + item.useAmmo);
+                            Item ammunition;
+                            foreach (int j in ammos)
+                            {
+                                ammunition = new Item();
+                                ammunition.SetDefaults(j);
+                                if (ammunition.ammo == item.useAmmo)
+                                {
+                                    stack = ammunition.maxStack;
+                                    stack += Main.rand.Next(stack * 2);
+                                    stack /= 8;
+                                    stack = Math.Min(stack, ammunition.maxStack);
+                                    stack = Math.Max(stack, 1);
+
+                                    rewards.Add(new ItemRewardData(ammunition.type, stack));
+                                    break;
+                                }
+                            }
+                        }
+                        break;
                     }
                 }
             }
@@ -189,35 +191,34 @@ namespace Expeditions.Items
                         try { item.modItem.SetDefaults(); } catch { }
 
                         // No super rares
-                        if (item.rare > rare) continue;
+                        if (item.rare <= rare)
+                        {
+                            int stack = item.maxStack;
+                            int maxCostStack = stack;
+                            stack += Main.rand.Next(stack * 4);
+                            if (item.value > 0)
+                            { stack /= 16; }
+                            else
+                            { stack /= 8; }
+
+                            if (item.value > 0)
+                            {
+                                // Stop costs going over 5-15 gold
+                                maxCostStack = Item.buyPrice(0, Main.rand.Next(5, 16), 0, 0);
+                                maxCostStack /= item.value;
+                                maxCostStack = Math.Min(maxCostStack, item.maxStack);
+                                maxCostStack = Math.Max(maxCostStack, 1);
+                            }
+
+                            stack = Math.Min(stack, maxCostStack);
+                            stack = Math.Max(stack, 1);
+
+                            rewards.Add(new ItemRewardData(sideReward, stack));
+                            //Main.NewText(i + " granted " + item.name + ":" + stack);
+                            break;
+                        }
                     }
 
-                    int stack = item.maxStack;
-                    int maxCostStack = stack;
-                    stack += Main.rand.Next(stack * 4);
-                    if (item.value > 0)
-                    { stack /= 16; }
-                    else
-                    { stack /= 8; }
-
-                    if(item.value > 0)
-                    {
-                        // Stop costs going over 5-15 gold
-                        maxCostStack = Item.buyPrice(0, Main.rand.Next(5, 16), 0, 0);
-                        maxCostStack /= item.value;
-                        maxCostStack = Math.Min(maxCostStack, item.maxStack);
-                        maxCostStack = Math.Max(maxCostStack, 1);
-
-                        //get lesser
-                        stack = Math.Min(stack, maxCostStack);
-                    }
-                    
-                    stack = Math.Min(stack, item.maxStack);
-                    stack = Math.Max(maxCostStack, 1);
-
-                    rewards.Add(new ItemRewardData(sideReward, stack));
-
-                    //Main.NewText(i + " granted " + item.name + ":" + stack);
                 }
             }
 
