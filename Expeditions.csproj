@@ -58,7 +58,6 @@
     <Compile Include="UI\UIColour.cs" />
     <Compile Include="UI\UITextWrap.cs" />
     <Compile Include="UI\UIValueBar.cs" />
-    <Compile Include="WorldExplore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">

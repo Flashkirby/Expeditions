@@ -23,16 +23,6 @@ namespace Expeditions
         /// <summary> The NPC that was last killed by the player this frame, or an empty NPC type 0 </summary>
         public static NPC LastKilledNPC { get { return Expeditions.LastKilledNPC; } }
 
-        /// <summary>
-        /// A list of tiles to check for onscreen.
-        /// </summary>
-        public static List<ushort> TileCheckList { get { return WorldExplore.TileCheckList; } }
-
-        /// <summary>
-        /// A list of onscreen tiles found
-        /// </summary>
-        public static List<ushort> TilesChecked { get { return WorldExplore.TilesChecked; } }
-
         public static int ItemIDExpeditionBook { get { return Expeditions.bookID; } }
         public static int ItemIDExpeditionBoard { get { return Expeditions.boardID; } }
         public static int ItemIDExpeditionCoupon { get { return Expeditions.voucherID; } }
@@ -77,12 +67,12 @@ namespace Expeditions
         /// <summary>
         /// Attempts to find the specified mod expedition by class name. 
         /// </summary>
-        /// <typeparam name="T">The classname of the ModExpedition</typeparam>
+        /// <typeparam name="ClassName">The classname of the ModExpedition</typeparam>
         /// <param name="mod">Your mod object</param>
         /// <returns>ModExpedition, or null if no result</returns>
-        public static ModExpedition FindModExpedition<T>(Mod mod)
+        public static ModExpedition FindModExpedition<ClassName>(Mod mod)
         {
-            return Expeditions.FindModExpedition<T>(mod);
+            return Expeditions.FindModExpedition<ClassName>(mod);
         }
 
         /// <summary>
@@ -98,12 +88,12 @@ namespace Expeditions
         /// <summary>
         /// Attempts to find the specified expedition by class name. 
         /// </summary>
-        /// <typeparam name="T">The classname of the Expedition's ModExpedition</typeparam>
+        /// <typeparam name="ClassName">The classname of the Expedition's ModExpedition</typeparam>
         /// <param name="mod">Your mod object</param>
         /// <returns>Expedition, or null if no result</returns>
-        public static Expedition FindExpedition<T>(Mod mod)
+        public static Expedition FindExpedition<ClassName>(Mod mod)
         {
-            return Expeditions.FindExpedition<T>(mod);
+            return Expeditions.FindExpedition<ClassName>(mod);
         }
         /// <summary>
         /// Show the expedition as an item pickup.
@@ -148,18 +138,7 @@ namespace Expeditions
         {
             return Expeditions.DivideValueIntoMoneyStack(value);
         }
-
-
-
-        /// <summary>
-        /// Counts the number of tiles onscreen matching tiles from TileCheckList
-        /// </summary>
-        /// <param name="tileID"></param>
-        /// <returns></returns>
-        public static int CountTilesInCheckedOnScreen(ushort tileID)
-        {
-            return WorldExplore.CountTilesInChecked(tileID);
-        }
+        
 
 
         /// <summary>
