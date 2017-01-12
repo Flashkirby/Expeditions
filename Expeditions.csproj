@@ -44,6 +44,7 @@
     <Compile Include="Expeditions.cs" />
     <Compile Include="Items\BountyBook.cs" />
     <Compile Include="Items\BountyVoucher.cs" />
+    <Compile Include="Items\ItemRewardPool.cs" />
     <Compile Include="Items\StockBox2.cs" />
     <Compile Include="Items\StockBox.cs" />
     <Compile Include="ModExpedition.cs" />

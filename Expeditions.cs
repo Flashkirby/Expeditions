@@ -142,6 +142,16 @@ namespace Expeditions
             return null;
         }
         /// <summary>
+        /// Finds the specified mod expedition or null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="mod"></param>
+        /// <returns></returns>
+        public static ModExpedition FindModExpedition<T>(Mod mod)
+        {
+            return FindModExpedition(mod, typeof(T).ToString());
+        }
+        /// <summary>
         /// Finds the specified expedition or null
         /// </summary>
         /// <param name="mod"></param>
@@ -168,6 +178,16 @@ namespace Expeditions
                 }
             }
             return null;
+        }
+        /// <summary>
+        /// Finds the specified expedition or null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="mod"></param>
+        /// <returns></returns>
+        public static Expedition FindExpedition<T>(Mod mod)
+        {
+            return FindExpedition(mod, typeof(T).ToString());
         }
 
         #endregion

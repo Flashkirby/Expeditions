@@ -75,6 +75,17 @@ namespace Expeditions
             return Expeditions.FindModExpedition(mod, name);
         }
         /// <summary>
+        /// Attempts to find the specified mod expedition by class name. 
+        /// </summary>
+        /// <typeparam name="T">The classname of the ModExpedition</typeparam>
+        /// <param name="mod">Your mod object</param>
+        /// <returns>ModExpedition, or null if no result</returns>
+        public static ModExpedition FindModExpedition<T>(Mod mod)
+        {
+            return Expeditions.FindModExpedition<T>(mod);
+        }
+
+        /// <summary>
         /// Attempts to find the specified expedition by class name. 
         /// </summary>
         /// <param name="mod">Your mod object</param>
@@ -84,7 +95,16 @@ namespace Expeditions
         {
             return Expeditions.FindExpedition(mod, name);
         }
-        
+        /// <summary>
+        /// Attempts to find the specified expedition by class name. 
+        /// </summary>
+        /// <typeparam name="T">The classname of the Expedition's ModExpedition</typeparam>
+        /// <param name="mod">Your mod object</param>
+        /// <returns>Expedition, or null if no result</returns>
+        public static Expedition FindExpedition<T>(Mod mod)
+        {
+            return Expeditions.FindExpedition<T>(mod);
+        }
         /// <summary>
         /// Show the expedition as an item pickup.
         /// Automatically called when expeditions meet prerequisites, 
