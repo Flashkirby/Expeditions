@@ -149,10 +149,10 @@ namespace Expeditions
         /// <returns></returns>
         public static ModExpedition FindModExpedition<T>(Mod mod)
         {
-            return FindModExpedition(mod, typeof(T).ToString());
+            return FindModExpedition(mod, typeof(T).Name);
         }
         /// <summary>
-        /// Finds the specified expedition or null
+        /// Finds the specified expedition or an empty one
         /// </summary>
         /// <param name="mod"></param>
         /// <param name="name"></param>
@@ -160,7 +160,7 @@ namespace Expeditions
         public static Expedition FindExpedition(Mod mod, string name)
         {
             ModExpedition e = FindModExpedition(mod, name);
-            if (e == null) return null;
+            if (e == null) return new Expedition();
             return e.expedition;
         }
         /// <summary>
@@ -187,7 +187,7 @@ namespace Expeditions
         /// <returns></returns>
         public static Expedition FindExpedition<T>(Mod mod)
         {
-            return FindExpedition(mod, typeof(T).ToString());
+            return FindExpedition(mod, typeof(T).Name);
         }
 
         #endregion

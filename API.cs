@@ -80,7 +80,7 @@ namespace Expeditions
         /// </summary>
         /// <param name="mod">Your mod object</param>
         /// <param name="name">The classname of the Expedition's ModExpedition</param>
-        /// <returns>Expedition, or null if no result</returns>
+        /// <returns>Expedition, or an empty expedition if no result</returns>
         public static Expedition FindExpedition(Mod mod, string name)
         {
             return Expeditions.FindExpedition(mod, name);
@@ -90,7 +90,7 @@ namespace Expeditions
         /// </summary>
         /// <typeparam name="ClassName">The classname of the Expedition's ModExpedition</typeparam>
         /// <param name="mod">Your mod object</param>
-        /// <returns>Expedition, or null if no result</returns>
+        /// <returns>Expedition, or an empty expedition if no result</returns>
         public static Expedition FindExpedition<ClassName>(Mod mod)
         {
             return Expeditions.FindExpedition<ClassName>(mod);
