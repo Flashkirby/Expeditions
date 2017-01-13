@@ -313,23 +313,26 @@ namespace Expeditions
 
         public override void PostUpdate()
         {
-            if (ExpeditionUI.visible && ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile)
+            if (player.whoAmI == Main.myPlayer)
             {
-                Rectangle tileRange = new Rectangle(
-                    (int)(player.Center.X - (float)(Player.tileRangeX * 16)),
-                    (int)(player.Center.Y - (float)(Player.tileRangeY * 16)),
-                    Player.tileRangeX * 16 * 2,
-                    Player.tileRangeY * 16 * 2);
-                Rectangle boardRect = new Rectangle(
-                    tileOpened[0] * 16,
-                    tileOpened[1] * 16,
-                    4 * 16,
-                    3 * 16
-                    );
-                if (Expeditions.DEBUG) Dust.NewDust(boardRect.TopLeft(), boardRect.Width, boardRect.Height, 175);
-                if (!tileRange.Intersects(boardRect))
+                if (ExpeditionUI.visible && ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile)
                 {
-                    Expeditions.CloseExpeditionMenu();
+                    Rectangle tileRange = new Rectangle(
+                        (int)(player.Center.X - (float)(Player.tileRangeX * 16)),
+                        (int)(player.Center.Y - (float)(Player.tileRangeY * 16)),
+                        Player.tileRangeX * 16 * 2,
+                        Player.tileRangeY * 16 * 2);
+                    Rectangle boardRect = new Rectangle(
+                        tileOpened[0] * 16,
+                        tileOpened[1] * 16,
+                        4 * 16,
+                        3 * 16
+                        );
+                    if (Expeditions.DEBUG) Dust.NewDust(boardRect.TopLeft(), boardRect.Width, boardRect.Height, 175);
+                    if (!tileRange.Intersects(boardRect))
+                    {
+                        Expeditions.CloseExpeditionMenu();
+                    }
                 }
             }
         }
