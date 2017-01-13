@@ -354,6 +354,7 @@ namespace Expeditions
                 Item item = new Item();
                 item.SetDefaults(i.type);
                 item.Prefix(i.prefix);
+                item.stack = i.stack;
                 tempRewards.Add(item);
             }
 
