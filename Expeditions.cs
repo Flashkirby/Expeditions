@@ -21,7 +21,7 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = false;
+        internal const bool DEBUG = true;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
@@ -30,18 +30,6 @@ namespace Expeditions
         private static List<ModExpedition> expeditionList;
         public static Texture2D sortingTexture;
         public static Texture2D bountyBoardTexture;
-
-        // NPC Hit checks
-        internal static NPC lastHitNPC;
-        public static NPC LastHitNPC
-        {
-            get { return lastHitNPC == null ? new NPC() : lastHitNPC; }
-        }
-        internal static NPC lastKilledNPC;
-        public static NPC LastKilledNPC
-        {
-            get { return lastKilledNPC == null ? new NPC() : lastKilledNPC; }
-        }
 
         public static int bookID;
         public static int boardID;
@@ -207,8 +195,6 @@ namespace Expeditions
         internal static void WorldInit()
         {
             if (Main.netMode == 2) Console.WriteLine("  > WorldInit");
-            lastHitNPC = new NPC();
-            lastKilledNPC = lastHitNPC;
             foreach (ModExpedition mex in GetExpeditionsList())
             {
                 mex.expedition.WorldInitialise();
@@ -283,6 +269,8 @@ namespace Expeditions
 
         }
         
+        
+
         public override void PostUpdateInput()
         {
             if (Main.netMode == 2) return;
@@ -294,12 +282,16 @@ namespace Expeditions
                 // RESET Expedition called values
                 unlockedSoundFrame = false;
 
-                if (Main.time == 0.0 && Main.dayTime)
+                if (Main.time == 0.0)
                 {
                     foreach (ModExpedition me in GetExpeditionsList())
                     {
                         // Dawn of a new day
-                        me.expedition.UpdateNewDay();
+                        if (Main.dayTime)
+                        { me.OnNewDay(); }
+                        else
+                        { me.OnNewNight(); }
+                        
                         // Check conditions as long as prerequisites are met
                         if (me.expedition.PrerequisitesMet())
                         {
@@ -327,14 +319,6 @@ namespace Expeditions
                         }
                     }
                 }
-
-                // Reset the NPC after checking
-                if (lastHitNPC != null)
-                {
-                    lastHitNPC = null;
-                    if (DEBUG) Main.NewText("Reset Hit NPC");
-                }
-                if (lastKilledNPC != null) lastKilledNPC = null;
             }
 
             //DEBUG INFO

@@ -3,8 +3,10 @@ Fix stockbox item pool. possibly use equipped armour as rarity? or more normal r
 Filter by NPC Head
 For the future: Filter by tracking
 
-
-
+Known Bugs:
+* Mouse down on completing quest when next quest in line's compelte is in same place gracefully crashes the UI
+========= fixed testing =========
+* 
 
 Delete all progress [O][K][0]
 Discard Unknowns [#]

@@ -194,8 +194,7 @@ namespace Expeditions
                     break;
             }
         }
-
-
+        
         #region Virtual Methods
         /// <summary>
         /// The initialisation method for mods using this. Use it to set the title and category
@@ -286,6 +285,75 @@ namespace Expeditions
         /// Called on the dawn of each day, can be used with ResetExpedition to set up Daily Quests etc.
         /// </summary>
         public virtual void OnNewDay()
+        {
+
+        }
+        /// <summary>
+        /// Called on the start of each night, can be used to track the start of night activities?
+        /// </summary>
+        public virtual void OnNewNight()
+        {
+
+        }
+        /// <summary>
+        /// Called when player engages in most forms of combat against any NPC.
+        /// </summary>
+        /// <param name="npc">The NPC fighting with</param>
+        /// <param name="playerGotHit">If called by player getting bodied by the npc</param>
+        public virtual void OnCombatWithNPC(NPC npc, bool playerGotHit)
+        {
+
+        }
+        /// <summary>
+        /// Called when an NPC is directly killed by the player, not including debuffs
+        /// </summary>
+        /// <param name="npc">NPC that was killed</param>param>
+        public virtual void OnKillNPC(NPC npc)
+        {
+
+        }
+        /// <summary>
+        /// Called when an NPC dies somewhere for any reason. May be useful for bosses or group killing missions.
+        /// </summary>
+        /// <param name="npc">NPC that was killed</param>param>
+        public virtual void OnAnyNPCDeath(NPC npc)
+        {
+
+        }
+        /// <summary>
+        /// Called when the player crafts an item. To see how to use recipes, look at recipe.requiredItem[], with each type assigned a stack amount
+        /// </summary>
+        /// <param name="item">Item crafted</param>
+        /// <param name="recipe">Recipe used to craft the item</param>
+        public virtual void OnCraftItem(Item item, Recipe recipe)
+        {
+
+        }
+        /// <summary>
+        /// Called when the player picks up an item
+        /// </summary>
+        /// <param name="item">Item being picked up</param>
+        public virtual void OnPickupItem(Item item)
+        {
+
+        }
+        /// <summary>
+        /// Called when the player manually mines a tile
+        /// </summary>
+        /// <param name="x">player tileTargetX</param>
+        /// <param name="y">player tileTargetY</param>
+        /// <param name="type">type tile</param>
+        public virtual void OnKillTile(int x, int y, int type)
+        {
+            
+        }
+        /// <summary>
+        /// Called when the player interacts with a tile
+        /// </summary>
+        /// <param name="x">player tileTargetX</param>
+        /// <param name="y">player tileTargetY</param>
+        /// <param name="type">type tile</param>
+        public virtual void OnInteractTile(int x, int y, int type)
         {
 
         }

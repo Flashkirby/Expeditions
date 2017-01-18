@@ -32,5 +32,33 @@ namespace Expeditions
             shop.item[nextSlot].shopSpecialCurrency = Expeditions.currencyVoucherID;
             nextSlot++;
         }
+
+        public override void OnHitByItem(NPC npc, Player player, Item item, int damage, float knockback, bool crit)
+        {
+            if (player.whoAmI != Main.myPlayer) return;
+            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+            {
+                if (npc.life <= 0 || !npc.active)
+                { me.OnKillNPC(npc); }
+                me.OnCombatWithNPC(npc, false);
+            }
+        }
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
+        {
+            if (projectile.owner != Main.myPlayer) return;
+            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+            {
+                if (npc.life <= 0 || !npc.active)
+                { me.OnKillNPC(npc); }
+                me.OnCombatWithNPC(npc, false);
+            }
+        }
+        public override void NPCLoot(NPC npc)
+        {
+            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+            {
+                me.OnAnyNPCDeath(npc);
+            }
+        }
     }
 }

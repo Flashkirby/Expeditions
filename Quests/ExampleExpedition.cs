@@ -104,7 +104,51 @@ namespace Expeditions.Quests
         public override void OnNewDay()
         {
             expedition.ResetProgress(true);
-            if (Expeditions.DEBUG) Main.NewText("Expedition was reset.", 
+            if (Expeditions.DEBUG) Main.NewText("Expedition was reset for daytime.", 
+                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
+        }
+        public override void OnNewNight()
+        {
+            expedition.ResetProgress(true);
+            if (Expeditions.DEBUG) Main.NewText("Expedition was reset for nighttime.",
+                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
+        }
+
+        public override void OnCombatWithNPC(NPC npc, bool playerGotHit)
+        {
+            if (Expeditions.DEBUG) Main.NewText(npc.name + " in combat, who hit? " + playerGotHit,
+                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
+        }
+        public override void OnKillNPC(NPC npc, bool anyDeath)
+        {
+            if (Expeditions.DEBUG) Main.NewText(npc.name + " got DEAD, was it any? " + anyDeath,
+                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
+        }
+
+        public override void OnCraftItem(Item item, Recipe recipe)
+        {
+            if (!Expeditions.DEBUG) return;
+            for (int i = 0; i < recipe.requiredItem.Length; i++)
+            {
+                if (recipe.requiredItem[i] == null || recipe.requiredItem[i].stack <= 0) continue;
+                Main.NewText(item.name + " from " + recipe.requiredItem[i].name,
+                    Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
+            }
+        }
+        public override void OnPickupItem(Item item)
+        {
+            if (Expeditions.DEBUG) Main.NewText("Picked up " + item.name,
+                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
+        }
+
+        public override void OnInteractTile(int x, int y, int type)
+        {
+            if (Expeditions.DEBUG) Main.NewText("Interacted with tile " + Main.tile[x,y].type,
+                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
+        }
+        public override void OnKillTile(int x, int y, int type)
+        {
+            if (Expeditions.DEBUG) Main.NewText("Break tile " + Main.tile[x, y].type,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
     }

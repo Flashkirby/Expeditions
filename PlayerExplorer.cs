@@ -337,28 +337,12 @@ namespace Expeditions
             }
         }
 
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
-            HitNPC(target);
-        }
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-        {
-            if (!proj.npcProj) HitNPC(target);
-        }
-
-        private void HitNPC(NPC target)
-        {
-            // Only record NPCs the client hit
             if (player.whoAmI != Main.myPlayer) return;
-
-            if (Expeditions.DEBUG && Expeditions.lastHitNPC != target) Main.NewText("EXP Hit: " + target.name, 119, 119, 255);
-            Expeditions.lastHitNPC = target;
-
-            // Record NPCs killed
-            if (target.life <= 0 || !target.active)
+            foreach(ModExpedition me in Expeditions.GetExpeditionsList())
             {
-                if (Expeditions.DEBUG) Main.NewText("EXP Kill: " + target.name, 255, 119, 119);
-                Expeditions.lastKilledNPC = target;
+                me.OnCombatWithNPC(npc, true);
             }
         }
     }

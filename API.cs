@@ -18,11 +18,6 @@ namespace Expeditions
     {
         #region Fields
 
-        /// <summary> The NPC that was last struck my the player this frame, or an empty NPC type 0 </summary>
-        public static NPC LastHitNPC { get { return Expeditions.LastHitNPC; } }
-        /// <summary> The NPC that was last killed by the player this frame, or an empty NPC type 0 </summary>
-        public static NPC LastKilledNPC { get { return Expeditions.LastKilledNPC; } }
-
         public static int ItemIDExpeditionBook { get { return Expeditions.bookID; } }
         public static int ItemIDExpeditionBoard { get { return Expeditions.boardID; } }
         public static int ItemIDExpeditionCoupon { get { return Expeditions.voucherID; } }

@@ -83,6 +83,7 @@ namespace Expeditions.Tiles
                 return;
             }
 
+            player.tileInteractionHappened = true;
             Expeditions.ToggleExpeditionMenu(ExpeditionUI.viewMode_Tile);
         }
 
