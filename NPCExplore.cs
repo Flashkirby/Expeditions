@@ -21,7 +21,14 @@ namespace Expeditions
         }
         public void SkeletonMerchantShop(Chest shop, ref int nextSlot)
         {
-            API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRelicBox, 2);
+            if(Main.hardMode)
+            {
+                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRelicBox, 3);
+            }
+            else
+            {
+                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRustedBox, 2);
+            }
         }
 
         internal static void AddVoucherPricedItem(Chest shop, ref int nextSlot, int itemID, int price)
