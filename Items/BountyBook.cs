@@ -30,7 +30,10 @@ namespace Expeditions.Items
 
         public override bool UseItem(Player player)
         {
-            Expeditions.OpenExpeditionMenu(ExpeditionUI.viewMode_Menu);
+            if (player.whoAmI == Main.myPlayer)
+            {
+                Expeditions.OpenExpeditionMenu(ExpeditionUI.viewMode_Menu);
+            }
             return true;
         }
     }
