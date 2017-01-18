@@ -119,9 +119,9 @@ namespace Expeditions.Quests
             if (Expeditions.DEBUG) Main.NewText(npc.name + " in combat, who hit? " + playerGotHit,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
-        public override void OnKillNPC(NPC npc, bool anyDeath)
+        public override void OnKillNPC(NPC npc)
         {
-            if (Expeditions.DEBUG) Main.NewText(npc.name + " got DEAD, was it any? " + anyDeath,
+            if (Expeditions.DEBUG) Main.NewText(npc.name + " got DEAD",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 

@@ -8,6 +8,7 @@ namespace Expeditions
 {
     public class NPCExplore : GlobalNPC
     {
+        #region Shop
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
             if (type == NPCID.Merchant) MerchantShop(shop, ref nextSlot);
@@ -20,7 +21,7 @@ namespace Expeditions
         }
         public void SkeletonMerchantShop(Chest shop, ref int nextSlot)
         {
-            API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRelicBox, 1);
+            API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRelicBox, 2);
         }
 
         internal static void AddVoucherPricedItem(Chest shop, ref int nextSlot, int itemID, int price)
@@ -32,6 +33,8 @@ namespace Expeditions
             shop.item[nextSlot].shopSpecialCurrency = Expeditions.currencyVoucherID;
             nextSlot++;
         }
+
+        #endregion
 
         public override void OnHitByItem(NPC npc, Player player, Item item, int damage, float knockback, bool crit)
         {
