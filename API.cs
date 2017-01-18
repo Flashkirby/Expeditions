@@ -26,6 +26,22 @@ namespace Expeditions
 
         public static int CustomCurrencyIDExpeditionCoupon { get { return Expeditions.currencyVoucherID; } }
 
+        /// <summary> Morning, according to the merchant. </summary>
+        public static bool TimeMorning { get { return TimeChecker.TimeDayMorn; } }
+        /// <summary> Afternoon, according to the merchant. </summary>
+        public static bool TimeAfternoon { get { return TimeChecker.TimeDayNoon; } }
+        /// <summary> Evening, according to the merchant. </summary>
+        public static bool TimeEvening { get { return TimeChecker.TimeDayEve; } }
+        /// <summary> Early Night, according to the merchant. </summary>
+        public static bool TimeDusk { get { return TimeChecker.TimeNightDusk; } }
+        /// <summary> Mid Night, according to the merchant. </summary>
+        public static bool TimeNight { get { return TimeChecker.TimeNightMidnight; } }
+        /// <summary> Late Night, according to the merchant. </summary>
+        public static bool TimeDawn { get { return TimeChecker.TimeNightDawn; } }
+
+        /// <summary> Random Fact, did you know the traditional witching hour is 3-4AM? </summary>
+        public static bool TimeWitchingHour { get { return TimeChecker.WitchingHour; } }
+
         #endregion
 
         #region Methods
