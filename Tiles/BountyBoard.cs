@@ -89,6 +89,10 @@ namespace Expeditions.Tiles
 
         public override void MouseOver(int i, int j)
         {
+            // Unfixable issue - always uses mouseover of most recent player
+            // current comprimise is to remove when in multiplayer altogether
+            if (Main.netMode > 0) return;
+
             Player player = Main.player[Main.myPlayer];
             Tile tile = Main.tile[i, j];
             
@@ -100,6 +104,10 @@ namespace Expeditions.Tiles
 
         public override void MouseOverFar(int i, int j)
         {
+            // Unfixable issue - always uses mouseover of most recent player
+            // current comprimise is to remove when in multiplayer altogether
+            if (Main.netMode > 0) return;
+
             Player player = Main.player[Main.myPlayer];
             player.showItemIcon = false;
             player.showItemIcon2 = 0;
