@@ -356,16 +356,6 @@ namespace Expeditions
         {
             
         }
-        /// <summary>
-        /// Called when the player interacts with a tile
-        /// </summary>
-        /// <param name="x">player tileTargetX</param>
-        /// <param name="y">player tileTargetY</param>
-        /// <param name="type">type tile</param>
-        public virtual void OnInteractTile(int x, int y, int type)
-        {
-
-        }
         #endregion
     }
 }

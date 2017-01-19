@@ -148,12 +148,7 @@ namespace Expeditions.Quests
             if (Expeditions.DEBUG) Main.NewText("Picked up " + item.name,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
-
-        public override void OnInteractTile(int x, int y, int type)
-        {
-            if (Expeditions.DEBUG) Main.NewText("Interacted with tile " + Main.tile[x,y].type,
-                Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
-        }
+        
         public override void OnKillTile(int x, int y, int type)
         {
             if (Expeditions.DEBUG) Main.NewText("Break tile " + Main.tile[x, y].type,
