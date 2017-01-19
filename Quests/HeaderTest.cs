@@ -23,6 +23,7 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
+            if (WorldExplore.IsCurrentDaily(expedition)) return "I'm the daily quest! ";
             return "This mod adds Expeditions, which are basically quests that have conditions and give rewards. Neato! ";
         }
 
@@ -35,6 +36,11 @@ namespace Expeditions.Quests
         public override bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             return Expeditions.DEBUG;
+        }
+
+        public override bool IncludeAsDaily()
+        {
+            return true;
         }
     }
 }

@@ -409,6 +409,19 @@ namespace Expeditions
                 Expeditions.expeditionUI.ListRecalculate();
             }
         }
+        
+        /// <summary>
+        /// Check if this quest is viable to be selected for a daily. This will automatically reset it when it is added. 
+        /// </summary>
+        public bool CheckDailyAssigned()
+        {
+            if (completed) return false;
+            if (mex != null)
+            {
+                return mex.IncludeAsDaily();
+            }
+            return false;
+        }
 
         private void GetConsumedDeliverables(List<Item> validDeliverables)
         {
@@ -556,7 +569,6 @@ namespace Expeditions
             condition3Met = e.condition3Met;
             conditionCounted = e.conditionCounted;
         }
-
         /// <summary>
         /// Modifies the item type if it matches a tiered group. Reads the "any*" bools to determine converting or not.
         /// </summary>
@@ -696,6 +708,11 @@ namespace Expeditions
                 salt *= c + code;
             }
             return code;
+        }
+
+        public static bool CompareExpeditions(Expedition e1, Expedition e2)
+        {
+            return GetHashID(e1) == GetHashID(e2);
         }
     }
 }

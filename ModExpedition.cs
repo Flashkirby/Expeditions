@@ -282,7 +282,16 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Called on the dawn of each day, can be used with ResetExpedition to set up Daily Quests etc.
+        /// Checks on a new day to see if this expedition should be added to the random daily expedition
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IncludeAsDaily()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Called on the dawn of each day, can be used to tracking day resetting activities?
         /// </summary>
         public virtual void OnNewDay()
         {

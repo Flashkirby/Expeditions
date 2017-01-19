@@ -45,8 +45,10 @@ namespace Expeditions.Quests
         }
         public override string Description(bool complete)
         {
-            if (complete) return "You've completed this repeatable expedition. Good for you! ";
-            return "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. ";
+            string message = "";
+            if (WorldExplore.IsCurrentDaily(expedition)) message = "I'm the daily quest! ";
+            if (complete) return "You've completed this repeatable expedition. Good for you! " + message;
+            return "This is a sample quest, with a lot of random text to help build unnessecary amounts of space to create lines. " + message;
         }
 
         public override void CheckConditionCountable(Player player, ref int count, int max)
@@ -70,6 +72,7 @@ namespace Expeditions.Quests
 
         public override bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
+            if (WorldExplore.IsCurrentDaily(expedition)) return true;
             if (Expeditions.DEBUG)
             {
                 foreach (Item item in player.inventory)
@@ -99,6 +102,11 @@ namespace Expeditions.Quests
                 rewards[2].SetDefaults(ItemID.CobaltBar);
             }
             rewards[2].stack = 2;
+        }
+
+        public override bool IncludeAsDaily()
+        {
+            return true;
         }
 
         public override void OnNewDay()

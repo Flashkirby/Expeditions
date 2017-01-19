@@ -21,13 +21,14 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = false;
+        internal const bool DEBUG = true;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
         private static List<ModExpedition> expeditionList;
+
         public static Texture2D sortingTexture;
         public static Texture2D bountyBoardTexture;
 
@@ -358,8 +359,11 @@ namespace Expeditions
             }
         }
 
+        #region Netcode
+
         public const int packetID_test = 0;
         public const int packetID_partyComplete = 1;
+        public const int packetID_dailyExpedition = 2;
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             //get my packet type
@@ -418,6 +422,28 @@ namespace Expeditions
                         Receive_PartyComplete(expIndex);
                     }
                     break;
+                case packetID_dailyExpedition:
+                    // Get variables
+                    int dailyIndex = reader.ReadInt32();
+
+                    // If the server sent this, distribute it to all clients
+                    if (Main.netMode == 2)
+                    {
+                        if (DEBUG) Console.WriteLine("Packet for new daily " + dailyIndex);
+                        ModPacket packet = GetPacket();
+                        packet.Write(packetID_partyComplete);
+                        packet.Write(dailyIndex);
+                        foreach (Player player in Main.player)
+                        {
+                            if (player.active) packet.Send(player.whoAmI);
+                        }
+                    }
+                    // If a client receieved this, sync up
+                    else
+                    {
+                        Receive_NewDaily(dailyIndex);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -439,12 +465,12 @@ namespace Expeditions
                 ReceiveTestModPacket(senderWhoAmI, message);
             }
         }
-        private void ReceiveTestModPacket(int senderWhoAmI, int message)
+        private static void ReceiveTestModPacket(int senderWhoAmI, int message)
         {
             Main.NewText("This is a net test from " + Main.player[senderWhoAmI].name +  ", with message: " + message);
         }
 
-        public static void SendNet_PartyComplete(Mod mod, int team, ModExpedition expedition)
+        internal static void SendNet_PartyComplete(Mod mod, int team, ModExpedition expedition)
         {
             if (Main.netMode == 1 && team > 0)
             {
@@ -466,11 +492,37 @@ namespace Expeditions
                 expedition.expedition.CompleteExpedition(true);
             }
         }
-        private void Receive_PartyComplete(int expeditionIndex)
+        private static void Receive_PartyComplete(int expeditionIndex)
         {
             Expedition expedition = GetExpeditionsList()[expeditionIndex].expedition;
             expedition.CompleteExpedition(true);
         }
+
+        internal static void SendNet_NewDaily(Mod mod, Expedition expedition)
+        {
+            if(Main.netMode == 2)
+            {
+                int index = GetExpeditionsList().IndexOf(expedition.mex);
+                if (index >= 0)
+                {
+                    // Generate a new packet
+                    ModPacket packet = mod.GetPacket();
+                    // Add the variables
+                    packet.Write(packetID_dailyExpedition);
+                    packet.Write(index);
+                    // Send to the server
+                    packet.Send();
+                }
+            }
+        }
+        private static void Receive_NewDaily(int index)
+        {
+            try
+            { WorldExplore.NetSyncDaily(GetExpeditionsList()[index].expedition); }
+            catch { }
+        }
+
+        #endregion Netcode
 
         /// <summary>
         /// Opens the expediton menu
@@ -536,10 +588,10 @@ namespace Expeditions
         /// the prerequisite for the first time.
         /// </summary>
         /// <param name="expedition"></param>
-        public static void DisplayUnlockedExpedition(Expedition expedition)
+        public static void DisplayUnlockedExpedition(Expedition expedition, string customPrefix = "Expedition: ")
         {
             Item exp = new Item();
-            exp.name = "Expedition: " + expedition.name;
+            exp.name = customPrefix + expedition.name;
             exp.stack = 1;
             exp.active = true;
             exp.Center = Main.player[Main.myPlayer].Center;
