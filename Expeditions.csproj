@@ -40,6 +40,7 @@
     <Compile Include="API.cs" />
     <Compile Include="ExpeditionUI.cs" />
     <Compile Include="Expedition.cs" />
+    <Compile Include="TileExplore.cs" />
     <Compile Include="Items\BountyBoard.cs" />
     <Compile Include="Expeditions.cs" />
     <Compile Include="Items\BountyBook.cs" />
@@ -48,16 +49,19 @@
     <Compile Include="Items\StockBox2.cs" />
     <Compile Include="Items\StockBox.cs" />
     <Compile Include="ModExpedition.cs" />
+    <Compile Include="ItemExplore.cs" />
     <Compile Include="NPCExplore.cs" />
     <Compile Include="PlayerExplorer.cs" />
     <Compile Include="Quests\ExampleExpedition.cs" />
     <Compile Include="Quests\HeaderTest.cs" />
     <Compile Include="Tiles\BountyBoard.cs" />
+    <Compile Include="TimeChecker.cs" />
     <Compile Include="UI\UIItemSlots.cs" />
     <Compile Include="UI\UITextButton.cs" />
     <Compile Include="UI\UIColour.cs" />
     <Compile Include="UI\UITextWrap.cs" />
     <Compile Include="UI\UIValueBar.cs" />
+    <Compile Include="WorldExplore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
