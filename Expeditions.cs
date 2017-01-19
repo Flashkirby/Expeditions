@@ -367,7 +367,7 @@ namespace Expeditions
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             //get my packet type
-            int packetID = reader.ReadUInt16();
+            int packetID = reader.ReadInt32();
             if (DEBUG)
             {
                 if (Main.netMode == 2)
@@ -494,11 +494,14 @@ namespace Expeditions
                     packet.Write(index);
                     // Send to the clients
                     packet.Send();
+
+                    Console.WriteLine("SENT INDEX IS " + index);
                 }
             }
         }
         private static void Receive_NewDaily(int index)
         {
+            if (index >= GetExpeditionsList().Count) return;
             try
             {
                 WorldExplore.NetSyncDaily(GetExpeditionsList()[index].expedition);
