@@ -42,6 +42,9 @@ namespace Expeditions
         /// <summary> Random Fact, did you know the traditional witching hour is 3-4AM? </summary>
         public static bool TimeWitchingHour { get { return TimeChecker.WitchingHour; } }
 
+        /// <summary> Get the generated list of player inventory items </summary>
+        public static bool[] InInventory { get { return PlayerExplorer.itemContains; } }
+
         #endregion
 
         #region Methods

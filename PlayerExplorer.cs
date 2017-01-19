@@ -11,7 +11,7 @@ namespace Expeditions
     public class PlayerExplorer : ModPlayer
     {
         public int[] tileOpened = new int[2];
-
+        public static bool[] itemContains;
 
         #region Save/Load
         private static int _version = 3;
@@ -31,6 +31,7 @@ namespace Expeditions
         {
             _localExpeditionList = new List<ProgressData>();
             _orphanData = new List<ProgressData>();
+            itemContains = new bool[Main.itemTexture.Length];
         }
 
         public override TagCompound Save()
@@ -310,6 +311,30 @@ namespace Expeditions
         }
 
         #endregion
+
+        public override void ResetEffects()
+        {
+            if (player.whoAmI == Main.myPlayer)
+            {
+                // Reset item contains
+                itemContains = new bool[Main.itemTexture.Length];
+                foreach (Item item in player.inventory)
+                {
+                    if (item == null) continue;
+                    itemContains[item.type] = true;
+                }
+                foreach (Item item in player.armor)
+                {
+                    if (item == null) continue;
+                    itemContains[item.type] = true;
+                }
+                foreach (Item item in player.miscEquips)
+                {
+                    if (item == null) continue;
+                    itemContains[item.type] = true;
+                }
+            }
+        }
 
         public override void PostUpdate()
         {

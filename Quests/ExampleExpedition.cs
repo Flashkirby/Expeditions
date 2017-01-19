@@ -74,12 +74,7 @@ namespace Expeditions.Quests
         {
             if (WorldExplore.IsCurrentDaily(expedition)) return true;
             if (Expeditions.DEBUG)
-            {
-                foreach (Item item in player.inventory)
-                {
-                    if (item.rare == -1) return true;
-                }
-            }
+            { return API.InInventory[ItemID.FishingSeaweed]; }
             return false;
         }
 
