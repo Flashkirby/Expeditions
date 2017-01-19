@@ -149,7 +149,7 @@ namespace Expeditions
         {
             return Expeditions.DivideValueIntoMoneyStack(value);
         }
-        
+
 
 
         /// <summary>
@@ -166,6 +166,26 @@ namespace Expeditions
         public static void AddShopItemVoucher(Chest shop, ref int nextSlot, int itemID, int price)
         {
             NPCExplore.AddVoucherPricedItem(shop, ref nextSlot, itemID, price);
+        }
+
+
+        /// <summary>
+        /// Check to see whether the expeditions is the daily one.
+        /// </summary>
+        /// <param name="expedition">The expedition to check</param>
+        /// <returns>True if the specified expedition is the daily one</returns>
+        public static bool IsDaily(Expedition expedition)
+        {
+            return WorldExplore.IsCurrentDaily(expedition);
+        }
+        /// <summary>
+        /// Check to see whether the expeditions is the daily one.
+        /// </summary>
+        /// <param name="modExpedition">The mod expedition to check</param>
+        /// <returns>True if the specified expedition is the daily one</returns>
+        public static bool IsDaily(ModExpedition modExpedition)
+        {
+            return WorldExplore.IsCurrentDaily(modExpedition.expedition);
         }
         #endregion
     }
