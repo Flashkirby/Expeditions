@@ -21,7 +21,7 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = false;
+        internal const bool DEBUG = true;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
@@ -370,13 +370,10 @@ namespace Expeditions
             int packetID = reader.ReadUInt16();
             if (DEBUG)
             {
-                if(Main.netMode == 2)
-                {
-                    Console.WriteLine("Received a Packet with id " + packetID + " for " + whoAmI);
-                }else
-                {
-                    Main.NewText("Received a Packet with id " + packetID + " for " + whoAmI, 50, 50, 100);
-                }
+                if (Main.netMode == 2)
+                { Console.WriteLine("Received a Packet with id " + packetID + " for " + whoAmI); }
+                else
+                { Main.NewText("Received a Packet with id " + packetID + " for " + whoAmI, 50, 50, 100); }
             }
             switch (packetID)
             {
@@ -426,23 +423,8 @@ namespace Expeditions
                     // Get variables
                     int dailyIndex = reader.ReadInt32();
 
-                    // If the server sent this, distribute it to all clients
-                    if (Main.netMode == 2)
-                    {
-                        if (DEBUG) Console.WriteLine("Packet for new daily " + dailyIndex);
-                        ModPacket packet = GetPacket();
-                        packet.Write(packetID_partyComplete);
-                        packet.Write(dailyIndex);
-                        foreach (Player player in Main.player)
-                        {
-                            if (player.active) packet.Send(player.whoAmI);
-                        }
-                    }
-                    // If a client receieved this, sync up
-                    else
-                    {
-                        Receive_NewDaily(dailyIndex);
-                    }
+                    if (DEBUG) Main.NewText("Expedition index received: " + dailyIndex);
+                    Receive_NewDaily(dailyIndex);
                     break;
                 default:
                     break;
@@ -498,19 +480,19 @@ namespace Expeditions
             expedition.CompleteExpedition(true);
         }
 
-        internal static void SendNet_NewDaily(Mod mod, Expedition expedition)
+        internal static void SendNet_NewDaily(Mod mod, int index)
         {
             if(Main.netMode == 2)
             {
-                int index = GetExpeditionsList().IndexOf(expedition.mex);
                 if (index >= 0)
                 {
+                    Console.WriteLine("Sending daily expedition: " + index);
                     // Generate a new packet
                     ModPacket packet = mod.GetPacket();
                     // Add the variables
                     packet.Write(packetID_dailyExpedition);
                     packet.Write(index);
-                    // Send to the server
+                    // Send to the clients
                     packet.Send();
                 }
             }
@@ -518,7 +500,9 @@ namespace Expeditions
         private static void Receive_NewDaily(int index)
         {
             try
-            { WorldExplore.NetSyncDaily(GetExpeditionsList()[index].expedition); }
+            {
+                WorldExplore.NetSyncDaily(GetExpeditionsList()[index].expedition);
+            }
             catch { }
         }
 

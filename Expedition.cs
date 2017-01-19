@@ -411,11 +411,10 @@ namespace Expeditions
         }
         
         /// <summary>
-        /// Check if this quest is viable to be selected for a daily. This will automatically reset it when it is added. 
+        /// Check if this quest is viable to be selected for a daily. This will automatically reset it when it is added. Keep in mind this is called by server so code accordingly
         /// </summary>
         public bool CheckDailyAssigned()
         {
-            if (completed) return false;
             if (mex != null)
             {
                 return mex.IncludeAsDaily();

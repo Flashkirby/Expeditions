@@ -26,15 +26,22 @@ namespace Expeditions
                     if (me.expedition.CheckDailyAssigned()) dailys.Add(me.expedition);
                 }
 
-                if(dailys.Count > 0)
+                if (dailys.Count > 0)
                 {
-                    int random = Main.rand.Next(dailys.Count);
-                    if (Expeditions.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + random);
+                    // Try for one that we didn't have last time
+                    Expedition previousDaily = syncedDailyExpedition;
+                    int random = 0;
+                    for (int i = 0; i < 100; i++)
+                    {
+                        random = Main.rand.Next(dailys.Count);
+                        if (previousDaily != dailys[random]) break;
+                    }
 
+                    if (Expeditions.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + random);
                     NetSyncDaily(dailys[random]);
                     if (Main.netMode == 2)
                     {
-                        Expeditions.SendNet_NewDaily(mod, syncedDailyExpedition);
+                        Expeditions.SendNet_NewDaily(mod, random);
                     }
                 }
                 else
