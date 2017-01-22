@@ -152,6 +152,7 @@ namespace Expeditions
         /// Attempts to set the head sprite associated with this npc.
         /// </summary>
         /// <param name="npcType">Type of NPC. Clerk's type is accessed via API.NPCIDClerk </param>
+        /// <param name="npcIsRequired">Can this quest be continued/completed without the presence of this NPC? </param>
         public void SetNPCHead(int npcType, bool npcIsRequired = true)
         {
             //First run through known vanilla NPC head slots
