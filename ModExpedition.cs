@@ -152,7 +152,7 @@ namespace Expeditions
         /// Attempts to set the head sprite associated with this npc.
         /// </summary>
         /// <param name="npcType">Type of NPC. Clerk's type is accessed via API.NPCIDClerk </param>
-        public void SetNPCHead(int npcType)
+        public void SetNPCHead(int npcType, bool npcIsRequired = true)
         {
             //First run through known vanilla NPC head slots
             switch (npcType)
@@ -192,6 +192,12 @@ namespace Expeditions
                     }
                     catch { }
                     break;
+            }
+
+            // If the npc is required, we'll also set it up as such
+            if (npcIsRequired)
+            {
+                expedition.requireNPC = npcType;
             }
         }
         

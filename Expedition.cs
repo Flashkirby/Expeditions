@@ -25,8 +25,6 @@ namespace Expeditions
         public static string ExpeditionTrackerAccomplished = " accomplished!";
         public static string ExpeditionTrackerNotValid = " is no longer valid...";
 
-        
-
         public ModExpedition mex
         {
             get;
@@ -37,6 +35,8 @@ namespace Expeditions
         public string name = "";
         /// <summary>The NPC Head that will be shown with the quest. By default, 0 and invalid integers will show the expediiton board. See ModExpedition's SetNPCHead()</summary>
         public int npcHead = 0;
+        /// <summary> Quest will not appear unless this NPC is present, if >0 </summary>
+        public int requireNPC = 0;
         /// <summary>Description of a condition to be met - see condition1Met</summary>
         public string conditionDescription1 = "";
         /// <summary>Description of a condition to be met - see condition2Met</summary>
@@ -214,6 +214,10 @@ namespace Expeditions
         public bool PrerequisitesMet()
         {
             if (Main.netMode == 2) return false;
+            if(requireNPC > 0)
+            {
+                if (NPC.FindFirstNPC(requireNPC) < 0) return false;
+            }
             if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax))
             {
                 lastPrereq = false;
