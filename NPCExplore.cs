@@ -23,11 +23,11 @@ namespace Expeditions
         {
             if(Main.hardMode)
             {
-                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRelicBox, 3);
+                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRelicBox, 2);
             }
             else
             {
-                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRustedBox, 2);
+                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRustedBox, 1);
             }
         }
 
