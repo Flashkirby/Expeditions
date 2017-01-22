@@ -214,10 +214,14 @@ namespace Expeditions
         public bool PrerequisitesMet()
         {
             if (Main.netMode == 2) return false;
-            if(requireNPC > 0)
+
+            // Don't show if NPC not around and uncomplete
+            if(requireNPC > 0 && !completed)
             {
                 if (NPC.FindFirstNPC(requireNPC) < 0) return false;
             }
+
+            // Check the mod call
             if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax))
             {
                 lastPrereq = false;
