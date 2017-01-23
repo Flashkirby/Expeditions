@@ -230,7 +230,13 @@ namespace Expeditions
 
             if (!hideQuestUnlock && !lastPrereq)
             {
-                Expeditions.DisplayUnlockedExpedition(this);
+                if (WorldExplore.IsCurrentDaily(this))
+                {
+                    Expeditions.DisplayUnlockedExpedition(this, "Daily Expedition: ");
+                } else
+                {
+                    Expeditions.DisplayUnlockedExpedition(this);
+                }
             }
 
             lastPrereq = true;
