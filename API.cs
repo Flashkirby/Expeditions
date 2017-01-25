@@ -42,6 +42,15 @@ namespace Expeditions
         /// <summary> Random Fact, did you know the traditional witching hour is 3-4AM? </summary>
         public static bool TimeWitchingHour { get { return TimeChecker.WitchingHour; } }
 
+        /// <summary> Day time before the sun hits the top of the sky </summary>
+        public static bool TimeDayPreNoon { get { return TimeChecker.TimeDayPreNoon; } }
+        /// <summary> Day time after the sun hits the top of the sky </summary>
+        public static bool TimeDayPostNoon { get { return TimeChecker.TimeDayPostNoon; } }
+        /// <summary> Night time before the moon hits the top of the sky </summary>
+        public static bool TimeNightPreMid { get { return TimeChecker.TimeNightPreMid; } }
+        /// <summary> Night time after the moon hits the top of the sky </summary>
+        public static bool TimeNightPostMid { get { return TimeChecker.TimeNightPostMid; } }
+
         /// <summary> Get the generated list of player inventory items </summary>
         public static bool[] InInventory { get { return PlayerExplorer.itemContains; } }
 
