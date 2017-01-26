@@ -49,8 +49,8 @@ namespace Expeditions
             foreach (ModExpedition me in Expeditions.GetExpeditionsList())
             {
                 if (npc.life <= 0 || !npc.active)
-                { me.OnKillNPC(npc); }
-                me.OnCombatWithNPC(npc, false);
+                { expKillNPC(me, npc); }
+                expCombatWithNPC(me, npc);
             }
         }
         public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
@@ -59,16 +59,44 @@ namespace Expeditions
             foreach (ModExpedition me in Expeditions.GetExpeditionsList())
             {
                 if (npc.life <= 0 || !npc.active)
-                { me.OnKillNPC(npc); }
-                me.OnCombatWithNPC(npc, false);
+                { expKillNPC(me, npc); }
+                expCombatWithNPC(me, npc);
             }
         }
         public override void NPCLoot(NPC npc)
         {
             foreach (ModExpedition me in Expeditions.GetExpeditionsList())
             {
-                me.OnAnyNPCDeath(npc);
+                expAnyNPCDeath(me, npc);
             }
+        }
+
+        private void expCombatWithNPC(ModExpedition me, NPC npc)
+        {
+            me.OnCombatWithNPC(npc, false, Main.player[Main.myPlayer],
+                          ref me.expedition.condition1Met,
+                          ref me.expedition.condition2Met,
+                          ref me.expedition.condition3Met,
+                          me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                          );
+        }
+        private void expKillNPC(ModExpedition me, NPC npc)
+        {
+            me.OnKillNPC(npc, Main.player[Main.myPlayer],
+                          ref me.expedition.condition1Met,
+                          ref me.expedition.condition2Met,
+                          ref me.expedition.condition3Met,
+                          me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                          );
+        }
+        private void expAnyNPCDeath(ModExpedition me, NPC npc)
+        {
+            me.OnAnyNPCDeath(npc, Main.player[Main.myPlayer],
+                          ref me.expedition.condition1Met,
+                          ref me.expedition.condition2Met,
+                          ref me.expedition.condition3Met,
+                          me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                          );
         }
     }
 }

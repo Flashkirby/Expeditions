@@ -119,6 +119,9 @@ namespace Expeditions
             }
         }
         private bool meetc = false;
+        private bool lastCond1 = false;
+        private bool lastCond2 = false;
+        private bool lastCond3 = false;
         private int lastCounted = 0; // The previous counted value
 
         /// <summary>
@@ -128,9 +131,6 @@ namespace Expeditions
         public bool ConditionsMet()
         {
             if (Main.netMode == 2) return false;
-            bool meet1 = condition1Met;
-            bool meet2 = condition2Met;
-            bool meet3 = condition3Met;
 
             // check conditions
             bool checkConditions = true;
@@ -143,9 +143,9 @@ namespace Expeditions
             if (trackingActive)
             {
                 // Apply green colour to gains
-                if (!meet1 && condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
-                if (!meet2 && condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
-                if (!meet3 && condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!lastCond1 && condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!lastCond2 && condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!lastCond3 && condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
                 if (!meetc)
                 {
                     if (conditionCounted >= conditionCountedMax)
@@ -176,12 +176,16 @@ namespace Expeditions
                 }
 
                 // Apply red colour to lossess
-                if (meet1 && !condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
-                if (meet2 && !condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
-                if (meet3 && !condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                if (lastCond1 && !condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                if (lastCond2 && !condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                if (lastCond3 && !condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
                 if (meetc && conditionCounted < conditionCountedMax) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
             }
 
+            // Set coditions after checking
+            lastCond1 = condition1Met;
+            lastCond2 = condition2Met;
+            lastCond3 = condition3Met;
             // Set last counted after use
             lastCounted = conditionCounted;
 
@@ -205,6 +209,7 @@ namespace Expeditions
                     return false;
                 }
             }
+
             return (mex == null || checkConditions) && meetc;
         }
         /// <summary>
@@ -476,7 +481,13 @@ namespace Expeditions
 
                 mex.AddItemsOnLoad();
             }
-        }
+
+            // Reset last state tracker
+            lastCond1 = condition1Met;
+            lastCond2 = condition2Met;
+            lastCond3 = condition3Met;
+            lastCounted = conditionCounted; 
+    }
 
         /// <summary>
         /// Add an item to be handed in for the expedition to be successful. 

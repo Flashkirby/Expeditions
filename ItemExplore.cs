@@ -12,7 +12,12 @@ namespace Expeditions
         {
             foreach (ModExpedition me in Expeditions.GetExpeditionsList())
             {
-                me.OnCraftItem(item, recipe);
+                me.OnCraftItem(item, recipe, Main.player[Main.myPlayer],
+                              ref me.expedition.condition1Met,
+                              ref me.expedition.condition2Met,
+                              ref me.expedition.condition3Met,
+                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                              );
             }
         }
         public override bool OnPickup(Item item, Player player)
@@ -21,14 +26,15 @@ namespace Expeditions
             {
                 foreach (ModExpedition me in Expeditions.GetExpeditionsList())
                 {
-                    me.OnPickupItem(item);
+                    me.OnPickupItem(item, Main.player[Main.myPlayer],
+                              ref me.expedition.condition1Met,
+                              ref me.expedition.condition2Met,
+                              ref me.expedition.condition3Met,
+                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                              );
                 }
             }
             return base.OnPickup(item, player);
-        }
-        public override bool GrabStyle(Item item, Player player)
-        {
-            return base.GrabStyle(item, player);
         }
     }
 }

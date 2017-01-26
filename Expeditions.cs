@@ -21,7 +21,7 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = false;
+        internal const bool DEBUG = true;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
@@ -289,9 +289,20 @@ namespace Expeditions
                     {
                         // Dawn of a new day
                         if (Main.dayTime)
-                        { me.OnNewDay(); }
+                        {
+                            me.OnNewDay(player,
+                              ref me.expedition.condition1Met,
+                              ref me.expedition.condition2Met,
+                              ref me.expedition.condition3Met,
+                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                              ); }
                         else
-                        { me.OnNewNight(); }
+                        { me.OnNewNight(player,
+                              ref me.expedition.condition1Met,
+                              ref me.expedition.condition2Met,
+                              ref me.expedition.condition3Met,
+                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                              ); }
                         
                         // Check conditions as long as prerequisites are met
                         if (me.expedition.PrerequisitesMet())

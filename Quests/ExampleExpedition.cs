@@ -19,6 +19,7 @@ namespace Expeditions.Quests
             expedition.partyShare = true;
             expedition.conditionDescription1 = "Stand on the ground";
             expedition.conditionDescription2 = "Run at 30mph";
+            expedition.conditionDescription3 = "Craft an item";
             expedition.conditionCountedMax = 120;
             expedition.conditionDescriptionCountable = "Jump in the air for " + expedition.conditionCountedMax + " ticks";
         }
@@ -67,7 +68,7 @@ namespace Expeditions.Quests
                 //if(Expeditions.DEBUG) Main.NewText(Math.Abs(player.velocity.X) + " is < 6");
                 cond2 = Math.Abs(player.velocity.X) > 6;
             }
-            return cond1 && cond2;
+            return cond1 && cond2 && cond3;
         }
 
         public override bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
@@ -103,33 +104,34 @@ namespace Expeditions.Quests
         {
             return true;
         }
-
-        public override void OnNewDay()
+        
+        public override void OnNewDay(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             expedition.ResetProgress(true);
             if (Expeditions.DEBUG) Main.NewText("Expedition was reset for daytime.", 
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
-        public override void OnNewNight()
+        public override void OnNewNight(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             expedition.ResetProgress(true);
             if (Expeditions.DEBUG) Main.NewText("Expedition was reset for nighttime.",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
-        public override void OnCombatWithNPC(NPC npc, bool playerGotHit)
+        public override void OnCombatWithNPC(NPC npc, bool playerGotHit, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (Expeditions.DEBUG) Main.NewText(npc.name + " in combat, who hit? " + playerGotHit,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
-        public override void OnKillNPC(NPC npc)
+        public override void OnKillNPC(NPC npc, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (Expeditions.DEBUG) Main.NewText(npc.name + " got DEAD",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
-        public override void OnCraftItem(Item item, Recipe recipe)
+        public override void OnCraftItem(Item item, Recipe recipe, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
+            cond3 = true;
             if (!Expeditions.DEBUG) return;
             for (int i = 0; i < recipe.requiredItem.Length; i++)
             {
@@ -138,13 +140,13 @@ namespace Expeditions.Quests
                     Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
             }
         }
-        public override void OnPickupItem(Item item)
+        public override void OnPickupItem(Item item, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (Expeditions.DEBUG) Main.NewText("Picked up " + item.name,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
-        
-        public override void OnKillTile(int x, int y, int type)
+
+        public override void OnKillTile(int x, int y, int type, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (Expeditions.DEBUG) Main.NewText("Break tile " + Main.tile[x, y].type,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);

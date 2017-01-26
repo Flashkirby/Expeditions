@@ -300,14 +300,14 @@ namespace Expeditions
         /// <summary>
         /// Called on the dawn of each day, can be used to tracking day resetting activities?
         /// </summary>
-        public virtual void OnNewDay()
+        public virtual void OnNewDay(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
         /// <summary>
         /// Called on the start of each night, can be used to track the start of night activities?
         /// </summary>
-        public virtual void OnNewNight()
+        public virtual void OnNewNight(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
@@ -316,7 +316,7 @@ namespace Expeditions
         /// </summary>
         /// <param name="npc">The NPC fighting with</param>
         /// <param name="playerGotHit">If called by player getting bodied by the npc</param>
-        public virtual void OnCombatWithNPC(NPC npc, bool playerGotHit)
+        public virtual void OnCombatWithNPC(NPC npc, bool playerGotHit, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
@@ -324,7 +324,7 @@ namespace Expeditions
         /// Called when an NPC is directly killed by the player, not including debuffs
         /// </summary>
         /// <param name="npc">NPC that was killed</param>param>
-        public virtual void OnKillNPC(NPC npc)
+        public virtual void OnKillNPC(NPC npc, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
@@ -332,7 +332,7 @@ namespace Expeditions
         /// Called when an NPC dies somewhere for any reason. May be useful for bosses or group killing missions.
         /// </summary>
         /// <param name="npc">NPC that was killed</param>param>
-        public virtual void OnAnyNPCDeath(NPC npc)
+        public virtual void OnAnyNPCDeath(NPC npc, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
@@ -341,7 +341,7 @@ namespace Expeditions
         /// </summary>
         /// <param name="item">Item crafted</param>
         /// <param name="recipe">Recipe used to craft the item</param>
-        public virtual void OnCraftItem(Item item, Recipe recipe)
+        public virtual void OnCraftItem(Item item, Recipe recipe, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
@@ -349,7 +349,7 @@ namespace Expeditions
         /// Called when the player picks up an item
         /// </summary>
         /// <param name="item">Item being picked up</param>
-        public virtual void OnPickupItem(Item item)
+        public virtual void OnPickupItem(Item item, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
@@ -359,7 +359,7 @@ namespace Expeditions
         /// <param name="x">player tileTargetX</param>
         /// <param name="y">player tileTargetY</param>
         /// <param name="type">type tile</param>
-        public virtual void OnKillTile(int x, int y, int type)
+        public virtual void OnKillTile(int x, int y, int type, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             
         }

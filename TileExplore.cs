@@ -16,7 +16,12 @@ namespace Expeditions
             {
                 if (i == Player.tileTargetX && j == Player.tileTargetY && !fail)
                 {
-                    me.OnKillTile(i, j, type);
+                    me.OnKillTile(i, j, type, Main.player[Main.myPlayer],
+                              ref me.expedition.condition1Met,
+                              ref me.expedition.condition2Met,
+                              ref me.expedition.condition3Met,
+                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                              );
                 }
             }
         }

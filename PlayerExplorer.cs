@@ -365,9 +365,14 @@ namespace Expeditions
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            foreach(ModExpedition me in Expeditions.GetExpeditionsList())
+            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
             {
-                me.OnCombatWithNPC(npc, true);
+                me.OnCombatWithNPC(npc, true, Main.player[Main.myPlayer],
+                              ref me.expedition.condition1Met,
+                              ref me.expedition.condition2Met,
+                              ref me.expedition.condition3Met,
+                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+                              );
             }
         }
     }
