@@ -306,8 +306,18 @@ namespace Expeditions
                CopyLocalExpeditionsToMain();
             }
 
+            if(Main.netMode == 1)
+            {
+                RequestDailyQuest();
+            }
+
             // Reset list items
             Expeditions.WorldInit();
+        }
+
+        internal void RequestDailyQuest()
+        {
+            Expeditions.SendNet_GetDaily(mod, player.whoAmI);
         }
 
         #endregion

@@ -9,7 +9,9 @@ namespace Expeditions
 {
     public class WorldExplore : ModWorld
     {
-        private static Expedition syncedDailyExpedition = null;
+        internal static Expedition syncedDailyExpedition = null;
+        private static int expeditionIndex = -1;
+        internal static int dailyExpIndex { get { return expeditionIndex; } }
         
         public override void Initialize()
         {
@@ -30,18 +32,18 @@ namespace Expeditions
                 {
                     // Try for one that we didn't have last time
                     Expedition previousDaily = syncedDailyExpedition;
-                    int random = 0;
+                    expeditionIndex = -1;
                     for (int i = 0; i < 100; i++)
                     {
-                        random = Main.rand.Next(dailys.Count);
-                        if (previousDaily != dailys[random]) break;
+                        expeditionIndex = Main.rand.Next(dailys.Count);
+                        if (previousDaily != dailys[expeditionIndex]) break;
                     }
 
-                    if (Expeditions.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + random);
-                    NetSyncDaily(dailys[random]);
+                    if (Expeditions.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + expeditionIndex);
+                    NetSyncDaily(dailys[expeditionIndex]);
                     if (Main.netMode == 2)
                     {
-                        Expeditions.SendNet_NewDaily(mod, random);
+                        Expeditions.SendNet_NewDaily(mod, expeditionIndex);
                     }
                 }
                 else

@@ -21,7 +21,7 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = true;
+        internal const bool DEBUG = false;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
@@ -375,6 +375,7 @@ namespace Expeditions
         public const int packetID_test = 0;
         public const int packetID_partyComplete = 1;
         public const int packetID_dailyExpedition = 2;
+        public const int packetID_dailyCheck = 3;
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             //get my packet type
@@ -436,6 +437,19 @@ namespace Expeditions
 
                     if (DEBUG) Main.NewText("Expedition index received: " + dailyIndex);
                     Receive_NewDaily(dailyIndex);
+                    break;
+                case packetID_dailyCheck:
+                    // Get variables
+                    int playerRequester = reader.ReadInt32();
+
+                    if (Main.netMode == 2)
+                    {
+                        if (DEBUG) Console.WriteLine("Packet request from " + playerRequester + " to " + whoAmI);
+                        ModPacket packet = GetPacket();
+                        packet.Write(packetID_dailyExpedition);
+                        packet.Write(WorldExplore.dailyExpIndex);
+                        packet.Send(playerRequester);
+                    }
                     break;
                 default:
                     break;
@@ -515,9 +529,31 @@ namespace Expeditions
             if (index >= GetExpeditionsList().Count) return;
             try
             {
-                WorldExplore.NetSyncDaily(GetExpeditionsList()[index].expedition);
+                if (index >= 0)
+                {
+                    WorldExplore.NetSyncDaily(GetExpeditionsList()[index].expedition);
+                }
+                else
+                {
+                    WorldExplore.NetSyncDaily(null);
+                }
             }
-            catch { }
+            catch
+            {
+                WorldExplore.NetSyncDaily(null);
+            }
+        }
+
+        internal static void SendNet_GetDaily(Mod mod, int playerWhoAmI)
+        {
+            if (DEBUG) Main.NewText("Requesting daily expedition for " + playerWhoAmI);
+            // Generate a new packet
+            ModPacket packet = mod.GetPacket();
+            // Add the variables
+            packet.Write(packetID_dailyCheck);
+            packet.Write(playerWhoAmI);
+            // Send to the server
+            packet.Send();
         }
 
         #endregion Netcode
