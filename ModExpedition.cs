@@ -289,7 +289,9 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Checks on a new day to see if this expedition should be added to the random daily expedition
+        /// Checks on a new day to see if this expedition should be added to the random daily expedition. KEEP IN IN MIND: This is a world-based method, not client-based. 
+        /// Make sure you are checking against conditions accessible by the server in multiplayer,
+        /// otherwise the quest will likely not get added to the daily quest pool.
         /// </summary>
         /// <returns></returns>
         public virtual bool IncludeAsDaily()
@@ -298,14 +300,14 @@ namespace Expeditions
         }
 
         /// <summary>
-        /// Called on the dawn of each day, can be used to tracking day resetting activities?
+        /// Called on the dawn of each day, can be used to track day activities.
         /// </summary>
         public virtual void OnNewDay(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
 
         }
         /// <summary>
-        /// Called on the start of each night, can be used to track the start of night activities?
+        /// Called on the start of each night, can be used to track the start of night activities.
         /// </summary>
         public virtual void OnNewNight(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
@@ -321,7 +323,7 @@ namespace Expeditions
 
         }
         /// <summary>
-        /// Called when an NPC is directly killed by the player, not including debuffs
+        /// Called when an NPC is directly killed by the player, not including debuffs.
         /// </summary>
         /// <param name="npc">NPC that was killed</param>param>
         public virtual void OnKillNPC(NPC npc, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
@@ -346,7 +348,7 @@ namespace Expeditions
 
         }
         /// <summary>
-        /// Called when the player picks up an item
+        /// Called when the player picks up an item from the world.
         /// </summary>
         /// <param name="item">Item being picked up</param>
         public virtual void OnPickupItem(Item item, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
@@ -354,7 +356,7 @@ namespace Expeditions
 
         }
         /// <summary>
-        /// Called when the player manually mines a tile
+        /// Called when a tile is destroyed that's targetting by the player
         /// </summary>
         /// <param name="x">player tileTargetX</param>
         /// <param name="y">player tileTargetY</param>

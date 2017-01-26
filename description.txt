@@ -1,6 +1,18 @@
 Add Expeditions, a quest system accesible via the Expedition Board craftable tile.
 This is the core mod, providing just the quest system framework, without content.
 
+Framework Features:
+* Client-side quest viewing, tracking and completion.
+* 'Fancy' UI for handling the above.
+* Lists for delivering and rewards items.
+* Up to 3 customisable conditions and 1 counter per quests.
+* Daily random quest system, saved to world and net-synced.
+* Custom currency 'Expedition Coupon' and related methods.
+* Loot boxes that use an item pool generated from all installed mods.
+* Hooks for detecting various things.
+* Semantic time checking information.
+* Bugs and glitches!
+
 Commands:
 Hold [O][K][0] when exiting the world to reset ALL quest data.
 Hold [#] when exiting the world to discard quest data from unloaded mods.

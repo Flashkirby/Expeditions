@@ -29,16 +29,16 @@ namespace Expeditions
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
         private static List<ModExpedition> expeditionList;
 
-        public static Texture2D sortingTexture;
-        public static Texture2D bountyBoardTexture;
+        internal static Texture2D sortingTexture;
+        internal static Texture2D bountyBoardTexture;
 
-        public static int bookID;
-        public static int boardID;
-        public static int voucherID;
-        public static int stockBox1;
-        public static int stockBox2;
+        internal static int bookID;
+        internal static int boardID;
+        internal static int voucherID;
+        internal static int stockBox1;
+        internal static int stockBox2;
 
-        public static int currencyVoucherID;
+        internal static int currencyVoucherID;
 
         public Expeditions()
         {
@@ -372,10 +372,10 @@ namespace Expeditions
 
         #region Netcode
 
-        public const int packetID_test = 0;
-        public const int packetID_partyComplete = 1;
-        public const int packetID_dailyExpedition = 2;
-        public const int packetID_dailyCheck = 3;
+        internal const int packetID_test = 0;
+        internal const int packetID_partyComplete = 1;
+        internal const int packetID_dailyExpedition = 2;
+        internal const int packetID_dailyCheck = 3;
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             //get my packet type
