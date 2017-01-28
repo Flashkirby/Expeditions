@@ -1,3 +1,5 @@
+WARNING: This mod has been split into Expeditions Base (this) and Expeditions Content Pack. You will lose all quest progress you made with this mod when it was in version 1. Sorry!
+
 Add Expeditions, a quest system accesible via the Expedition Board craftable tile.
 This is the core mod, providing just the quest system framework, without content.
 
