@@ -29,6 +29,12 @@ namespace Expeditions
 
         public override void Initialize()
         {
+            // Clear tracked expeditions;
+            foreach(ModExpedition me in Expeditions.GetExpeditionsList())
+            {
+                me.expedition.ResetProgress(true);
+            }
+
             _localExpeditionList = new List<ProgressData>();
             _orphanData = new List<ProgressData>();
             itemContains = new bool[Main.itemTexture.Length];
