@@ -11,6 +11,7 @@ namespace Expeditions.Items
         public static List<int> mainRewards;
         public static List<int> ammos;
         public static List<int> resourceRewards;
+        public const int resourceReducedRarity = 1;
         public static void GenerateRewardPool()
         {
             mainRewards = new List<int>();
@@ -171,10 +172,17 @@ namespace Expeditions.Items
                 }
             }
 
+            rare -= resourceReducedRarity;
+
             if (resourceRewards.Count > 0)
             {
                 int sideReward = 0;
-                int sideCount = Main.rand.Next(2, 5);
+                int sideCount = Main.rand.Next(2, 5); // 2 - 4 items
+                if(rare <= 0)
+                {
+                    rare = 0;
+                    sideCount = Main.rand.Next(1, 3); // 1 - 2
+                }
                 for (int i = 0; i < sideCount; i++)
                 {
                     sideReward = ItemID.Wood;
@@ -190,7 +198,7 @@ namespace Expeditions.Items
                         item.SetDefaults(sideReward);
                         try { item.modItem.SetDefaults(); } catch { }
 
-                        // No super rares
+                        // No super rares, or hardmode (3) in prehard
                         if (item.rare <= rare)
                         {
                             int stack = item.maxStack;
