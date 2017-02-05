@@ -27,14 +27,9 @@ namespace Expeditions
         /// </summary>
         private List<ProgressData> _orphanData;
 
+        // v9.0.1 bug calls this method in multiplayer
         public override void Initialize()
         {
-            // Clear tracked expeditions;
-            foreach(ModExpedition me in Expeditions.GetExpeditionsList())
-            {
-                me.expedition.ResetProgress(true);
-            }
-
             _localExpeditionList = new List<ProgressData>();
             _orphanData = new List<ProgressData>();
             itemContains = new bool[Main.itemTexture.Length];
@@ -65,6 +60,9 @@ namespace Expeditions
                 foreach (ModExpedition me in expeditions)
                 {
                     saveData.Add(new ProgressData(me.expedition));
+
+                    // Clear expeditions progress to prevent carryong over of data
+                    me.expedition.ResetProgress(true);
                 }
 
                 // Carry on unknown progress
@@ -83,7 +81,6 @@ namespace Expeditions
                 {
                     ErrorLogger.Log("Expeditions: " + e.ToString());
                 }
-
             }
             return tag;
         }
