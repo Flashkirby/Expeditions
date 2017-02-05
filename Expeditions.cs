@@ -416,7 +416,7 @@ namespace Expeditions
 
                     if (Main.netMode == 2)
                     {
-                        if (DEBUG) Console.WriteLine("Packet for team " + senderTeam);
+                        if (DEBUG) Console.WriteLine("Packet for team " + senderTeam + ", expi " + expIndex);
                         ModPacket packet = GetPacket();
                         packet.Write(packetID_partyComplete);
                         packet.Write(expIndex);
@@ -546,7 +546,6 @@ namespace Expeditions
 
         internal static void SendNet_GetDaily(Mod mod, int playerWhoAmI)
         {
-            if (DEBUG) Main.NewText("Requesting daily expedition for " + playerWhoAmI);
             // Generate a new packet
             ModPacket packet = mod.GetPacket();
             // Add the variables

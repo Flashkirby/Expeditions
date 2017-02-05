@@ -283,7 +283,7 @@ namespace Expeditions
             if(currentME != null && !previewMode &&
                 (currentME.expedition.ConditionsMet()))
             {
-                currentME.expedition.CompleteExpedition();
+                currentME.expedition.CompleteExpedition(false);
                 Main.PlaySound(12, -1, -1, 1);
 
                 if(!currentME.expedition.partyShare || Main.netMode != 1) ListRecalculate();
@@ -432,6 +432,7 @@ namespace Expeditions
         /// </summary>
         public void ListRecalculate()
         {
+            if (Expeditions.DEBUG) Main.NewText("#Recalculating");
             // get a new list
             filterList.Clear();
             sortedList.Clear();

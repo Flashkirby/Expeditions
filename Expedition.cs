@@ -353,6 +353,7 @@ namespace Expeditions
                 // Check if this is a shared expedition on a multiplayer server
                 if (partyShare && Main.netMode == 1 && mex != null)
                 {
+                    if (Expeditions.DEBUG) Main.NewText("#sending");
                     // Send net message and return early without running the rest of the code
                     Expeditions.SendNet_PartyComplete(
                         this.mex.mod,
@@ -362,6 +363,7 @@ namespace Expeditions
                 }
             }
 
+            if (Expeditions.DEBUG) Main.NewText("#complete repeat");
             // What if I receive this from someone else who hasn't finished it yet?
             if (completed && !repeatable) return;
 
@@ -392,6 +394,7 @@ namespace Expeditions
                 Expeditions.ClientNetSpawnItem(item);
             }
 
+            if (Expeditions.DEBUG) Main.NewText("#compelte quest");
             //complete this
             Main.PlaySound(24, -1, -1, 1);
             if (!repeatable || (repeatable && !completed))
@@ -405,9 +408,11 @@ namespace Expeditions
                 Main.NewText("Expeditions: '" + name + "' recompleted!", textColour.R, textColour.G, textColour.B);
             }
 
+            if (Expeditions.DEBUG) Main.NewText("#set progress");
             if (!repeatable)
             {
                 // Save conditions used to finish, on 1 time expeditions
+                // So just disable tracking
                 trackCondition = false;
                 trackingActive = false;
                 trackItems = false;
@@ -419,9 +424,10 @@ namespace Expeditions
             }
             completed = true;
 
+            if (Expeditions.DEBUG) Main.NewText("#postcomplete, complete = " + completed);
             // check mod hook
             mex.PostCompleteExpedition();
-
+            
             // Force the expeditions list to recalculate in this instance
             if (ExpeditionUI.visible)
             {

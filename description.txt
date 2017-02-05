@@ -23,3 +23,4 @@ Hold [#] when exiting the world to discard quest data from unloaded mods.
 Credits:
 Flashkirby99 - I am making this mod.
 jopojelly - Additional advice on mod referencing and .tmod usage
+Sos339 - Playtesting help

@@ -20,6 +20,8 @@ namespace Expeditions
 
         /// <summary>
         /// Stores expedition progress data.
+        /// When loaded, copies progress to the expeditions list.
+        /// When saved, copies progress from the expeditions list.
         /// </summary>
         private List<ProgressData> _localExpeditionList;
         /// <summary>
