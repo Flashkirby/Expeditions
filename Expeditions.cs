@@ -21,7 +21,7 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = false;
+        internal const bool DEBUG = true;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
@@ -185,7 +185,9 @@ namespace Expeditions
         internal static void ResetExpeditions()
         {
             if (Main.netMode == 2) Console.WriteLine("  > Resetting Expeditions");
-            //initiliase all the expeditions
+            if (Expeditions.DEBUG) Main.NewText("Expeditions: Resetting Expeditions");
+
+            // reinitiliase all the expeditions
             foreach (ModExpedition mex in GetExpeditionsList())
             {
                 mex.expedition.ResetProgress();
@@ -348,11 +350,11 @@ namespace Expeditions
                             stacks[2] + "silv, " +
                             stacks[3] + "copr, "
                             );
-                        SendTestModPacket(Main.myPlayer, 1337);
+                        if (Main.netMode == 1) SendTestModPacket(Main.myPlayer, 1337);
                     }
+                    /*
                     if (Main.time % 60 == 20)
                     {
-
                         if (PlayerExplorer.svmsg != null)
                         {
                             Main.NewTextMultiline(PlayerExplorer.svmsg, false, Color.LightSeaGreen);
@@ -360,11 +362,19 @@ namespace Expeditions
                     }
                     if (Main.time % 60 == 40)
                     {
-
                         if (PlayerExplorer.dbgmsg != null)
                         {
                             Main.NewTextMultiline(PlayerExplorer.dbgmsg, false, Color.LightSteelBlue);
                         }
+                    }
+                    */
+                }
+                if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.P))
+                {
+                    if (Main.time % 60 == 0)
+                    {
+                        Main.NewText("Reset Progress");
+                        ResetExpeditions();
                     }
                 }
             }
@@ -378,6 +388,8 @@ namespace Expeditions
         internal const int packetID_dailyCheck = 3;
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
+            if (Main.netMode == 0) return;
+
             //get my packet type
             int packetID = reader.ReadInt32();
             if (DEBUG)
@@ -692,7 +704,7 @@ namespace Expeditions
             int index;
             while (value > 0)
             {
-                if (DEBUG) Main.NewText("    value is now: " + value, 255, 255, 100);
+                // if (DEBUG) Main.NewText("    value is at: " + value, 255, 255, 100);
                 if (value >= 1000000) //platinum
                 {
                     index = 0;
@@ -719,7 +731,7 @@ namespace Expeditions
                 // Reduce value by denomination * calculated stack
                 value -= stacks[index] * denomination;
             }
-            if (DEBUG) Main.NewText("    value is now: " + value, 255, 255, 100);
+            // if (DEBUG) Main.NewText("    value is now: " + value, 255, 255, 100);
             return stacks;
         }
         

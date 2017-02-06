@@ -274,7 +274,7 @@ namespace Expeditions
                 {
                     if (hasStacks[i] < stacks[i]) // Player doesn't have enough of an item
                     {
-                        if (Expeditions.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
+                        // if (Expeditions.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
                         return false;
                     }
                 }

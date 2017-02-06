@@ -23,7 +23,7 @@ namespace Expeditions
         /// When loaded, copies progress to the expeditions list.
         /// When saved, copies progress from the expeditions list.
         /// </summary>
-        private List<ProgressData> _localExpeditionList;
+        private List<ProgressData> _savedProgressList;
         /// <summary>
         /// Stores expeditions which were loaded with no match found.
         /// </summary>
@@ -32,13 +32,14 @@ namespace Expeditions
         // v9.0.1 bug calls this method in multiplayer
         public override void Initialize()
         {
-            _localExpeditionList = new List<ProgressData>();
-            _orphanData = new List<ProgressData>();
             itemContains = new bool[Main.itemTexture.Length];
         }
 
+        // Called on exiting world and on death
         public override TagCompound Save()
         {
+            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Saving...");
+
             //the tag to save
             TagCompound tag = new TagCompound();
 
@@ -62,9 +63,6 @@ namespace Expeditions
                 foreach (ModExpedition me in expeditions)
                 {
                     saveData.Add(new ProgressData(me.expedition));
-
-                    // Clear expeditions progress to prevent carryong over of data
-                    me.expedition.ResetProgress(true);
                 }
 
                 // Carry on unknown progress
@@ -84,6 +82,16 @@ namespace Expeditions
                     ErrorLogger.Log("Expeditions: " + e.ToString());
                 }
             }
+
+            if (Main.gameMenu)
+            {
+                // If leaving the game, reset the expeditions list 
+                // so it isn't copied when new players are created. 
+                //I don't even know how this works...
+                Expeditions.ResetExpeditions();
+            }
+
+            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Save complete, expeditions cleared");
             return tag;
         }
 
@@ -113,21 +121,24 @@ namespace Expeditions
             tag.Add("ProgressData.condCount", cc);
         }
 
+        // Called at player select screen
         public override void Load(TagCompound tag)
         {
+            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Loading...");
             if (Expeditions.DEBUG) svmsg += "\n" + player.name + " : Load";
 
             List<ProgressData> progress = ConvertTagToProgress(tag);
 
-            _localExpeditionList = new List<ProgressData>();
-            _orphanData = new List<ProgressData>();
-
-            if (progress != null)
+            if (progress.Count > 0)
             {
+                //Initialise the progress list for this
+                _savedProgressList = new List<ProgressData>();
+                _orphanData = new List<ProgressData>();
+
                 // Create carbon copy of loaded expedition list
                 for (int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
                 {
-                    _localExpeditionList.Add(new ProgressData(0, false, false, false, false, false, 0));
+                    _savedProgressList.Add(new ProgressData(0, false, false, false, false, false, 0));
                 }
 
                 // Find hash matches and add progress
@@ -139,7 +150,7 @@ namespace Expeditions
                         if(pd.hash == Expedition.GetHashID(e))
                         {
                             if (Expeditions.DEBUG) svmsg += e.completed ? ":" : ".";
-                            _localExpeditionList[i] = pd;
+                            _savedProgressList[i] = pd;
 
                             // Remove from the list after use
                             progress.Remove(pd);
@@ -159,6 +170,7 @@ namespace Expeditions
                 }
             }
             if (Expeditions.DEBUG) svmsg += " c:" + progress.Count;
+            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Load complete, expeditions set");
         }
 
         private static List<ProgressData> ConvertTagToProgress(TagCompound tag)
@@ -178,137 +190,43 @@ namespace Expeditions
             }
             return progress;
         }
-
-        public override void LoadLegacy(BinaryReader reader)
-        {
-            _version = reader.ReadInt32();
-            if (_version == 3)
-            {
-                //!/ if (Expeditions.DEBUG) dbgmsg += "\nLOAD v:" + _version + "/" + 2;
-
-                // Create a new progress storage
-                //_localExpeditionList = new List<Expedition>();
-                _localExpeditionList = new List<ProgressData>();
-
-                // Create a dictionary of keys -> index
-                Dictionary<int, int> hashToIndex = new Dictionary<int, int>();
-                for (int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
-                {
-                    Expedition e = Expeditions.GetExpeditionsList()[i].expedition;
-                    // Populate both lists
-                    try
-                    {
-                        hashToIndex.Add(
-                            Expedition.GetHashID(e), // The hashcode
-                            i               // The index
-                            );
-                        //_localExpeditionList.Add(new Expedition());
-                        _localExpeditionList.Add(new ProgressData(0, false, false, false, false, false, 0));
-                    }
-                    catch
-                    {
-                        string errorList = "";
-                        foreach (ModExpedition me in Expeditions.GetExpeditionsList())
-                        {
-                            errorList += "\n" + Expedition.GetHashID(me.expedition).ToString("X") + " -> " + me.expedition.name + " (" + (object)(me).GetType().Name + ")";
-                        }
-                        throw new System.Exception("{!CONFLICT: " + e.name + ":#" + Expedition.GetHashID(e).ToString("X") + " duplicate!}" + errorList);
-                        //dbgmsg += "{!CONFLICT: " + e.name + ":#" + e.GetHashID().ToString("X") + " duplicate!}";
-                    }
-                }
-
-                // Read expeditions
-                int count = reader.ReadInt32();
-                int unknownCount = reader.ReadInt32();
-                //!/ if (Expeditions.DEBUG) dbgmsg += "|c:" + count + "?" + unknownCount;
-
-                // Iterating
-                for (int i = 0; i < count + unknownCount; i++)
-                {
-                    int expeditionID = reader.ReadInt32();
-                    BitsByte flags = reader.ReadByte();
-                    ushort countedCond = reader.ReadUInt16();
-                    int index;
-                    if (hashToIndex.TryGetValue(expeditionID, out index))
-                    {
-                        // Write match found at index
-                        //Expedition e = _localExpeditionList[index];
-                        ProgressData e = _localExpeditionList[index];
-                        e.completed = flags[0];
-                        e.trackingActive = flags[1];
-                        e.condition1Met = flags[2];
-                        e.condition2Met = flags[3];
-                        e.condition3Met = flags[4];
-                        e.conditionCounted = countedCond;
-                        //!/ if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";" + (e.completed ? "`" : ".") + (e.trackingActive ? "`" : ".") + "]";
-                    }
-                    else
-                    {
-                        // Make a new one if not initialised
-                        //if (_unusedExpeditionData == null) _unusedExpeditionData = new List<Expedition>();
-                        if (_orphanData == null) _orphanData = new List<ProgressData>();
-                        // No match found
-                        //Expedition e = new Expedition();
-                        ProgressData e = new ProgressData(0, false, false, false, false, false, 0);
-                        e.completed = flags[0];
-                        e.trackingActive = flags[1];
-                        e.condition1Met = flags[2];
-                        e.condition2Met = flags[3];
-                        e.condition3Met = flags[4];
-                        e.conditionCounted = countedCond;
-                        //e.name = "" + expeditionID;
-                        e.hash = expeditionID;
-                        //_unusedExpeditionData.Add(e);
-                        _orphanData.Add(e);
-                        //!/ if (Expeditions.DEBUG) dbgmsg += " [" + expeditionID.ToString("X") + ";-]";
-                    }
-                }
-            }
-            else
-            {
-                if (_version < 0) return;
-                if (_version == 2) return; // This was a save from v1.0.2
-                if (Expeditions.DEBUG)
-                {
-                    dbgmsg += "(( LOAD v: " + _version + " / " + 2 + ")) ";
-                }
-                else
-                {
-                    ErrorLogger.Log("Expeditions: Player save file v" + _version + " is not a valid version number, somehow (You must've done goofed).");
-                }
-            }
-        }
-
+        
         internal void CopyLocalExpeditionsToMain()
         {
             if (Main.netMode != 2 && player.whoAmI == Main.myPlayer)
             {
                 if (Expeditions.DEBUG) { dbgmsg += "\n" + player.name + " set Expeditions"; }
                 Expeditions.ResetExpeditions();
-                if (_localExpeditionList != null)
+                if (_savedProgressList != null)
                 {
+                    if (Expeditions.DEBUG) Main.NewText("Expeditions: Loading progress to list, counted " + _savedProgressList.Count);
                     // Set the expeditions to use this list
-                    for (int i = 0; i < _localExpeditionList.Count; i++)
+                    for (int i = 0; i < _savedProgressList.Count; i++)
                     {
                         //Expeditions.GetExpeditionsList()[i].expedition.CopyProgress(
                         //    _localExpeditionList[i]);
                         Expeditions.GetExpeditionsList()[i].expedition.CopyProgress(
-                            _localExpeditionList[i].ToExpedition());
+                            _savedProgressList[i].ToExpedition());
 
                         dbgmsg += "(" + Expeditions.GetExpeditionsList()[i].expedition.name
-                            + (_localExpeditionList[i].trackingActive ? "T-" : "n-")
+                            + (_savedProgressList[i].trackingActive ? "T-" : "n-")
                             + (Expeditions.GetExpeditionsList()[i].expedition.trackingActive ? ">T" : ">n") + ")";
                     }
+                }
+                else
+                {
+                    if (Expeditions.DEBUG) Main.NewText("Expeditions: New player - null list");
                 }
             }
         }
 
         public override void OnEnterWorld(Player player)
         {
+            if (Expeditions.DEBUG) Main.NewText("Expeditions: Enter World");
             if (Main.netMode != 2)
             {
                 // Set main list to loaded
-               CopyLocalExpeditionsToMain();
+                CopyLocalExpeditionsToMain();
             }
 
             if(Main.netMode == 1)
