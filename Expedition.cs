@@ -251,28 +251,28 @@ namespace Expeditions
         private bool CheckRequiredItems(bool deductItems = false)
         {
             //get as temp array of required
-            int[] items = new int[deliverables.Count];
-            int[] stacks = new int[deliverables.Count];
-            for (int i = 0; i < items.Length; i++)
+            int[] requiredItems = new int[deliverables.Count];
+            int[] requiredStack = new int[deliverables.Count];
+            for (int i = 0; i < requiredItems.Length; i++)
             {
-                items[i] = deliverables[i].Key;
-                stacks[i] = deliverables[i].Value;
+                requiredItems[i] = deliverables[i].Key;
+                requiredStack[i] = deliverables[i].Value;
             }
 
             //keep track of stacks player has, as this the total number can be divided across multiple
-            int[] hasStacks = new int[deliverables.Count];
+            int[] countedStack = new int[deliverables.Count];
             Item[] inventory = Main.player[Main.myPlayer].inventory;
             for (int i = 0; i < inventory.Length; i++)
             {
-                addToStackIfMatching(inventory[i], items, ref hasStacks, stacks, deductItems);
+                addToStackIfMatching(inventory[i], requiredItems, ref countedStack, requiredStack, deductItems);
             }
 
             //check to see if all item stacks are == or above
             try
             {
-                for (int i = 0; i < stacks.Length; i++)
+                for (int i = 0; i < requiredStack.Length; i++)
                 {
-                    if (hasStacks[i] < stacks[i]) // Player doesn't have enough of an item
+                    if (countedStack[i] < requiredStack[i]) // Player doesn't have enough of an item
                     {
                         // if (Expeditions.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
                         return false;
@@ -289,7 +289,7 @@ namespace Expeditions
         /// <summary>
         /// Check against itemTypes to see if it matches, if so add to corrosponding index in stack counter. 
         /// </summary>
-        private bool addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount, int[]itemStacks, bool deductItems = false)
+        private bool addToStackIfMatching(Item item, int[] itemTypes, ref int[] itemStackCount, int[]itemTotalStack, bool deductItems = false)
         {
             for (int i = 0; i < itemTypes.Length; i++)
             {
@@ -302,11 +302,14 @@ namespace Expeditions
                 {
                     // Does this item stack actually count towards deliverables
                     bool contributeToRequirement = false;
-                    contributeToRequirement = itemStackCount[i] < itemStacks[i];
+                    contributeToRequirement = itemStackCount[i] < itemTotalStack[i];
 
-                    if (deductItems) //behaviour if removing items
+                    // Behaviour if removing items
+                    // But only if it is still less 
+                    // (otherwise will cause item duplicaiton glitch)
+                    if (deductItems && contributeToRequirement) 
                     {
-                        int deductAmount = itemStacks[i] - itemStackCount[i];
+                        int deductAmount = itemTotalStack[i] - itemStackCount[i];
                         if (item.stack > deductAmount)
                         {
                             //item stack is larger than amount remaining;
