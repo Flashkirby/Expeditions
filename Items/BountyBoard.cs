@@ -28,6 +28,7 @@ namespace Expeditions.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Wood, 20);
+            recipe.anyWood = true;
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
