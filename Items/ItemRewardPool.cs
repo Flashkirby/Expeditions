@@ -202,8 +202,8 @@ namespace Expeditions.Items
                     item.SetDefaults(sideReward);
                     try { item.modItem.SetDefaults(); } catch { }
                     
-                    // Try random 255 times
-                    for (int j = 0; j < 255; j++)
+                    // Try random 511 times
+                    for (int j = 0; j < 511; j++)
                     {
                         sideReward = resourceRewards[Main.rand.Next(resourceRewards.Count)];
                         item = new Item();
