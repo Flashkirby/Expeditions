@@ -216,23 +216,21 @@ namespace Expeditions
             {
                 UIToggleImage uIToggleImage = new UIToggleImage(texture, 32, 32, new Point(34 * j, 0), new Point(34 * j, 34));
                 uIToggleImage.Left.Set((float)(j * 36 + x), 0f);
-                uIToggleImage.SetState(true);
+                uIToggleImage.SetState(false); //These are disabled by default
                 if (j == 2)
                 {
-                    uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortAlphabetical);
-                }
-                else if(j ==3)
-                {
-                    uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortDifficulty);
+                    if (uIToggleImage.IsOn)
+                    {
+                        uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortDifficulty);
+                    }
+                    else
+                    {
+                        uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortAlphabetical);
+                    }
                 }
                 else
                 {
                     uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
-                }
-                if(j != 3)
-                {
-                    // Set include completed, repeat only, and sort by alphabet as false
-                    uIToggleImage.SetState(false);
                 }
                 this._categoryButtons.Add(uIToggleImage);
                 uIElement.Append(uIToggleImage);
@@ -276,21 +274,23 @@ namespace Expeditions
 
         private void SortAlphabetical(UIMouseEvent evt, UIElement listeningElement)
         {
+            /*
             if (this._categoryButtons[6].IsOn)
             { this._categoryButtons[7].SetState(false); }
             else
             { this._categoryButtons[7].SetState(true); }
-
+            */
             ListRecalculate();
         }
 
         private void SortDifficulty(UIMouseEvent evt, UIElement listeningElement)
         {
+            /*
             if (this._categoryButtons[7].IsOn)
             { this._categoryButtons[6].SetState(false); }
             else
             { this._categoryButtons[6].SetState(true); }
-
+            */
             ListRecalculate();
         }
 
@@ -469,22 +469,22 @@ namespace Expeditions
                 Expedition e = current.expedition;
                 anyMatch = 0;
                 // line 1
-                if (e.ctgSlay && this._categoryButtons[0].IsOn) { anyMatch++; }
-                if (e.ctgCollect && this._categoryButtons[1].IsOn) { anyMatch++; }
-                if (e.ctgExplore && this._categoryButtons[2].IsOn) { anyMatch++; }
-                if (e.ctgImportant && this._categoryButtons[3].IsOn) { anyMatch++; }
+                if (e.ctgSlay && this._categoryButtons[0].IsOn) { anyMatch++; } // Slayer Filter
+                if (e.ctgCollect && this._categoryButtons[1].IsOn) { anyMatch++; } //Collector Filter
+                if (e.ctgExplore && this._categoryButtons[2].IsOn) { anyMatch++; } // Explorer Filter
+                if (e.ctgImportant && this._categoryButtons[3].IsOn) { anyMatch++; } // Challenger Filter
                 if (anyMatch == 0) continue;
                 // line 2
-                if (e.completed && !this._categoryButtons[4].IsOn) { continue; }
-                if (!e.repeatable && this._categoryButtons[5].IsOn) { continue; }
+                if (e.completed && !this._categoryButtons[4].IsOn) { continue; } // Completed FIlter
+                if (!e.repeatable && this._categoryButtons[5].IsOn) { continue; } // Repeated FIlter
+                if (!e.trackingActive && this._categoryButtons[7].IsOn) { continue; } // Tracking FIlter
                 if (!e.PrerequisitesMet()) continue;
                 filterList.Add(current);
             }
 
             // sort by these
-            int sortMode = 0;
-            if (this._categoryButtons[6].IsOn) sortMode = 0;
-            if (this._categoryButtons[7].IsOn) sortMode = 1;
+            int sortMode = 1; //SortByDifficulty (default)
+            if (this._categoryButtons[6].IsOn) sortMode = 0; //Srot by ALphabet
 
             switch(sortMode)
             {
@@ -614,7 +614,7 @@ namespace Expeditions
                             text = "Sort by A-Z";
                             break;
                         case 7:
-                            text = "Sort by Tier";
+                            text = "Only Tracked";
                             break;
                         default:
                             text = "None";
