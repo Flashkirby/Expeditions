@@ -73,7 +73,7 @@ namespace Expeditions
 
         private void expCombatWithNPC(ModExpedition me, NPC npc)
         {
-            me.OnCombatWithNPC(npc, false, Main.player[Main.myPlayer],
+            me.OnCombatWithNPC(npc, false, Main.LocalPlayer,
                           ref me.expedition.condition1Met,
                           ref me.expedition.condition2Met,
                           ref me.expedition.condition3Met,
@@ -82,7 +82,7 @@ namespace Expeditions
         }
         private void expKillNPC(ModExpedition me, NPC npc)
         {
-            me.OnKillNPC(npc, Main.player[Main.myPlayer],
+            me.OnKillNPC(npc, Main.LocalPlayer,
                           ref me.expedition.condition1Met,
                           ref me.expedition.condition2Met,
                           ref me.expedition.condition3Met,
@@ -91,7 +91,7 @@ namespace Expeditions
         }
         private void expAnyNPCDeath(ModExpedition me, NPC npc)
         {
-            me.OnAnyNPCDeath(npc, Main.player[Main.myPlayer],
+            me.OnAnyNPCDeath(npc, Main.LocalPlayer,
                           ref me.expedition.condition1Met,
                           ref me.expedition.condition2Met,
                           ref me.expedition.condition3Met,

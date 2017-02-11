@@ -242,7 +242,7 @@ namespace Expeditions
         {
             if (Main.mouseX >= x && (float)Main.mouseX <= (float)x + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= y && (float)Main.mouseY <= (float)y + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
             {
-                Main.player[Main.myPlayer].mouseInterface = true;
+                Main.LocalPlayer.mouseInterface = true;
                 ItemSlot.MouseHover(ref item, Context);
             }
             Main.inventoryScale = 0.6f;
@@ -535,7 +535,7 @@ namespace Expeditions
             if (_navigationPanel.ContainsPoint(MousePosition) ||
                 _expeditionPanel.ContainsPoint(MousePosition))
             {
-                Main.player[Main.myPlayer].mouseInterface = true;
+                Main.LocalPlayer.mouseInterface = true;
             }
             if (dragging)
             {

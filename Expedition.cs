@@ -115,7 +115,7 @@ namespace Expeditions
             if (mex != null)
             {
                 meetc = conditionCounted >= conditionCountedMax;
-                mex.CheckConditionCountable(Main.player[Main.myPlayer], ref conditionCounted, conditionCountedMax);
+                mex.CheckConditionCountable(Main.LocalPlayer, ref conditionCounted, conditionCountedMax);
             }
         }
         private bool meetc = false;
@@ -134,7 +134,7 @@ namespace Expeditions
 
             // check conditions
             bool checkConditions = true;
-            if (mex != null) checkConditions = mex.CheckConditions(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax);
+            if (mex != null) checkConditions = mex.CheckConditions(Main.LocalPlayer, ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax);
 
             if (!trackCondition && checkConditions) { trackCondition = true; }
             if (trackCondition && !checkConditions) { trackCondition = false; }
@@ -228,7 +228,7 @@ namespace Expeditions
             }
 
             // Check the mod call
-            if (mex != null && !mex.CheckPrerequisites(Main.player[Main.myPlayer], ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax))
+            if (mex != null && !mex.CheckPrerequisites(Main.LocalPlayer, ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax))
             {
                 lastPrereq = false;
                 return false;
@@ -262,7 +262,7 @@ namespace Expeditions
 
             //keep track of stacks player has, as this the total number can be divided across multiple
             int[] countedStack = new int[deliverables.Count];
-            Item[] inventory = Main.player[Main.myPlayer].inventory;
+            Item[] inventory = Main.LocalPlayer.inventory;
             for (int i = 0; i < inventory.Length; i++)
             {
                 addToStackIfMatching(inventory[i], requiredItems, ref countedStack, requiredStack, deductItems);
@@ -361,7 +361,7 @@ namespace Expeditions
                     // Send net message and return early without running the rest of the code
                     Expeditions.SendNet_PartyComplete(
                         this.mex.mod,
-                        Main.player[Main.myPlayer].team,
+                        Main.LocalPlayer.team,
                         this.mex);
                     return;
                 }
@@ -404,7 +404,7 @@ namespace Expeditions
             if (!repeatable || (repeatable && !completed))
             {
                 Main.NewText("Expeditions: '" + name + "' completed!", textColour.R, textColour.G, textColour.B);
-                Player p = Main.player[Main.myPlayer];
+                Player p = Main.LocalPlayer;
                 Projectile.NewProjectile(p.Center, new Vector2(0f, -6f), ProjectileID.RocketFireworkBlue, 0, 0f, p.whoAmI);
             }
             else
@@ -464,7 +464,7 @@ namespace Expeditions
 
             //keep track of stacks player has, as this the total number can be divided across multiple
             int[] hasStacks = new int[deliverables.Count];
-            Item[] inventory = Main.player[Main.myPlayer].inventory;
+            Item[] inventory = Main.LocalPlayer.inventory;
             for (int i = 0; i < inventory.Length; i++)
             {
                 // Item in inventory matches, we'll add it to the items being delivered

@@ -12,7 +12,7 @@ namespace Expeditions
         {
             foreach (ModExpedition me in Expeditions.GetExpeditionsList())
             {
-                me.OnCraftItem(item, recipe, Main.player[Main.myPlayer],
+                me.OnCraftItem(item, recipe, Main.LocalPlayer,
                               ref me.expedition.condition1Met,
                               ref me.expedition.condition2Met,
                               ref me.expedition.condition3Met,
@@ -26,7 +26,7 @@ namespace Expeditions
             {
                 foreach (ModExpedition me in Expeditions.GetExpeditionsList())
                 {
-                    me.OnPickupItem(item, Main.player[Main.myPlayer],
+                    me.OnPickupItem(item, Main.LocalPlayer,
                               ref me.expedition.condition1Met,
                               ref me.expedition.condition2Met,
                               ref me.expedition.condition3Met,

@@ -16,7 +16,7 @@ namespace Expeditions
             {
                 if (i == Player.tileTargetX && j == Player.tileTargetY && !fail)
                 {
-                    me.OnKillTile(i, j, type, Main.player[Main.myPlayer],
+                    me.OnKillTile(i, j, type, Main.LocalPlayer,
                               ref me.expedition.condition1Met,
                               ref me.expedition.condition2Met,
                               ref me.expedition.condition3Met,

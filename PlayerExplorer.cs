@@ -300,7 +300,7 @@ namespace Expeditions
             if (player.whoAmI != Main.myPlayer) return;
             foreach (ModExpedition me in Expeditions.GetExpeditionsList())
             {
-                me.OnCombatWithNPC(npc, true, Main.player[Main.myPlayer],
+                me.OnCombatWithNPC(npc, true, Main.LocalPlayer,
                               ref me.expedition.condition1Met,
                               ref me.expedition.condition2Met,
                               ref me.expedition.condition3Met,

@@ -50,7 +50,7 @@ namespace Expeditions.Tiles
         }
         public override void RightClick(int i, int j)
         {
-            Player player = Main.player[Main.myPlayer];
+            Player player = Main.LocalPlayer;
             PlayerExplorer playerm = player.GetModPlayer<PlayerExplorer>(mod);
             Tile tile = Main.tile[i, j];
 
@@ -93,7 +93,7 @@ namespace Expeditions.Tiles
             // current comprimise is to remove when in multiplayer altogether
             if (Main.netMode > 0) return;
 
-            Player player = Main.player[Main.myPlayer];
+            Player player = Main.LocalPlayer;
             Tile tile = Main.tile[i, j];
             
             player.showItemIconText = "";
@@ -108,7 +108,7 @@ namespace Expeditions.Tiles
             // current comprimise is to remove when in multiplayer altogether
             if (Main.netMode > 0) return;
 
-            Player player = Main.player[Main.myPlayer];
+            Player player = Main.LocalPlayer;
             player.showItemIcon = false;
             player.showItemIcon2 = 0;
         }

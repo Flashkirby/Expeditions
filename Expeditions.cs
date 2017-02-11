@@ -240,9 +240,9 @@ namespace Expeditions
                     {
                         if (ExpeditionUI.visible)
                         {
-                            Player p = Main.player[Main.myPlayer];
+                            Player p = Main.LocalPlayer;
                             if (Main.playerInventory ||
-                                Main.player[Main.myPlayer].chest != -1 ||
+                                Main.LocalPlayer.chest != -1 ||
                                 Main.npcShop != 0 ||
                                 (
                                     p.talkNPC > 0 &&
@@ -278,7 +278,7 @@ namespace Expeditions
         {
             if (Main.netMode == 2) return;
 
-            Player player = Main.player[Main.myPlayer];
+            Player player = Main.LocalPlayer;
             // Keep track of active expeditions in-game
             if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
             {
@@ -578,7 +578,7 @@ namespace Expeditions
             if (Main.netMode == 2) return;
 
             if (DEBUG) Main.NewText("OpenMethod UI : " + viewMode);
-            Player player = Main.player[Main.myPlayer];
+            Player player = Main.LocalPlayer;
             
             Main.playerInventory = false;
             player.sign = -1;
@@ -639,7 +639,7 @@ namespace Expeditions
             exp.name = customPrefix + expedition.name;
             exp.stack = 1;
             exp.active = true;
-            exp.Center = Main.player[Main.myPlayer].Center;
+            exp.Center = Main.LocalPlayer.Center;
             exp.rare = expedition.difficulty;
             exp.expert = expedition.ctgImportant;
 
@@ -647,7 +647,7 @@ namespace Expeditions
 
             if (!unlockedSoundFrame)
             {
-                Main.PlaySound(SoundID.Chat, Main.player[Main.myPlayer].Center);
+                Main.PlaySound(SoundID.Chat, Main.LocalPlayer.Center);
                 unlockedSoundFrame = true;
             }
         }
@@ -661,10 +661,10 @@ namespace Expeditions
             if (Main.netMode == 2) return;
 
             int id = Item.NewItem(
-                (int)Main.player[Main.myPlayer].position.X,
-                (int)Main.player[Main.myPlayer].position.Y,
-                Main.player[Main.myPlayer].width,
-                Main.player[Main.myPlayer].height,
+                (int)Main.LocalPlayer.position.X,
+                (int)Main.LocalPlayer.position.Y,
+                Main.LocalPlayer.width,
+                Main.LocalPlayer.height,
                 itemType, stack, false, prefix, false, false);
             if (Main.netMode == 1)
             {
