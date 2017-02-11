@@ -33,7 +33,11 @@ namespace Expeditions.Items
                     player.QuickSpawnItem(i.itemID, i.stack);
                 }
             }
-            catch { player.QuickSpawnItem(ItemID.GoldenCrate); }
+            catch (System.Exception e)
+            {
+                //Main.NewTextMultiline(e.ToString());
+                player.QuickSpawnItem(ItemID.GoldenCrate);
+            }
         }
     }
 }

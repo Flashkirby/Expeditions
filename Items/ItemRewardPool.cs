@@ -52,12 +52,14 @@ namespace Expeditions.Items
                     }
                     else
                     {
+                        // No Tiles
+                        if (item.createTile > 0) continue;
+                        if (item.createWall > 0) continue;
                         // Non Weapons
                         if (item.material || //materials
                             item.potion || //potions
                             item.bait > 0 || //baits
-                            item.vanity || //vanity equips
-                            item.createTile > 0 // tiles
+                            item.vanity //vanity equips
                             )
                         {
                             resourceRewards.Add(item.type);
@@ -113,6 +115,7 @@ namespace Expeditions.Items
 
         public static List<ItemRewardData> GenerateFullRewards(int rare)
         {
+            #region Main Reward
             List<ItemRewardData> rewards = new List<ItemRewardData>();
             Item item;
             if (mainRewards.Count > 0)
@@ -131,7 +134,9 @@ namespace Expeditions.Items
                     try { item.modItem.SetDefaults(); } catch { }
 
                     // Limit by rare
-                    if (item.rare <= rare)
+                    bool goForTopTier = Main.rand.Next(4) != 0; // 75% chance of going for top rare
+                    if ((!goForTopTier && item.rare <= rare) ||
+                        (goForTopTier && item.rare == rare))
                     {
                         int stack = item.maxStack;
                         if (stack > 1) // For multi stack weapons like throwing
@@ -158,7 +163,7 @@ namespace Expeditions.Items
                                 {
                                     stack = ammunition.maxStack;
                                     stack += Main.rand.Next(stack * 2);
-                                    stack /= 8;
+                                    stack /= 15;
                                     stack = Math.Min(stack, ammunition.maxStack);
                                     stack = Math.Max(stack, 1);
 
@@ -171,29 +176,30 @@ namespace Expeditions.Items
                     }
                 }
             }
+            #endregion
 
+            #region Side Resource
             rare -= resourceReducedRarity;
-
             if (resourceRewards.Count > 0)
             {
                 int sideReward = 0;
-                int sideCount = Main.rand.Next(2, 5); // 2 - 4 items
-                if(rare <= 0)
+                int sideRareCount = Main.rand.Next(1, 3 + rare / 2); // Varying amounts of items
+                if (rare <= 0)
                 {
                     rare = 0;
-                    sideCount = Main.rand.Next(1, 3); // 1 - 2
+                    sideRareCount = Main.rand.Next(1, 3); // 1 - 2 rarity max
                 }
-                for (int i = 0; i < sideCount; i++)
+                int i = 0;
+                while (i < sideRareCount)
                 {
-                    sideReward = ItemID.Wood;
                     item = new Item();
                     item.SetDefaults(sideReward);
                     try { item.modItem.SetDefaults(); } catch { }
-
+                    
                     // Try random 255 times
                     for (int j = 0; j < 255; j++)
                     {
-                        sideReward = resourceRewards[Main.rand.Next(mainRewards.Count)];
+                        sideReward = resourceRewards[Main.rand.Next(resourceRewards.Count)];
                         item = new Item();
                         item.SetDefaults(sideReward);
                         try { item.modItem.SetDefaults(); } catch { }
@@ -221,14 +227,15 @@ namespace Expeditions.Items
                             stack = Math.Min(stack, maxCostStack);
                             stack = Math.Max(stack, 1);
 
-                            rewards.Add(new ItemRewardData(sideReward, stack));
                             //Main.NewText(i + " granted " + item.name + ":" + stack);
+                            rewards.Add(new ItemRewardData(sideReward, stack));
+                            i += 1 + item.rare;
                             break;
                         }
                     }
-
                 }
             }
+            #endregion
 
             return rewards;
         }
