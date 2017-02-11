@@ -148,6 +148,7 @@ namespace Expeditions
                 if (!lastCond3 && condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
                 if (!meetc)
                 {
+                    if (Expeditions.DEBUG && conditionCountedMax > 0 && conditionCounted > 0) Main.NewText(conditionCounted + " from " + lastCounted);
                     if (conditionCounted >= conditionCountedMax)
                     {
                         Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
