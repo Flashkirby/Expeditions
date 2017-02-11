@@ -125,18 +125,24 @@ namespace Expeditions.Items
                 item.SetDefaults(mainReward);
                 try { item.modItem.SetDefaults(); } catch { }
 
-                // Try random 255 times
-                for (int i = 0; i < 255; i++)
+                // Limit by rare
+                bool goForTopTier = Main.rand.Next(3) != 0; // 66% chance of going for top rare
+                bool goForHighTier = Main.rand.Next(2) == 0; // 50% chance of going for good rare
+
+                // Try random 511 times
+                for (int i = 0; i < 511; i++)
                 {
                     mainReward = mainRewards[Main.rand.Next(mainRewards.Count)];
                     item = new Item();
                     item.SetDefaults(mainReward);
                     try { item.modItem.SetDefaults(); } catch { }
 
-                    // Limit by rare
-                    bool goForTopTier = Main.rand.Next(4) != 0; // 75% chance of going for top rare
-                    if ((!goForTopTier && item.rare <= rare) ||
-                        (goForTopTier && item.rare == rare))
+                    int lowRare = 0;
+                    if (goForTopTier) lowRare = rare; // Only the best
+                    if (goForHighTier) lowRare = rare - 2; // The good stuff
+                    if (goForTopTier && goForHighTier) lowRare = rare - 1; //If both, give leeway
+
+                    if (item.rare <= rare && item.rare >= lowRare)
                     {
                         int stack = item.maxStack;
                         if (stack > 1) // For multi stack weapons like throwing
@@ -183,11 +189,11 @@ namespace Expeditions.Items
             if (resourceRewards.Count > 0)
             {
                 int sideReward = 0;
-                int sideRareCount = Main.rand.Next(1, 3 + rare / 2); // Varying amounts of items
+                int sideRareCount = Main.rand.Next(1, 2 + rare / 3); // Varying amounts of items
                 if (rare <= 0)
                 {
                     rare = 0;
-                    sideRareCount = Main.rand.Next(1, 3); // 1 - 2 rarity max
+                    sideRareCount = 1; // 1 extra item
                 }
                 int i = 0;
                 while (i < sideRareCount)
