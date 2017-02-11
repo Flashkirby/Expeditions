@@ -97,6 +97,9 @@ namespace Expeditions
             _expeditionPanel.BackgroundColor = UIColour.backgroundColour;
             _expeditionPanel.BorderColor = UIColour.borderColour;
 
+            _expeditionPanel.OnMouseDown += new UIElement.MouseEvent(DragStart);
+            _expeditionPanel.OnMouseUp += new UIElement.MouseEvent(DragEnd);
+
             _deliverableSlots = new UIItemSlots(7);
             _deliverableSlots.Left.Set(14, 0);
             _deliverableSlots.Top.Set(8, 0);
@@ -125,6 +128,29 @@ namespace Expeditions
             _completeButton = AppendTextButtonPan2("Complete", 120, 0, new MouseEvent(CompleteClicked));
             base.Append(_expeditionPanel);
         }
+
+        #region Dragging (ExampleMod)
+        Vector2 offset;
+        public bool dragging = false;
+        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
+        {
+            offset = new Vector2(
+                evt.MousePosition.X - _expeditionPanel.Left.Pixels, 
+                evt.MousePosition.Y - _expeditionPanel.Top.Pixels);
+            dragging = true;
+        }
+
+        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Vector2 end = evt.MousePosition;
+            dragging = false;
+
+            Vector2 newPos = end - offset;
+            RecalculatePosition(newPos);
+
+            Recalculate();
+        }
+        #endregion
 
         private void AppendTextButton(string text, float x, float y, MouseEvent evt)
         {
@@ -511,8 +537,35 @@ namespace Expeditions
             {
                 Main.player[Main.myPlayer].mouseInterface = true;
             }
+            if (dragging)
+            {
+                Vector2 newPos = MousePosition - offset;
+                RecalculatePosition(newPos);
+            }
 
         }
+        private void RecalculatePosition(Vector2 newPos)
+        {
+            // Clamp horizontal screen
+            if (newPos.X < -_expPanelWidth / 2) newPos.X = -_expPanelWidth / 2;
+            if (newPos.X > Main.screenWidth - _expPanelWidth / 2) newPos.X = Main.screenWidth - _expPanelWidth / 2;
+
+            // Clamp vertical screen
+            float _expPanelHeight = _expeditionPanel.Height.Pixels;
+            if (newPos.Y < -_expPanelHeight / 2) newPos.Y = -_expPanelHeight / 2;
+            if (newPos.Y > Main.screenHeight - _expPanelHeight / 2) newPos.Y = Main.screenHeight - _expPanelHeight / 2;
+
+            // Move window
+            _expeditionPanel.Left.Set(newPos.X, 0f);
+            _expeditionPanel.Top.Set(newPos.Y, 0f);
+
+            // Move the rest of it relative
+            _navigationPanel.Left.Set(newPos.X + (_expPanelWidth - _navPanelWidth) / 2, 0);
+            _navigationPanel.Top.Set(newPos.Y - 4 - _navigationPanel.Height.Pixels, 0);
+
+            Recalculate();
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             // constantly check while open
