@@ -131,7 +131,7 @@ namespace Expeditions
 
         #region Dragging (ExampleMod)
         Vector2 offset;
-        public bool dragging = false;
+        private bool dragging = false;
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
             offset = new Vector2(
@@ -542,19 +542,57 @@ namespace Expeditions
                 Vector2 newPos = MousePosition - offset;
                 RecalculatePosition(newPos);
             }
+            else
+            {
+                Vector2 position = _expeditionPanel.GetOuterDimensions().Position();
+                if (ClampPosition(ref position))
+                {
+                    MovePanels(position);
+                }
+            }
 
         }
         private void RecalculatePosition(Vector2 newPos)
         {
+            ClampPosition(ref newPos);
+
+            MovePanels(newPos);
+
+            Recalculate();
+        }
+        private bool ClampPosition(ref Vector2 pos)
+        {
+            bool getClamped = false;
+
             // Clamp horizontal screen
-            if (newPos.X < -_expPanelWidth / 2) newPos.X = -_expPanelWidth / 2;
-            if (newPos.X > Main.screenWidth - _expPanelWidth / 2) newPos.X = Main.screenWidth - _expPanelWidth / 2;
+            if (pos.X < -_expPanelWidth / 2)
+            {
+                pos.X = -_expPanelWidth / 2;
+                getClamped = true;
+            }
+            if (pos.X > Main.screenWidth - _expPanelWidth / 2)
+            {
+                pos.X = Main.screenWidth - _expPanelWidth / 2;
+                getClamped = true;
+            }
 
             // Clamp vertical screen
             float _expPanelHeight = _expeditionPanel.Height.Pixels;
-            if (newPos.Y < -_expPanelHeight / 2) newPos.Y = -_expPanelHeight / 2;
-            if (newPos.Y > Main.screenHeight - _expPanelHeight / 2) newPos.Y = Main.screenHeight - _expPanelHeight / 2;
+            if (pos.Y < -_expPanelHeight / 2)
+            {
+                pos.Y = -_expPanelHeight / 2;
+                getClamped = true;
+            }
+            if (pos.Y > Main.screenHeight - _expPanelHeight / 2)
+            {
+                pos.Y = Main.screenHeight - _expPanelHeight / 2;
+                getClamped = true;
+            }
 
+            return getClamped;
+        }
+        private void MovePanels(Vector2 newPos)
+        {
             // Move window
             _expeditionPanel.Left.Set(newPos.X, 0f);
             _expeditionPanel.Top.Set(newPos.Y, 0f);
@@ -562,8 +600,6 @@ namespace Expeditions
             // Move the rest of it relative
             _navigationPanel.Left.Set(newPos.X + (_expPanelWidth - _navPanelWidth) / 2, 0);
             _navigationPanel.Top.Set(newPos.Y - 4 - _navigationPanel.Height.Pixels, 0);
-
-            Recalculate();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
