@@ -306,18 +306,16 @@ namespace Expeditions
 
         private void CompleteClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            if(currentME != null && !previewMode &&
+            if (currentME != null && !previewMode &&
                 (currentME.expedition.ConditionsMet()))
             {
                 currentME.expedition.CompleteExpedition(false);
                 Main.PlaySound(12, -1, -1, 1);
-
-                if(!currentME.expedition.partyShare || Main.netMode != 1) ListRecalculate();
             }
             else
             {
                 Main.PlaySound(22, -1, -1, 1);
-                ListRecalculate();
+                Main.NewText("``");
             }
         }
 
