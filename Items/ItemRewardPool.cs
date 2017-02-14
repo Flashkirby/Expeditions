@@ -73,15 +73,15 @@ namespace Expeditions.Items
         public static int GetRewardRare(Player player)
         {
             int rare = 0;
-            if (player.statLife >= 200 || NPC.downedBoss1 || NPC.downedGoblins)
+            if (NPC.downedBoss1 || NPC.downedGoblins)
             {
                 rare = Math.Max(rare, 1);
             }
-            if ((player.statLife >= 300 && NPC.downedBoss1) || NPC.downedBoss2)
+            if (NPC.downedBoss2)
             {
                 rare = Math.Max(rare, 2);
             }
-            if ((player.statLife >= 400 && NPC.downedBoss2) || NPC.downedBoss3 || NPC.downedQueenBee)
+            if (NPC.downedBoss3 || NPC.downedQueenBee)
             {
                 rare = Math.Max(rare, 3);
             }
@@ -89,7 +89,7 @@ namespace Expeditions.Items
             {
                 rare = Math.Max(rare, 4);
             }
-            if (player.statLife >= 500 || NPC.downedMechBoss1 || NPC.downedMechBoss2 || NPC.downedMechBoss3 || NPC.downedFrost || NPC.downedPirates)
+            if (NPC.downedMechBoss1 || NPC.downedMechBoss2 || NPC.downedMechBoss3 || NPC.downedFrost || NPC.downedPirates)
             {
                 rare = Math.Max(rare, 5);
             }
