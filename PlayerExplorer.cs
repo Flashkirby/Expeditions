@@ -293,6 +293,12 @@ namespace Expeditions
                     }
                 }
             }
+            /*
+            if (player.controlDown)
+            {
+                Main.NewText(player.HeldItem.name + " is rarity: " + player.HeldItem.rare);
+            }
+            */
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)

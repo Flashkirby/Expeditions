@@ -126,7 +126,7 @@ namespace Expeditions.Items
                 try { item.modItem.SetDefaults(); } catch { }
 
                 // Limit by rare
-                bool goForTopTier = Main.rand.Next(3) != 0; // 66% chance of going for top rare
+                bool goForTopTier = Main.rand.Next(3) == 0; // 33% chance of going for top rare
                 bool goForHighTier = Main.rand.Next(2) == 0; // 50% chance of going for good rare
 
                 // Try random 511 times
@@ -141,6 +141,10 @@ namespace Expeditions.Items
                     if (goForTopTier) lowRare = rare; // Only the best
                     if (goForHighTier) lowRare = rare - 2; // The good stuff
                     if (goForTopTier && goForHighTier) lowRare = rare - 1; //If both, give leeway
+
+                    //Prevent custom and quest items
+                    if (rare < 0) rare = 0;
+                    if (lowRare < 0) rare = 0;
 
                     if (item.rare <= rare && item.rare >= lowRare)
                     {
@@ -210,8 +214,11 @@ namespace Expeditions.Items
                         item.SetDefaults(sideReward);
                         try { item.modItem.SetDefaults(); } catch { }
 
+                        // No items above this value in prehard (eg. wizard and pirate items)
+                        if (item.value > Item.buyPrice(0, 4) && !Main.hardMode) continue;
+
                         // No super rares, or hardmode (3) in prehard
-                        if (item.rare <= rare)
+                        if (item.rare <= rare && rare >= 0)
                         {
                             int stack = item.maxStack;
                             int maxCostStack = stack;
