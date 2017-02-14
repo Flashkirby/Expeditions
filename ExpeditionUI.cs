@@ -315,7 +315,6 @@ namespace Expeditions
             else
             {
                 Main.PlaySound(22, -1, -1, 1);
-                Main.NewText("``");
             }
         }
 
