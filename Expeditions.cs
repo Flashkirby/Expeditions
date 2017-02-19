@@ -445,10 +445,10 @@ namespace Expeditions
                     break;
                 case packetID_dailyExpedition:
                     // Get variables
-                    int dailyIndex = reader.ReadInt32();
+                    int dailyHashID = reader.ReadInt32();
 
-                    if (DEBUG) Main.NewText("Expedition index received: " + dailyIndex);
-                    Receive_NewDaily(dailyIndex);
+                    if (DEBUG) Main.NewText("Expedition index received: " + dailyHashID);
+                    Receive_NewDaily(dailyHashID);
                     break;
                 case packetID_dailyCheck:
                     // Get variables
@@ -456,11 +456,13 @@ namespace Expeditions
 
                     if (Main.netMode == 2)
                     {
-                        if (DEBUG) Console.WriteLine("Packet request from " + playerRequester + " to " + whoAmI);
-                        ModPacket packet = GetPacket();
-                        packet.Write(packetID_dailyExpedition);
-                        packet.Write(WorldExplore.dailyExpIndex);
-                        packet.Send(playerRequester);
+                        if (DEBUG)
+                            try
+                            {
+                                Console.WriteLine("Packet request from " + playerRequester + " to " + whoAmI
+                                     + ", writing " + Expedition.GetHashID(WorldExplore.syncedDailyExpedition));
+                            } catch (Exception e) { Console.WriteLine(e.ToString()); }
+                        SendNet_NewDaily(this, playerRequester);
                     }
                     break;
                 default:
@@ -517,45 +519,42 @@ namespace Expeditions
             expedition.CompleteExpedition(true);
         }
 
-        internal static void SendNet_NewDaily(Mod mod, int index)
+        internal static void SendNet_NewDaily(Mod mod, int sendToPlayer = -1)
         {
             if(Main.netMode == 2)
             {
-                if (index >= 0)
+                if (WorldExplore.syncedDailyExpedition != null)
                 {
-                    Console.WriteLine("Sending daily expedition: " + index);
+                    Console.WriteLine("Sending daily expedition: " + Expedition.GetHashID(WorldExplore.syncedDailyExpedition));
                     // Generate a new packet
                     ModPacket packet = mod.GetPacket();
                     // Add the variables
                     packet.Write(packetID_dailyExpedition);
-                    packet.Write(index);
+                    packet.Write(Expedition.GetHashID(WorldExplore.syncedDailyExpedition));
                     // Send to the clients
-                    packet.Send();
+                    packet.Send(sendToPlayer);
 
-                    Console.WriteLine("SENT INDEX IS " + index);
+                    Console.WriteLine("SENT INDEX IS " + Expedition.GetHashID(WorldExplore.syncedDailyExpedition));
                 }
             }
         }
-        private static void Receive_NewDaily(int index)
+        private static void Receive_NewDaily(int hasID)
         {
-            if (index >= GetExpeditionsList().Count) return;
+            Expedition expedition = FindExpedition(hasID);
+            if (expedition == null) return;
             try
             {
-                if (index >= 0)
-                {
-                    WorldExplore.NetSyncDaily(GetExpeditionsList()[index].expedition);
-                }
-                else
-                {
-                    WorldExplore.NetSyncDaily(null);
-                }
+                if (DEBUG) Main.NewText("id matches " + expedition.name);
+                WorldExplore.NetSyncDaily(expedition);
             }
             catch
             {
+                if (DEBUG) Main.NewText("id matches nothing");
                 WorldExplore.NetSyncDaily(null);
             }
         }
 
+        // Client send request to daily quest on connect
         internal static void SendNet_GetDaily(Mod mod, int playerWhoAmI)
         {
             // Generate a new packet

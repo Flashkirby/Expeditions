@@ -43,12 +43,12 @@ namespace Expeditions
                     NetSyncDaily(dailys[expeditionIndex]);
                     if (Main.netMode == 2)
                     {
-                        Expeditions.SendNet_NewDaily(mod, expeditionIndex);
+                        Expeditions.SendNet_NewDaily(mod);
                     }
                 }
                 else
                 {
-                    syncedDailyExpedition = null;
+                    if(Main.netMode != 1) syncedDailyExpedition = null;
                 }
 
             }
@@ -60,7 +60,11 @@ namespace Expeditions
             syncedDailyExpedition.ResetProgress(true);
             if (Expeditions.DEBUG)
             {
-                if (syncedDailyExpedition != null) Expeditions.DisplayUnlockedExpedition(expedition, "Daily Expedition: ");
+                if (syncedDailyExpedition != null)
+                {
+                    Expeditions.DisplayUnlockedExpedition(expedition, "Daily Expedition: ");
+                    Main.NewText("Daily EXP = " + syncedDailyExpedition.name);
+                }
             }
         }
 
