@@ -34,7 +34,7 @@ namespace Expeditions
         private const int _expPanelWidth = 460;
         private UIPanel _expeditionPanel;
         private UITextWrap _titleHeader;
-        private UIImage _headImage;
+        private UIImageButton _headImage;
         private UITextWrap _description;
         private UITextWrap _conditionHeader;
         private UITextWrap _conditionsDesc;
@@ -48,8 +48,14 @@ namespace Expeditions
 
         private ModExpedition currentME
         {
-            get { return sortedList[_scrollBar.Value - 1]; }
+            get
+            {
+                if (_scrollBar.Value < 1) return null;
+                return sortedList[_scrollBar.Value - 1];
+            }
         }
+
+        private int _filterByHead;
 
         // Data
         public List<ModExpedition> filterList;
@@ -110,9 +116,12 @@ namespace Expeditions
             _rewardSlots.Top.Set(8, 0);
             _rewardSlots.Width.Set(_expPanelWidth - 20, 0);
             
-            _headImage = new UIImage(Main.npcHeadTexture[0]);
-            _headImage.Left.Set(_expPanelWidth - 38, 0);
-            _headImage.Top.Set(6, 0);
+            _headImage = new UIImageButton(Main.npcHeadTexture[0]);
+            _headImage.Left.Set(_expPanelWidth - 42, 0);
+            _headImage.Top.Set(10, 0);
+
+            _headImage.OnMouseOut += new MouseEvent(NPCHeadMouseOut);
+            _headImage.OnClick += new MouseEvent(NPCHeadClicked);
 
             Color invis = new Color(0, 0, 0, 0);
             _titleHeader = AppendTextPan2("Title", _expPanelWidth/2, 16, Color.White, Color.Black, true);
@@ -294,6 +303,25 @@ namespace Expeditions
             ListRecalculate();
         }
 
+        private void NPCHeadClicked(UIMouseEvent evt, UIElement listeningElement)
+        {
+            // Set the head to expedition or empty it
+            if (_filterByHead > 0 || currentME == null) _filterByHead = 0;
+            else _filterByHead = currentME.expedition.npcHead;
+
+            // Tick
+            Main.PlaySound(12, -1, -1, 1);
+
+            _headImage.Deactivate();
+
+            // Recalculate
+            ListRecalculate();
+        }
+        private void NPCHeadMouseOut(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if(_filterByHead > 0) _headImage.MouseOver(evt); // Hacky way to preserve alpha effect
+        }
+
         private void ToggleTrackedClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             if (currentME != null)
@@ -351,6 +379,7 @@ namespace Expeditions
                 {
                     _headImage.SetImage(Expeditions.bountyBoardTexture);
                 }
+                _headImage.Recalculate();
 
                 _description.SetText(currentME.expedition.GetDescription());
                 _description.Top.Set(yBottom, 0f);
@@ -455,66 +484,79 @@ namespace Expeditions
         /// </summary>
         public void ListRecalculate()
         {
-            if (Expeditions.DEBUG) Main.NewText("#Recalculating");
-            // get a new list
-            filterList.Clear();
-            sortedList.Clear();
+            try
+            {
+                if (Expeditions.DEBUG) Main.NewText("#Recalculating");
 
-            int anyMatch = 0;
-            foreach (ModExpedition current in Expeditions.GetExpeditionsList())
-            {
-                Expedition e = current.expedition;
-                anyMatch = 0;
-                // line 1
-                if (e.ctgSlay && this._categoryButtons[0].IsOn) { anyMatch++; } // Slayer Filter
-                if (e.ctgCollect && this._categoryButtons[1].IsOn) { anyMatch++; } //Collector Filter
-                if (e.ctgExplore && this._categoryButtons[2].IsOn) { anyMatch++; } // Explorer Filter
-                if (e.ctgImportant && this._categoryButtons[3].IsOn) { anyMatch++; } // Challenger Filter
-                if (anyMatch == 0) continue;
-                // line 2
-                if (e.completed && !this._categoryButtons[4].IsOn) { continue; } // Completed FIlter
-                if (!e.repeatable && this._categoryButtons[5].IsOn) { continue; } // Repeated FIlter
-                if (!e.trackingActive && this._categoryButtons[7].IsOn) { continue; } // Tracking FIlter
-                if (!e.PrerequisitesMet()) continue;
-                filterList.Add(current);
-            }
+                // Save current expedition
+                ModExpedition meBeforeSort = currentME;
 
-            // sort by these
-            int sortMode = 1; //SortByDifficulty (default)
-            if (this._categoryButtons[6].IsOn) sortMode = 0; //Srot by ALphabet
+                // get a new list
+                filterList.Clear();
+                sortedList.Clear();
 
-            switch(sortMode)
-            {
-                case 1:
-                    sortedList = filterList.OrderBy(me => me.expedition.difficulty).ToList();
-                    break;
-                default:
-                    sortedList = filterList.OrderBy(me => me.expedition.name).ToList();
-                    break;
-            }
+                int anyMatch = 0;
+                foreach (ModExpedition current in Expeditions.GetExpeditionsList())
+                {
+                    Expedition e = current.expedition;
+                    anyMatch = 0;
+                    // line 1
+                    if (e.ctgSlay && this._categoryButtons[0].IsOn) { anyMatch++; } // Slayer Filter
+                    if (e.ctgCollect && this._categoryButtons[1].IsOn) { anyMatch++; } //Collector Filter
+                    if (e.ctgExplore && this._categoryButtons[2].IsOn) { anyMatch++; } // Explorer Filter
+                    if (e.ctgImportant && this._categoryButtons[3].IsOn) { anyMatch++; } // Challenger Filter
+                    if (anyMatch == 0) continue;
+                    // line 2
+                    if (e.completed && !this._categoryButtons[4].IsOn) { continue; } // Completed FIlter
+                    if (!e.repeatable && this._categoryButtons[5].IsOn) { continue; } // Repeated FIlter
+                    if (!e.trackingActive && this._categoryButtons[7].IsOn) { continue; } // Tracking FIlter
+                    if (!e.PrerequisitesMet()) continue;
+                    // NPC head highlight
+                    if (_filterByHead > 0 && e.npcHead != _filterByHead) { continue; } // Ignore non-matching
+                    filterList.Add(current);
+                }
 
-            // set scrollbar
-            if(sortedList.Count > 0)
-            {
-                _scrollBar.MinValue = 1;
-                _scrollBar.MaxValue = sortedList.Count;
+                // sort by these
+                int sortMode = 1; //SortByDifficulty (default)
+                if (this._categoryButtons[6].IsOn) sortMode = 0; //Srot by ALphabet
+
+                switch (sortMode)
+                {
+                    case 1:
+                        sortedList = filterList.OrderBy(me => me.expedition.difficulty).ToList();
+                        break;
+                    default:
+                        sortedList = filterList.OrderBy(me => me.expedition.name).ToList();
+                        break;
+                }
+
+                // set scrollbar
+                if (sortedList.Count > 0)
+                {
+                    _scrollBar.MinValue = 1;
+                    _scrollBar.MaxValue = sortedList.Count;
+                }
+                else
+                {
+                    _scrollBar.MinValue = 0;
+                    _scrollBar.MaxValue = 0;
+                }
+
+                // set scrollbar blip colours, and preserve expedition position if it still exists
+                Color[] colours = new Color[sortedList.Count];
+                int daily = -1;
+                for (int i = 0; i < colours.Length; i++)
+                {
+                    colours[i] = UIColour.GetColourFromRarity(sortedList[i].expedition.difficulty);
+                    if (API.IsDaily(sortedList[i].expedition)) daily = i;
+                    if (sortedList[i] == meBeforeSort) _scrollBar.Value = i + 1;
+                }
+                _scrollBar.SetBlipColours(colours, daily);
+
+                //Main.NewText("Re-sorted List: " + sortedList.Count);
             }
-            else
-            {
-                _scrollBar.MinValue = 0;
-                _scrollBar.MaxValue = 0;
-            }
-            // set scrollbar blip colours
-            Color[] colours = new Color[sortedList.Count];
-            int daily = -1;
-            for(int i = 0; i < colours.Length; i++)
-            {
-                colours[i] = UIColour.GetColourFromRarity(sortedList[i].expedition.difficulty);
-                if (API.IsDaily(sortedList[i].expedition)) daily = i;
-            }
-            _scrollBar.SetBlipColours(colours, daily);
-            
-            //Main.NewText("Re-sorted List: " + sortedList.Count);
+            catch (Exception e) { Main.NewTextMultiline(e.ToString()); }
+            this.RecalculateChildren();
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
