@@ -20,7 +20,7 @@ namespace Expeditions.Items
             item.height = 12;
             item.maxStack = 999;
             item.value = 0;
-            item.rare = -11;
+            item.rare = -11; //quest tier
         }
     }
 }

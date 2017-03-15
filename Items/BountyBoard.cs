@@ -9,7 +9,7 @@ namespace Expeditions.Items
 		public override void SetDefaults()
 		{
 			item.name = "Expeditions Board";
-			item.toolTip = "View, Track and Complete expeditions";
+			item.toolTip = "View, track and complete expeditions";
             item.width = 30;
             item.height = 36;
             item.maxStack = 99;

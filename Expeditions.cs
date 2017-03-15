@@ -634,6 +634,8 @@ namespace Expeditions
         /// <param name="expedition"></param>
         public static void DisplayUnlockedExpedition(Expedition expedition, string customPrefix = "Expedition: ")
         {
+            if (!API.InInventory[bookID]) return;
+
             Item exp = new Item();
             exp.name = customPrefix + expedition.name;
             exp.stack = 1;
