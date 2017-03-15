@@ -21,14 +21,10 @@ namespace Expeditions
         }
         public void SkeletonMerchantShop(Chest shop, ref int nextSlot)
         {
-            if(Main.hardMode)
-            {
-                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRelicBox, 2);
-            }
+            if (Main.moonPhase % 2 == 0) //Alternate between selling the box and board
+            { API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRustedBox, 1); }
             else
-            {
-                API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRustedBox, 1);
-            }
+            { shop.item[nextSlot].SetDefaults(API.ItemIDExpeditionBoard); nextSlot++; }
         }
 
         internal static void AddVoucherPricedItem(Chest shop, ref int nextSlot, int itemID, int price)
