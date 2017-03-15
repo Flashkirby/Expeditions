@@ -1,5 +1,5 @@
 author = Flashkirby99
-version = 2.1.2
+version = 2.2
 displayName = Expeditions Base
 
 homepage = http://forums.terraria.org/index.php?threads/expeditions-mod-modular-quest-system.52517/
