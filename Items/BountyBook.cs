@@ -14,7 +14,7 @@ namespace Expeditions.Items
             item.height = 36;
             item.maxStack = 1;
 
-            item.useStyle = 2; // "eat usetyle"
+            item.useStyle = 4; // holding up
             item.useTurn = true;
             item.useAnimation = 15;
             item.useTime = 15;
