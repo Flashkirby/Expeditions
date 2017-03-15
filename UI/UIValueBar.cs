@@ -24,6 +24,7 @@ namespace Expeditions.UI
         private int _dragVal = 0;
         private float _widthRange = 160f;
         private bool _dragging = false;
+        private int _dailyColour = -1;
         public int Value
         {
             get { return _index; }
@@ -71,13 +72,18 @@ namespace Expeditions.UI
             _dragging = false;
         }
 
-        public void SetBlipColours(Color[] colours)
+        public void SetBlipColours(Color[] colours, int daily)
         {
             _blipColourList.Clear();
             foreach (Color c in colours)
             {
                 _blipColourList.Add(c);
             }
+            _dailyColour = daily;
+        }
+        public void SetBlipColours(Color[] colours)
+        {
+            SetBlipColours(colours, -1);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -96,6 +102,7 @@ namespace Expeditions.UI
             {
                 try { c = _blipColourList[i]; }
                 catch { c = Color.LightSlateGray; }
+                if (i == _dailyColour && _dailyColour >= 0) c = UIColour.Expert;
                 spriteBatch.Draw(blip, pos + new Vector2(8f + (160f / range) * i, 8f), blip.Bounds, c);
             }
 

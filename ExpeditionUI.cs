@@ -506,11 +506,13 @@ namespace Expeditions
             }
             // set scrollbar blip colours
             Color[] colours = new Color[sortedList.Count];
+            int daily = -1;
             for(int i = 0; i < colours.Length; i++)
             {
                 colours[i] = UIColour.GetColourFromRarity(sortedList[i].expedition.difficulty);
+                if (API.IsDaily(sortedList[i].expedition)) daily = i;
             }
-            _scrollBar.SetBlipColours(colours);
+            _scrollBar.SetBlipColours(colours, daily);
             
             //Main.NewText("Re-sorted List: " + sortedList.Count);
         }
