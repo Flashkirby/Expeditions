@@ -142,7 +142,7 @@ namespace Expeditions.Items
                     if (goForHighTier) lowRare = rare - 2; // The good stuff
                     if (goForTopTier && goForHighTier) lowRare = rare - 1; //If both, give leeway
 
-                    //Prevent custom and quest items
+                    //Prevent custom and quest items maybe? (Thorium Blood Orange rarity)
                     if (rare < 0) rare = 0;
                     if (lowRare < 0) rare = 0;
 
