@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq; // For OrderBy
 using System.IO;
 
 using Microsoft.Xna.Framework.Graphics;
@@ -85,8 +86,9 @@ namespace Expeditions
             // Add test quests
             if (DEBUG)
             {
-                AddExpeditionToList(new ExampleExpedition(), this);
-                AddExpeditionToList(new HeaderTest(), this);
+                AutoLoadExpeditions(this);
+                //AddExpeditionToList(new ExampleExpedition(), this);
+                //AddExpeditionToList(new HeaderTest(), this);
             }
         }
         
