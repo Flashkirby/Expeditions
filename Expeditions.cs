@@ -126,7 +126,10 @@ namespace Expeditions
             // Basically, it calls a ModExpedition's ModExpedition() constructor. Can specify extra params since it uses
             // params object[], though not particularly relevant here.
             ModExpedition modExpedition = (ModExpedition)Activator.CreateInstance(type);
-            AddExpeditionToList(modExpedition, mod);
+            if (modExpedition.AutoLoad())
+            {
+                AddExpeditionToList(modExpedition, mod);
+            }
         }
         
         #endregion
