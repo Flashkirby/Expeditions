@@ -25,6 +25,15 @@ namespace Expeditions
         }
 
         /// <summary>
+        /// Should this expedition be included when AutoloadExpeditions is called?
+        /// </summary>
+        /// <returns>True by default</returns>
+        public virtual bool AutoLoad()
+        {
+            return true; //Assuming true since you have to call the method to autoload in the first place...
+        }
+
+        /// <summary>
         /// Add an item with a specified required stack to the expedition deliver conditions.
         /// </summary>
         /// <param name="itemID">Item type</param>
