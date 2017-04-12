@@ -89,6 +89,45 @@ namespace Expeditions
                 AddExpeditionToList(new HeaderTest(), this);
             }
         }
+        
+        #region Autoload support
+
+        /// <summary>
+        /// Tries to autoload all expeditions where available.
+        /// </summary>
+        /// <param name="mod">Your mod, which is probably just 'this'</param>
+        public static void AutoLoadExpeditions(Mod mod)
+        {
+            // Should be a publicly accessible readonly Assembly object
+			if (mod.Code == null) return;
+            
+            // Shameless copy from tModLoader/patches/tModLoader/Terraria.ModLoader, internal void Autoload()
+            // Appears to get all classes from the assembly ordered specificially irrelevant of culture (eg. turkish, chinese)
+            foreach (Type type in mod.Code.GetTypes().OrderBy(type => type.FullName, StringComparer.InvariantCulture))
+			{
+				if (type.IsAbstract)
+				{
+					continue; // Obviously, ignore abstract types since they cannot be initialised on their own
+				}
+				if (type.IsSubclassOf(typeof(ModExpedition)))
+				{
+                    // We want to load classes extended from ModExpedition
+					AutoloadExpedition(type, mod);
+				}
+            }
+        }
+        
+        private static void AutoloadExpedition(Type type, Mod mod)
+        {
+            // Activator is a handy mscorlib class that:
+            // "Creates an instance of the specified type using the constructor that best matches the specified parameters."
+            // Basically, it calls a ModExpedition's ModExpedition() constructor. Can specify extra params since it uses
+            // params object[], though not particularly relevant here.
+            ModExpedition modExpedition = (ModExpedition)Activator.CreateInstance(type);
+            AddExpeditionToList(modExpedition, mod);
+        }
+        
+        #endregion
 
         #region External Expedition Support
 
