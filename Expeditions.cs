@@ -166,10 +166,10 @@ namespace Expeditions
                 expeditionActiveList = new List<ModExpedition>();
                 ResetExpeditions();
             }
-            return expeditionActiveList;
+            return expeditionActiveList.ToList<ModExpedition>(); // Prevent issues with modified enumeration?
         }
         /// <summary>
-        /// Finds the specified mod expedition or null
+        /// Finds the specified mod expedition or an empty ModExpedition
         /// </summary>
         /// <param name="mod"></param>
         /// <param name="name"></param>
@@ -183,10 +183,10 @@ namespace Expeditions
                     return me;
                 }
             }
-            return null;
+            return new ModExpedition();
         }
         /// <summary>
-        /// Finds the specified mod expedition or null
+        /// Finds the specified mod expedition or an empty ModExpedition
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="mod"></param>
@@ -395,7 +395,7 @@ namespace Expeditions
                 }
             }
 
-            //DEBUG INFO
+            #region Debug
             if (DEBUG)
             {
                 if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.L))
@@ -438,6 +438,7 @@ namespace Expeditions
                     }
                 }
             }
+            #endregion
         }
 
         #region Netcode
