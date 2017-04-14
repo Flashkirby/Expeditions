@@ -77,6 +77,8 @@ namespace Expeditions
             _navigationPanel.BackgroundColor = UIColour.backgroundColour;
             _navigationPanel.BorderColor = UIColour.borderColour;
 
+            _navigationPanel.OnScrollWheel += new UIElement.ScrollWheelEvent(ScrollWindow);
+
             // Bar
             _scrollBar = new UIValueBar(0, sortedList.Count);
             _scrollBar.Left.Set(40, 0f);
@@ -105,6 +107,7 @@ namespace Expeditions
 
             _expeditionPanel.OnMouseDown += new UIElement.MouseEvent(DragStart);
             _expeditionPanel.OnMouseUp += new UIElement.MouseEvent(DragEnd);
+            _expeditionPanel.OnScrollWheel += new UIElement.ScrollWheelEvent(ScrollWindow);
 
             _deliverableSlots = new UIItemSlots(7);
             _deliverableSlots.Left.Set(14, 0);
@@ -270,6 +273,12 @@ namespace Expeditions
             //UpdateIndex();
         }
 
+        private void ScrollWindow(UIScrollWheelEvent evt, UIElement listeningElement)
+        {
+            int scrollBy = evt.ScrollWheelValue / 120; // 120 is WHELL_DELTA
+            _scrollBar.Value -= scrollBy;
+        }
+
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             Main.PlaySound(11, -1, -1, 1);
@@ -368,6 +377,7 @@ namespace Expeditions
                 {
                     if (currentME.expedition.npcHead > 0)
                     {
+                        // Note: Texture height/width clickbox seems bugged until the appropriate NPC is loaded
                         _headImage.SetImage(Main.npcHeadTexture[currentME.expedition.npcHead]);
                     }
                     else
