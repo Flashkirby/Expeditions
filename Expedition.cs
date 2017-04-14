@@ -89,6 +89,7 @@ namespace Expeditions
 
         private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
         private List<Item> rewards = new List<Item>();
+        private List<Item> oneTimeRewards = new List<Item>();
 
         /// <summary> All conditions met </summary>
         private bool trackCondition = false;
@@ -373,6 +374,18 @@ namespace Expeditions
 
             // Initialise a new set of rewards that don't affect the original listed
             List<Item> tempRewards = new List<Item>();
+            if (!completed)
+            {
+                foreach (Item i in oneTimeRewards)
+                {
+                    // Create new editable instance of this item
+                    Item item = new Item();
+                    item.SetDefaults(i.type);
+                    item.Prefix(i.prefix);
+                    item.stack = i.stack;
+                    tempRewards.Add(item);
+                }
+            }
             foreach (Item i in rewards)
             {
                 // Create new editable instance of this item
@@ -482,6 +495,7 @@ namespace Expeditions
 
             deliverables.Clear();
             rewards.Clear();
+            oneTimeRewards.Clear();
 
             PlayerExplorer.dbgmsg += "\n" + WorldGen.GoldTierOre + " | " + TileID.Gold + " : " + WorldGen.oreTier1 + " | " + TileID.Cobalt;
 
@@ -689,15 +703,47 @@ namespace Expeditions
         }
 
         /// <summary>
+        /// Add an item to be given only ONCE when an expedition is finished (no repeatables)
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddRewardOnce(Item item)
+        {
+            oneTimeRewards.Add(item);
+        }
+        /// <summary>
+        /// Add an item to be given only ONCE when an expedition is finished (no repeatables)
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddRewardOnce(ModItem moditem)
+        {
+            oneTimeRewards.Add(moditem.item);
+        }
+
+        /// <summary>
         /// Gets the current reward list as an array. 
         /// </summary>
         /// <returns></returns>
         public Item[] GetRewardsArray()
         {
             Item[] rewards = new Item[this.rewards.Count];
-            for (int i = 0; i < rewards.Length; i++)
+            if (!completed)
             {
-                rewards[i] = this.rewards[i];
+                rewards = new Item[this.oneTimeRewards.Count + this.rewards.Count];
+                for (int i = 0; i < oneTimeRewards.Count; i++)
+                {
+                    rewards[i] = this.oneTimeRewards[i];
+                }
+                for (int i = 0; i < this.rewards.Count; i++)
+                {
+                    rewards[i + oneTimeRewards.Count] = this.rewards[i];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < rewards.Length; i++)
+                {
+                    rewards[i] = this.rewards[i];
+                }
             }
             return rewards;
         }
@@ -708,9 +754,24 @@ namespace Expeditions
         public Item[] GetRewardsCloneToArray()
         {
             Item[] rewards = new Item[this.rewards.Count];
-            for(int i = 0; i < rewards.Length; i++)
+            if (!completed)
             {
-                rewards[i] = this.rewards[i].Clone();
+                rewards = new Item[this.oneTimeRewards.Count + this.rewards.Count];
+                for (int i = 0; i < oneTimeRewards.Count; i++)
+                {
+                    rewards[i] = this.oneTimeRewards[i].Clone();
+                }
+                for (int i = 0; i < this.rewards.Count; i++)
+                {
+                    rewards[i + oneTimeRewards.Count] = this.rewards[i].Clone();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < rewards.Length; i++)
+                {
+                    rewards[i] = this.rewards[i].Clone();
+                }
             }
             return rewards;
         }
