@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq; // For OrderBy
 using System.IO;
 
 using Microsoft.Xna.Framework.Graphics;
@@ -26,8 +27,10 @@ namespace Expeditions
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
-        /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
-        private static List<ModExpedition> expeditionList;
+        /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY. DO NOT CHANGE. </summary>
+        private static List<ModExpedition> expeditionTemplateList;
+        /// <summary> The list used by the player. Can be modified. </summary>
+        private static List<ModExpedition> expeditionActiveList;
 
         internal static Texture2D sortingTexture;
         internal static Texture2D bountyBoardTexture;
@@ -49,7 +52,8 @@ namespace Expeditions
                 AutoloadSounds = true
             };
             // Reset list every time we reload
-            expeditionList = new List<ModExpedition>();
+            expeditionTemplateList = new List<ModExpedition>();
+            expeditionActiveList = new List<ModExpedition>();
         }
 
         public override void Load()
@@ -83,12 +87,55 @@ namespace Expeditions
 
 
             // Add test quests
+            AutoLoadExpeditions(this);
             if (DEBUG)
             {
-                AddExpeditionToList(new ExampleExpedition(), this);
-                AddExpeditionToList(new HeaderTest(), this);
+                //AddExpeditionToList(new ExampleExpedition(), this);
+                //AddExpeditionToList(new HeaderTest(), this);
             }
         }
+        
+        #region Autoload support
+
+        /// <summary>
+        /// Tries to autoload all expeditions where available.
+        /// </summary>
+        /// <param name="mod">Your mod, which is probably just 'this'</param>
+        public static void AutoLoadExpeditions(Mod mod)
+        {
+            // Should be a publicly accessible readonly Assembly object
+			if (mod.Code == null) return;
+            
+            // Shameless copy from tModLoader/patches/tModLoader/Terraria.ModLoader, internal void Autoload()
+            // Appears to get all classes from the assembly ordered specificially irrelevant of culture (eg. turkish, chinese)
+            foreach (Type type in mod.Code.GetTypes().OrderBy(type => type.FullName, StringComparer.InvariantCulture))
+			{
+				if (type.IsAbstract)
+				{
+					continue; // Obviously, ignore abstract types since they cannot be initialised on their own
+				}
+				if (type.IsSubclassOf(typeof(ModExpedition)))
+				{
+                    // We want to load classes extended from ModExpedition
+					AutoloadExpedition(type, mod);
+				}
+            }
+        }
+        
+        private static void AutoloadExpedition(Type type, Mod mod)
+        {
+            // Activator is a handy mscorlib class that:
+            // "Creates an instance of the specified type using the constructor that best matches the specified parameters."
+            // Basically, it calls a ModExpedition's ModExpedition() constructor. Can specify extra params since it uses
+            // params object[], though not particularly relevant here.
+            ModExpedition modExpedition = (ModExpedition)Activator.CreateInstance(type);
+            if (modExpedition.AutoLoad())
+            {
+                AddExpeditionToList(modExpedition, mod);
+            }
+        }
+        
+        #endregion
 
         #region External Expedition Support
 
@@ -99,8 +146,11 @@ namespace Expeditions
         /// <param name="mod">Your mod, which is probably just 'this'</param>
         public static void AddExpeditionToList(ModExpedition modExpedition, Mod mod)
         {
+            // Make a new set
+            if (expeditionTemplateList == null) expeditionTemplateList = new List<ModExpedition>();
+
             modExpedition.mod = mod;
-            GetExpeditionsList().Add(modExpedition);
+            expeditionTemplateList.Add(modExpedition);
             if (Main.netMode == 2) Console.WriteLine("  > Adding Expedition: " + modExpedition.GetType().ToString());
         }
         
@@ -110,8 +160,13 @@ namespace Expeditions
         /// <returns></returns>
         public static List<ModExpedition> GetExpeditionsList()
         {
-            if (expeditionList == null) expeditionList = new List<ModExpedition>();
-            return expeditionList;
+            // Make a new set
+            if (expeditionActiveList == null)
+            {
+                expeditionActiveList = new List<ModExpedition>();
+                ResetExpeditions();
+            }
+            return expeditionActiveList;
         }
         /// <summary>
         /// Finds the specified mod expedition or null
@@ -188,11 +243,15 @@ namespace Expeditions
             if (Expeditions.DEBUG) Main.NewText("Expeditions: Resetting Expeditions");
 
             // reinitiliase all the expeditions
-            foreach (ModExpedition mex in GetExpeditionsList())
+            expeditionActiveList = new List<ModExpedition>();
+            for(int i = 0; i < expeditionTemplateList.Count; i++)
             {
-                mex.expedition.ResetProgress();
-                PlayerExplorer.dbgmsg += "(" + mex.expedition.name
-                    + (mex.expedition.trackingActive ? "T" : "n") + ")";
+                ModExpedition mex = expeditionTemplateList[i];
+                ModExpedition mexAct = mex.Clone();
+                mexAct.SetDefaults();
+                expeditionActiveList.Add(mexAct);
+                PlayerExplorer.dbgmsg += "(" + mexAct.expedition.name
+                    + (mexAct.expedition.trackingActive ? "T" : "n") + ")";
             }
         }
         internal static void WorldInit()
@@ -211,7 +270,7 @@ namespace Expeditions
         {
             //initiliase expedition defaults, values reset in PlayerExplorer
             if (Main.netMode == 2) Console.WriteLine("  > Setting Defaults");
-            foreach (ModExpedition mex in GetExpeditionsList())
+            foreach (ModExpedition mex in expeditionTemplateList)
             {
                 mex.SetDefaults();
                 if (!mex.expedition.ctgCollect &&
@@ -223,6 +282,7 @@ namespace Expeditions
                     mex.expedition.ctgExplore = true;
                 }
             }
+            ResetExpeditions();
 
             Items.ItemRewardPool.GenerateRewardPool();
         }

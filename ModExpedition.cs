@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
 using Terraria.ID;
@@ -22,6 +23,15 @@ namespace Expeditions
         {
             this.expedition = new Expedition();
             this.expedition.mex = this;
+        }
+
+        /// <summary>
+        /// Should this expedition be included when AutoloadExpeditions is called?
+        /// </summary>
+        /// <returns>True by default</returns>
+        public virtual bool AutoLoad()
+        {
+            return true; //Assuming true since you have to call the method to autoload in the first place...
         }
 
         /// <summary>
@@ -99,28 +109,33 @@ namespace Expeditions
         /// </summary>
         /// <param name="itemID">Item type</param>
         /// <param name="itemStack">The total amount in the stack, up to the maxStack</param>
+        /// <param name="onlyOnce">Only will reward once, hidden after completion</param>
         /// <param name="addTag">Should the item have [addTag] appended to it (eg. as a bonus item)</param>
-        public void AddRewardItem(int itemID, int itemStack = 1, string addTag = "")
+        public void AddRewardItem(int itemID, int itemStack = 1, bool onlyOnce = false, string addTag = "")
         {
             Item i = new Item();
             i.SetDefaults(itemID);
             if (i.maxStack < itemStack) itemStack = i.maxStack;
             i.stack = itemStack;
 
-            if(addTag != "")
+            if (addTag != "")
             {
                 i.name = string.Concat("[", addTag, "] ", i.name);
             }
 
-            expedition.AddReward(i);
+            if (onlyOnce)
+            { expedition.AddRewardOnce(i); }
+            else
+            { expedition.AddReward(i); }
         }
         /// <summary>
         /// Add an item with a prefix to the expedition rewards.
         /// </summary>
         /// <param name="itemID">Item type</param>
         /// <param name="prefix">See AffixName_Old for a list of prefixes</param>
+        /// <param name="onlyOnce">Only will reward once, hidden after completion</param>
         /// <param name="addTag">Should the item have [addTag] appended to it (eg. as a bonus item)</param>
-        public void AddRewardPrefix(int itemID, byte prefix = 0, string addTag = "")
+        public void AddRewardPrefix(int itemID, byte prefix = 0, bool onlyOnce = false, string addTag = "")
         {
             Item i = new Item();
             i.SetDefaults(itemID);
@@ -132,20 +147,24 @@ namespace Expeditions
                 i.name = string.Concat("[", addTag, "] ", i.name);
             }
 
-            expedition.AddReward(i);
+            if (onlyOnce)
+            { expedition.AddRewardOnce(i); }
+            else
+            { expedition.AddReward(i); }
         }
         /// <summary>
         /// Add money reward. For simplicities sake use Item.buyPrice(int platinum, int gold, int silver, int copper) to get your value.
         /// </summary>
         /// <param name="value"></param>
+        /// <param name="onlyOnce">Only will reward once, hidden after completion</param>
         /// <param name="addTag">Should the item have [addTag] appended to it (eg. as a bonus item)</param>
-        public void AddRewardMoney(int value, string addTag = "")
+        public void AddRewardMoney(int value, bool onlyOnce = false, string addTag = "")
         {
             int[] stacks = Expeditions.DivideValueIntoMoneyStack(value);
-            if (stacks[0] > 0) AddRewardItem(74, stacks[0], addTag);
-            if (stacks[1] > 0) AddRewardItem(73, stacks[1], addTag);
-            if (stacks[2] > 0) AddRewardItem(72, stacks[2], addTag);
-            if (stacks[3] > 0) AddRewardItem(71, stacks[3], addTag);
+            if (stacks[0] > 0) AddRewardItem(74, stacks[0], onlyOnce, addTag);
+            if (stacks[1] > 0) AddRewardItem(73, stacks[1], onlyOnce, addTag);
+            if (stacks[2] > 0) AddRewardItem(72, stacks[2], onlyOnce, addTag);
+            if (stacks[3] > 0) AddRewardItem(71, stacks[3], onlyOnce, addTag);
         }
 
         /// <summary>
@@ -202,6 +221,49 @@ namespace Expeditions
             }
         }
         
+        public ModExpedition Clone()
+        {
+            // Clone the class
+            ModExpedition me = (ModExpedition)Activator.CreateInstance(this.GetType());
+            me.mod = this.mod;
+            Expedition ex = me.expedition;
+
+            ex.name = expedition.name;
+            ex.npcHead = expedition.npcHead;
+            ex.requireNPC = expedition.requireNPC;
+            ex.conditionDescription1 = expedition.conditionDescription1;
+            ex.conditionDescription2 = expedition.conditionDescription2;
+            ex.conditionDescription3 = expedition.conditionDescription3;
+            ex.conditionDescriptionCountable = expedition.conditionDescriptionCountable;
+            ex.difficulty = expedition.difficulty;
+            ex.trackingActive = expedition.trackingActive;
+
+            ex.ctgImportant = expedition.ctgImportant;
+            ex.ctgExplore = expedition.ctgExplore;
+            ex.ctgCollect = expedition.ctgCollect;
+            ex.ctgSlay = expedition.ctgSlay;
+
+            ex.condition1Met = expedition.condition1Met;
+            ex.condition2Met = expedition.condition2Met;
+            ex.condition3Met = expedition.condition3Met;
+            ex.conditionCounted = expedition.conditionCounted;
+            ex.conditionCountedMax = expedition.conditionCountedMax;
+            ex.condition3Met = expedition.condition3Met;
+
+            ex.conditionCountedTrackHalfCompleted = expedition.conditionCountedTrackHalfCompleted;
+            ex.conditionCountedTrackQuarterCompleted = expedition.conditionCountedTrackQuarterCompleted;
+            ex.hideQuestUnlock = expedition.hideQuestUnlock;
+
+            ex.completed = expedition.completed;
+            ex.repeatable = expedition.repeatable;
+            ex.partyShare = expedition.partyShare;
+
+            ex.anyWood = expedition.anyWood;
+            ex.anySameTierOreBar = expedition.anySameTierOreBar;
+
+            return me;
+        }
+
         #region Virtual Methods
         /// <summary>
         /// The initialisation method for mods using this. Use it to set the title and category
