@@ -27,8 +27,10 @@ namespace Expeditions
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
-        /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY </summary>
-        private static List<ModExpedition> expeditionList;
+        /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY. DO NOT CHANGE. </summary>
+        private static List<ModExpedition> expeditionTemplateList;
+        /// <summary> The list used by the player. Can be modified. </summary>
+        private static List<ModExpedition> expeditionActiveList;
 
         internal static Texture2D sortingTexture;
         internal static Texture2D bountyBoardTexture;
@@ -50,7 +52,8 @@ namespace Expeditions
                 AutoloadSounds = true
             };
             // Reset list every time we reload
-            expeditionList = new List<ModExpedition>();
+            expeditionTemplateList = new List<ModExpedition>();
+            expeditionActiveList = new List<ModExpedition>();
         }
 
         public override void Load()
@@ -84,9 +87,9 @@ namespace Expeditions
 
 
             // Add test quests
+            AutoLoadExpeditions(this);
             if (DEBUG)
             {
-                AutoLoadExpeditions(this);
                 //AddExpeditionToList(new ExampleExpedition(), this);
                 //AddExpeditionToList(new HeaderTest(), this);
             }
@@ -143,8 +146,11 @@ namespace Expeditions
         /// <param name="mod">Your mod, which is probably just 'this'</param>
         public static void AddExpeditionToList(ModExpedition modExpedition, Mod mod)
         {
+            // Make a new set
+            if (expeditionTemplateList == null) expeditionTemplateList = new List<ModExpedition>();
+
             modExpedition.mod = mod;
-            GetExpeditionsList().Add(modExpedition);
+            expeditionTemplateList.Add(modExpedition);
             if (Main.netMode == 2) Console.WriteLine("  > Adding Expedition: " + modExpedition.GetType().ToString());
         }
         
@@ -154,8 +160,13 @@ namespace Expeditions
         /// <returns></returns>
         public static List<ModExpedition> GetExpeditionsList()
         {
-            if (expeditionList == null) expeditionList = new List<ModExpedition>();
-            return expeditionList;
+            // Make a new set
+            if (expeditionActiveList == null)
+            {
+                expeditionActiveList = new List<ModExpedition>();
+                ResetExpeditions();
+            }
+            return expeditionActiveList;
         }
         /// <summary>
         /// Finds the specified mod expedition or null
@@ -232,11 +243,15 @@ namespace Expeditions
             if (Expeditions.DEBUG) Main.NewText("Expeditions: Resetting Expeditions");
 
             // reinitiliase all the expeditions
-            foreach (ModExpedition mex in GetExpeditionsList())
+            expeditionActiveList = new List<ModExpedition>();
+            for(int i = 0; i < expeditionTemplateList.Count; i++)
             {
-                mex.expedition.ResetProgress();
-                PlayerExplorer.dbgmsg += "(" + mex.expedition.name
-                    + (mex.expedition.trackingActive ? "T" : "n") + ")";
+                ModExpedition mex = expeditionTemplateList[i];
+                ModExpedition mexAct = mex.Clone();
+                mexAct.SetDefaults();
+                expeditionActiveList.Add(mexAct);
+                PlayerExplorer.dbgmsg += "(" + mexAct.expedition.name
+                    + (mexAct.expedition.trackingActive ? "T" : "n") + ")";
             }
         }
         internal static void WorldInit()
@@ -255,7 +270,7 @@ namespace Expeditions
         {
             //initiliase expedition defaults, values reset in PlayerExplorer
             if (Main.netMode == 2) Console.WriteLine("  > Setting Defaults");
-            foreach (ModExpedition mex in GetExpeditionsList())
+            foreach (ModExpedition mex in expeditionTemplateList)
             {
                 mex.SetDefaults();
                 if (!mex.expedition.ctgCollect &&
@@ -267,6 +282,7 @@ namespace Expeditions
                     mex.expedition.ctgExplore = true;
                 }
             }
+            ResetExpeditions();
 
             Items.ItemRewardPool.GenerateRewardPool();
         }

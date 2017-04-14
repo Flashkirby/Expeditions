@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
 using Terraria.ID;
@@ -211,6 +212,49 @@ namespace Expeditions
             }
         }
         
+        public ModExpedition Clone()
+        {
+            // Clone the class
+            ModExpedition me = (ModExpedition)Activator.CreateInstance(this.GetType());
+            me.mod = this.mod;
+            Expedition ex = me.expedition;
+
+            ex.name = expedition.name;
+            ex.npcHead = expedition.npcHead;
+            ex.requireNPC = expedition.requireNPC;
+            ex.conditionDescription1 = expedition.conditionDescription1;
+            ex.conditionDescription2 = expedition.conditionDescription2;
+            ex.conditionDescription3 = expedition.conditionDescription3;
+            ex.conditionDescriptionCountable = expedition.conditionDescriptionCountable;
+            ex.difficulty = expedition.difficulty;
+            ex.trackingActive = expedition.trackingActive;
+
+            ex.ctgImportant = expedition.ctgImportant;
+            ex.ctgExplore = expedition.ctgExplore;
+            ex.ctgCollect = expedition.ctgCollect;
+            ex.ctgSlay = expedition.ctgSlay;
+
+            ex.condition1Met = expedition.condition1Met;
+            ex.condition2Met = expedition.condition2Met;
+            ex.condition3Met = expedition.condition3Met;
+            ex.conditionCounted = expedition.conditionCounted;
+            ex.conditionCountedMax = expedition.conditionCountedMax;
+            ex.condition3Met = expedition.condition3Met;
+
+            ex.conditionCountedTrackHalfCompleted = expedition.conditionCountedTrackHalfCompleted;
+            ex.conditionCountedTrackQuarterCompleted = expedition.conditionCountedTrackQuarterCompleted;
+            ex.hideQuestUnlock = expedition.hideQuestUnlock;
+
+            ex.completed = expedition.completed;
+            ex.repeatable = expedition.repeatable;
+            ex.partyShare = expedition.partyShare;
+
+            ex.anyWood = expedition.anyWood;
+            ex.anySameTierOreBar = expedition.anySameTierOreBar;
+
+            return me;
+        }
+
         #region Virtual Methods
         /// <summary>
         /// The initialisation method for mods using this. Use it to set the title and category
