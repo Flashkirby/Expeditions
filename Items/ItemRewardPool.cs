@@ -144,7 +144,7 @@ namespace Expeditions.Items
 
                     //Prevent custom and quest items maybe? (Thorium Blood Orange rarity)
                     if (rare < 0) rare = 0;
-                    if (lowRare < 0) rare = 0;
+                    if (lowRare < -1) rare = -1;
 
                     if (item.rare <= rare && item.rare >= lowRare)
                     {
