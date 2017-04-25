@@ -27,3 +27,5 @@ Credits:
 Flashkirby99 - I am making this mod.
 jopojelly - Additional advice on mod referencing and .tmod usage
 Sos339 - Playtesting help
+
+Discord: https://discord.gg/zT9JC
