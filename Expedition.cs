@@ -144,10 +144,13 @@ namespace Expeditions
             if (trackingActive)
             {
                 // Apply green colour to gains
-                if (!lastCond1 && condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
-                if (!lastCond2 && condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
-                if (!lastCond3 && condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
-                if (!meetc)
+                if (!lastCond1 && condition1Met && conditionDescription1 != "")
+                    Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!lastCond2 && condition2Met && conditionDescription2 != "")
+                    Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!lastCond3 && condition3Met && conditionDescription3 != "")
+                    Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                if (!meetc && conditionDescriptionCountable != "")
                 {
                     if (Expeditions.DEBUG && conditionCountedMax > 0 && conditionCounted > 0) Main.NewText(conditionCounted + " from " + lastCounted);
                     if (conditionCounted >= conditionCountedMax)
