@@ -243,7 +243,7 @@ namespace Expeditions
             if (Expeditions.DEBUG) Main.NewText("Expeditions: Resetting Expeditions");
 
             // reinitiliase all the expeditions
-            expeditionActiveList = new List<ModExpedition>();
+            expeditionActiveList = new List<ModExpedition>(expeditionTemplateList.Count);
             for(int i = 0; i < expeditionTemplateList.Count; i++)
             {
                 ModExpedition mex = expeditionTemplateList[i];
