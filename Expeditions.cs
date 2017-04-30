@@ -87,9 +87,9 @@ namespace Expeditions
 
 
             // Add test quests
-            AutoLoadExpeditions(this);
             if (DEBUG)
             {
+                AutoLoadExpeditions(this);
                 //AddExpeditionToList(new ExampleExpedition(), this);
                 //AddExpeditionToList(new HeaderTest(), this);
             }
