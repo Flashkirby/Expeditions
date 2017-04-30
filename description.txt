@@ -13,6 +13,7 @@ Framework Features:
 * Custom currency 'Expedition Coupon' and related methods.
 * Loot boxes that use an item pool generated from all installed mods.
 * Hooks for detecting various things.
+* Autloading expeditions.
 * Semantic time checking information.
 * Bugs and glitches!
 
