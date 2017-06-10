@@ -22,7 +22,7 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = false;
+        internal const bool DEBUG = true;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
@@ -287,14 +287,14 @@ namespace Expeditions
             Items.ItemRewardPool.GenerateRewardPool();
         }
 
-        public override void ModifyInterfaceLayers(List<MethodSequenceListItem> layers)
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             //All this stuff is jankyily adapted from ExampleMod
             //This is getting the mouse layer, and adding the UI just underneath it
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
             if (MouseTextIndex != -1)
             {
-                layers.Insert(MouseTextIndex, new MethodSequenceListItem(
+                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ExpeditionsUIPanel",
                     delegate
                     {
@@ -325,14 +325,12 @@ namespace Expeditions
                             }
                         }
                         return true;
-                    },
-                    null)
+                    })
                 );
             }
-
         }
-        
-        
+
+
 
         public override void PostUpdateInput()
         {
@@ -698,7 +696,7 @@ namespace Expeditions
             if (!API.InInventory[bookID]) return;
 
             Item exp = new Item();
-            exp.name = customPrefix + expedition.name;
+            exp.SetNameOverride(customPrefix + expedition.name);
             exp.stack = 1;
             exp.active = true;
             exp.Center = Main.LocalPlayer.Center;
@@ -730,7 +728,7 @@ namespace Expeditions
                 itemType, stack, false, prefix, false, false);
             if (Main.netMode == 1)
             {
-                NetMessage.SendData(21, -1, -1, "", id, 1f);
+                NetMessage.SendData(21, -1, -1, null, id, 1f);
             }
         }
         /// <summary>

@@ -11,11 +11,15 @@ namespace Expeditions.Items
     public class BountyVoucher : ModItem
     {
         public static string itemName = "Expedition Coupon";
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault(itemName);
+            Tooltip.SetDefault("Trade in for exclusive items at certain stores\n"
+              + "'Proof of achievement'");
+        }
+
         public override void SetDefaults()
         {
-            item.name = itemName;
-            item.toolTip = "Trade in for exclusive items at certain stores";
-            item.toolTip2 = "'Proof of achievement'";
             item.width = 12;
             item.height = 12;
             item.maxStack = 999;

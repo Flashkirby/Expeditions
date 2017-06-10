@@ -6,10 +6,14 @@ namespace Expeditions.Items
 {
     public class BountyBoard : ModItem
 	{
-		public override void SetDefaults()
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Expeditions Board");
+            Tooltip.SetDefault("View, track and complete expeditions");
+        }
+
+        public override void SetDefaults()
 		{
-			item.name = "Expeditions Board";
-			item.toolTip = "View, track and complete expeditions";
             item.width = 30;
             item.height = 36;
             item.maxStack = 99;

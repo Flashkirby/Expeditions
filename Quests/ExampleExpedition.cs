@@ -37,7 +37,7 @@ namespace Expeditions.Quests
             AddRewardPrefix(ItemID.Shackle, 65);
             Item item = new Item();
             item.SetDefaults(ItemID.CobaltBar);
-            item.name = "Cobalt or Palladium Bar";
+            item.SetNameOverride("Cobalt or Palladium Bar");
             expedition.AddReward(item);
             AddRewardItem(WorldGen.copperBar);
             AddRewardItem(WorldGen.ironBar);
@@ -120,12 +120,12 @@ namespace Expeditions.Quests
 
         public override void OnCombatWithNPC(NPC npc, bool playerGotHit, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions.DEBUG) Main.NewText(npc.name + " in combat, who hit? " + playerGotHit,
+            if (Expeditions.DEBUG) Main.NewText(npc.GivenOrTypeName + " in combat, who hit? " + playerGotHit,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
         public override void OnKillNPC(NPC npc, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions.DEBUG) Main.NewText(npc.name + " got DEAD",
+            if (Expeditions.DEBUG) Main.NewText(npc.GivenOrTypeName + " got DEAD",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
@@ -136,13 +136,13 @@ namespace Expeditions.Quests
             for (int i = 0; i < recipe.requiredItem.Length; i++)
             {
                 if (recipe.requiredItem[i] == null || recipe.requiredItem[i].stack <= 0) continue;
-                Main.NewText(item.name + " from " + recipe.requiredItem[i].name,
+                Main.NewText(item.Name + " from " + recipe.requiredItem[i].Name,
                     Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
             }
         }
         public override void OnPickupItem(Item item, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions.DEBUG) Main.NewText("Picked up " + item.name,
+            if (Expeditions.DEBUG) Main.NewText("Picked up " + item.Name,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 

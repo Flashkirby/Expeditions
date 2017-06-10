@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Localization;
 
 namespace Expeditions
 {
@@ -569,20 +570,20 @@ namespace Expeditions
                     {
                         if (itemType == ItemID.DemoniteBar)
                         {
-                            it.name = Lang.misc[37] + " " + Lang.npcName(NPCID.Demon) + " Bar";
+                            it.SetNameOverride("Any" + Lang.GetNPCName(NPCID.Demon) + " Bar");
                         }
                         else if (itemType == ItemID.DemoniteOre)
                         {
-                            it.name = Lang.misc[37] + " " + Lang.npcName(NPCID.Demon) + " Ore";
+                            it.SetNameOverride("Any" + Lang.GetNPCName(NPCID.Demon) + " Ore");
                         }
                         else
                         {
-                            it.name = Lang.misc[37] + " " + Lang.itemName(itemType);
+                            it.SetNameOverride("Any" + Lang.GetItemName(itemType));
                         }
                     }
                     else
                     {
-                        it.name = mex.GetCustomItemGroupName(itemType);
+                        it.SetNameOverride(mex.GetCustomItemGroupName(itemType));
                     }
                 }
 

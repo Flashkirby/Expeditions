@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
@@ -281,7 +282,7 @@ namespace Expeditions
 
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.PlaySound(11, -1, -1, 1);
+            Main.PlaySound(SoundID.MenuClose);
             visible = false;
         }
 
@@ -319,7 +320,7 @@ namespace Expeditions
             else _filterByHead = currentME.expedition.npcHead;
 
             // Tick
-            Main.PlaySound(12, -1, -1, 1);
+            Main.PlaySound(SoundID.MenuTick);
 
             _headImage.Deactivate();
 
@@ -336,22 +337,29 @@ namespace Expeditions
             if (currentME != null)
             {
                 currentME.expedition.ToggleTrackingActive();
-                Main.PlaySound(12, -1, -1, 1);
+                Main.PlaySound(SoundID.MenuTick);
             }
             //UpdateIndex();
         }
 
         private void CompleteClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (currentME != null && !previewMode &&
+            if(currentME == null)
+            {
+                //huh
+                Main.NewText("this shouldn't happen... (" + Expeditions.GetExpeditionsList().Count + ")", new Color(1,0,0));
+                Main.PlaySound(SoundID.Camera);
+                return;
+            }
+            if (!previewMode &&
                 (currentME.expedition.ConditionsMet()))
             {
                 currentME.expedition.CompleteExpedition(false);
-                Main.PlaySound(12, -1, -1, 1);
+                Main.PlaySound(SoundID.MenuTick);
             }
             else
             {
-                Main.PlaySound(22, -1, -1, 1);
+                Main.PlaySound(SoundID.Unlock);
             }
         }
 

@@ -21,7 +21,7 @@ namespace Expeditions.Tiles
             //extra info
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;
-            AddMapEntry(new Color(200, 180, 50), "Expeditions Board");
+            AddMapEntry(new Color(200, 180, 50), mod.GetItem<Items.BountyBoard>().DisplayName);
             dustType = 7;
             disableSmartCursor = true;
 

@@ -6,13 +6,17 @@ namespace Expeditions.Items
 {
     public class StockBox : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Rusted Box");
+            Tooltip.SetDefault("Right click to open\n"
+              + "'Its contents, a mystery...'");
+        }
+
         public override void SetDefaults()
         {
-            item.name = "Rusted Box";
             item.width = 20;
             item.height = 20;
-            item.toolTip = "Right click to open";
-            item.toolTip2 = "'Its contents, a mystery...'";
             item.maxStack = 30;
             item.rare = 1;
         }

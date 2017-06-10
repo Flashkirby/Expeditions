@@ -5,11 +5,15 @@ namespace Expeditions.Items
 {
     public class BountyBook : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Expedition Log");
+            Tooltip.SetDefault("Manage and track expeditions\n"
+              + "'The joys of discovery!'");
+        }
+
         public override void SetDefaults()
         {
-            item.name = "Expedition Log";
-            item.toolTip = "Manage and track expeditions";
-            item.toolTip2 = "'The joys of discovery!'";
             item.width = 30;
             item.height = 36;
             item.maxStack = 1;

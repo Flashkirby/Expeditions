@@ -84,7 +84,7 @@ namespace Expeditions
                     foreach (int itemType in itemGroup)
                     {
                         i.SetDefaults(itemType);
-                        itemNames += i.name;
+                        itemNames += i.Name;
                         if(itemGroup.Length > 1)
                         {
                             if(index < itemGroup.Length - 2)
@@ -120,7 +120,7 @@ namespace Expeditions
 
             if (addTag != "")
             {
-                i.name = string.Concat("[", addTag, "] ", i.name);
+                i.SetNameOverride(string.Concat("[", addTag, "] ", i.Name));
             }
 
             if (onlyOnce)
@@ -144,7 +144,7 @@ namespace Expeditions
 
             if (addTag != "")
             {
-                i.name = string.Concat("[", addTag, "] ", i.name);
+                i.SetNameOverride(string.Concat("[", addTag, "] ", i.Name));
             }
 
             if (onlyOnce)

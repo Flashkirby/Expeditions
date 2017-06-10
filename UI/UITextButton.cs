@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using ReLogic.Graphics;
 using Terraria;
 using Terraria.UI;
 
@@ -36,7 +37,7 @@ namespace Expeditions.UI
         }
         public void SetText(string text, float textScale, bool large)
         {
-            SpriteFont spriteFont = large ? Main.fontDeathText : Main.fontMouseText;
+            DynamicSpriteFont spriteFont = large ? Main.fontDeathText : Main.fontMouseText;
             Vector2 vector = new Vector2(spriteFont.MeasureString(text).X, large ? 32f : 16f) * textScale;
             this._text = text;
             this._textScale = textScale;

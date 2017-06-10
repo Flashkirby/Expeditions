@@ -27,7 +27,7 @@ namespace Expeditions.Items
                     item.SetDefaults(i);
                     try { item.modItem.SetDefaults(); } catch { }
                     if (item.pick > 0 || // No picks
-                        (item.name.Contains("Key") || Lang.itemName(i).Contains("Key")) || // No "keys"
+                        (item.Name.Contains("Key") || Lang.GetItemName(i).Value.Contains("Key")) || // No "keys"
                         item.expert // No "experts" since boss only
                         )
                     { continue; }
