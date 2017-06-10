@@ -232,10 +232,17 @@ namespace Expeditions
                 if (NPC.FindFirstNPC(requireNPC) < 0) return false;
             }
 
-            // Check the mod call
-            if (mex != null && !mex.CheckPrerequisites(Main.LocalPlayer, ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax))
+            // Check the mod call (I can't remember why this has array errors sometimes,
+            // Lazy try catch until I can think of what to do
+            try
             {
-                lastPrereq = false;
+                if (mex != null && !mex.CheckPrerequisites(Main.LocalPlayer, ref condition1Met, ref condition2Met, ref condition3Met, conditionCounted >= conditionCountedMax))
+                {
+                    lastPrereq = false;
+                    return false;
+                }
+            }catch
+            {
                 return false;
             }
 

@@ -22,7 +22,7 @@ namespace Expeditions
     /// </summary>
     public class Expeditions : Mod
     {
-        internal const bool DEBUG = true;
+        internal const bool DEBUG = false;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
