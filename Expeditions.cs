@@ -23,6 +23,8 @@ namespace Expeditions
     public class Expeditions : Mod
     {
         internal const bool DEBUG = false;
+        // Use a boolean to check if the appropriate mod is loaded
+        public bool LoadedFKTModSettings = false;
 
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
@@ -104,6 +106,14 @@ namespace Expeditions
                 AutoLoadExpeditions(this);
                 //AddExpeditionToList(new ExampleExpedition(), this);
                 //AddExpeditionToList(new HeaderTest(), this);
+            }
+
+            LoadedFKTModSettings = ModLoader.GetMod("FKTModSettings") != null;
+            if (LoadedFKTModSettings)
+            {
+                // Needs to be in a method otherwise it throws a namespace error
+                try { LoadModSettings(); }
+                catch { }
             }
         }
         
@@ -248,6 +258,33 @@ namespace Expeditions
 
         #endregion
 
+        #region ModSettings Support
+        private void LoadModSettings()
+        {
+            FKTModSettings.ModSetting setting = 
+                FKTModSettings.ModSettingsAPI.CreateModSettingConfig(this);
+            setting.EnableAutoConfig();
+
+            setting.AddBool("newQuestPopup", "Show New Expeditions", false);
+            setting.AddBool("trackerEnabled", "HUD Tracker Enabled", false);
+            setting.AddByte("trackerAlphaByte", "HUD Transparency", 0, 255, false);
+            setting.AddBool("autoShowEnabled", "Contextual HUD Enabled", false);
+            setting.AddInt("autoShowHoldTime", "HUD Time (seconds/60)", 0, 300, false);
+        }
+        private void UpdateModSettings()
+        {
+            FKTModSettings.ModSetting setting;
+            if (FKTModSettings.ModSettingsAPI.TryGetModSetting(this, out setting))
+            {
+                setting.Get("newQuestPopup", ref enableUnlockDisplay);
+                setting.Get("trackerEnabled", ref TrackerUI.visible);
+                setting.Get("trackerAlphaByte", ref TrackerUI.permaVisAlpha);
+                setting.Get("autoShowEnabled", ref TrackerUI.allowUpdateVisible);
+                setting.Get("autoShowHoldTime", ref TrackerUI.ChangeTickMax);
+            }
+        }
+        #endregion
+
         /// <summary> Reset progress and detach references </summary>
         internal static void ResetExpeditions()
         {
@@ -367,6 +404,12 @@ namespace Expeditions
 
         public override void PostUpdateInput()
         {
+            if (LoadedFKTModSettings && !Main.gameMenu)
+            {
+                // Needs to be in a method otherwise it throws a namespace error
+                try { UpdateModSettings(); }
+                catch { }
+            }
             if (Main.netMode == 2) return;
 
             Player player = Main.LocalPlayer;
@@ -745,6 +788,8 @@ namespace Expeditions
         }
 
         private static bool unlockedSoundFrame = false;
+        private static bool enableUnlockDisplay = true;
+
         /// <summary>
         /// Show the expedition as an item being "picked up". Called when an expedition meets
         /// the prerequisite for the first time.
@@ -752,6 +797,7 @@ namespace Expeditions
         /// <param name="expedition"></param>
         public static void DisplayUnlockedExpedition(Expedition expedition, string customPrefix = "Expedition: ")
         {
+            if (!enableUnlockDisplay) return;
             if (!API.InInventory[bookID]) return;
 
             Item exp = new Item();
