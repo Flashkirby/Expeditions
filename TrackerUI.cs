@@ -15,6 +15,7 @@ namespace Expeditions
     {
         internal static bool visible = false;
         internal static bool allowUpdateVisible = true;
+        internal static bool showDescription = true;
         public static bool Visible
         {
             get { return visible || (allowUpdateVisible && recentChangeTick > 0); }
@@ -26,6 +27,7 @@ namespace Expeditions
             set { visible = value; }
         }
         internal static int ChangeTickMax = 60;
+
         internal static int recentChangeTick = 0;
         internal static float _xPos = 30f;
         internal static float _yPos = 110f;
@@ -86,23 +88,26 @@ namespace Expeditions
                 }
 
                 // Draw the Description
-                string description = "";
-                string collecItems = me.expedition.hasDeliverables ? "Collect items" : "";
-                AddCondition(ref description, me.expedition.conditionDescription1, me.expedition.condition1Met);
-                AddCondition(ref description, me.expedition.conditionDescription2, me.expedition.condition2Met);
-                AddCondition(ref description, me.expedition.conditionDescription3, me.expedition.condition3Met);
-                AddCondition(ref description, collecItems, me.expedition.CheckRequiredItems(false));
-                AddCondition(ref description, me.expedition.conditionDescriptionCountable, me.expedition.conditionCounted, me.expedition.conditionCountedMax);
-                if (description.Length > 0)
+                if (showDescription)
                 {
-                    Utils.DrawBorderStringFourWay(spriteBatch,
-                        Main.fontMouseText,
-                        description,
-                        _xPos, startY, mainC * (textAlpha / 255f), bordC * (textAlpha / 255f),
-                        Vector2.Zero, textScale);
-                    startY += Main.fontMouseText.MeasureString(
-                        description.Substring(0, description.Length - 2) // Remove last \n character
-                        ).Y * textScale;
+                    string description = "";
+                    string collecItems = me.expedition.hasDeliverables ? "Collect items" : "";
+                    AddCondition(ref description, me.expedition.conditionDescription1, me.expedition.condition1Met);
+                    AddCondition(ref description, me.expedition.conditionDescription2, me.expedition.condition2Met);
+                    AddCondition(ref description, me.expedition.conditionDescription3, me.expedition.condition3Met);
+                    AddCondition(ref description, collecItems, me.expedition.CheckRequiredItems(false));
+                    AddCondition(ref description, me.expedition.conditionDescriptionCountable, me.expedition.conditionCounted, me.expedition.conditionCountedMax);
+                    if (description.Length > 0)
+                    {
+                        Utils.DrawBorderStringFourWay(spriteBatch,
+                            Main.fontMouseText,
+                            description,
+                            _xPos, startY, mainC * (textAlpha / 255f), bordC * (textAlpha / 255f),
+                            Vector2.Zero, textScale);
+                        startY += Main.fontMouseText.MeasureString(
+                            description.Substring(0, description.Length - 2) // Remove last \n character
+                            ).Y * textScale;
+                    }
                 }
             }
         }

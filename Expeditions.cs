@@ -32,6 +32,8 @@ namespace Expeditions
         private UserInterface trackerInterface;
         internal static TrackerUI trackerUI;
 
+        internal static bool ShowTrackingText = true;
+
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY. DO NOT CHANGE. </summary>
         private static List<ModExpedition> expeditionTemplateList;
         /// <summary> The list used by the player. Can be modified. </summary>
@@ -266,8 +268,10 @@ namespace Expeditions
             setting.EnableAutoConfig();
 
             setting.AddBool("newQuestPopup", "Show New Expeditions", false);
+            setting.AddBool("chatTrackEnabled", "Chat Tracker Enabled", false);
             setting.AddBool("trackerEnabled", "HUD Tracker Enabled", false);
             setting.AddByte("trackerAlphaByte", "HUD Transparency", 0, 255, false);
+            setting.AddBool("trackerDescriptions", "HUD Descriptions", false);
             setting.AddBool("autoShowEnabled", "Contextual HUD Enabled", false);
             setting.AddInt("autoShowHoldTime", "HUD Time (seconds/60)", 0, 300, false);
         }
@@ -277,8 +281,10 @@ namespace Expeditions
             if (FKTModSettings.ModSettingsAPI.TryGetModSetting(this, out setting))
             {
                 setting.Get("newQuestPopup", ref enableUnlockDisplay);
+                setting.Get("chatTrackEnabled", ref ShowTrackingText);
                 setting.Get("trackerEnabled", ref TrackerUI.visible);
                 setting.Get("trackerAlphaByte", ref TrackerUI.permaVisAlpha);
+                setting.Get("trackerDescriptions", ref TrackerUI.showDescription);
                 setting.Get("autoShowEnabled", ref TrackerUI.allowUpdateVisible);
                 setting.Get("autoShowHoldTime", ref TrackerUI.ChangeTickMax);
             }
