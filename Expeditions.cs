@@ -27,10 +27,15 @@ namespace Expeditions
         private UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
+        private UserInterface trackerInterface;
+        internal static TrackerUI trackerUI;
+
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY. DO NOT CHANGE. </summary>
         private static List<ModExpedition> expeditionTemplateList;
         /// <summary> The list used by the player. Can be modified. </summary>
         private static List<ModExpedition> expeditionActiveList;
+
+        internal static Dictionary<int, byte> checkedState;
 
         internal static Texture2D sortingTexture;
         internal static Texture2D bountyBoardTexture;
@@ -58,6 +63,8 @@ namespace Expeditions
 
         public override void Load()
         {
+            checkedState = new Dictionary<int, byte>();
+
             // Load textures
             if (Main.netMode != 2)
             {
@@ -71,6 +78,11 @@ namespace Expeditions
                 expeditionUI.Activate();
                 expeditionUserInterface = new UserInterface();
                 expeditionUserInterface.SetState(expeditionUI);
+
+                trackerUI = new TrackerUI();
+                trackerUI.Activate();
+                trackerInterface = new UserInterface();
+                trackerInterface.SetState(trackerUI);
             }
 
             bookID = ItemType("BountyBook");
@@ -289,6 +301,38 @@ namespace Expeditions
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
+            bool OtherInterfaceActive = 
+                Main.playerInventory ||
+                Main.LocalPlayer.chest != -1 ||
+                Main.npcShop != 0 ||
+                (
+                    Main.LocalPlayer.talkNPC > 0 &&
+                    ExpeditionUI.viewMode != ExpeditionUI.viewMode_NPC
+                ) ||
+                Main.InReforgeMenu ||
+                Main.InGuideCraftMenu ||
+                Main.gameMenu;
+            
+            int HotBar = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Hotbar"));
+            if (HotBar != -1)
+            {
+                layers.Insert(HotBar, new LegacyGameInterfaceLayer(
+                    "ExpeditionsUITracker",
+                    delegate
+                    {
+                        if (TrackerUI.visible)
+                        {
+                            if (!OtherInterfaceActive)
+                            {
+                                trackerInterface.Update(Main._drawInterfaceGameTime);
+                                trackerUI.Draw(Main.spriteBatch);
+                            }
+                        }
+                        return true;
+                    })
+                );
+            }
+
             //All this stuff is jankyily adapted from ExampleMod
             //This is getting the mouse layer, and adding the UI just underneath it
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
@@ -300,18 +344,7 @@ namespace Expeditions
                     {
                         if (ExpeditionUI.visible)
                         {
-                            Player p = Main.LocalPlayer;
-                            if (Main.playerInventory ||
-                                Main.LocalPlayer.chest != -1 ||
-                                Main.npcShop != 0 ||
-                                (
-                                    p.talkNPC > 0 &&
-                                    ExpeditionUI.viewMode != ExpeditionUI.viewMode_NPC
-                                ) ||
-                                Main.InReforgeMenu ||
-                                Main.InGuideCraftMenu ||
-                                Main.gameMenu
-                                )
+                            if (OtherInterfaceActive)
                             {
                                 //close this if other things are opened
                                 CloseExpeditionMenu(true);
@@ -343,6 +376,7 @@ namespace Expeditions
                 // RESET Expedition called values
                 unlockedSoundFrame = false;
 
+                checkedState.Clear();
                 if (Main.time == 0.0)
                 {
                     foreach (ModExpedition me in GetExpeditionsList())
@@ -363,7 +397,7 @@ namespace Expeditions
                               ref me.expedition.condition3Met,
                               me.expedition.conditionCounted >= me.expedition.conditionCountedMax
                               ); }
-                        
+
                         // Check conditions as long as prerequisites are met
                         if (me.expedition.PrerequisitesMet())
                         {
@@ -372,7 +406,18 @@ namespace Expeditions
                             {
                                 me.expedition.UpdateCountable();
                                 me.expedition.ConditionsMet();
+                                checkedState.Add(me.expedition.GetHashID(), 1);
                             }
+                            else
+                            {
+                                // Completed
+                                checkedState.Add(me.expedition.GetHashID(), 2);
+                            }
+                        }
+                        else
+                        {
+                            // Prerequisite not met yet
+                            checkedState.Add(me.expedition.GetHashID(), 0);
                         }
                     }
                 }
@@ -387,7 +432,18 @@ namespace Expeditions
                             {
                                 me.expedition.UpdateCountable();
                                 me.expedition.ConditionsMet();
+                                checkedState.Add(me.expedition.GetHashID(), 1);
                             }
+                            else
+                            {
+                                // Completed
+                                checkedState.Add(me.expedition.GetHashID(), 2);
+                            }
+                        }
+                        else
+                        {
+                            // Prerequisite not met yet
+                            checkedState.Add(me.expedition.GetHashID(), 0);
                         }
                     }
                 }

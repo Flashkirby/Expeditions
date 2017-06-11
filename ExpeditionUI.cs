@@ -363,7 +363,7 @@ namespace Expeditions
             }
         }
 
-        private string StrTick(bool ticked)
+        public static string StrTick(bool ticked)
         {
             return ticked ? "[x] " : "[ ] ";
         }

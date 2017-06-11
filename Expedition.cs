@@ -89,6 +89,7 @@ namespace Expeditions
         public bool anySameTierOreBar = true;
 
         private List<KeyValuePair<int, int>> deliverables = new List<KeyValuePair<int, int>>();
+        public bool hasDeliverables { get { return deliverables.Count > 0; } }
         private List<Item> rewards = new List<Item>();
         private List<Item> oneTimeRewards = new List<Item>();
 
@@ -261,7 +262,7 @@ namespace Expeditions
             return true;
         }
 
-        private bool CheckRequiredItems(bool deductItems = false)
+        internal bool CheckRequiredItems(bool deductItems = false)
         {
             //get as temp array of required
             int[] requiredItems = new int[deliverables.Count];
@@ -814,6 +815,10 @@ namespace Expeditions
                 salt *= c + code;
             }
             return code;
+        }
+        public int GetHashID()
+        {
+            return Expedition.GetHashID(this);
         }
 
         public static bool CompareExpeditions(Expedition e1, Expedition e2)

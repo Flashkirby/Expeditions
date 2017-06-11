@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent.UI.Elements;
+using Terraria.UI;
+using ReLogic.Graphics;
+
+namespace Expeditions
+{
+    public class TrackerUI : UIState
+    {
+        public static bool visible = true;
+        internal static float _xPos = 30f;
+        internal static float _yPos = 110f;
+        internal static byte textAlpha = 255;
+        internal static float textScale = 0.6f;
+
+        private UIText uiText;
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            float colMod = (Main.mouseTextColor / 255f);
+            Color mainColour = new Color(255, 255, 255, 255) * colMod;
+            Color bordColour = new Color(0, 0, 0, 255) * colMod;
+            mainColour.A = textAlpha;
+            bordColour.A = textAlpha;
+
+            try
+            {
+                DrawTrackedText(spriteBatch, mainColour, bordColour, colMod);
+            }
+            catch (Exception e) { Main.NewTextMultiline(e.ToString()); }
+        }
+
+        private static void DrawTrackedText(SpriteBatch spriteBatch, Color mainC, Color bordC, float colMod)
+        {
+            float startY = _yPos;
+            List<ModExpedition> mes = API.GetExpeditionsList();
+            foreach (ModExpedition me in mes)
+            {
+                if (!me.expedition.trackingActive) continue;
+                byte state = 255;
+                if(Expeditions.checkedState.TryGetValue(me.expedition.GetHashID(), out state))
+                {
+                    if (state == 0 || state == 2 || state == 255) continue;
+                }
+
+                // Draw the Title
+                string title = me.expedition.name;
+                if (title.Length > 0)
+                {
+                    Color titleColour = UI.UIColour.GetColourFromRarity(me.expedition.difficulty) * colMod;
+                    titleColour.A = mainC.A;
+                    Utils.DrawBorderStringFourWay(spriteBatch,
+                        Main.fontMouseText,
+                        title,
+                        _xPos, startY, titleColour, bordC,
+                        Vector2.Zero, textScale);
+                    startY += Main.fontMouseText.MeasureString(title).Y * textScale;
+                }
+
+                // Draw the Description
+                string description = "";
+                string collecItems = me.expedition.hasDeliverables ? "Collect items" : "";
+                AddCondition(ref description, me.expedition.conditionDescription1, me.expedition.condition1Met);
+                AddCondition(ref description, me.expedition.conditionDescription2, me.expedition.condition2Met);
+                AddCondition(ref description, me.expedition.conditionDescription3, me.expedition.condition3Met);
+                AddCondition(ref description, collecItems, me.expedition.CheckRequiredItems(false));
+                AddCondition(ref description, me.expedition.conditionDescriptionCountable, me.expedition.conditionCounted, me.expedition.conditionCountedMax);
+                if (description.Length > 0)
+                {
+                    Utils.DrawBorderStringFourWay(spriteBatch,
+                        Main.fontMouseText,
+                        description,
+                        _xPos, startY, mainC, bordC,
+                        Vector2.Zero, textScale);
+                    startY += Main.fontMouseText.MeasureString(
+                        description.Substring(0, description.Length - 2) // Remove last \n character
+                        ).Y * textScale;
+                }
+            }
+        }
+
+        internal static void AddCondition(ref string text, string description, bool condition)
+        {
+            if(description != "")
+            {
+                text += "  " + ExpeditionUI.StrTick(condition) + description + "\n";
+            }
+        }
+        internal static void AddCondition(ref string text, string description, int count, int countMax)
+        {
+            if (description != "")
+            {
+                text += "  " + string.Concat(
+                    "[", count,
+                    (countMax > 0 ? "/" + countMax : "")
+                    , "] ", description,
+                    "\n");
+            }
+        }
+    }
+}
