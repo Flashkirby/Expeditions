@@ -320,7 +320,7 @@ namespace Expeditions
                     "ExpeditionsUITracker",
                     delegate
                     {
-                        if (TrackerUI.visible)
+                        if (TrackerUI.VisibleWithAlpha)
                         {
                             if (!OtherInterfaceActive)
                             {
@@ -377,6 +377,9 @@ namespace Expeditions
                 unlockedSoundFrame = false;
 
                 checkedState.Clear();
+
+                if(TrackerUI.recentChangeTick > 0) TrackerUI.recentChangeTick--;
+
                 if (Main.time == 0.0)
                 {
                     foreach (ModExpedition me in GetExpeditionsList())

@@ -13,15 +13,38 @@ namespace Expeditions
 {
     public class TrackerUI : UIState
     {
-        public static bool visible = true;
+        internal static bool visible = false;
+        internal static bool allowUpdateVisible = true;
+        public static bool Visible
+        {
+            get { return visible || (allowUpdateVisible && recentChangeTick > 0); }
+            set { visible = value; }
+        }
+        public static bool VisibleWithAlpha
+        {
+            get { return visible || (allowUpdateVisible && recentChangeTick > 0) || textAlpha > 0; }
+            set { visible = value; }
+        }
+        internal static int ChangeTickMax = 60;
+        internal static int recentChangeTick = 0;
         internal static float _xPos = 30f;
         internal static float _yPos = 110f;
+        internal static byte permaVisAlpha = 255;
         internal static byte textAlpha = 255;
         internal static float textScale = 0.6f;
 
         private UIText uiText;
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
+            if (Visible)
+            {
+                textAlpha = permaVisAlpha;
+            }
+            else
+            {
+                if (textAlpha > 0) textAlpha--;
+            }
+
             float colMod = (Main.mouseTextColor / 255f);
             Color mainColour = new Color(255, 255, 255, 255) * colMod;
             Color bordColour = new Color(0, 0, 0, 255) * colMod;
@@ -53,11 +76,11 @@ namespace Expeditions
                 if (title.Length > 0)
                 {
                     Color titleColour = UI.UIColour.GetColourFromRarity(me.expedition.difficulty) * colMod;
-                    titleColour.A = mainC.A;
+                    titleColour.A = textAlpha;
                     Utils.DrawBorderStringFourWay(spriteBatch,
                         Main.fontMouseText,
                         title,
-                        _xPos, startY, titleColour, bordC,
+                        _xPos, startY, titleColour * (textAlpha / 255f), bordC,
                         Vector2.Zero, textScale);
                     startY += Main.fontMouseText.MeasureString(title).Y * textScale;
                 }
@@ -75,7 +98,7 @@ namespace Expeditions
                     Utils.DrawBorderStringFourWay(spriteBatch,
                         Main.fontMouseText,
                         description,
-                        _xPos, startY, mainC, bordC,
+                        _xPos, startY, mainC * (textAlpha / 255f), bordC * (textAlpha / 255f),
                         Vector2.Zero, textScale);
                     startY += Main.fontMouseText.MeasureString(
                         description.Substring(0, description.Length - 2) // Remove last \n character

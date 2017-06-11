@@ -147,17 +147,27 @@ namespace Expeditions
             {
                 // Apply green colour to gains
                 if (!lastCond1 && condition1Met && conditionDescription1 != "")
+                {
                     Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                    TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
+                }
                 if (!lastCond2 && condition2Met && conditionDescription2 != "")
+                {
                     Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                    TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
+                }
                 if (!lastCond3 && condition3Met && conditionDescription3 != "")
+                {
                     Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                    TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
+                }
                 if (!meetc && conditionDescriptionCountable != "")
                 {
                     if (Expeditions.DEBUG && conditionCountedMax > 0 && conditionCounted > 0) Main.NewText(conditionCounted + " from " + lastCounted);
                     if (conditionCounted >= conditionCountedMax)
                     {
                         Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                        TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
                     }
                     else if (
                        conditionCountedTrackQuarterCompleted ||
@@ -178,15 +188,29 @@ namespace Expeditions
                             )
                         {
                             Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + " Progress is [" + conditionCounted + "/" + conditionCountedMax + "]", muteColour.R, muteColour.G, muteColour.B);
+                            TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
                         }
                     }
                 }
 
                 // Apply red colour to lossess
-                if (lastCond1 && !condition1Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
-                if (lastCond2 && !condition2Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
-                if (lastCond3 && !condition3Met) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
-                if (meetc && conditionCounted < conditionCountedMax) Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                if (lastCond1 && !condition1Met)
+                {
+                    Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription1 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                    TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
+                }
+                if (lastCond2 && !condition2Met)
+                {
+                    Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription2 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B); TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
+                }
+                if (lastCond3 && !condition3Met)
+                {
+                    Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescription3 + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B); TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
+                }
+                if (meetc && conditionCounted < conditionCountedMax)
+                {
+                    Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' " + conditionDescriptionCountable + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B); TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
+                }
             }
 
             // Set coditions after checking
@@ -203,6 +227,7 @@ namespace Expeditions
                     if (trackingActive && !trackItems)
                     {
                         Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' Collect expedition items" + ExpeditionTrackerAccomplished, muteColour.R, muteColour.G, muteColour.B);
+                        TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
                         trackItems = true;
                     }
                 }
@@ -211,6 +236,7 @@ namespace Expeditions
                     if (trackingActive && trackItems && Main.mouseItem.type == 0)
                     {
                         Main.NewText(ExpeditionTrackerTemplate + "'" + name + "' Collect expedition items" + ExpeditionTrackerNotValid, poorColour.R, poorColour.G, poorColour.B);
+                        TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
                         trackItems = false;
                     }
                     return false;
@@ -431,10 +457,12 @@ namespace Expeditions
                 Main.NewText("Expeditions: '" + name + "' completed!", textColour.R, textColour.G, textColour.B);
                 Player p = Main.LocalPlayer;
                 Projectile.NewProjectile(p.Center, new Vector2(0f, -6f), ProjectileID.RocketFireworkBlue, 0, 0f, p.whoAmI);
+                TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
             }
             else
             {
                 Main.NewText("Expeditions: '" + name + "' recompleted!", textColour.R, textColour.G, textColour.B);
+                TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
             }
 
             if (Expeditions.DEBUG) Main.NewText("#set progress");
