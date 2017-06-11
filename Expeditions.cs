@@ -272,6 +272,7 @@ namespace Expeditions
             setting.AddBool("trackerEnabled", "HUD Tracker Enabled", false);
             setting.AddByte("trackerAlphaByte", "HUD Transparency", 0, 255, false);
             setting.AddBool("trackerDescriptions", "HUD Descriptions", false);
+            setting.AddFloat("trackerScale", "HUD Scale", 0.5f, 1f, false);
             setting.AddBool("autoShowEnabled", "Contextual HUD Enabled", false);
             setting.AddInt("autoShowHoldTime", "HUD Time (seconds/60)", 0, 300, false);
         }
@@ -285,6 +286,7 @@ namespace Expeditions
                 setting.Get("trackerEnabled", ref TrackerUI.visible);
                 setting.Get("trackerAlphaByte", ref TrackerUI.permaVisAlpha);
                 setting.Get("trackerDescriptions", ref TrackerUI.showDescription);
+                setting.Get("trackerScale", ref TrackerUI.textScale);
                 setting.Get("autoShowEnabled", ref TrackerUI.allowUpdateVisible);
                 setting.Get("autoShowHoldTime", ref TrackerUI.ChangeTickMax);
             }

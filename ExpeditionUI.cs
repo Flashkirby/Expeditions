@@ -87,6 +87,7 @@ namespace Expeditions
             _scrollBar.OnMouseUp += new MouseEvent(UpdateIndex);
 
             // Append (in reverse order)
+            AppendTextButton("o", 16, 52, new MouseEvent(SideTrackerToggle));
             AppendTextButton("Close", 16, 16, new MouseEvent(CloseButtonClicked));
             AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
             AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
@@ -280,6 +281,20 @@ namespace Expeditions
             _scrollBar.Value -= scrollBy;
         }
 
+        private void SideTrackerToggle(UIMouseEvent evt, UIElement listeningElement)
+        {
+            TrackerUI.visible = !TrackerUI.visible;
+            if(TrackerUI.visible)
+            {
+                Main.PlaySound(SoundID.MenuOpen);
+            }
+            else
+            {
+                Main.PlaySound(SoundID.MenuClose);
+                TrackerUI.textAlpha = 0;
+            }
+        }
+
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             Main.PlaySound(SoundID.MenuClose);
@@ -337,6 +352,7 @@ namespace Expeditions
             if (currentME != null)
             {
                 currentME.expedition.ToggleTrackingActive();
+                TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
                 Main.PlaySound(SoundID.MenuTick);
             }
             //UpdateIndex();
