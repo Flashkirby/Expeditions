@@ -1,10 +1,10 @@
 ﻿using System;
 using Terraria;
 using Terraria.ID;
-using Expeditions;
+using Expeditions144;
 using System.Collections.Generic;
 
-namespace Expeditions.Quests
+namespace Expeditions144.Quests
 {
     class ExampleExpedition : ModExpedition
     {
@@ -39,11 +39,11 @@ namespace Expeditions.Quests
             item.SetDefaults(ItemID.CobaltBar);
             item.SetNameOverride("Cobalt or Palladium Bar");
             expedition.AddReward(item);
-            AddRewardItem(WorldGen.copperBar);
-            AddRewardItem(WorldGen.ironBar);
-            AddRewardItem(WorldGen.silverBar);
-            AddRewardItem(WorldGen.goldBar);
-        }
+            AddRewardItem(ItemID.CopperBar); // **** was "WorldGen" instead of "ItemID"
+            AddRewardItem(ItemID.IronBar); // **** was "WorldGen" instead of "ItemID"
+			AddRewardItem(ItemID.SilverBar); // **** was "WorldGen" instead of "ItemID"
+			AddRewardItem(ItemID.GoldBar); // **** was "WorldGen" instead of "ItemID"
+		}
         public override string Description(bool complete)
         {
             string message = "";
@@ -65,7 +65,7 @@ namespace Expeditions.Quests
             cond1 = player.velocity.Y == 0f;
             if (!cond2 && cond1) 
             {
-                //if(Expeditions.DEBUG) Main.NewText(Math.Abs(player.velocity.X) + " is < 6");
+                //if(Expeditions144.DEBUG) Main.NewText(Math.Abs(player.velocity.X) + " is < 6");
                 cond2 = Math.Abs(player.velocity.X) > 6;
             }
             return cond1 && cond2 && cond3;
@@ -74,7 +74,7 @@ namespace Expeditions.Quests
         public override bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (WorldExplore.IsCurrentDaily(expedition)) return true;
-            if (Expeditions.DEBUG)
+            if (Expeditions144.DEBUG)
             { return API.InInventory[ItemID.FishingSeaweed]; }
             return false;
         }
@@ -92,10 +92,10 @@ namespace Expeditions.Quests
             }
             if(givePalladium)
             {
-                rewards[2].SetDefaults(ItemID.PalladiumBar);
+                rewards[2] = new Item(ItemID.PalladiumBar);
             }else
             {
-                rewards[2].SetDefaults(ItemID.CobaltBar);
+                rewards[2] = new Item(ItemID.CobaltBar);
             }
             rewards[2].stack = 2;
         }
@@ -108,32 +108,32 @@ namespace Expeditions.Quests
         public override void OnNewDay(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             expedition.ResetProgress(true);
-            if (Expeditions.DEBUG) Main.NewText("Expedition was reset for daytime.", 
+            if (Expeditions144.DEBUG) Main.NewText("Expedition was reset for daytime.", 
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
         public override void OnNewNight(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             expedition.ResetProgress(true);
-            if (Expeditions.DEBUG) Main.NewText("Expedition was reset for nighttime.",
+            if (Expeditions144.DEBUG) Main.NewText("Expedition was reset for nighttime.",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
         public override void OnCombatWithNPC(NPC npc, bool playerGotHit, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions.DEBUG) Main.NewText(npc.GivenOrTypeName + " in combat, who hit? " + playerGotHit,
+            if (Expeditions144.DEBUG) Main.NewText(npc.GivenOrTypeName + " in combat, who hit? " + playerGotHit,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
         public override void OnKillNPC(NPC npc, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions.DEBUG) Main.NewText(npc.GivenOrTypeName + " got DEAD",
+            if (Expeditions144.DEBUG) Main.NewText(npc.GivenOrTypeName + " got DEAD",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
         public override void OnCraftItem(Item item, Recipe recipe, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             cond3 = true;
-            if (!Expeditions.DEBUG) return;
-            for (int i = 0; i < recipe.requiredItem.Length; i++)
+            if (!Expeditions144.DEBUG) return;
+            for (int i = 0; i < recipe.requiredItem.Count; i++)
             {
                 if (recipe.requiredItem[i] == null || recipe.requiredItem[i].stack <= 0) continue;
                 Main.NewText(item.Name + " from " + recipe.requiredItem[i].Name,
@@ -142,13 +142,13 @@ namespace Expeditions.Quests
         }
         public override void OnPickupItem(Item item, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions.DEBUG) Main.NewText("Picked up " + item.Name,
+            if (Expeditions144.DEBUG) Main.NewText("Picked up " + item.Name,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
         public override void OnKillTile(int x, int y, int type, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions.DEBUG) Main.NewText("Break tile " + Main.tile[x, y].type,
+            if (Expeditions144.DEBUG) Main.NewText("Break tile " + Main.tile[x, y].TileType,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
     }

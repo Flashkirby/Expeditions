@@ -5,25 +5,25 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Expeditions
+namespace Expeditions144
 {
-    public class WorldExplore : ModWorld
+    public class WorldExplore : ModSystem
     {
         internal static Expedition syncedDailyExpedition = null;
         private static int expeditionIndex = -1;
         internal static int dailyExpIndex { get { return expeditionIndex; } }
         
-        public override void Initialize()
+        public override void Load() //**** was "Initialize"
         {
             syncedDailyExpedition = null;
         }
 
-        public override void PostUpdate()
+        public override void PostUpdateEverything()
         {
             if(Main.dayTime && Main.time == 0.0)
             {
                 List<Expedition> dailys = new List<Expedition>();
-                foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+                foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
                 {
                     if (me.expedition.CheckDailyAssigned()) dailys.Add(me.expedition);
                 }
@@ -39,11 +39,11 @@ namespace Expeditions
                         if (previousDaily != dailys[expeditionIndex]) break;
                     }
 
-                    if (Expeditions.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + expeditionIndex);
+                    if (Expeditions144.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + expeditionIndex);
                     NetSyncDaily(dailys[expeditionIndex]);
                     if (Main.netMode == 2)
                     {
-                        Expeditions.SendNet_NewDaily(mod);
+                        Expeditions144.SendNet_NewDaily(Mod);
                     }
                 }
                 else
@@ -58,11 +58,11 @@ namespace Expeditions
         {
             syncedDailyExpedition = expedition;
             syncedDailyExpedition.ResetProgress(true);
-            if (Expeditions.DEBUG)
+            if (Expeditions144.DEBUG)
             {
                 if (syncedDailyExpedition != null)
                 {
-                    Expeditions.DisplayUnlockedExpedition(expedition, "Daily Expedition: ");
+                    Expeditions144.DisplayUnlockedExpedition(expedition, "Daily Expedition: ");
                     Main.NewText("Daily EXP = " + syncedDailyExpedition.name);
                 }
             }
@@ -77,19 +77,16 @@ namespace Expeditions
 
         #region SaveLoad overrides
 
-        public override TagCompound Save()
+        public override void SaveWorldData(TagCompound tag)
         {
             int dQuestID = 0;
             if (syncedDailyExpedition != null) dQuestID = Expedition.GetHashID(syncedDailyExpedition);
-            return new TagCompound
-            {
-                { "dailyQuestID", dQuestID }
-            };
+			tag.Add("dailyQuestID", dQuestID);
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadWorldData(TagCompound tag)
         {
-            syncedDailyExpedition = Expeditions.FindExpedition(tag.GetInt("dailyQuestID"));
+            syncedDailyExpedition = Expeditions144.FindExpedition(tag.GetInt("dailyQuestID"));
         }
         #endregion
     }

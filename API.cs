@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Expeditions
+namespace Expeditions144
 {
     /// <summary>
     /// Big Friendly Class provides access to all the important and useful methods
@@ -18,13 +18,13 @@ namespace Expeditions
     {
         #region Fields
 
-        public static int ItemIDExpeditionBook { get { return Expeditions.bookID; } }
-        public static int ItemIDExpeditionBoard { get { return Expeditions.boardID; } }
-        public static int ItemIDExpeditionCoupon { get { return Expeditions.voucherID; } }
-        public static int ItemIDRustedBox { get { return Expeditions.stockBox1; } }
-        public static int ItemIDRelicBox { get { return Expeditions.stockBox2; } }
+        public static int ItemIDExpeditionBook { get { return Expeditions144.bookID; } }
+        public static int ItemIDExpeditionBoard { get { return Expeditions144.boardID; } }
+        public static int ItemIDExpeditionCoupon { get { return Expeditions144.voucherID; } }
+        public static int ItemIDRustedBox { get { return Expeditions144.stockBox1; } }
+        public static int ItemIDRelicBox { get { return Expeditions144.stockBox2; } }
 
-        public static int CustomCurrencyIDExpeditionCoupon { get { return Expeditions.currencyVoucherID; } }
+        public static int CustomCurrencyIDExpeditionCoupon { get { return Expeditions144.currencyVoucherID; } }
 
         /// <summary> Morning, according to the merchant. </summary>
         public static bool TimeMorning { get { return TimeChecker.TimeDayMorn; } }
@@ -65,7 +65,7 @@ namespace Expeditions
         /// <param name="modExpedition">Your CustomExpedition, usually just 'new CustomExpedition()'</param>
         public static void AddExpedition(Mod mod, ModExpedition modExpedition)
         {
-            Expeditions.AddExpeditionToList(modExpedition, mod);
+            Expeditions144.AddExpeditionToList(modExpedition, mod);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Expeditions
         /// <returns>The list of ModExpeditions. Will not return null, only an empty list.</returns>
         public static List<ModExpedition> GetExpeditionsList()
         {
-            return Expeditions.GetExpeditionsList();
+            return Expeditions144.GetExpeditionsList();
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Expeditions
         /// <returns>ModExpedition, or null if no result</returns>
         public static ModExpedition FindModExpedition(Mod mod, string name)
         {
-            return Expeditions.FindModExpedition(mod, name);
+            return Expeditions144.FindModExpedition(mod, name);
         }
         /// <summary>
         /// Attempts to find the specified mod expedition by class name. 
@@ -95,7 +95,7 @@ namespace Expeditions
         /// <returns>ModExpedition, or null if no result</returns>
         public static ModExpedition FindModExpedition<ClassName>(Mod mod)
         {
-            return Expeditions.FindModExpedition<ClassName>(mod);
+            return Expeditions144.FindModExpedition<ClassName>(mod);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Expeditions
         /// <returns>Expedition, or an empty expedition if no result</returns>
         public static Expedition FindExpedition(Mod mod, string name)
         {
-            return Expeditions.FindExpedition(mod, name);
+            return Expeditions144.FindExpedition(mod, name);
         }
         /// <summary>
         /// Attempts to find the specified expedition by class name. 
@@ -116,7 +116,7 @@ namespace Expeditions
         /// <returns>Expedition, or an empty expedition if no result</returns>
         public static Expedition FindExpedition<ClassName>(Mod mod)
         {
-            return Expeditions.FindExpedition<ClassName>(mod);
+            return Expeditions144.FindExpedition<ClassName>(mod);
         }
         /// <summary>
         /// Show the expedition as an item pickup.
@@ -126,7 +126,7 @@ namespace Expeditions
         /// <param name="expedition"></param>
         public static void ShowExpeditionAsNewItem(Expedition expedition)
         {
-            Expeditions.DisplayUnlockedExpedition(expedition);
+            Expeditions144.DisplayUnlockedExpedition(expedition);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Expeditions
         /// <param name="prefix"></param>
         public static void ClientSpawnItem(int itemType, int stack = 1, int prefix = 0)
         {
-            Expeditions.ClientNetSpawnItem(itemType, stack, prefix);
+            Expeditions144.ClientNetSpawnItem(itemType, stack, prefix);
         }
         /// <summary>
         /// Net-friendly method to spawn item on top of my player.
@@ -149,7 +149,7 @@ namespace Expeditions
         /// <param name="item"></param>
         public static void ClientNetSpawnItem(Item item)
         {
-            Expeditions.ClientNetSpawnItem(item);
+            Expeditions144.ClientNetSpawnItem(item);
         }
         /// <summary>
         /// Takes a value and divides it into stacks of coins.
@@ -159,7 +159,7 @@ namespace Expeditions
         /// <returns></returns>
         public static int[] DivideValueIntoMoneyStacks(int value)
         {
-            return Expeditions.DivideValueIntoMoneyStack(value);
+            return Expeditions144.DivideValueIntoMoneyStack(value);
         }
 
 
@@ -175,7 +175,7 @@ namespace Expeditions
         /// <param name="nextSlot">Shop's next slot. This will get incremented automagically. </param>
         /// <param name="itemID">Item type being sold. </param>
         /// <param name="price">Number of coupons needed. </param>
-        public static void AddShopItemVoucher(Chest shop, ref int nextSlot, int itemID, int price)
+        public static void AddShopItemVoucher(Item[] shop, ref int nextSlot, int itemID, int price)
         {
             NPCExplore.AddVoucherPricedItem(shop, ref nextSlot, itemID, price);
         }

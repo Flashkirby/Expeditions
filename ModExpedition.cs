@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Expeditions
+namespace Expeditions144
 {
     public class ModExpedition
     {
@@ -160,7 +160,7 @@ namespace Expeditions
         /// <param name="addTag">Should the item have [addTag] appended to it (eg. as a bonus item)</param>
         public void AddRewardMoney(int value, bool onlyOnce = false, string addTag = "")
         {
-            int[] stacks = Expeditions.DivideValueIntoMoneyStack(value);
+            int[] stacks = Expeditions144.DivideValueIntoMoneyStack(value);
             if (stacks[0] > 0) AddRewardItem(74, stacks[0], onlyOnce, addTag);
             if (stacks[1] > 0) AddRewardItem(73, stacks[1], onlyOnce, addTag);
             if (stacks[2] > 0) AddRewardItem(72, stacks[2], onlyOnce, addTag);

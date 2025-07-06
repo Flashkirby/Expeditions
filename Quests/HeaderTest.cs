@@ -1,9 +1,9 @@
 ﻿using System;
 using Terraria;
 using Terraria.ID;
-using Expeditions;
+using Expeditions144;
 
-namespace Expeditions.Quests
+namespace Expeditions144.Quests
 {
     class HeaderTest : ModExpedition
     {
@@ -35,7 +35,7 @@ namespace Expeditions.Quests
 
         public override bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            return Expeditions.DEBUG;
+            return Expeditions144.DEBUG;
         }
 
         public override bool IncludeAsDaily()

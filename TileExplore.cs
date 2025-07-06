@@ -6,13 +6,13 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Expeditions
+namespace Expeditions144
 {
     public class TileExplore : GlobalTile
     {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+            foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
             {
                 if (i == Player.tileTargetX && j == Player.tileTargetY && !fail)
                 {

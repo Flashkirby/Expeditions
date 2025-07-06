@@ -1,6 +1,6 @@
 ﻿using Terraria.ModLoader;
 
-namespace Expeditions.Items
+namespace Expeditions144.Items
 {
     /// <summary>
     /// Used in shops that require this as a special currency. 
@@ -13,18 +13,18 @@ namespace Expeditions.Items
         public static string itemName = "Expedition Coupon";
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault(itemName);
+            /*DisplayName.SetDefault(itemName);
             Tooltip.SetDefault("Trade in for exclusive items at certain stores\n"
-              + "'Proof of achievement'");
+              + "'Proof of achievement'");*/
         }
 
         public override void SetDefaults()
         {
-            item.width = 12;
-            item.height = 12;
-            item.maxStack = 999;
-            item.value = 0;
-            item.rare = -11; //quest tier
+			Item.width = 12;
+			Item.height = 12;
+			Item.maxStack = 999;
+			Item.value = 0;
+			Item.rare = -11; //quest tier
         }
     }
 }

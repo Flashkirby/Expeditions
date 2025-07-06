@@ -4,16 +4,17 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.UI;
+using Terraria.GameContent;
 
-namespace Expeditions.UI
+namespace Expeditions144.UI
 {
     public class UIValueBar : UIElement
     {
         private static Color barColour = new Color(43, 56, 101, 200);
 
-        Texture2D bar = Main.colorBarTexture;
-        Texture2D blip = Main.colorBlipTexture;
-        Texture2D slider = Main.colorSliderTexture; //80 range with offset 3
+		Texture2D bar = TextureAssets.ColorBar.Value;
+        Texture2D blip = TextureAssets.ColorBlip.Value;
+        Texture2D slider = TextureAssets.ColorSlider.Value; //80 range with offset 3
 
         private List<Color> _blipColourList;
 
@@ -61,14 +62,14 @@ namespace Expeditions.UI
             _blipColourList = new List<Color>();
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             _dragging = true;
         }
-        public override void MouseUp(UIMouseEvent evt)
+        public override void LeftMouseUp(UIMouseEvent evt)
         {
-            base.MouseUp(evt);
+            base.LeftMouseUp(evt);
             _dragging = false;
         }
 
@@ -100,9 +101,9 @@ namespace Expeditions.UI
             Color c;
             for (int i = 0; i < range + 1; i++)
             {
-                try { c = _blipColourList[i]; }
-                catch { c = Color.LightSlateGray; }
-                if (i == _dailyColour && _dailyColour >= 0) c = UIColour.Expert;
+				c = i < _blipColourList.Count ? _blipColourList[i] : Color.LightSlateGray;
+
+				if (i == _dailyColour && _dailyColour >= 0) c = UIColour.Expert;
                 spriteBatch.Draw(blip, pos + new Vector2(8f + (160f / range) * i, 8f), blip.Bounds, c);
             }
 

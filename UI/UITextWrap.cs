@@ -2,8 +2,9 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.UI;
+using Terraria.GameContent;
 
-namespace Expeditions.UI
+namespace Expeditions144.UI
 {
     public class UITextWrap : UIElement
     {
@@ -20,7 +21,7 @@ namespace Expeditions.UI
             {
                 if (_text == "") return 0;
                 int noOfLines = 0;
-                string[] array = Utils.WordwrapString(_text, Main.fontMouseText, _maxWidth, _maxLines, out noOfLines);
+                string[] array = Utils.WordwrapString(_text, FontAssets.MouseText.Value, _maxWidth, _maxLines, out noOfLines);
                 noOfLines++;
                 return noOfLines * 30;
             }
@@ -41,7 +42,7 @@ namespace Expeditions.UI
         }
         public void SetText(string text)
         {
-            Vector2 vector = new Vector2(Main.fontMouseText.MeasureString(text).X, 16f);
+            Vector2 vector = new Vector2(FontAssets.MouseText.Value.MeasureString(text).X, 16f);
             this._text = text;
             this.MinWidth.Set(vector.X + this.PaddingLeft + this.PaddingRight, 0f);
             this.MinHeight.Set(vector.Y + this.PaddingTop + this.PaddingBottom, 0f);
@@ -57,11 +58,11 @@ namespace Expeditions.UI
             CalculatedStyle dimensions = base.GetDimensions();
             Vector2 pos = dimensions.Position();
             float offsetX = 0;
-            if (_centred) offsetX = Main.fontMouseText.MeasureString(_text).X * 0.5f;
+            if (_centred) offsetX = FontAssets.MouseText.Value.MeasureString(_text).X * 0.5f;
 
             //calculate wordwrap of text
             int noOfLines = 0;
-            string[] array = Utils.WordwrapString(_text, Main.fontMouseText, _maxWidth, _maxLines, out noOfLines);
+            string[] array = Utils.WordwrapString(_text, FontAssets.MouseText.Value, _maxWidth, _maxLines, out noOfLines);
             noOfLines++;
 
             float colMod = (Main.mouseTextColor / 255f);
@@ -74,7 +75,7 @@ namespace Expeditions.UI
             //draw each line of text
             for (int i = 0; i < noOfLines; i++)
             {
-                Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, array[i], (int)(pos.X - offsetX), (int)(pos.Y + i * 30), textColor, _borderColour, Vector2.Zero, 1f);
+                Utils.DrawBorderStringFourWay(Main.spriteBatch, FontAssets.MouseText.Value, array[i], (int)(pos.X - offsetX), (int)(pos.Y + i * 30), textColor, _borderColour, Vector2.Zero, 1f);
             }
         }
     }

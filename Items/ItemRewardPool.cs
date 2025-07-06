@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 
-namespace Expeditions.Items
+namespace Expeditions144.Items
 {
     public static class ItemRewardPool
     {
@@ -19,13 +20,13 @@ namespace Expeditions.Items
             resourceRewards = new List<int>();
 
             Item item;
-            for (int i = 0; i < Main.itemTexture.Length; i++)
+            for (int i = 0; i < TextureAssets.Item.Length; i++)
             {
                 try
                 {
                     item = new Item();
                     item.SetDefaults(i);
-                    try { item.modItem.SetDefaults(); } catch { }
+                    try { item.ModItem.SetDefaults(); } catch { }
                     if (item.pick > 0 || // No picks
                         (item.Name.Contains("Key") || Lang.GetItemName(i).Value.Contains("Key")) || // No "keys"
                         item.expert // No "experts" since boss only
@@ -37,8 +38,8 @@ namespace Expeditions.Items
 
                     if (
                             ( // Is a weapon
-                            (item.melee || item.ranged || item.magic || item.summon || item.thrown)
-                            && item.damage > 0
+                            /****(item.melee || item.ranged || item.magic || item.summon || item.thrown)*/ !item.accessory
+							&& item.damage > 0
                             && item.ammo == AmmoID.None
                             )
                         ||
@@ -121,23 +122,25 @@ namespace Expeditions.Items
             if (mainRewards.Count > 0)
             {
                 int mainReward = ItemID.CopperShortsword;
-                item = new Item();
+				/****item = new Item();
                 item.SetDefaults(mainReward);
-                try { item.modItem.SetDefaults(); } catch { }
+                try { item.ModItem.SetDefaults(); } catch { }*/
+				item = new Item(mainReward);
 
-                // Limit by rare
-                bool goForTopTier = Main.rand.Next(3) == 0; // 33% chance of going for top rare
+				// Limit by rare
+				bool goForTopTier = Main.rand.Next(3) == 0; // 33% chance of going for top rare
                 bool goForHighTier = Main.rand.Next(2) == 0; // 50% chance of going for good rare
 
                 // Try random 511 times
                 for (int i = 0; i < 511; i++)
                 {
                     mainReward = mainRewards[Main.rand.Next(mainRewards.Count)];
-                    item = new Item();
+					item = new Item(mainReward);
+					/****item = new Item();
                     item.SetDefaults(mainReward);
-                    try { item.modItem.SetDefaults(); } catch { }
+                    try { item.modItem.SetDefaults(); } catch { }*/
 
-                    int lowRare = 0;
+					int lowRare = 0;
                     if (goForTopTier) lowRare = rare; // Only the best
                     if (goForHighTier) lowRare = rare - 2; // The good stuff
                     if (goForTopTier && goForHighTier) lowRare = rare - 1; //If both, give leeway
@@ -202,20 +205,22 @@ namespace Expeditions.Items
                 int i = 0;
                 while (i < sideRareCount)
                 {
-                    item = new Item();
+					/***item = new Item();
                     item.SetDefaults(sideReward);
-                    try { item.modItem.SetDefaults(); } catch { }
+                    try { item.modItem.SetDefaults(); } catch { }*/
+					item = new Item(sideReward);
                     
                     // Try random 511 times
                     for (int j = 0; j < 511; j++)
                     {
                         sideReward = resourceRewards[Main.rand.Next(resourceRewards.Count)];
-                        item = new Item();
+						/****item = new Item();
                         item.SetDefaults(sideReward);
-                        try { item.modItem.SetDefaults(); } catch { }
+                        try { item.modItem.SetDefaults(); } catch { }*/
+						item = new Item(sideReward);
 
-                        // No items above this value in prehard (eg. wizard and pirate items)
-                        if (item.value > Item.buyPrice(0, 4) && !Main.hardMode) continue;
+						// No items above this value in prehard (eg. wizard and pirate items)
+						if (item.value > Item.buyPrice(0, 4) && !Main.hardMode) continue;
 
                         // No super rares, or hardmode (3) in prehard
                         if (item.rare <= rare && rare >= 0)

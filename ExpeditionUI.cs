@@ -7,11 +7,14 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using Expeditions.UI;
+using Expeditions144.UI;
 
 using System.Linq;
+using Terraria.GameContent;
+using ReLogic.Content;
+using Terraria.Audio;
 
-namespace Expeditions
+namespace Expeditions144
 {
     /// <summary>
     /// See the API class. Do not use unless you know precisely what you're doing.
@@ -66,7 +69,7 @@ namespace Expeditions
 
         public override void OnInitialize()
         {
-            filterList = new List<ModExpedition>(Expeditions.GetExpeditionsList());
+            filterList = new List<ModExpedition>(Expeditions144.GetExpeditionsList());
             sortedList = new List<ModExpedition>(filterList);
 
             _navigationPanel = new UIPanel();
@@ -84,21 +87,22 @@ namespace Expeditions
             _scrollBar = new UIValueBar(0, sortedList.Count);
             _scrollBar.Left.Set(40, 0f);
             _scrollBar.Top.Set(50, 0f);
-            _scrollBar.OnMouseUp += new MouseEvent(UpdateIndex);
+            _scrollBar.OnLeftMouseUp += (evt, element) => this.UpdateIndex(evt, element);
 
             // Append (in reverse order)
-            AppendTextButton("o", 16, 52, new MouseEvent(SideTrackerToggle));
-            AppendTextButton("Close", 16, 16, new MouseEvent(CloseButtonClicked));
-            AppendTextButton("Next", 200, 16, new MouseEvent(IncrementIndexClick));
-            AppendTextButton("Prev", 80, 16, new MouseEvent(DecrementIndexClick));
+            
             _navigationPanel.Append(_scrollBar);
             AppendCategoryButtonsLine1(_navPanelWidth - 150, 10);
             AppendCategoryButtonsLine2(_navPanelWidth - 150, 46);
-            _indexText = AppendText("000/000", 156, 16, Color.White, true);
+			AppendTextButton("x", 16, 52, (evt, element) => this.SideTrackerToggle(evt, element)); // **** changed to "x" to indicate what the current state probably is
+			AppendTextButton("Close", 16, 16, (evt, element) => this.CloseButtonClicked(evt, element));
+			AppendTextButton("Next", 200, 16, (evt, element) => this.IncrementIndexClick(evt, element));
+			AppendTextButton("Prev", 80, 16, (evt, element) => this.DecrementIndexClick(evt, element));
+			_indexText = AppendText("000/000", 156, 16, Color.White, true);
             base.Append(_navigationPanel);
 
-            //#########################################################################
-            _expeditionPanel = new UIPanel();
+			//#########################################################################
+			_expeditionPanel = new UIPanel();
             _expeditionPanel.SetPadding(0);
             _expeditionPanel.Left.Set(30, 0);
             _expeditionPanel.Top.Set(_navigationPanel.Top.Pixels + _navigationPanel.Height.Pixels + 4, 0);
@@ -107,8 +111,8 @@ namespace Expeditions
             _expeditionPanel.BackgroundColor = UIColour.backgroundColour;
             _expeditionPanel.BorderColor = UIColour.borderColour;
 
-            _expeditionPanel.OnMouseDown += new UIElement.MouseEvent(DragStart);
-            _expeditionPanel.OnMouseUp += new UIElement.MouseEvent(DragEnd);
+            _expeditionPanel.OnLeftMouseDown += new UIElement.MouseEvent(DragStart);
+            _expeditionPanel.OnLeftMouseUp += new UIElement.MouseEvent(DragEnd);
             _expeditionPanel.OnScrollWheel += new UIElement.ScrollWheelEvent(ScrollWindow);
 
             _deliverableSlots = new UIItemSlots(7);
@@ -121,12 +125,12 @@ namespace Expeditions
             _rewardSlots.Top.Set(8, 0);
             _rewardSlots.Width.Set(_expPanelWidth - 20, 0);
             
-            _headImage = new UIImageButton(Main.npcHeadTexture[0]);
+            _headImage = new UIImageButton(TextureAssets.NpcHead[0]);
             _headImage.Left.Set(_expPanelWidth - 42, 0);
             _headImage.Top.Set(10, 0);
 
             _headImage.OnMouseOut += new MouseEvent(NPCHeadMouseOut);
-            _headImage.OnClick += new MouseEvent(NPCHeadClicked);
+            _headImage.OnLeftClick += new MouseEvent(NPCHeadClicked);
 
             Color invis = new Color(0, 0, 0, 0);
             _titleHeader = AppendTextPan2("Title", _expPanelWidth/2, 16, Color.White, Color.Black, true);
@@ -168,18 +172,20 @@ namespace Expeditions
 
         private void AppendTextButton(string text, float x, float y, MouseEvent evt)
         {
-            UITextButton textButton = new UITextButton(text, 1, false);
+			Vector2 textDims = FontAssets.MouseText.Value.MeasureString(text);
+			UITextButton textButton = new UITextButton(text, 1, false);
             textButton.Left.Set(x, 0f);
             textButton.Top.Set(y, 0f);
-            textButton.OnMouseDown += evt;
-            _navigationPanel.Append(textButton);
+			textButton.OnLeftMouseDown += evt;
+
+			_navigationPanel.Append(textButton);
         }
         private UITextButton AppendTextButtonPan2(string text, float x, float y, MouseEvent evt)
         {
             UITextButton textButton = new UITextButton(text, 1, false);
             textButton.Left.Set(x, 0f);
             textButton.Top.Set(y, 0f);
-            textButton.OnMouseDown += evt;
+            textButton.OnLeftMouseDown += evt;
             _expeditionPanel.Append(textButton);
             return textButton;
         }
@@ -207,13 +213,14 @@ namespace Expeditions
             uIElement.Width.Set(0f, 1f);
             uIElement.Height.Set(32f, 0f);
             uIElement.Top.Set(y, 0f);
-            Texture2D texture = ModLoader.GetTexture("Terraria/UI/Achievement_Categories");
+			//**** why is the x not set?
+            Asset<Texture2D> texture = ModContent.Request<Texture2D>("Terraria/Images/UI/Achievement_Categories");
             for (int j = 0; j < 4; j++)
             {
                 UIToggleImage uIToggleImage = new UIToggleImage(texture, 32, 32, new Point(34 * j, 0), new Point(34 * j, 34));
                 uIToggleImage.Left.Set((float)(j * 36 + x), 0f);
                 uIToggleImage.SetState(true);
-                uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
+                uIToggleImage.OnLeftClick += this.FilterList;
                 this._categoryButtons.Add(uIToggleImage);
                 uIElement.Append(uIToggleImage);
             }
@@ -225,7 +232,8 @@ namespace Expeditions
             uIElement.Width.Set(0f, 1f);
             uIElement.Height.Set(32f, 0f);
             uIElement.Top.Set(y, 0f);
-            Texture2D texture = Expeditions.sortingTexture;
+			//**** why is the x not set?
+			Asset<Texture2D> texture = Expeditions144.sortingTexture;
             for (int j = 0; j < 4; j++)
             {
                 UIToggleImage uIToggleImage = new UIToggleImage(texture, 32, 32, new Point(34 * j, 0), new Point(34 * j, 34));
@@ -235,16 +243,16 @@ namespace Expeditions
                 {
                     if (uIToggleImage.IsOn)
                     {
-                        uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortDifficulty);
+                        uIToggleImage.OnLeftClick += new UIElement.MouseEvent(this.SortDifficulty);
                     }
                     else
                     {
-                        uIToggleImage.OnClick += new UIElement.MouseEvent(this.SortAlphabetical);
+                        uIToggleImage.OnLeftClick += new UIElement.MouseEvent(this.SortAlphabetical);
                     }
                 }
                 else
                 {
-                    uIToggleImage.OnClick += new UIElement.MouseEvent(this.FilterList);
+                    uIToggleImage.OnLeftClick += new UIElement.MouseEvent(this.FilterList);
                 }
                 this._categoryButtons.Add(uIToggleImage);
                 uIElement.Append(uIToggleImage);
@@ -254,7 +262,7 @@ namespace Expeditions
 
         public static void DrawItemSlot(SpriteBatch spriteBatch, Item item, float x, float y, int Context)
         {
-            if (Main.mouseX >= x && (float)Main.mouseX <= (float)x + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= y && (float)Main.mouseY <= (float)y + (float)Main.inventoryBackTexture.Height * Main.inventoryScale)
+            if (Main.mouseX >= x && (float)Main.mouseX <= (float)x + (float)TextureAssets.InventoryBack.Value.Width * Main.inventoryScale && Main.mouseY >= y && (float)Main.mouseY <= (float)y + (float)TextureAssets.InventoryBack.Value.Height * Main.inventoryScale)
             {
                 Main.LocalPlayer.mouseInterface = true;
                 ItemSlot.MouseHover(ref item, Context);
@@ -286,20 +294,28 @@ namespace Expeditions
             TrackerUI.visible = !TrackerUI.visible;
             if(TrackerUI.visible)
             {
-                Main.PlaySound(SoundID.MenuOpen);
+                SoundEngine.PlaySound(SoundID.MenuOpen);
             }
             else
             {
-                Main.PlaySound(SoundID.MenuClose);
+				SoundEngine.PlaySound(SoundID.MenuClose);
                 TrackerUI.textAlpha = 0;
             }
-        }
+
+			// **** added this to indicate the current state
+			((UITextButton)listeningElement).SetText(TrackerUI.visible ? "x" : "o");
+
+		}
 
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.PlaySound(SoundID.MenuClose);
+			SoundEngine.PlaySound(SoundID.MenuClose);
             visible = false;
-        }
+			//**** port: Makes closing the menu opened by the NPC close the interaction as well
+			if (viewMode == ExpeditionUI.viewMode_NPC)
+				Main.LocalPlayer.SetTalkNPC(0);
+			//****
+		}
 
         private void FilterList(UIMouseEvent evt, UIElement listeningElement)
         {
@@ -334,8 +350,8 @@ namespace Expeditions
             if (_filterByHead > 0 || currentME == null) _filterByHead = 0;
             else _filterByHead = currentME.expedition.npcHead;
 
-            // Tick
-            Main.PlaySound(SoundID.MenuTick);
+			// Tick
+			SoundEngine.PlaySound(SoundID.MenuTick);
 
             _headImage.Deactivate();
 
@@ -353,7 +369,7 @@ namespace Expeditions
             {
                 currentME.expedition.ToggleTrackingActive();
                 TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
-                Main.PlaySound(SoundID.MenuTick);
+				SoundEngine.PlaySound(SoundID.MenuTick);
             }
             //UpdateIndex();
         }
@@ -363,19 +379,19 @@ namespace Expeditions
             if(currentME == null)
             {
                 //huh
-                Main.NewText("this shouldn't happen... (" + Expeditions.GetExpeditionsList().Count + ")", new Color(1,0,0));
-                Main.PlaySound(SoundID.Camera);
+                Main.NewText("this shouldn't happen... (" + Expeditions144.GetExpeditionsList().Count + ")", new Color(1,0,0));
+				SoundEngine.PlaySound(SoundID.Camera);
                 return;
             }
             if (!previewMode &&
                 (currentME.expedition.ConditionsMet()))
             {
                 currentME.expedition.CompleteExpedition(false);
-                Main.PlaySound(SoundID.MenuTick);
+				SoundEngine.PlaySound(SoundID.MenuTick);
             }
             else
             {
-                Main.PlaySound(SoundID.Unlock);
+				SoundEngine.PlaySound(SoundID.Unlock);
             }
         }
 
@@ -394,7 +410,7 @@ namespace Expeditions
             if (_scrollBar.Value > 0)
             {
                 float yBottom = 0;
-                _titleHeader.SetText(currentME.expedition.name + (currentME.expedition.completed ? " (Completed)" : "") + (Expeditions.DEBUG?" #"+Expedition.GetHashID(currentME.expedition).ToString("X"):""));
+                _titleHeader.SetText(currentME.expedition.name + (currentME.expedition.completed ? " (Completed)" : "") + (Expeditions144.DEBUG?" #"+Expedition.GetHashID(currentME.expedition).ToString("X"):""));
                 yBottom += _titleHeader.TextHeight + 10;
 
                 try
@@ -402,16 +418,16 @@ namespace Expeditions
                     if (currentME.expedition.npcHead > 0)
                     {
                         // Note: Texture height/width clickbox seems bugged until the appropriate NPC is loaded
-                        _headImage.SetImage(Main.npcHeadTexture[currentME.expedition.npcHead]);
+                        _headImage.SetImage(TextureAssets.NpcHead[currentME.expedition.npcHead]);
                     }
                     else
                     {
-                        _headImage.SetImage(Expeditions.bountyBoardTexture);
+                        _headImage.SetImage(Expeditions144.bountyBoardTexture);
                     }
                 }
                 catch (Exception e) // On a fail, we'll just default to unknown
                 {
-                    _headImage.SetImage(Expeditions.bountyBoardTexture);
+                    _headImage.SetImage(Expeditions144.bountyBoardTexture);
                 }
                 _headImage.Recalculate();
 
@@ -492,7 +508,7 @@ namespace Expeditions
             else
             {
                 _titleHeader.SetText("No Expeditions Posted");
-                _headImage.SetImage(Expeditions.bountyBoardTexture);
+                _headImage.SetImage(Expeditions144.bountyBoardTexture);
                 _description.SetText("");
                 _conditionHeader.SetText("");
                 _conditionsDesc.SetText("");
@@ -520,7 +536,7 @@ namespace Expeditions
         {
             try
             {
-                if (Expeditions.DEBUG) Main.NewText("#Recalculating");
+                if (Expeditions144.DEBUG) Main.NewText("#Recalculating");
 
                 // Save current expedition
                 ModExpedition meBeforeSort = currentME;
@@ -530,7 +546,7 @@ namespace Expeditions
                 sortedList.Clear();
 
                 int anyMatch = 0;
-                foreach (ModExpedition current in Expeditions.GetExpeditionsList())
+                foreach (ModExpedition current in Expeditions144.GetExpeditionsList())
                 {
                     Expedition e = current.expedition;
                     anyMatch = 0;
@@ -731,7 +747,7 @@ namespace Expeditions
                             text = "None";
                             break;
                     }
-                    float x = Main.fontMouseText.MeasureString(text).X;
+                    float x = FontAssets.MouseText.Value.MeasureString(text).X;
                     Vector2 vector = new Vector2((float)Main.mouseX, (float)Main.mouseY) + new Vector2(16f);
                     if (vector.Y > (float)(Main.screenHeight - 30))
                     {
@@ -741,7 +757,7 @@ namespace Expeditions
                     {
                         vector.X = (float)(Main.screenWidth - 460);
                     }
-                    Utils.DrawBorderStringFourWay(spriteBatch, Main.fontMouseText, text, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
+                    Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, text, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
                     return;
                 }
             }

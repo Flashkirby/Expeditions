@@ -5,8 +5,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.Audio;
 
-namespace Expeditions
+namespace Expeditions144
 {
     /// <summary>
     /// Class that holds all the important data for expeditions.
@@ -143,7 +144,7 @@ namespace Expeditions
             if (trackCondition && !checkConditions) { trackCondition = false; }
 
             // tracker
-            bool showText = Expeditions.ShowTrackingText;
+            bool showText = Expeditions144.ShowTrackingText;
             if (trackingActive)
             {
                 // Apply green colour to gains
@@ -170,7 +171,7 @@ namespace Expeditions
                 }
                 if (!meetc && conditionDescriptionCountable != "")
                 {
-                    if (Expeditions.DEBUG && conditionCountedMax > 0 && conditionCounted > 0) Main.NewText(conditionCounted + " from " + lastCounted);
+                    if (Expeditions144.DEBUG && conditionCountedMax > 0 && conditionCounted > 0) Main.NewText(conditionCounted + " from " + lastCounted);
                     if (conditionCounted >= conditionCountedMax)
                     {
                         if (showText)
@@ -313,10 +314,10 @@ namespace Expeditions
             {
                 if (WorldExplore.IsCurrentDaily(this))
                 {
-                    Expeditions.DisplayUnlockedExpedition(this, "Daily Expedition: ");
+                    Expeditions144.DisplayUnlockedExpedition(this, "Daily Expedition: ");
                 } else
                 {
-                    Expeditions.DisplayUnlockedExpedition(this);
+                    Expeditions144.DisplayUnlockedExpedition(this);
                 }
             }
 
@@ -350,7 +351,7 @@ namespace Expeditions
                 {
                     if (countedStack[i] < requiredStack[i]) // Player doesn't have enough of an item
                     {
-                        // if (Expeditions.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
+                        // if (Expeditions144.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
                         return false;
                     }
                 }
@@ -432,9 +433,9 @@ namespace Expeditions
                 // Check if this is a shared expedition on a multiplayer server
                 if (partyShare && Main.netMode == 1 && mex != null)
                 {
-                    if (Expeditions.DEBUG) Main.NewText("#sending");
+                    if (Expeditions144.DEBUG) Main.NewText("#sending");
                     // Send net message and return early without running the rest of the code
-                    Expeditions.SendNet_PartyComplete(
+                    Expeditions144.SendNet_PartyComplete(
                         this.mex.mod,
                         Main.LocalPlayer.team,
                         this.mex);
@@ -442,7 +443,7 @@ namespace Expeditions
                 }
             }
 
-            if (Expeditions.DEBUG) Main.NewText("#complete repeat");
+            if (Expeditions144.DEBUG) Main.NewText("#complete repeat");
             // What if I receive this from someone else who hasn't finished it yet?
             if (completed && !repeatable) return;
 
@@ -482,17 +483,17 @@ namespace Expeditions
             // grant items
             foreach (Item item in tempRewards)
             {
-                Expeditions.ClientNetSpawnItem(item);
+                Expeditions144.ClientNetSpawnItem(item);
             }
 
-            if (Expeditions.DEBUG) Main.NewText("#compelte quest");
-            //complete this
-            Main.PlaySound(24, -1, -1, 1);
+            if (Expeditions144.DEBUG) Main.NewText("#compelte quest");
+			//complete this
+			SoundEngine.PlaySound(SoundID.Chat);
             if (!repeatable || (repeatable && !completed))
             {
                 Main.NewText("Expeditions: '" + name + "' completed!", textColour.R, textColour.G, textColour.B);
                 Player p = Main.LocalPlayer;
-                Projectile.NewProjectile(p.Center, new Vector2(0f, -6f), ProjectileID.RocketFireworkBlue, 0, 0f, p.whoAmI);
+                Projectile.NewProjectile(p.GetSource_FromThis("Expeditions_CompleteThis"), p.Center, new Vector2(0f, -6f), ProjectileID.RocketFireworkBlue, 0, 0f, p.whoAmI);
                 TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
             }
             else
@@ -501,7 +502,7 @@ namespace Expeditions
                 TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
             }
 
-            if (Expeditions.DEBUG) Main.NewText("#set progress");
+            if (Expeditions144.DEBUG) Main.NewText("#set progress");
             if (!repeatable)
             {
                 // Save conditions used to finish, on 1 time expeditions
@@ -517,14 +518,14 @@ namespace Expeditions
             }
             completed = true;
 
-            if (Expeditions.DEBUG) Main.NewText("#postcomplete, complete = " + completed);
+            if (Expeditions144.DEBUG) Main.NewText("#postcomplete, complete = " + completed);
             // check mod hook
             mex.PostCompleteExpedition();
             
             // Force the expeditions list to recalculate in this instance
             if (ExpeditionUI.visible)
             {
-                Expeditions.expeditionUI.ListRecalculate();
+                Expeditions144.expeditionUI.ListRecalculate();
             }
         }
         
@@ -573,7 +574,7 @@ namespace Expeditions
             rewards.Clear();
             oneTimeRewards.Clear();
 
-            PlayerExplorer.dbgmsg += "\n" + WorldGen.GoldTierOre + " | " + TileID.Gold + " : " + WorldGen.oreTier1 + " | " + TileID.Cobalt;
+            PlayerExplorer.dbgmsg += "\n" /****+ WorldGen.GoldTierOre*/ + " | " + TileID.Gold + " : " /****+ WorldGen.oreTier1*/ + " | " + TileID.Cobalt;
 
             if (mex != null)
             {
@@ -618,7 +619,7 @@ namespace Expeditions
         /// <param name="stack"></param>
         public void AddDeliverable(ModItem moditem, int stack)
         {
-            AddDeliverable(moditem.item.type, stack);
+            AddDeliverable(moditem.Item.type, stack);
         }
 
         /// <summary>
@@ -775,7 +776,7 @@ namespace Expeditions
         /// <param name="moditem"></param>
         public void AddReward(ModItem moditem)
         {
-            AddReward(moditem.item);
+            AddReward(moditem.Item);
         }
 
         /// <summary>
@@ -792,7 +793,7 @@ namespace Expeditions
         /// <param name="item"></param>
         public void AddRewardOnce(ModItem moditem)
         {
-            oneTimeRewards.Add(moditem.item);
+            oneTimeRewards.Add(moditem.Item);
         }
 
         /// <summary>

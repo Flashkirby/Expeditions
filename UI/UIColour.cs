@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace Expeditions.UI
+namespace Expeditions144.UI
 {
     public class UIColour
     {

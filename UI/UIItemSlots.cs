@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.UI;
 
-namespace Expeditions.UI
+namespace Expeditions144.UI
 {
 
     /// <summary>

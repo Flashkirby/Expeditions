@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Expeditions
+namespace Expeditions144
 {
     public class PlayerExplorer : ModPlayer
     {
@@ -32,19 +33,16 @@ namespace Expeditions
         // v9.0.1 bug calls this method in multiplayer
         public override void Initialize()
         {
-            itemContains = new bool[Main.itemTexture.Length];
+            itemContains = new bool[TextureAssets.Item.Length];
         }
 
         // Called on exiting world and on death
-        public override TagCompound Save()
+        public override void SaveData(TagCompound tag)
         {
-            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Saving...");
-
-            //the tag to save
-            TagCompound tag = new TagCompound();
+            if (Expeditions144.DEBUG) Main.NewText("Expeditions PE: Saving...");
 
             // Get the current expedition list
-            List<ModExpedition> expeditions = Expeditions.GetExpeditionsList();
+            List<ModExpedition> expeditions = Expeditions144.GetExpeditionsList();
 
             // If 'O-K-0' is held
             bool resetProgress =
@@ -56,7 +54,7 @@ namespace Expeditions
 
             List<ProgressData> saveData = new List<ProgressData>();
             
-            if (Expeditions.DEBUG) svmsg += "\n" + player.name + " : Save";
+            if (Expeditions144.DEBUG) svmsg += "\n" + Player.name + " : Save";
             if (!resetProgress && expeditions != null)
             {
                 // Save expedition progress
@@ -79,7 +77,7 @@ namespace Expeditions
                     ConvertProgressToTag(tag, saveData);
                 }catch(Exception e)
                 {
-                    ErrorLogger.Log("Expeditions: " + e.ToString());
+                    Mod.Logger.Error("Expeditions: " + e.ToString());
                 }
             }
 
@@ -88,11 +86,10 @@ namespace Expeditions
                 // If leaving the game, reset the expeditions list 
                 // so it isn't copied when new players are created. 
                 //I don't even know how this works...
-                Expeditions.ResetExpeditions();
+                Expeditions144.ResetExpeditions();
             }
 
-            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Save complete, expeditions cleared");
-            return tag;
+            if (Expeditions144.DEBUG) Main.NewText("Expeditions PE: Save complete, expeditions cleared");
         }
 
         private static void ConvertProgressToTag(TagCompound tag, List<ProgressData> saveData)
@@ -105,7 +102,7 @@ namespace Expeditions
             // Add all values to arrays
             foreach (ProgressData pd in saveData)
             {
-                if (Expeditions.DEBUG) svmsg += pd.completed ? ":" : ".";
+                if (Expeditions144.DEBUG) svmsg += pd.completed ? ":" : ".";
                 h.Add(pd.hash);
                 c.Add(new BitsByte(
                     pd.completed,
@@ -122,10 +119,10 @@ namespace Expeditions
         }
 
         // Called at player select screen
-        public override void Load(TagCompound tag)
+        public override void LoadData(TagCompound tag)
         {
-            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Loading...");
-            if (Expeditions.DEBUG) svmsg += "\n" + player.name + " : Load";
+            if (Expeditions144.DEBUG) Main.NewText("Expeditions PE: Loading...");
+            if (Expeditions144.DEBUG) svmsg += "\n" + Player.name + " : Load";
 
             List<ProgressData> progress = ConvertTagToProgress(tag);
 
@@ -136,20 +133,20 @@ namespace Expeditions
                 _orphanData = new List<ProgressData>();
 
                 // Create carbon copy of loaded expedition list
-                for (int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
+                for (int i = 0; i < Expeditions144.GetExpeditionsList().Count; i++)
                 {
                     _savedProgressList.Add(new ProgressData(0, false, false, false, false, false, 0));
                 }
 
                 // Find hash matches and add progress
-                for (int i = 0; i < Expeditions.GetExpeditionsList().Count; i++)
+                for (int i = 0; i < Expeditions144.GetExpeditionsList().Count; i++)
                 {
-                    Expedition e = Expeditions.GetExpeditionsList()[i].expedition;
+                    Expedition e = Expeditions144.GetExpeditionsList()[i].expedition;
                     foreach (ProgressData pd in progress)
                     {
                         if(pd.hash == Expedition.GetHashID(e))
                         {
-                            if (Expeditions.DEBUG) svmsg += e.completed ? ":" : ".";
+                            if (Expeditions144.DEBUG) svmsg += e.completed ? ":" : ".";
                             _savedProgressList[i] = pd;
 
                             // Remove from the list after use
@@ -164,13 +161,13 @@ namespace Expeditions
                 {
                     foreach(ProgressData pd in progress)
                     {
-                        if (Expeditions.DEBUG) svmsg += pd.completed ? "`" : "`";
+                        if (Expeditions144.DEBUG) svmsg += pd.completed ? "`" : "`";
                         _orphanData.Add(pd);
                     }
                 }
             }
-            if (Expeditions.DEBUG) svmsg += " c:" + progress.Count;
-            if (Expeditions.DEBUG) Main.NewText("Expeditions PE: Load complete, expeditions set");
+            if (Expeditions144.DEBUG) svmsg += " c:" + progress.Count;
+            if (Expeditions144.DEBUG) Main.NewText("Expeditions PE: Load complete, expeditions set");
         }
 
         private static List<ProgressData> ConvertTagToProgress(TagCompound tag)
@@ -179,7 +176,7 @@ namespace Expeditions
             IList<int> h = tag.GetList<int>("ProgressData.hash");
             IList<byte> c = tag.GetList<byte>("ProgressData.bools");
             IList<int> cc = tag.GetList<int>("ProgressData.condCount");
-            if (Expeditions.DEBUG) svmsg += " L:" + h.Count + "'" + c.Count + "'" + cc.Count;
+            if (Expeditions144.DEBUG) svmsg += " L:" + h.Count + "'" + c.Count + "'" + cc.Count;
             for (int i = 0; i < h.Count; i++)
             {
                 BitsByte bb = c[i];
@@ -193,36 +190,36 @@ namespace Expeditions
         
         internal void CopyLocalExpeditionsToMain()
         {
-            if (Main.netMode != 2 && player.whoAmI == Main.myPlayer)
+            if (Main.netMode != 2 && Player.whoAmI == Main.myPlayer)
             {
-                if (Expeditions.DEBUG) { dbgmsg += "\n" + player.name + " set Expeditions"; }
-                Expeditions.ResetExpeditions();
+                if (Expeditions144.DEBUG) { dbgmsg += "\n" + Player.name + " set Expeditions"; }
+                Expeditions144.ResetExpeditions();
                 if (_savedProgressList != null)
                 {
-                    if (Expeditions.DEBUG) Main.NewText("Expeditions: Loading progress to list, counted " + _savedProgressList.Count);
+                    if (Expeditions144.DEBUG) Main.NewText("Expeditions: Loading progress to list, counted " + _savedProgressList.Count);
                     // Set the expeditions to use this list
                     for (int i = 0; i < _savedProgressList.Count; i++)
                     {
-                        //Expeditions.GetExpeditionsList()[i].expedition.CopyProgress(
+                        //Expeditions144.GetExpeditionsList()[i].expedition.CopyProgress(
                         //    _localExpeditionList[i]);
-                        Expeditions.GetExpeditionsList()[i].expedition.CopyProgress(
+                        Expeditions144.GetExpeditionsList()[i].expedition.CopyProgress(
                             _savedProgressList[i].ToExpedition());
 
-                        dbgmsg += "(" + Expeditions.GetExpeditionsList()[i].expedition.name
+                        dbgmsg += "(" + Expeditions144.GetExpeditionsList()[i].expedition.name
                             + (_savedProgressList[i].trackingActive ? "T-" : "n-")
-                            + (Expeditions.GetExpeditionsList()[i].expedition.trackingActive ? ">T" : ">n") + ")";
+                            + (Expeditions144.GetExpeditionsList()[i].expedition.trackingActive ? ">T" : ">n") + ")";
                     }
                 }
                 else
                 {
-                    if (Expeditions.DEBUG) Main.NewText("Expeditions: New player - null list");
+                    if (Expeditions144.DEBUG) Main.NewText("Expeditions: New player - null list");
                 }
             }
         }
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
-            if (Expeditions.DEBUG) Main.NewText("Expeditions: Enter World");
+            if (Expeditions144.DEBUG) Main.NewText("Expeditions: Enter World");
             if (Main.netMode != 2)
             {
                 // Set main list to loaded
@@ -235,33 +232,33 @@ namespace Expeditions
             }
 
             // Reset list items
-            Expeditions.WorldInit();
+            Expeditions144.WorldInit();
         }
 
         internal void RequestDailyQuest()
         {
-            Expeditions.SendNet_GetDaily(mod, player.whoAmI);
+            Expeditions144.SendNet_GetDaily(Mod, Player.whoAmI);
         }
 
         #endregion
 
         public override void ResetEffects()
         {
-            if (player.whoAmI == Main.myPlayer)
+            if (Player.whoAmI == Main.myPlayer)
             {
                 // Reset item contains
-                itemContains = new bool[Main.itemTexture.Length];
-                foreach (Item item in player.inventory)
+                itemContains = new bool[TextureAssets.Item.Length];
+                foreach (Item item in Player.inventory)
                 {
                     if (item == null) continue;
                     itemContains[item.type] = true;
                 }
-                foreach (Item item in player.armor)
+                foreach (Item item in Player.armor)
                 {
                     if (item == null) continue;
                     itemContains[item.type] = true;
                 }
-                foreach (Item item in player.miscEquips)
+                foreach (Item item in Player.miscEquips)
                 {
                     if (item == null) continue;
                     itemContains[item.type] = true;
@@ -271,13 +268,13 @@ namespace Expeditions
 
         public override void PostUpdate()
         {
-            if (player.whoAmI == Main.myPlayer)
+            if (Player.whoAmI == Main.myPlayer)
             {
                 if (ExpeditionUI.visible && ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile)
                 {
                     Rectangle tileRange = new Rectangle(
-                        (int)(player.Center.X - (float)(Player.tileRangeX * 16)),
-                        (int)(player.Center.Y - (float)(Player.tileRangeY * 16)),
+                        (int)(Player.Center.X - (float)(Player.tileRangeX * 16)),
+                        (int)(Player.Center.Y - (float)(Player.tileRangeY * 16)),
                         Player.tileRangeX * 16 * 2,
                         Player.tileRangeY * 16 * 2);
                     Rectangle boardRect = new Rectangle(
@@ -286,10 +283,10 @@ namespace Expeditions
                         4 * 16,
                         3 * 16
                         );
-                    if (Expeditions.DEBUG) Dust.NewDust(boardRect.TopLeft(), boardRect.Width, boardRect.Height, 175);
+                    if (Expeditions144.DEBUG) Dust.NewDust(boardRect.TopLeft(), boardRect.Width, boardRect.Height, 175);
                     if (!tileRange.Intersects(boardRect))
                     {
-                        Expeditions.CloseExpeditionMenu();
+                        Expeditions144.CloseExpeditionMenu();
                     }
                 }
             }
@@ -301,10 +298,10 @@ namespace Expeditions
             */
         }
 
-        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo info)
         {
-            if (player.whoAmI != Main.myPlayer) return;
-            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+            if (Player.whoAmI != Main.myPlayer) return;
+            foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
             {
                 me.OnCombatWithNPC(npc, true, Main.LocalPlayer,
                               ref me.expedition.condition1Met,

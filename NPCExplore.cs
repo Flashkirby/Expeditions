@@ -4,70 +4,86 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Expeditions
+namespace Expeditions144
 {
     public class NPCExplore : GlobalNPC
     {
         #region Shop
-        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        public override void ModifyActiveShop(NPC npc, String shopName, Item[] items)
         {
-            if (type == NPCID.Merchant) MerchantShop(shop, ref nextSlot);
-            if (type == NPCID.SkeletonMerchant) SkeletonMerchantShop(shop, ref nextSlot);
+			int nextSlot = 0;
+			for (; nextSlot < items.Length && items[nextSlot] != null && !items[nextSlot].IsAir; nextSlot++);
+			nextSlot++;
+
+			if (npc.type == NPCID.Merchant) MerchantShop(items, ref nextSlot);
+            if (npc.type == NPCID.SkeletonMerchant) SkeletonMerchantShop(items, ref nextSlot);
         }
 
-        public void MerchantShop(Chest shop, ref int nextSlot)
+        public void MerchantShop(Item[] items, ref int nextSlot)
         {
-            shop.item[nextSlot].SetDefaults(API.ItemIDExpeditionBook); nextSlot++;
+			if (nextSlot < items.Length)
+			{
+				items[nextSlot] = new Item(API.ItemIDExpeditionBook);
+				nextSlot++;
+			}
         }
-        public void SkeletonMerchantShop(Chest shop, ref int nextSlot)
+        public void SkeletonMerchantShop(Item[] items, ref int nextSlot)
         {
             if (Main.moonPhase % 2 == 0) //Alternate between selling the box and board
-            { API.AddShopItemVoucher(shop, ref nextSlot, API.ItemIDRustedBox, 1); }
+            { API.AddShopItemVoucher(items, ref nextSlot, API.ItemIDRustedBox, 1); }
             else
-            { shop.item[nextSlot].SetDefaults(API.ItemIDExpeditionBoard); nextSlot++; }
+            {
+				if (nextSlot < items.Length)
+				{
+					items[nextSlot] = new Item(API.ItemIDExpeditionBoard);
+					nextSlot++;
+				}
+			}
         }
 
-        internal static void AddVoucherPricedItem(Chest shop, ref int nextSlot, int itemID, int price)
+        internal static void AddVoucherPricedItem(Item[] shop, ref int nextSlot, int itemID, int price)
         {
             price = Math.Min(999,Math.Max(0, price));
 
-            shop.item[nextSlot].SetDefaults(itemID);
-            shop.item[nextSlot].shopCustomPrice = new int?(price);
-            shop.item[nextSlot].shopSpecialCurrency = Expeditions.currencyVoucherID;
+            shop[nextSlot] = new Item(itemID);
+            shop[nextSlot].shopCustomPrice = new int?(price);
+            shop[nextSlot].shopSpecialCurrency = Expeditions144.currencyVoucherID;
             nextSlot++;
         }
 
-        #endregion
+		#endregion
 
-        public override void OnHitByItem(NPC npc, Player player, Item item, int damage, float knockback, bool crit)
-        {
-            if (player.whoAmI != Main.myPlayer) return;
-            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
-            {
-                if (npc.life <= 0 || !npc.active)
-                { expKillNPC(me, npc); }
-                expCombatWithNPC(me, npc);
-            }
-        }
-        public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
-        {
-            if (projectile.owner != Main.myPlayer) return;
-            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
-            {
-                if (npc.life <= 0 || !npc.active)
-                { expKillNPC(me, npc); }
-                expCombatWithNPC(me, npc);
-            }
-        }
-        public override void NPCLoot(NPC npc)
-        {
-            foreach (ModExpedition me in Expeditions.GetExpeditionsList())
-            {
-                expAnyNPCDeath(me, npc);
-            }
-        }
+		public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
+		{
+			if (player.whoAmI != Main.myPlayer) return;
+			foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+			{
+				if (npc.life <= 0 || !npc.active)
+				{ expKillNPC(me, npc); }
+				expCombatWithNPC(me, npc);
+			}
+		}
 
-        private void expCombatWithNPC(ModExpedition me, NPC npc)
+		public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
+		{
+			if (projectile.owner != Main.myPlayer) return;
+			foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+			{
+				if (npc.life <= 0 || !npc.active)
+				{ expKillNPC(me, npc); }
+				expCombatWithNPC(me, npc);
+			}
+		}
+
+		public override void OnKill(NPC npc)
+		{
+			foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+			{
+				expAnyNPCDeath(me, npc);
+			}
+		}
+
+		private void expCombatWithNPC(ModExpedition me, NPC npc)
         {
             me.OnCombatWithNPC(npc, false, Main.LocalPlayer,
                           ref me.expedition.condition1Met,
