@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace Expeditions144.Items
+namespace Expeditions.Items
 {
     public class BountyBook : ModItem
     {
@@ -36,7 +36,7 @@ namespace Expeditions144.Items
         {
             if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) // **** added "player.ItemAnimationJustStarted" because it was needed, for some reason
 			{
-                Expeditions144.OpenExpeditionMenu(ExpeditionUI.viewMode_Menu);
+                Expeditions.OpenExpeditionMenu(ExpeditionUI.viewMode_Menu);
             }
             return null;
         }

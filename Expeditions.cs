@@ -11,25 +11,28 @@ using Terraria.ID;
 using Terraria.UI;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
-
-using Expeditions.Quests;
+using ReLogic.Content;
+using Expeditions.Items;
+using Terraria.ModLoader.Config;
+using System.ComponentModel;
+using Terraria.Audio;
+using Expeditions.Common.Configs;
 
 namespace Expeditions
 {
-    /// <summary>
-    /// See the API class. Do not use unless you know precisely what you're doing.
-    /// </summary>
-    public class Expeditions : Mod
+	/// <summary>
+	/// See the API class. Do not use unless you know precisely what you're doing.
+	/// </summary>
+	public class Expeditions : Mod
     {
         internal const bool DEBUG = false;
         // Use a boolean to check if the appropriate mod is loaded
         public bool LoadedFKTModSettings = false;
 
-        private UserInterface expeditionUserInterface;
+        internal UserInterface expeditionUserInterface;
         internal static ExpeditionUI expeditionUI;
 
-        private UserInterface trackerInterface;
+        /*private*/ internal static UserInterface trackerInterface; // *** added "static"
         internal static TrackerUI trackerUI;
 
         internal static bool ShowTrackingText = true;
@@ -41,8 +44,8 @@ namespace Expeditions
 
         internal static Dictionary<int, byte> checkedState;
 
-        internal static Texture2D sortingTexture;
-        internal static Texture2D bountyBoardTexture;
+        internal static Asset<Texture2D> sortingTexture;
+        internal static Asset<Texture2D> bountyBoardTexture;
 
         internal static int bookID;
         internal static int boardID;
@@ -54,12 +57,13 @@ namespace Expeditions
 
         public Expeditions()
         {
-            Properties = new ModProperties()
+			this.GoreAutoloadingEnabled = true;
+            /***Properties = new ModProperties()
             {
                 Autoload = true,
                 AutoloadGores = true,
                 AutoloadSounds = true
-            };
+            };*/
             // Reset list every time we reload
             expeditionTemplateList = new List<ModExpedition>();
             expeditionActiveList = new List<ModExpedition>();
@@ -72,8 +76,8 @@ namespace Expeditions
             // Load textures
             if (Main.netMode != 2)
             {
-                sortingTexture = GetTexture("UI/Sorting_Categories");
-                bountyBoardTexture = GetTexture("Items/BountyBoard");
+                sortingTexture = this.Assets.Request<Texture2D>("UI/Sorting_Categories");
+                bountyBoardTexture = this.Assets.Request< Texture2D >("Items/BountyBoard");
             }
 
             if (Main.netMode != 2)
@@ -89,11 +93,11 @@ namespace Expeditions
                 trackerInterface.SetState(trackerUI);
             }
 
-            bookID = ItemType("BountyBook");
-            boardID = ItemType("BountyBoard");
-            voucherID = ItemType("BountyVoucher");
-            stockBox1 = ItemType("StockBox");
-            stockBox2 = ItemType("StockBox2");
+            bookID = ModContent.ItemType<BountyBook>();
+            boardID = ModContent.ItemType<BountyBoard>();
+            voucherID = ModContent.ItemType<BountyVoucher>();
+            stockBox1 = ModContent.ItemType<StockBox>();
+            stockBox2 = ModContent.ItemType<StockBox2>();
 
             // Register the voucher as a new currency
             CustomCurrencySingleCoin c = new CustomCurrencySingleCoin(voucherID, 999L);
@@ -110,13 +114,13 @@ namespace Expeditions
                 //AddExpeditionToList(new HeaderTest(), this);
             }
 
-            LoadedFKTModSettings = ModLoader.GetMod("FKTModSettings") != null;
+            /***LoadedFKTModSettings = ModLoader.GetMod("FKTModSettings") != null;
             if (LoadedFKTModSettings)
             {
                 // Needs to be in a method otherwise it throws a namespace error
                 try { LoadModSettings(); }
                 catch { }
-            }
+            }*/
         }
         
         #region Autoload support
@@ -258,10 +262,10 @@ namespace Expeditions
             return FindExpedition(mod, typeof(T).Name);
         }
 
-        #endregion
+		#endregion
 
-        #region ModSettings Support
-        private void LoadModSettings()
+		#region ModSettings Support
+		/****private void LoadModSettings()
         {
             FKTModSettings.ModSetting setting = 
                 FKTModSettings.ModSettingsAPI.CreateModSettingConfig(this);
@@ -275,10 +279,13 @@ namespace Expeditions
             setting.AddFloat("trackerScale", "HUD Scale", 0.5f, 1f, false);
             setting.AddBool("autoShowEnabled", "Contextual HUD Enabled", false);
             setting.AddInt("autoShowHoldTime", "HUD Time (seconds/60)", 0, 300, false);
-        }
-        private void UpdateModSettings()
+		}*/
+
+
+		public static bool port_lastTrackerEnabled = false; //**** So you can toggle off the thing
+		internal void UpdateModSettings() // *** changed from "private" to "internal"
         {
-            FKTModSettings.ModSetting setting;
+			/*FKTModSettings.ModSetting setting;
             if (FKTModSettings.ModSettingsAPI.TryGetModSetting(this, out setting))
             {
                 setting.Get("newQuestPopup", ref enableUnlockDisplay);
@@ -289,8 +296,19 @@ namespace Expeditions
                 setting.Get("trackerScale", ref TrackerUI.textScale);
                 setting.Get("autoShowEnabled", ref TrackerUI.allowUpdateVisible);
                 setting.Get("autoShowHoldTime", ref TrackerUI.ChangeTickMax);
-            }
-        }
+            }*/
+			ExpeditionsConfig config = (ExpeditionsConfig)this.GetConfig("ExpeditionsConfig");
+
+			enableUnlockDisplay = config.newQuestPopup;
+			ShowTrackingText = config.chatTrackEnabled;
+			if (port_lastTrackerEnabled != config.trackerEnabled)
+				TrackerUI.visible = port_lastTrackerEnabled = config.trackerEnabled;
+			TrackerUI.permaVisAlpha = config.trackerAlphaByte;
+			TrackerUI.showDescription = config.trackerDescriptions;
+			TrackerUI.textScale = config.trackerScale;
+			TrackerUI.allowUpdateVisible = config.autoShowEnabled;
+			TrackerUI.ChangeTickMax = config.autoShowHoldTime;
+		}
         #endregion
 
         /// <summary> Reset progress and detach references </summary>
@@ -344,210 +362,6 @@ namespace Expeditions
             Items.ItemRewardPool.GenerateRewardPool();
         }
 
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            bool OtherInterfaceActive = 
-                Main.playerInventory ||
-                Main.LocalPlayer.chest != -1 ||
-                Main.npcShop != 0 ||
-                (
-                    Main.LocalPlayer.talkNPC > 0 &&
-                    ExpeditionUI.viewMode != ExpeditionUI.viewMode_NPC
-                ) ||
-                Main.InReforgeMenu ||
-                Main.InGuideCraftMenu ||
-                Main.gameMenu;
-            
-            int HotBar = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Hotbar"));
-            if (HotBar != -1)
-            {
-                layers.Insert(HotBar, new LegacyGameInterfaceLayer(
-                    "ExpeditionsUITracker",
-                    delegate
-                    {
-                        if (TrackerUI.VisibleWithAlpha)
-                        {
-                            if (!OtherInterfaceActive)
-                            {
-                                trackerInterface.Update(Main._drawInterfaceGameTime);
-                                trackerUI.Draw(Main.spriteBatch);
-                            }
-                        }
-                        return true;
-                    })
-                );
-            }
-
-            //All this stuff is jankyily adapted from ExampleMod
-            //This is getting the mouse layer, and adding the UI just underneath it
-            int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (MouseTextIndex != -1)
-            {
-                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
-                    "ExpeditionsUIPanel",
-                    delegate
-                    {
-                        if (ExpeditionUI.visible)
-                        {
-                            if (OtherInterfaceActive)
-                            {
-                                //close this if other things are opened
-                                CloseExpeditionMenu(true);
-                                if (DEBUG) Main.NewText("Closing via obstruction");
-                            }
-                            else
-                            {
-                                //No idea what this does but the other one draws the UI
-                                expeditionUserInterface.Update(Main._drawInterfaceGameTime);
-                                expeditionUI.Draw(Main.spriteBatch);
-                            }
-                        }
-                        return true;
-                    })
-                );
-            }
-        }
-
-
-
-        public override void PostUpdateInput()
-        {
-            if (LoadedFKTModSettings && !Main.gameMenu)
-            {
-                // Needs to be in a method otherwise it throws a namespace error
-                try { UpdateModSettings(); }
-                catch { }
-            }
-            if (Main.netMode == 2) return;
-
-            Player player = Main.LocalPlayer;
-            // Keep track of active expeditions in-game
-            if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
-            {
-                // RESET Expedition called values
-                unlockedSoundFrame = false;
-
-                checkedState.Clear();
-
-                if(TrackerUI.recentChangeTick > 0) TrackerUI.recentChangeTick--;
-
-                if (Main.time == 0.0)
-                {
-                    foreach (ModExpedition me in GetExpeditionsList())
-                    {
-                        // Dawn of a new day
-                        if (Main.dayTime)
-                        {
-                            me.OnNewDay(player,
-                              ref me.expedition.condition1Met,
-                              ref me.expedition.condition2Met,
-                              ref me.expedition.condition3Met,
-                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
-                              ); }
-                        else
-                        { me.OnNewNight(player,
-                              ref me.expedition.condition1Met,
-                              ref me.expedition.condition2Met,
-                              ref me.expedition.condition3Met,
-                              me.expedition.conditionCounted >= me.expedition.conditionCountedMax
-                              ); }
-
-                        // Check conditions as long as prerequisites are met
-                        if (me.expedition.PrerequisitesMet())
-                        {
-                            // As long as an expedition is not completed yet, or repeats, check this
-                            if (!me.expedition.completed || me.expedition.repeatable)
-                            {
-                                me.expedition.UpdateCountable();
-                                me.expedition.ConditionsMet();
-                                checkedState.Add(me.expedition.GetHashID(), 1);
-                            }
-                            else
-                            {
-                                // Completed
-                                checkedState.Add(me.expedition.GetHashID(), 2);
-                            }
-                        }
-                        else
-                        {
-                            // Prerequisite not met yet
-                            checkedState.Add(me.expedition.GetHashID(), 0);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (ModExpedition me in GetExpeditionsList())
-                    {
-                        // Check conditions as long as prerequisites are met
-                        if (me.expedition.PrerequisitesMet())
-                        {
-                            if (!me.expedition.completed || me.expedition.repeatable)
-                            {
-                                me.expedition.UpdateCountable();
-                                me.expedition.ConditionsMet();
-                                checkedState.Add(me.expedition.GetHashID(), 1);
-                            }
-                            else
-                            {
-                                // Completed
-                                checkedState.Add(me.expedition.GetHashID(), 2);
-                            }
-                        }
-                        else
-                        {
-                            // Prerequisite not met yet
-                            checkedState.Add(me.expedition.GetHashID(), 0);
-                        }
-                    }
-                }
-            }
-
-            #region Debug
-            if (DEBUG)
-            {
-                if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.L))
-                {
-                    if (Main.time % 60 == 0)
-                    {
-                        Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
-                        int[] stacks = DivideValueIntoMoneyStack(1234567);
-                        Main.NewText("stacks: " +
-                            stacks[0] + "plat, " +
-                            stacks[1] + "gold, " +
-                            stacks[2] + "silv, " +
-                            stacks[3] + "copr, "
-                            );
-                        if (Main.netMode == 1) SendTestModPacket(Main.myPlayer, 1337);
-                    }
-                    /*
-                    if (Main.time % 60 == 20)
-                    {
-                        if (PlayerExplorer.svmsg != null)
-                        {
-                            Main.NewTextMultiline(PlayerExplorer.svmsg, false, Color.LightSeaGreen);
-                        }
-                    }
-                    if (Main.time % 60 == 40)
-                    {
-                        if (PlayerExplorer.dbgmsg != null)
-                        {
-                            Main.NewTextMultiline(PlayerExplorer.dbgmsg, false, Color.LightSteelBlue);
-                        }
-                    }
-                    */
-                }
-                if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.P))
-                {
-                    if (Main.time % 60 == 0)
-                    {
-                        Main.NewText("Reset Progress");
-                        ResetExpeditions();
-                    }
-                }
-            }
-            #endregion
-        }
 
         #region Netcode
 
@@ -639,7 +453,7 @@ namespace Expeditions
             }
         }
 
-        private void SendTestModPacket(int senderWhoAmI, int message)
+        internal void SendTestModPacket(int senderWhoAmI, int message)
         {
             if (Main.netMode == 1)
             {
@@ -743,22 +557,23 @@ namespace Expeditions
         /// <param name="viewMode"></param>
         public static void OpenExpeditionMenu(int viewMode)
         {
-            if (Main.netMode == 2) return;
+            if (Main.netMode == NetmodeID.Server) return;
 
             if (DEBUG) Main.NewText("OpenMethod UI : " + viewMode);
             Player player = Main.LocalPlayer;
-            
+
             Main.playerInventory = false;
             player.sign = -1;
-            Main.npcShop = 0;
+            Main.SetNPCShopIndex(0);
             Main.npcChatText = "";
             if (viewMode != ExpeditionUI.viewMode_NPC && 
                 player.talkNPC > 0)
-            {
-                player.talkNPC = 0;
-            }
+			{
+				player.SetTalkNPC(0);
 
-            Main.PlaySound(10, -1, -1, 1); //open menu
+			}
+
+			SoundEngine.PlaySound(SoundID.MenuOpen); //open menu
             expeditionUI.ListRecalculate();
             ExpeditionUI.visible = true;
             ExpeditionUI.viewMode = viewMode;
@@ -774,7 +589,7 @@ namespace Expeditions
             if (DEBUG) Main.NewText("CloseMethod UI");
             Main.npcChatText = "";
 
-            if (!silent) Main.PlaySound(11, -1, -1, 1); //close menu
+			if (!silent) SoundEngine.PlaySound(SoundID.MenuClose); //close menu
             ExpeditionUI.visible = false;
         }
 
@@ -795,8 +610,8 @@ namespace Expeditions
             }
         }
 
-        private static bool unlockedSoundFrame = false;
-        private static bool enableUnlockDisplay = true;
+        internal static bool unlockedSoundFrame = false;
+        internal static bool enableUnlockDisplay = true;
 
         /// <summary>
         /// Show the expedition as an item being "picked up". Called when an expedition meets
@@ -816,11 +631,13 @@ namespace Expeditions
             exp.rare = expedition.difficulty;
             exp.expert = expedition.ctgImportant;
 
-            ItemText.NewText(exp, 1, true, true);
+			//ItemText.NewText(exp, 1, true, true);
+			Main.HoverItem = exp;
 
-            if (!unlockedSoundFrame)
+
+			if (!unlockedSoundFrame)
             {
-                Main.PlaySound(SoundID.Chat, Main.LocalPlayer.Center);
+				SoundEngine.PlaySound(SoundID.Chat, Main.LocalPlayer.Center);
                 unlockedSoundFrame = true;
             }
         }
@@ -831,15 +648,16 @@ namespace Expeditions
         /// <param name="stack"></param>
         public static void ClientNetSpawnItem(int itemType, int stack = 1, int prefix = 0)
         {
-            if (Main.netMode == 2) return;
+            if (Main.netMode == NetmodeID.Server) return;
 
             int id = Item.NewItem(
-                (int)Main.LocalPlayer.position.X,
+				Main.LocalPlayer.GetSource_FromThis("Expeditions_ClientNetSpawnItem"),
+				(int)Main.LocalPlayer.position.X,
                 (int)Main.LocalPlayer.position.Y,
                 Main.LocalPlayer.width,
                 Main.LocalPlayer.height,
                 itemType, stack, false, prefix, false, false);
-            if (Main.netMode == 1)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(21, -1, -1, null, id, 1f);
             }
@@ -909,4 +727,220 @@ namespace Expeditions
         }
         
     }
+
+
+	public class ExpeditionsSystem : ModSystem
+	{
+		// Moved from the main class
+		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+		{
+			// **** changed to lambda operator function to get around nonsense involving use of local variables in local functions
+			Func<bool> OtherInterfaceActive = () => (
+				Main.playerInventory ||
+				Main.LocalPlayer.chest != -1 ||
+				Main.npcShop != 0 ||
+				(
+					Main.LocalPlayer.talkNPC > 0 &&
+					ExpeditionUI.viewMode != ExpeditionUI.viewMode_NPC
+				) ||
+				Main.InReforgeMenu ||
+				Main.InGuideCraftMenu ||
+				Main.gameMenu);
+
+			int HotBar = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Hotbar"));
+			if (HotBar != -1)
+			{
+				layers.Insert(HotBar, new LegacyGameInterfaceLayer(
+					"ExpeditionsUITracker",
+					delegate
+					{
+						if (TrackerUI.VisibleWithAlpha)
+						{
+							if (!OtherInterfaceActive())
+							{
+								Expeditions.trackerInterface.Update(Main._drawInterfaceGameTime);
+								Expeditions.trackerUI.Draw(Main.spriteBatch);
+							}
+						}
+						return true;
+					}, InterfaceScaleType.UI) // **** added InterfaceScaleType.UI to make it not scale with zoom
+				);
+			}
+
+			//All this stuff is jankyily adapted from ExampleMod
+			//This is getting the mouse layer, and adding the UI just underneath it
+			int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+			if (MouseTextIndex != -1)
+			{
+				layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
+					"ExpeditionsUIPanel",
+					delegate
+					{
+						if (ExpeditionUI.visible)
+						{
+							if (OtherInterfaceActive())
+							{
+								//close this if other things are opened
+								Expeditions.CloseExpeditionMenu(true);
+								if (Expeditions.DEBUG) Main.NewText("Closing via obstruction");
+							}
+							else
+							{
+								//No idea what this does but the other one draws the UI
+								((Expeditions)Mod).expeditionUserInterface.Update(Main._drawInterfaceGameTime);
+								Expeditions.expeditionUI.Draw(Main.spriteBatch);
+							}
+						}
+						return true;
+					}, InterfaceScaleType.UI) // **** added InterfaceScaleType.UI to make it not scale with zoom
+				);
+			}
+		}
+
+		public override void PostUpdateInput()
+		{
+			/*if (LoadedFKTModSettings && !Main.gameMenu)
+			{
+				// Needs to be in a method otherwise it throws a namespace error
+				try { UpdateModSettings(); }
+				catch { }
+			}*/
+			Expeditions expMod = ((Expeditions)this.Mod);
+			expMod.UpdateModSettings();
+
+			if (Main.netMode == 2) return;
+
+			Player player = Main.LocalPlayer;
+			// Keep track of active expeditions in-game
+			if (!Main.gamePaused && !Main.gameMenu && Main.netMode != 2)
+			{
+				// RESET Expedition called values
+				Expeditions.unlockedSoundFrame = false;
+
+				Expeditions.checkedState.Clear();
+
+				if (TrackerUI.recentChangeTick > 0) TrackerUI.recentChangeTick--;
+
+				if (Main.time == 0.0)
+				{
+					foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+					{
+						// Dawn of a new day
+						if (Main.dayTime)
+						{
+							me.OnNewDay(player,
+							  ref me.expedition.condition1Met,
+							  ref me.expedition.condition2Met,
+							  ref me.expedition.condition3Met,
+							  me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+							  );
+						}
+						else
+						{
+							me.OnNewNight(player,
+								ref me.expedition.condition1Met,
+								ref me.expedition.condition2Met,
+								ref me.expedition.condition3Met,
+								me.expedition.conditionCounted >= me.expedition.conditionCountedMax
+								);
+						}
+
+						// Check conditions as long as prerequisites are met
+						if (me.expedition.PrerequisitesMet())
+						{
+							// As long as an expedition is not completed yet, or repeats, check this
+							if (!me.expedition.completed || me.expedition.repeatable)
+							{
+								me.expedition.UpdateCountable();
+								me.expedition.ConditionsMet();
+								Expeditions.checkedState.Add(me.expedition.GetHashID(), 1);
+							}
+							else
+							{
+								// Completed
+								Expeditions.checkedState.Add(me.expedition.GetHashID(), 2);
+							}
+						}
+						else
+						{
+							// Prerequisite not met yet
+							Expeditions.checkedState.Add(me.expedition.GetHashID(), 0);
+						}
+					}
+				}
+				else
+				{
+					foreach (ModExpedition me in Expeditions.GetExpeditionsList())
+					{
+						// Check conditions as long as prerequisites are met
+						if (me.expedition.PrerequisitesMet())
+						{
+							if (!me.expedition.completed || me.expedition.repeatable)
+							{
+								me.expedition.UpdateCountable();
+								me.expedition.ConditionsMet();
+								Expeditions.checkedState.Add(me.expedition.GetHashID(), 1);
+							}
+							else
+							{
+								// Completed
+								Expeditions.checkedState.Add(me.expedition.GetHashID(), 2);
+							}
+						}
+						else
+						{
+							// Prerequisite not met yet
+							Expeditions.checkedState.Add(me.expedition.GetHashID(), 0);
+						}
+					}
+				}
+			}
+
+			#region Debug
+			if (Expeditions.DEBUG)
+			{
+				if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.L))
+				{
+					if (Main.time % 60 == 0)
+					{
+						Main.NewText(ExpeditionUI.visible + " : UIVisible mode? pre:" + ExpeditionUI.viewMode, 150, 200, 255);
+						int[] stacks = Expeditions.DivideValueIntoMoneyStack(1234567);
+						Main.NewText("stacks: " +
+							stacks[0] + "plat, " +
+							stacks[1] + "gold, " +
+							stacks[2] + "silv, " +
+							stacks[3] + "copr, "
+							);
+						if (Main.netMode == 1) expMod.SendTestModPacket(Main.myPlayer, 1337);
+					}
+					/*
+                    if (Main.time % 60 == 20)
+                    {
+                        if (PlayerExplorer.svmsg != null)
+                        {
+                            Main.NewTextMultiline(PlayerExplorer.svmsg, false, Color.LightSeaGreen);
+                        }
+                    }
+                    if (Main.time % 60 == 40)
+                    {
+                        if (PlayerExplorer.dbgmsg != null)
+                        {
+                            Main.NewTextMultiline(PlayerExplorer.dbgmsg, false, Color.LightSteelBlue);
+                        }
+                    }
+                    */
+				}
+				if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.P))
+				{
+					if (Main.time % 60 == 0)
+					{
+						Main.NewText("Reset Progress");
+						Expeditions.ResetExpeditions();
+					}
+				}
+			}
+			#endregion
+		}
+
+	}
 }

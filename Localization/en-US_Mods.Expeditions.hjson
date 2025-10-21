@@ -1,0 +1,88 @@
+Items: {
+	BountyBoard: {
+		DisplayName: Expeditions Board
+		Tooltip: View, track and complete expeditions
+	}
+
+	BountyBook: {
+		DisplayName: Expedition Log
+		Tooltip:
+			'''
+			Manage and track expeditions
+			'The joys of discovery!'
+			'''
+	}
+
+	BountyVoucher: {
+		DisplayName: Bounty Voucher
+		Tooltip:
+			'''
+			Trade in for exclusive items at certain stores
+			'Proof of achievement'
+			'''
+	}
+
+	StockBox: {
+		DisplayName: Rusted Box
+		Tooltip:
+			'''
+			Right click to open
+			'Its contents, a mystery...'
+			'''
+	}
+
+	StockBox2: {
+		DisplayName: Relic Box
+		Tooltip:
+			'''
+			Right click to open
+			'Its contents, an enigma...'
+			'''
+	}
+}
+
+Configs: {
+	ExpeditionsConfig: {
+		DisplayName: Expeditions Config
+
+		newQuestPopup: {
+			Label: Show New Expeditions
+			Tooltip: ""
+		}
+
+		chatTrackEnabled: {
+			Label: Chat Track Enabled
+			Tooltip: ""
+		}
+
+		trackerEnabled: {
+			Label: HUD Tracker Always Enabled
+			Tooltip: ""
+		}
+
+		trackerAlphaByte: {
+			Label: HUD Tracker Transparency
+			Tooltip: ""
+		}
+
+		trackerDescriptions: {
+			Label: HUD Descriptions
+			Tooltip: ""
+		}
+
+		trackerScale: {
+			Label: HUD Scale
+			Tooltip: ""
+		}
+
+		autoShowEnabled: {
+			Label: Contextual HUD Enabled
+			Tooltip: ""
+		}
+
+		autoShowHoldTime: {
+			Label: HUD Time (seconds/60)
+			Tooltip: ""
+		}
+	}
+}

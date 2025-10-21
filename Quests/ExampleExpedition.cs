@@ -1,10 +1,10 @@
 ﻿using System;
 using Terraria;
 using Terraria.ID;
-using Expeditions144;
+using Expeditions;
 using System.Collections.Generic;
 
-namespace Expeditions144.Quests
+namespace Expeditions.Quests
 {
     class ExampleExpedition : ModExpedition
     {
@@ -65,7 +65,7 @@ namespace Expeditions144.Quests
             cond1 = player.velocity.Y == 0f;
             if (!cond2 && cond1) 
             {
-                //if(Expeditions144.DEBUG) Main.NewText(Math.Abs(player.velocity.X) + " is < 6");
+                //if(Expeditions.DEBUG) Main.NewText(Math.Abs(player.velocity.X) + " is < 6");
                 cond2 = Math.Abs(player.velocity.X) > 6;
             }
             return cond1 && cond2 && cond3;
@@ -74,7 +74,7 @@ namespace Expeditions144.Quests
         public override bool CheckPrerequisites(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             if (WorldExplore.IsCurrentDaily(expedition)) return true;
-            if (Expeditions144.DEBUG)
+            if (Expeditions.DEBUG)
             { return API.InInventory[ItemID.FishingSeaweed]; }
             return false;
         }
@@ -108,31 +108,31 @@ namespace Expeditions144.Quests
         public override void OnNewDay(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             expedition.ResetProgress(true);
-            if (Expeditions144.DEBUG) Main.NewText("Expedition was reset for daytime.", 
+            if (Expeditions.DEBUG) Main.NewText("Expedition was reset for daytime.", 
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
         public override void OnNewNight(Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             expedition.ResetProgress(true);
-            if (Expeditions144.DEBUG) Main.NewText("Expedition was reset for nighttime.",
+            if (Expeditions.DEBUG) Main.NewText("Expedition was reset for nighttime.",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
         public override void OnCombatWithNPC(NPC npc, bool playerGotHit, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions144.DEBUG) Main.NewText(npc.GivenOrTypeName + " in combat, who hit? " + playerGotHit,
+            if (Expeditions.DEBUG) Main.NewText(npc.GivenOrTypeName + " in combat, who hit? " + playerGotHit,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
         public override void OnKillNPC(NPC npc, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions144.DEBUG) Main.NewText(npc.GivenOrTypeName + " got DEAD",
+            if (Expeditions.DEBUG) Main.NewText(npc.GivenOrTypeName + " got DEAD",
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
         public override void OnCraftItem(Item item, Recipe recipe, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
             cond3 = true;
-            if (!Expeditions144.DEBUG) return;
+            if (!Expeditions.DEBUG) return;
             for (int i = 0; i < recipe.requiredItem.Count; i++)
             {
                 if (recipe.requiredItem[i] == null || recipe.requiredItem[i].stack <= 0) continue;
@@ -142,13 +142,13 @@ namespace Expeditions144.Quests
         }
         public override void OnPickupItem(Item item, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions144.DEBUG) Main.NewText("Picked up " + item.Name,
+            if (Expeditions.DEBUG) Main.NewText("Picked up " + item.Name,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
 
         public override void OnKillTile(int x, int y, int type, Player player, ref bool cond1, ref bool cond2, ref bool cond3, bool condCount)
         {
-            if (Expeditions144.DEBUG) Main.NewText("Break tile " + Main.tile[x, y].TileType,
+            if (Expeditions.DEBUG) Main.NewText("Break tile " + Main.tile[x, y].TileType,
                 Expedition.textColour.R, Expedition.textColour.G, Expedition.textColour.B);
         }
     }

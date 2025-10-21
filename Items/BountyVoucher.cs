@@ -1,6 +1,6 @@
 ﻿using Terraria.ModLoader;
 
-namespace Expeditions144.Items
+namespace Expeditions.Items
 {
     /// <summary>
     /// Used in shops that require this as a special currency. 

@@ -1,8 +1,6 @@
-author = Flashkirby99
+author = Flashkirby
 version = 2.3.1
-displayName = Expeditions Base
-
-weakReferences = FKTModSettings
+displayName = Expeditions Base (Alpha)
 
 homepage = http://forums.terraria.org/index.php?threads/expeditions-mod-modular-quest-system.52517/
 hideCode = false

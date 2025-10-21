@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Expeditions144.Items
+namespace Expeditions.Items
 {
     public class BountyBoard : ModItem
 	{

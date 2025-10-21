@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Expeditions144
+namespace Expeditions
 {
     public class WorldExplore : ModSystem
     {
@@ -23,7 +23,7 @@ namespace Expeditions144
             if(Main.dayTime && Main.time == 0.0)
             {
                 List<Expedition> dailys = new List<Expedition>();
-                foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+                foreach (ModExpedition me in Expeditions.GetExpeditionsList())
                 {
                     if (me.expedition.CheckDailyAssigned()) dailys.Add(me.expedition);
                 }
@@ -39,11 +39,11 @@ namespace Expeditions144
                         if (previousDaily != dailys[expeditionIndex]) break;
                     }
 
-                    if (Expeditions144.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + expeditionIndex);
+                    if (Expeditions.DEBUG) Main.NewText("dailys = " + dailys.Count + ", picked " + expeditionIndex);
                     NetSyncDaily(dailys[expeditionIndex]);
                     if (Main.netMode == 2)
                     {
-                        Expeditions144.SendNet_NewDaily(Mod);
+                        Expeditions.SendNet_NewDaily(Mod);
                     }
                 }
                 else
@@ -58,11 +58,11 @@ namespace Expeditions144
         {
             syncedDailyExpedition = expedition;
             syncedDailyExpedition.ResetProgress(true);
-            if (Expeditions144.DEBUG)
+            if (Expeditions.DEBUG)
             {
                 if (syncedDailyExpedition != null)
                 {
-                    Expeditions144.DisplayUnlockedExpedition(expedition, "Daily Expedition: ");
+                    Expeditions.DisplayUnlockedExpedition(expedition, "Daily Expedition: ");
                     Main.NewText("Daily EXP = " + syncedDailyExpedition.name);
                 }
             }
@@ -86,7 +86,7 @@ namespace Expeditions144
 
         public override void LoadWorldData(TagCompound tag)
         {
-            syncedDailyExpedition = Expeditions144.FindExpedition(tag.GetInt("dailyQuestID"));
+            syncedDailyExpedition = Expeditions.FindExpedition(tag.GetInt("dailyQuestID"));
         }
         #endregion
     }

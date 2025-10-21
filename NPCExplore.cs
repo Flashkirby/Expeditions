@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Expeditions144
+namespace Expeditions
 {
     public class NPCExplore : GlobalNPC
     {
@@ -47,7 +47,7 @@ namespace Expeditions144
 
             shop[nextSlot] = new Item(itemID);
             shop[nextSlot].shopCustomPrice = new int?(price);
-            shop[nextSlot].shopSpecialCurrency = Expeditions144.currencyVoucherID;
+            shop[nextSlot].shopSpecialCurrency = Expeditions.currencyVoucherID;
             nextSlot++;
         }
 
@@ -56,7 +56,7 @@ namespace Expeditions144
 		public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
 		{
 			if (player.whoAmI != Main.myPlayer) return;
-			foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+			foreach (ModExpedition me in Expeditions.GetExpeditionsList())
 			{
 				if (npc.life <= 0 || !npc.active)
 				{ expKillNPC(me, npc); }
@@ -67,7 +67,7 @@ namespace Expeditions144
 		public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
 		{
 			if (projectile.owner != Main.myPlayer) return;
-			foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+			foreach (ModExpedition me in Expeditions.GetExpeditionsList())
 			{
 				if (npc.life <= 0 || !npc.active)
 				{ expKillNPC(me, npc); }
@@ -77,7 +77,7 @@ namespace Expeditions144
 
 		public override void OnKill(NPC npc)
 		{
-			foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+			foreach (ModExpedition me in Expeditions.GetExpeditionsList())
 			{
 				expAnyNPCDeath(me, npc);
 			}

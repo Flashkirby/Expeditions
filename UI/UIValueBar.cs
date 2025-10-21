@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.UI;
 using Terraria.GameContent;
 
-namespace Expeditions144.UI
+namespace Expeditions.UI
 {
     public class UIValueBar : UIElement
     {

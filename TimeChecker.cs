@@ -1,6 +1,6 @@
 ﻿using Terraria;
 
-namespace Expeditions144
+namespace Expeditions
 {
     public static class TimeChecker
     {

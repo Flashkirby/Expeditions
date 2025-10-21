@@ -10,7 +10,7 @@ using Terraria.UI;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 
-namespace Expeditions144
+namespace Expeditions
 {
     public class TrackerUI : UIState
     {
@@ -69,7 +69,7 @@ namespace Expeditions144
             {
                 if (!me.expedition.trackingActive) continue;
                 byte state = 255;
-                if(Expeditions144.checkedState.TryGetValue(me.expedition.GetHashID(), out state))
+                if(Expeditions.checkedState.TryGetValue(me.expedition.GetHashID(), out state))
                 {
                     if (state == 0 || state == 2 || state == 255) continue;
                 }

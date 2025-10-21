@@ -6,11 +6,11 @@ using Terraria.ObjectData;
 using Terraria.DataStructures;
 using Terraria.Enums;
 
-using Expeditions144;
+using Expeditions;
 using Terraria.GameContent.ObjectInteractions;
 using System.Collections.Generic;
 
-namespace Expeditions144.Tiles
+namespace Expeditions.Tiles
 {
     public class BountyBoard : ModTile
     {
@@ -62,7 +62,7 @@ namespace Expeditions144.Tiles
             //Can't do it if something is in front
             if (Main.mouseText)
             {
-                if(ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile) Expeditions144.CloseExpeditionMenu(true);
+                if(ExpeditionUI.viewMode == ExpeditionUI.viewMode_Tile) Expeditions.CloseExpeditionMenu(true);
                 return true;
             }
 
@@ -79,17 +79,17 @@ namespace Expeditions144.Tiles
             {
                 player.sign = -1;
                 Main.editSign = false;
-                Expeditions144.CloseExpeditionMenu();
+                Expeditions.CloseExpeditionMenu();
                 return true;
             }
             if (Main.npcChatText != "") //gets hidden when an NPC is in front
             {
-                Expeditions144.CloseExpeditionMenu();
+                Expeditions.CloseExpeditionMenu();
                 return true;
             }
 
             player.tileInteractionHappened = true;
-            Expeditions144.ToggleExpeditionMenu(ExpeditionUI.viewMode_Tile);
+            Expeditions.ToggleExpeditionMenu(ExpeditionUI.viewMode_Tile);
 			return true;
         }
 

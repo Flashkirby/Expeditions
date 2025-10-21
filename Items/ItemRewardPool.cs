@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 
-namespace Expeditions144.Items
+namespace Expeditions.Items
 {
     public static class ItemRewardPool
     {
@@ -26,7 +26,8 @@ namespace Expeditions144.Items
                 {
                     item = new Item();
                     item.SetDefaults(i);
-                    try { item.ModItem.SetDefaults(); } catch { }
+                    item.ModItem?.SetDefaults();
+
                     if (item.pick > 0 || // No picks
                         (item.Name.Contains("Key") || Lang.GetItemName(i).Value.Contains("Key")) || // No "keys"
                         item.expert // No "experts" since boss only

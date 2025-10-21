@@ -18,6 +18,7 @@ http://javid.ddns.net/tModLoader/widget/widgetimage/Expeditions.png
 Credits:
 Flashkirby99 - I am making this mod.
 jopojelly - Additional advice on mod referencing and .tmod usage
+nog_7124 - 1.4 port
 
 REMINDER:
 Compile, 

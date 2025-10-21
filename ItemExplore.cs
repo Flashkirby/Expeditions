@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Expeditions144
+namespace Expeditions
 {
     public class ItemExplore : GlobalItem
     {
@@ -13,7 +13,7 @@ namespace Expeditions144
         {
 			if (context is RecipeItemCreationContext craftContext)
 			{
-				foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+				foreach (ModExpedition me in Expeditions.GetExpeditionsList())
 				{
 					me.OnCraftItem(item, craftContext.Recipe, Main.LocalPlayer,
 								  ref me.expedition.condition1Met,
@@ -28,7 +28,7 @@ namespace Expeditions144
         {
             if (player.ItemSpace(item).CanTakeItem)
             {
-                foreach (ModExpedition me in Expeditions144.GetExpeditionsList())
+                foreach (ModExpedition me in Expeditions.GetExpeditionsList())
                 {
                     me.OnPickupItem(item, Main.LocalPlayer,
                               ref me.expedition.condition1Met,

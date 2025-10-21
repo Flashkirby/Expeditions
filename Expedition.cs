@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.Audio;
 
-namespace Expeditions144
+namespace Expeditions
 {
     /// <summary>
     /// Class that holds all the important data for expeditions.
@@ -144,7 +144,7 @@ namespace Expeditions144
             if (trackCondition && !checkConditions) { trackCondition = false; }
 
             // tracker
-            bool showText = Expeditions144.ShowTrackingText;
+            bool showText = Expeditions.ShowTrackingText;
             if (trackingActive)
             {
                 // Apply green colour to gains
@@ -171,7 +171,7 @@ namespace Expeditions144
                 }
                 if (!meetc && conditionDescriptionCountable != "")
                 {
-                    if (Expeditions144.DEBUG && conditionCountedMax > 0 && conditionCounted > 0) Main.NewText(conditionCounted + " from " + lastCounted);
+                    if (Expeditions.DEBUG && conditionCountedMax > 0 && conditionCounted > 0) Main.NewText(conditionCounted + " from " + lastCounted);
                     if (conditionCounted >= conditionCountedMax)
                     {
                         if (showText)
@@ -314,10 +314,10 @@ namespace Expeditions144
             {
                 if (WorldExplore.IsCurrentDaily(this))
                 {
-                    Expeditions144.DisplayUnlockedExpedition(this, "Daily Expedition: ");
+                    Expeditions.DisplayUnlockedExpedition(this, "Daily Expedition: ");
                 } else
                 {
-                    Expeditions144.DisplayUnlockedExpedition(this);
+                    Expeditions.DisplayUnlockedExpedition(this);
                 }
             }
 
@@ -351,7 +351,7 @@ namespace Expeditions144
                 {
                     if (countedStack[i] < requiredStack[i]) // Player doesn't have enough of an item
                     {
-                        // if (Expeditions144.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
+                        // if (Expeditions.DEBUG && trackingActive) Main.NewText("Missing " + Lang.itemName(items[i]));
                         return false;
                     }
                 }
@@ -433,9 +433,9 @@ namespace Expeditions144
                 // Check if this is a shared expedition on a multiplayer server
                 if (partyShare && Main.netMode == 1 && mex != null)
                 {
-                    if (Expeditions144.DEBUG) Main.NewText("#sending");
+                    if (Expeditions.DEBUG) Main.NewText("#sending");
                     // Send net message and return early without running the rest of the code
-                    Expeditions144.SendNet_PartyComplete(
+                    Expeditions.SendNet_PartyComplete(
                         this.mex.mod,
                         Main.LocalPlayer.team,
                         this.mex);
@@ -443,7 +443,7 @@ namespace Expeditions144
                 }
             }
 
-            if (Expeditions144.DEBUG) Main.NewText("#complete repeat");
+            if (Expeditions.DEBUG) Main.NewText("#complete repeat");
             // What if I receive this from someone else who hasn't finished it yet?
             if (completed && !repeatable) return;
 
@@ -483,10 +483,10 @@ namespace Expeditions144
             // grant items
             foreach (Item item in tempRewards)
             {
-                Expeditions144.ClientNetSpawnItem(item);
+                Expeditions.ClientNetSpawnItem(item);
             }
 
-            if (Expeditions144.DEBUG) Main.NewText("#compelte quest");
+            if (Expeditions.DEBUG) Main.NewText("#compelte quest");
 			//complete this
 			SoundEngine.PlaySound(SoundID.Chat);
             if (!repeatable || (repeatable && !completed))
@@ -502,7 +502,7 @@ namespace Expeditions144
                 TrackerUI.recentChangeTick = TrackerUI.ChangeTickMax;
             }
 
-            if (Expeditions144.DEBUG) Main.NewText("#set progress");
+            if (Expeditions.DEBUG) Main.NewText("#set progress");
             if (!repeatable)
             {
                 // Save conditions used to finish, on 1 time expeditions
@@ -518,14 +518,14 @@ namespace Expeditions144
             }
             completed = true;
 
-            if (Expeditions144.DEBUG) Main.NewText("#postcomplete, complete = " + completed);
+            if (Expeditions.DEBUG) Main.NewText("#postcomplete, complete = " + completed);
             // check mod hook
             mex.PostCompleteExpedition();
             
             // Force the expeditions list to recalculate in this instance
             if (ExpeditionUI.visible)
             {
-                Expeditions144.expeditionUI.ListRecalculate();
+                Expeditions.expeditionUI.ListRecalculate();
             }
         }
         

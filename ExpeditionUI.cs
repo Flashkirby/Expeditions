@@ -7,14 +7,14 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using Expeditions144.UI;
+using Expeditions.UI;
 
 using System.Linq;
 using Terraria.GameContent;
 using ReLogic.Content;
 using Terraria.Audio;
 
-namespace Expeditions144
+namespace Expeditions
 {
     /// <summary>
     /// See the API class. Do not use unless you know precisely what you're doing.
@@ -69,7 +69,7 @@ namespace Expeditions144
 
         public override void OnInitialize()
         {
-            filterList = new List<ModExpedition>(Expeditions144.GetExpeditionsList());
+            filterList = new List<ModExpedition>(Expeditions.GetExpeditionsList());
             sortedList = new List<ModExpedition>(filterList);
 
             _navigationPanel = new UIPanel();
@@ -233,7 +233,7 @@ namespace Expeditions144
             uIElement.Height.Set(32f, 0f);
             uIElement.Top.Set(y, 0f);
 			//**** why is the x not set?
-			Asset<Texture2D> texture = Expeditions144.sortingTexture;
+			Asset<Texture2D> texture = Expeditions.sortingTexture;
             for (int j = 0; j < 4; j++)
             {
                 UIToggleImage uIToggleImage = new UIToggleImage(texture, 32, 32, new Point(34 * j, 0), new Point(34 * j, 34));
@@ -379,7 +379,7 @@ namespace Expeditions144
             if(currentME == null)
             {
                 //huh
-                Main.NewText("this shouldn't happen... (" + Expeditions144.GetExpeditionsList().Count + ")", new Color(1,0,0));
+                Main.NewText("this shouldn't happen... (" + Expeditions.GetExpeditionsList().Count + ")", new Color(1,0,0));
 				SoundEngine.PlaySound(SoundID.Camera);
                 return;
             }
@@ -410,7 +410,7 @@ namespace Expeditions144
             if (_scrollBar.Value > 0)
             {
                 float yBottom = 0;
-                _titleHeader.SetText(currentME.expedition.name + (currentME.expedition.completed ? " (Completed)" : "") + (Expeditions144.DEBUG?" #"+Expedition.GetHashID(currentME.expedition).ToString("X"):""));
+                _titleHeader.SetText(currentME.expedition.name + (currentME.expedition.completed ? " (Completed)" : "") + (Expeditions.DEBUG?" #"+Expedition.GetHashID(currentME.expedition).ToString("X"):""));
                 yBottom += _titleHeader.TextHeight + 10;
 
                 try
@@ -422,12 +422,12 @@ namespace Expeditions144
                     }
                     else
                     {
-                        _headImage.SetImage(Expeditions144.bountyBoardTexture);
+                        _headImage.SetImage(Expeditions.bountyBoardTexture);
                     }
                 }
                 catch (Exception e) // On a fail, we'll just default to unknown
                 {
-                    _headImage.SetImage(Expeditions144.bountyBoardTexture);
+                    _headImage.SetImage(Expeditions.bountyBoardTexture);
                 }
                 _headImage.Recalculate();
 
@@ -508,7 +508,7 @@ namespace Expeditions144
             else
             {
                 _titleHeader.SetText("No Expeditions Posted");
-                _headImage.SetImage(Expeditions144.bountyBoardTexture);
+                _headImage.SetImage(Expeditions.bountyBoardTexture);
                 _description.SetText("");
                 _conditionHeader.SetText("");
                 _conditionsDesc.SetText("");
@@ -536,7 +536,7 @@ namespace Expeditions144
         {
             try
             {
-                if (Expeditions144.DEBUG) Main.NewText("#Recalculating");
+                if (Expeditions.DEBUG) Main.NewText("#Recalculating");
 
                 // Save current expedition
                 ModExpedition meBeforeSort = currentME;
@@ -546,7 +546,7 @@ namespace Expeditions144
                 sortedList.Clear();
 
                 int anyMatch = 0;
-                foreach (ModExpedition current in Expeditions144.GetExpeditionsList())
+                foreach (ModExpedition current in Expeditions.GetExpeditionsList())
                 {
                     Expedition e = current.expedition;
                     anyMatch = 0;

@@ -7,7 +7,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Audio;
 
-namespace Expeditions144.UI
+namespace Expeditions.UI
 {
     public class UITextButton : UIElement
     {
