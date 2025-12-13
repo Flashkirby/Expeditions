@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.Localization;
 
 using Expeditions;
 
@@ -16,12 +17,12 @@ namespace Expeditions.Tiles
 
         public const int tileWidth = 4;
         public const int tileHeight = 3;
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             //extra info
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;
-            AddMapEntry(new Color(200, 180, 50), mod.GetItem<Items.BountyBoard>().DisplayName);
+            AddMapEntry(new Color(200, 180, 50), ModContent.GetInstance<Items.BountyBoard>().DisplayName);
             dustType = 7;
             disableSmartCursor = true;
 
@@ -39,19 +40,19 @@ namespace Expeditions.Tiles
 
             TileObjectData.addTile(Type);
 
-            itemType = mod.ItemType("BountyBoard");
+            itemType = ModContent.ItemType<Items.BountyBoard>();
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
             adjTiles = new int[] { TileID.Chairs };
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 64, 48, mod.ItemType("BountyBoard"));
+            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 48, ModContent.ItemType<Items.BountyBoard>());
         }
         public override void RightClick(int i, int j)
         {
             Player player = Main.LocalPlayer;
-            PlayerExplorer playerm = player.GetModPlayer<PlayerExplorer>(mod);
+            PlayerExplorer playerm = player.GetModPlayer<PlayerExplorer>();
             Tile tile = Main.tile[i, j];
 
             //Can't do it if something is in front
