@@ -7,18 +7,25 @@ using Terraria.ModLoader.IO;
 
 namespace Expeditions
 {
-    public class WorldExplore : ModWorld
+    public class WorldExplore : ModSystem
     {
         internal static Expedition syncedDailyExpedition = null;
         private static int expeditionIndex = -1;
         internal static int dailyExpIndex { get { return expeditionIndex; } }
-        
-        public override void Initialize()
+
+        public override void OnWorldLoad()
         {
             syncedDailyExpedition = null;
+            expeditionIndex = -1;
         }
 
-        public override void PostUpdate()
+        public override void OnWorldUnload()
+        {
+            syncedDailyExpedition = null;
+            expeditionIndex = -1;
+        }
+
+        public override void PostUpdateWorld()
         {
             if(Main.dayTime && Main.time == 0.0)
             {
@@ -43,7 +50,7 @@ namespace Expeditions
                     NetSyncDaily(dailys[expeditionIndex]);
                     if (Main.netMode == 2)
                     {
-                        Expeditions.SendNet_NewDaily(mod);
+                        Expeditions.SendNet_NewDaily(ModContent.GetInstance<Expeditions>());
                     }
                 }
                 else
@@ -77,17 +84,14 @@ namespace Expeditions
 
         #region SaveLoad overrides
 
-        public override TagCompound Save()
+        public override void SaveWorldData(TagCompound tag)
         {
             int dQuestID = 0;
             if (syncedDailyExpedition != null) dQuestID = Expedition.GetHashID(syncedDailyExpedition);
-            return new TagCompound
-            {
-                { "dailyQuestID", dQuestID }
-            };
+            tag.Add("dailyQuestID", dQuestID);
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadWorldData(TagCompound tag)
         {
             syncedDailyExpedition = Expeditions.FindExpedition(tag.GetInt("dailyQuestID"));
         }

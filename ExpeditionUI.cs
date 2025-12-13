@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using ReLogic.Content;
 using Expeditions.UI;
 
 using System.Linq;
@@ -207,7 +208,7 @@ namespace Expeditions
             uIElement.Width.Set(0f, 1f);
             uIElement.Height.Set(32f, 0f);
             uIElement.Top.Set(y, 0f);
-            Texture2D texture = ModLoader.GetTexture("Terraria/UI/Achievement_Categories");
+            Texture2D texture = ModContent.Request<Texture2D>("Terraria/Images/UI/Achievement_Categories", AssetRequestMode.ImmediateLoad).Value;
             for (int j = 0; j < 4; j++)
             {
                 UIToggleImage uIToggleImage = new UIToggleImage(texture, 32, 32, new Point(34 * j, 0), new Point(34 * j, 34));

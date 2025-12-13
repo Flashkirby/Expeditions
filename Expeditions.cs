@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq; // For OrderBy
 using System.IO;
 
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 
 using Terraria;
 using Terraria.ID;
@@ -35,9 +36,9 @@ namespace Expeditions
         internal static bool ShowTrackingText = true;
 
         /// <summary> REMINDER: INTERNAL ONLY USE GetExpeditionsList() FOR SAFETY. DO NOT CHANGE. </summary>
-        private static List<ModExpedition> expeditionTemplateList;
+        private static List<ModExpedition> expeditionTemplateList = new List<ModExpedition>();
         /// <summary> The list used by the player. Can be modified. </summary>
-        private static List<ModExpedition> expeditionActiveList;
+        private static List<ModExpedition> expeditionActiveList = new List<ModExpedition>();
 
         internal static Dictionary<int, byte> checkedState;
 
@@ -52,28 +53,17 @@ namespace Expeditions
 
         internal static int currencyVoucherID;
 
-        public Expeditions()
-        {
-            Properties = new ModProperties()
-            {
-                Autoload = true,
-                AutoloadGores = true,
-                AutoloadSounds = true
-            };
-            // Reset list every time we reload
-            expeditionTemplateList = new List<ModExpedition>();
-            expeditionActiveList = new List<ModExpedition>();
-        }
-
         public override void Load()
         {
+            expeditionTemplateList = new List<ModExpedition>();
+            expeditionActiveList = new List<ModExpedition>();
             checkedState = new Dictionary<int, byte>();
 
             // Load textures
             if (Main.netMode != 2)
             {
-                sortingTexture = GetTexture("UI/Sorting_Categories");
-                bountyBoardTexture = GetTexture("Items/BountyBoard");
+                sortingTexture = ModContent.Request<Texture2D>("Expeditions/UI/Sorting_Categories", AssetRequestMode.ImmediateLoad).Value;
+                bountyBoardTexture = ModContent.Request<Texture2D>("Expeditions/Items/BountyBoard", AssetRequestMode.ImmediateLoad).Value;
             }
 
             if (Main.netMode != 2)
@@ -89,11 +79,11 @@ namespace Expeditions
                 trackerInterface.SetState(trackerUI);
             }
 
-            bookID = ItemType("BountyBook");
-            boardID = ItemType("BountyBoard");
-            voucherID = ItemType("BountyVoucher");
-            stockBox1 = ItemType("StockBox");
-            stockBox2 = ItemType("StockBox2");
+            bookID = ModContent.ItemType<Items.BountyBook>();
+            boardID = ModContent.ItemType<Items.BountyBoard>();
+            voucherID = ModContent.ItemType<Items.BountyVoucher>();
+            stockBox1 = ModContent.ItemType<Items.StockBox>();
+            stockBox2 = ModContent.ItemType<Items.StockBox2>();
 
             // Register the voucher as a new currency
             CustomCurrencySingleCoin c = new CustomCurrencySingleCoin(voucherID, 999L);
