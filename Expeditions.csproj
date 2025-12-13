@@ -1,113 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8298EAB6-0586-4BDA-9483-83624B66B13A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Expeditions</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Expeditions</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RootNamespace>Expeditions</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TMLPath Condition="'$(TMLPath)' == ''">$(LOCALAPPDATA)\Programs\tModLoader</TMLPath>
+    <BuildOutputBase>$(TMLPath)\ModSources\$(AssemblyName)\bin</BuildOutputBase>
+    <OutputPath>$(BuildOutputBase)\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Expeditions.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="API.cs" />
-    <Compile Include="ExpeditionUI.cs" />
-    <Compile Include="Expedition.cs" />
-    <Compile Include="TileExplore.cs" />
-    <Compile Include="Items\BountyBoard.cs" />
-    <Compile Include="Expeditions.cs" />
-    <Compile Include="Items\BountyBook.cs" />
-    <Compile Include="Items\BountyVoucher.cs" />
-    <Compile Include="Items\ItemRewardPool.cs" />
-    <Compile Include="Items\StockBox2.cs" />
-    <Compile Include="Items\StockBox.cs" />
-    <Compile Include="ModExpedition.cs" />
-    <Compile Include="ItemExplore.cs" />
-    <Compile Include="NPCExplore.cs" />
-    <Compile Include="PlayerExplorer.cs" />
-    <Compile Include="Quests\ExampleExpedition.cs" />
-    <Compile Include="Quests\HeaderTest.cs" />
-    <Compile Include="Tiles\BountyBoard.cs" />
-    <Compile Include="TimeChecker.cs" />
-    <Compile Include="TrackerUI.cs" />
-    <Compile Include="UI\UIItemSlots.cs" />
-    <Compile Include="UI\UITextButton.cs" />
-    <Compile Include="UI\UIColour.cs" />
-    <Compile Include="UI\UITextWrap.cs" />
-    <Compile Include="UI\UIValueBar.cs" />
-    <Compile Include="WorldExplore.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>
+    <Reference Include="tModLoader">
+      <HintPath>$(TMLPath)\tModLoader.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Game\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Game.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Graphics\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Graphics.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Xact\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Xact.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono">
-      <HintPath>..\..\Output\CheatSheet\Mono.dll</HintPath>
+    <Reference Include="Terraria">
+      <HintPath>$(TMLPath)\Terraria.dll</HintPath>
     </Reference>
     <Reference Include="ReLogic">
-      <HintPath>..\tModLoader\references\ReLogic.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="tModLoader">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\terraria\tModLoader.exe</HintPath>
+      <HintPath>$(TMLPath)\ReLogic.dll</HintPath>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <Content Include="build.txt" />
-    <Content Include="description.txt" />
-    <Content Include="Items\BountyBoard.png" />
-    <Content Include="Items\BountyVoucher.png" />
-    <Content Include="Tiles\BountyBoard.png" />
-    <Content Include="UI\Sorting_Categories.png" />
+    <Content Include="build.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="description.txt" Condition="Exists('description.txt')" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="**\*.png" Exclude="bin\**;obj\**" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="**\*.wav" Exclude="bin\**;obj\**" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="**\*.mp3" Exclude="bin\**;obj\**" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="**\*.ogg" Exclude="bin\**;obj\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FKTModSettings\FKTModSettings.csproj">
-      <Project>{9704d548-8670-4984-aef6-2b8d27d9fee7}</Project>
-      <Name>FKTModSettings</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".gitignore" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
